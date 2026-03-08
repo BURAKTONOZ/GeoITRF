@@ -3,116 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Profesyonel CBS Terminali</title>
+    <title>GeoITRF - CBS Veri Terminali</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
-        /* Temel Ayarlar */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; background: #000; overflow: hidden; }
-        #map { width: 100vw; height: 100vh; z-index: 1; }
-
-        /* Ortak Glassmorphism Sınıfı */
-        .glass-panel {
-            background: rgba(20, 20, 20, 0.65);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-            color: #fff;
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #10b981; /* Zümrüt Yeşili */
+            --accent-hover: #059669;
+            --danger: #ef4444;
+            --primary: #3b82f6;
         }
 
-        /* Alt Kısım: Anlık Konum ve Kayıt Kartı */
-        #bottom-card {
-            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 1000; padding: 15px 20px; width: 90%; max-width: 350px; border-radius: 20px;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            height: 100vh; 
+            display: flex; 
+            overflow: hidden; /* Sayfanın genel kaymasını engelle */
         }
-        .coords-display { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .coords-display span { color: #4da8da; font-weight: bold; }
+
+        /* Ana Taşıyıcı: Yan Panel + Harita */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- SOL PANEL (SİDEBAR) --- */
+        .sidebar {
+            width: 380px;
+            background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+        }
+
+        /* Üst Başlık */
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .sidebar-header i { font-size: 24px; color: var(--accent); }
+        .sidebar-header h1 { font-size: 1.2rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* Anlık Konum Kartı */
+        .live-location-card {
+            margin: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .live-location-card h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; display: flex; justify-content: space-between;}
+        .live-location-card h3 span { color: var(--danger); font-size: 0.8rem; animation: blink 2s infinite; }
+        .coord-row { display: flex; justify-content: space-between; font-size: 0.95rem; margin-bottom: 5px; font-weight: 600; color: var(--primary);}
         
-        .save-section { display: flex; gap: 10px; }
-        .save-section input {
-            flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(0,0,0,0.3); color: white; outline: none; font-size: 14px;
-        }
-        .save-section input::placeholder { color: #aaa; }
-        .btn {
-            padding: 10px 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s;
-        }
-        .btn-save { background: #4da8da; color: #000; }
-        .btn-save:hover { background: #3b8bb5; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* Üst Kısım: Açılır Kapanır Liste */
-        #list-container {
-            position: absolute; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end;
+        /* Veri Giriş Alanı */
+        .input-section {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid var(--border-color);
         }
-        #toggle-list-btn {
-            background: rgba(20, 20, 20, 0.8); color: white; border: 1px solid rgba(255,255,255,0.3);
-            padding: 10px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; backdrop-filter: blur(10px);
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        .input-group input {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s;
         }
-        #points-panel {
-            display: none; /* Başlangıçta kapalı */
-            width: 280px; max-height: 50vh; overflow-y: auto; margin-top: 10px; border-radius: 15px; padding: 10px;
+        .input-group input:focus { border-color: var(--accent); background: rgba(255, 255, 255, 0.1); }
+        .btn-save {
+            background: var(--accent); color: white; border: none; padding: 12px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
+        .btn-save:hover { background: var(--accent-hover); }
+
+        /* Kayıtlı Noktalar Listesi */
+        .points-list-header { padding: 20px 20px 10px 20px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between; }
+        .points-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 20px 20px;
+        }
+        
         /* Kaydırma Çubuğu Özelleştirme */
-        #points-panel::-webkit-scrollbar { width: 5px; }
-        #points-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 5px; }
+        .points-container::-webkit-scrollbar { width: 6px; }
+        .points-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
 
-        /* Liste Elemanları */
-        .point-item {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 10px;
+        .point-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: 0.2s;
         }
-        .point-item:last-child { margin-bottom: 0; }
-        .point-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #fff; }
-        .point-coords { font-size: 11px; color: #ccc; margin-bottom: 10px; }
-        .point-actions { display: flex; gap: 5px; }
-        .btn-zoom { background: rgba(255,255,255,0.2); color: white; font-size: 12px; flex: 1; }
-        .btn-delete { background: rgba(255, 50, 50, 0.6); color: white; font-size: 12px; }
+        .point-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
+        .point-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; color: white;}
+        .point-coords { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
+        .point-actions { display: flex; gap: 8px; }
+        .btn-action {
+            flex: 1; padding: 8px; border: none; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .btn-go { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+        .btn-go:hover { background: rgba(59, 130, 246, 0.4); }
+        .btn-del { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .btn-del:hover { background: rgba(239, 68, 68, 0.4); }
+
+        /* --- SAĞ PANEL (HARİTA) --- */
+        .map-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        #map { width: 100%; height: 100%; z-index: 1; }
+
+        /* Mobil Görünüm (Altlı Üstlü) */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .map-wrapper { height: 45vh; flex: none; order: 1; } /* Harita Üstte */
+            .sidebar { width: 100%; height: 55vh; order: 2; border-right: none; border-top: 1px solid var(--border-color); box-shadow: 0 -5px 15px rgba(0,0,0,0.5); }
+        }
     </style>
 </head>
 <body>
 
-    <div id="map"></div>
-
-    <div id="list-container">
-        <button id="toggle-list-btn" onclick="toggleList()">📋 Kayıtlı Noktalar (0)</button>
-        <div id="points-panel" class="glass-panel">
-            <div id="points-list">
-                <div style="font-size:12px; text-align:center; color:#aaa;">Henüz nokta kaydedilmedi.</div>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-satellite-dish"></i>
+                <div>
+                    <h1>GeoITRF</h1>
+                    <p>CBS Veri Terminali</p>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div id="bottom-card" class="glass-panel">
-        <div class="coords-display">
-            <div>Enlem: <span id="lat">Bekleniyor...</span></div>
-            <div>Boylam: <span id="lon">Bekleniyor...</span></div>
-        </div>
-        <div class="save-section">
-            <input type="text" id="point-name" placeholder="Nokta Adı Girin (Örn: P1)">
-            <button class="btn btn-save" onclick="saveCurrentLocation()">Kaydet</button>
-        </div>
+            <div class="live-location-card">
+                <h3>GPS Durumu <span><i class="fas fa-circle"></i> Canlı</span></h3>
+                <div class="coord-row"><span>Enlem:</span> <span id="lat">Bağlanıyor...</span></div>
+                <div class="coord-row"><span>Boylam:</span> <span id="lon">Bağlanıyor...</span></div>
+            </div>
+
+            <div class="input-section">
+                <div class="input-group">
+                    <input type="text" id="point-name" placeholder="Nokta Adı (Örn: P-101)">
+                    <button class="btn-save" onclick="saveCurrentLocation()">
+                        <i class="fas fa-map-pin"></i> Noktayı Kaydet
+                    </button>
+                </div>
+            </div>
+
+            <div class="points-list-header">
+                <span>Kayıtlı Noktalar</span>
+                <span id="point-count">0</span>
+            </div>
+            
+            <div class="points-container" id="points-list">
+                <div style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:20px;">
+                    <i class="fas fa-folder-open" style="font-size:2rem; margin-bottom:10px; opacity:0.5;"></i><br>
+                    Sistemde kayıtlı nokta bulunmuyor.
+                </div>
+            </div>
+        </aside>
+
+        <main class="map-wrapper">
+            <div id="map"></div>
+        </main>
+
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Harita ve Uydu Katmanı
+        // Harita Başlatma
         var map = L.map('map').setView([39.92, 32.85], 2); 
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 19, attribution: '© Esri'
+            maxZoom: 19, attribution: '© Esri & GeoITRF'
         }).addTo(map);
 
-        // Değişkenler
-        var userMarker = null; // Canlı konum işaretçisi (kırmızı nokta)
+        var userMarker = null;
         var firstLocationFound = false;
         var currentLat = null;
         var currentLon = null;
-        var savedPoints = []; // Kaydedilen noktaların tutulduğu dizi
-        var pointMarkers = {}; // Haritadaki pinleri id ile takip etmek için obje
+        var savedPoints = [];
+        var pointMarkers = {};
         var pointIdCounter = 0;
 
-        // Canlı Konum Takibi
+        // Anlık Konum Takibi
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
                 currentLat = position.coords.latitude;
@@ -123,39 +223,30 @@
 
                 var newLocation = new L.LatLng(currentLat, currentLon);
 
-                // Kullanıcının anlık konumu için özel kırmızı daire (haritayı pinle boğmamak için)
                 if (userMarker) {
                     userMarker.setLatLng(newLocation);
                 } else {
                     userMarker = L.circleMarker(newLocation, {
-                        color: 'red', fillColor: '#f03', fillOpacity: 0.8, radius: 8
-                    }).addTo(map).bindPopup("Şu an buradasınız!");
+                        color: '#10b981', fillColor: '#10b981', fillOpacity: 0.8, radius: 7, weight: 2
+                    }).addTo(map).bindPopup("Mevcut Konumunuz");
                 }
 
                 if (!firstLocationFound) {
-                    map.setView(newLocation, 18); // İlk buluşta çok yakından başla
+                    map.setView(newLocation, 18);
                     firstLocationFound = true;
                 }
 
             }, function(error) {
                 console.warn('Konum Hatası:', error.message);
+                document.getElementById('lat').innerText = "Hata!";
+                document.getElementById('lon').innerText = "Hata!";
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
-        // Listeyi Aç/Kapat Fonksiyonu
-        function toggleList() {
-            var panel = document.getElementById("points-panel");
-            if (panel.style.display === "none" || panel.style.display === "") {
-                panel.style.display = "block";
-            } else {
-                panel.style.display = "none";
-            }
-        }
-
-        // Noktayı Kaydet Fonksiyonu
+        // Nokta Kaydetme
         function saveCurrentLocation() {
             if (currentLat === null || currentLon === null) {
-                alert("Konum henüz bulunamadı, lütfen bekleyin.");
+                alert("GPS bağlantısı bekleniyor...");
                 return;
             }
 
@@ -163,69 +254,61 @@
             var pointName = nameInput.value.trim();
             
             if (pointName === "") {
-                alert("Lütfen kaydetmeden önce bir nokta adı girin!");
+                alert("Lütfen bir nokta adı girin!");
+                nameInput.focus();
                 return;
             }
 
             var id = pointIdCounter++;
             
-            // Haritaya Klasik Mavi Pin Ekle
+            // Haritaya Pin Ekle
             var marker = L.marker([currentLat, currentLon]).addTo(map).bindPopup("<b>" + pointName + "</b>");
             pointMarkers[id] = marker;
 
-            // Diziye Ekle
             savedPoints.push({ id: id, name: pointName, lat: currentLat, lon: currentLon });
 
-            // Inputu temizle ve listeyi güncelle
             nameInput.value = "";
             updateListUI();
-            
-            // Kullanıcıya listeyi açarak kaydettiğini gösterelim
-            document.getElementById("points-panel").style.display = "block";
         }
 
-        // Noktayı Haritada Göster (Zoom)
         function zoomToPoint(lat, lon) {
             map.setView([lat, lon], 19);
         }
 
-        // Noktayı Sil
         function deletePoint(id) {
-            // Haritadan sil
             if(pointMarkers[id]) {
                 map.removeLayer(pointMarkers[id]);
                 delete pointMarkers[id];
             }
-            // Diziden sil
             savedPoints = savedPoints.filter(p => p.id !== id);
             updateListUI();
         }
 
-        // Arayüzdeki Listeyi Güncelleme
         function updateListUI() {
             var listDiv = document.getElementById("points-list");
-            document.getElementById("toggle-list-btn").innerText = "📋 Kayıtlı Noktalar (" + savedPoints.length + ")";
+            document.getElementById("point-count").innerText = savedPoints.length;
 
             if (savedPoints.length === 0) {
-                listDiv.innerHTML = '<div style="font-size:12px; text-align:center; color:#aaa;">Henüz nokta kaydedilmedi.</div>';
+                listDiv.innerHTML = `
+                <div style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:20px;">
+                    <i class="fas fa-folder-open" style="font-size:2rem; margin-bottom:10px; opacity:0.5;"></i><br>
+                    Sistemde kayıtlı nokta bulunmuyor.
+                </div>`;
                 return;
             }
 
-            listDiv.innerHTML = ""; // İçeriği temizle
-
-            // Dizideki her nokta için HTML oluştur
+            listDiv.innerHTML = "";
             savedPoints.forEach(function(point) {
-                var itemHTML = `
-                    <div class="point-item">
-                        <div class="point-title">📍 ${point.name}</div>
-                        <div class="point-coords">E: ${point.lat.toFixed(5)} <br> B: ${point.lon.toFixed(5)}</div>
+                listDiv.innerHTML += `
+                    <div class="point-card">
+                        <div class="point-title"><i class="fas fa-map-marker-alt" style="color:var(--primary); margin-right:5px;"></i> ${point.name}</div>
+                        <div class="point-coords">E: ${point.lat.toFixed(6)} | B: ${point.lon.toFixed(6)}</div>
                         <div class="point-actions">
-                            <button class="btn btn-zoom" onclick="zoomToPoint(${point.lat}, ${point.lon})">🔍 Git</button>
-                            <button class="btn btn-delete" onclick="deletePoint(${point.id})">🗑️ Sil</button>
+                            <button class="btn-action btn-go" onclick="zoomToPoint(${point.lat}, ${point.lon})"><i class="fas fa-search-location"></i> Git</button>
+                            <button class="btn-action btn-del" onclick="deletePoint(${point.id})"><i class="fas fa-trash-alt"></i> Sil</button>
                         </div>
                     </div>
                 `;
-                listDiv.innerHTML += itemHTML;
             });
         }
     </script>
