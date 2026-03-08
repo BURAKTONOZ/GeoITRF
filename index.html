@@ -2,12 +2,11 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>GeoITRF - CBS Veri Terminali</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>GeoITRF - Mobil Terminal</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
@@ -18,191 +17,163 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent: #10b981; /* Zümrüt Yeşili */
-            --accent-hover: #059669;
             --danger: #ef4444;
             --primary: #3b82f6;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-
-        body { 
-            background-color: var(--bg-dark); 
-            color: var(--text-main); 
-            height: 100vh; 
-            display: flex; 
-            overflow: hidden; /* Sayfanın genel kaymasını engelle */
+        /* Sayfa Kaymasını Tamamen Engelleme */
+        body, html { 
+            margin: 0; padding: 0; 
+            width: 100%; height: 100%; 
+            font-family: 'Poppins', sans-serif; 
+            overflow: hidden; 
+            position: fixed; /* Mobilde sekmeyi aşağı çekmeyi/yaylanmayı önler */
+            background-color: #000;
         }
 
-        /* Ana Taşıyıcı: Yan Panel + Harita */
-        .app-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
+        /* Harita Arka Planda Tam Ekran */
+        #map { width: 100vw; height: 100vh; z-index: 1; }
+
+        /* Üst Bilgi Çubuğu (Yüzen) */
+        .top-bar {
+            position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 12px 20px; border-radius: 15px; border: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .top-bar h1 { font-size: 1rem; margin: 0; font-weight: 700; letter-spacing: 0.5px; }
+        .gps-status { font-size: 0.8rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 5px; }
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
+
+        /* ALT PANEL (BOTTOM SHEET) */
+        .bottom-panel {
+            position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--panel-bg);
+            border-radius: 25px 25px 0 0;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column;
+            border-top: 1px solid rgba(255,255,255,0.15);
         }
 
-        /* --- SOL PANEL (SİDEBAR) --- */
-        .sidebar {
-            width: 380px;
-            background-color: var(--panel-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+        /* Çekmece Tutamacı (Görsel Dokunuş) */
+        .drawer-handle {
+            width: 40px; height: 5px; background: rgba(255,255,255,0.2);
+            border-radius: 5px; margin: 10px auto;
         }
 
-        /* Üst Başlık */
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .sidebar-header i { font-size: 24px; color: var(--accent); }
-        .sidebar-header h1 { font-size: 1.2rem; font-weight: 600; margin: 0; }
-        .sidebar-header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        /* Sabit Kısım (Her Zaman Görünür) */
+        .panel-static { padding: 0 20px 20px 20px; }
 
-        /* Anlık Konum Kartı */
-        .live-location-card {
-            margin: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+        .coords-row {
+            display: flex; justify-content: space-between;
+            color: var(--primary); font-size: 0.9rem; font-weight: 600;
+            background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 10px; margin-bottom: 15px;
         }
-        .live-location-card h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; display: flex; justify-content: space-between;}
-        .live-location-card h3 span { color: var(--danger); font-size: 0.8rem; animation: blink 2s infinite; }
-        .coord-row { display: flex; justify-content: space-between; font-size: 0.95rem; margin-bottom: 5px; font-weight: 600; color: var(--primary);}
+
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .input-row input {
+            flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05); color: white; font-size: 0.9rem; outline: none;
+        }
+        .input-row button {
+            background: var(--accent); color: white; border: none; padding: 0 20px;
+            border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+
+        /* Menü Açma/Kapama Butonu */
+        .toggle-btn {
+            width: 100%; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
+            padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .toggle-btn:active { background: rgba(255,255,255,0.05); }
+
+        /* Açılır Kapanır Liste Alanı */
+        .panel-collapsible {
+            max-height: 0; /* Başlangıçta kapalı */
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            background: rgba(0,0,0,0.15);
+        }
         
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .panel-collapsible.open {
+            max-height: 45vh; /* Açıldığında ekranın %45'i kadar büyür */
+        }
 
-        /* Veri Giriş Alanı */
-        .input-section {
-            padding: 0 20px 20px 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .input-group { display: flex; flex-direction: column; gap: 10px; }
-        .input-group input {
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-            transition: 0.3s;
-        }
-        .input-group input:focus { border-color: var(--accent); background: rgba(255, 255, 255, 0.1); }
-        .btn-save {
-            background: var(--accent); color: white; border: none; padding: 12px;
-            border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .btn-save:hover { background: var(--accent-hover); }
-
-        /* Kayıtlı Noktalar Listesi */
-        .points-list-header { padding: 20px 20px 10px 20px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between; }
-        .points-container {
-            flex: 1;
+        /* İçerik (Kaydırılabilir Alan) */
+        .points-list {
+            padding: 15px 20px;
+            max-height: 45vh;
             overflow-y: auto;
-            padding: 0 20px 20px 20px;
+            -webkit-overflow-scrolling: touch; /* iOS'ta akıcı kaydırma */
         }
-        
-        /* Kaydırma Çubuğu Özelleştirme */
-        .points-container::-webkit-scrollbar { width: 6px; }
-        .points-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
 
         .point-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            transition: 0.2s;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 12px; margin-bottom: 10px; color: white;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .point-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
-        .point-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; color: white;}
-        .point-coords { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
-        .point-actions { display: flex; gap: 8px; }
-        .btn-action {
-            flex: 1; padding: 8px; border: none; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600; transition: 0.3s;
+        .point-info h4 { margin: 0 0 5px 0; font-size: 0.95rem; }
+        .point-info p { margin: 0; font-size: 0.75rem; color: var(--text-muted); }
+        .point-actions { display: flex; gap: 5px; }
+        .btn-icon {
+            width: 35px; height: 35px; border-radius: 8px; border: none;
+            display: flex; justify-content: center; align-items: center; color: white; cursor: pointer;
         }
         .btn-go { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
-        .btn-go:hover { background: rgba(59, 130, 246, 0.4); }
         .btn-del { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .btn-del:hover { background: rgba(239, 68, 68, 0.4); }
-
-        /* --- SAĞ PANEL (HARİTA) --- */
-        .map-wrapper {
-            flex: 1;
-            position: relative;
-        }
-        #map { width: 100%; height: 100%; z-index: 1; }
-
-        /* Mobil Görünüm (Altlı Üstlü) */
-        @media (max-width: 768px) {
-            .app-container { flex-direction: column; }
-            .map-wrapper { height: 45vh; flex: none; order: 1; } /* Harita Üstte */
-            .sidebar { width: 100%; height: 55vh; order: 2; border-right: none; border-top: 1px solid var(--border-color); box-shadow: 0 -5px 15px rgba(0,0,0,0.5); }
-        }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="top-bar">
+        <h1>GeoITRF</h1>
+        <div class="gps-status"><i class="fas fa-satellite blink"></i> Aktif</div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="bottom-panel">
+        <div class="drawer-handle"></div>
         
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-satellite-dish"></i>
-                <div>
-                    <h1>GeoITRF</h1>
-                    <p>CBS Veri Terminali</p>
+        <div class="panel-static">
+            <div class="coords-row">
+                <span>E: <span id="lat">...</span></span>
+                <span>B: <span id="lon">...</span></span>
+            </div>
+
+            <div class="input-row">
+                <input type="text" id="point-name" placeholder="Nokta Adı Girin (Örn: N1)">
+                <button onclick="saveCurrentLocation()"><i class="fas fa-save"></i></button>
+            </div>
+
+            <button class="toggle-btn" onclick="toggleList()">
+                <span><i class="fas fa-list-ul"></i> Kayıtlı Noktalar (<span id="point-count">0</span>)</span>
+                <i class="fas fa-chevron-down" id="toggle-icon"></i>
+            </button>
+        </div>
+
+        <div class="panel-collapsible" id="collapsible-area">
+            <div class="points-list" id="points-list">
+                <div style="text-align:center; color:#94a3b8; font-size:0.85rem; padding: 20px 0;">
+                    Kayıtlı noktanız bulunmuyor.
                 </div>
             </div>
-
-            <div class="live-location-card">
-                <h3>GPS Durumu <span><i class="fas fa-circle"></i> Canlı</span></h3>
-                <div class="coord-row"><span>Enlem:</span> <span id="lat">Bağlanıyor...</span></div>
-                <div class="coord-row"><span>Boylam:</span> <span id="lon">Bağlanıyor...</span></div>
-            </div>
-
-            <div class="input-section">
-                <div class="input-group">
-                    <input type="text" id="point-name" placeholder="Nokta Adı (Örn: P-101)">
-                    <button class="btn-save" onclick="saveCurrentLocation()">
-                        <i class="fas fa-map-pin"></i> Noktayı Kaydet
-                    </button>
-                </div>
-            </div>
-
-            <div class="points-list-header">
-                <span>Kayıtlı Noktalar</span>
-                <span id="point-count">0</span>
-            </div>
-            
-            <div class="points-container" id="points-list">
-                <div style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:20px;">
-                    <i class="fas fa-folder-open" style="font-size:2rem; margin-bottom:10px; opacity:0.5;"></i><br>
-                    Sistemde kayıtlı nokta bulunmuyor.
-                </div>
-            </div>
-        </aside>
-
-        <main class="map-wrapper">
-            <div id="map"></div>
-        </main>
-
+        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Harita Başlatma
-        var map = L.map('map').setView([39.92, 32.85], 2); 
+        var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 2); 
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 19, attribution: '© Esri & GeoITRF'
+            maxZoom: 19
         }).addTo(map);
+        
+        // Zoom butonlarını sağ üste taşı
+        L.control.zoom({ position: 'topright' }).addTo(map);
 
         var userMarker = null;
         var firstLocationFound = false;
@@ -212,14 +183,13 @@
         var pointMarkers = {};
         var pointIdCounter = 0;
 
-        // Anlık Konum Takibi
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
                 currentLat = position.coords.latitude;
                 currentLon = position.coords.longitude;
 
-                document.getElementById('lat').innerText = currentLat.toFixed(6);
-                document.getElementById('lon').innerText = currentLon.toFixed(6);
+                document.getElementById('lat').innerText = currentLat.toFixed(5);
+                document.getElementById('lon').innerText = currentLon.toFixed(5);
 
                 var newLocation = new L.LatLng(currentLat, currentLon);
 
@@ -227,59 +197,65 @@
                     userMarker.setLatLng(newLocation);
                 } else {
                     userMarker = L.circleMarker(newLocation, {
-                        color: '#10b981', fillColor: '#10b981', fillOpacity: 0.8, radius: 7, weight: 2
-                    }).addTo(map).bindPopup("Mevcut Konumunuz");
+                        color: '#10b981', fillColor: '#10b981', fillOpacity: 0.8, radius: 8, weight: 2
+                    }).addTo(map);
                 }
 
                 if (!firstLocationFound) {
                     map.setView(newLocation, 18);
                     firstLocationFound = true;
                 }
-
             }, function(error) {
                 console.warn('Konum Hatası:', error.message);
-                document.getElementById('lat').innerText = "Hata!";
-                document.getElementById('lon').innerText = "Hata!";
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
-        // Nokta Kaydetme
+        // Listeyi Açıp Kapatma Fonksiyonu (Accordion Animasyonu)
+        function toggleList() {
+            var panel = document.getElementById("collapsible-area");
+            var icon = document.getElementById("toggle-icon");
+            
+            if (panel.classList.contains("open")) {
+                panel.classList.remove("open");
+                icon.className = "fas fa-chevron-down";
+            } else {
+                panel.classList.add("open");
+                icon.className = "fas fa-chevron-up";
+            }
+        }
+
         function saveCurrentLocation() {
             if (currentLat === null || currentLon === null) {
-                alert("GPS bağlantısı bekleniyor...");
-                return;
+                alert("GPS bağlantısı bekleniyor..."); return;
             }
-
             var nameInput = document.getElementById("point-name");
             var pointName = nameInput.value.trim();
-            
             if (pointName === "") {
-                alert("Lütfen bir nokta adı girin!");
-                nameInput.focus();
-                return;
+                alert("Nokta adı girin!"); nameInput.focus(); return;
             }
 
             var id = pointIdCounter++;
-            
-            // Haritaya Pin Ekle
             var marker = L.marker([currentLat, currentLon]).addTo(map).bindPopup("<b>" + pointName + "</b>");
             pointMarkers[id] = marker;
 
             savedPoints.push({ id: id, name: pointName, lat: currentLat, lon: currentLon });
-
             nameInput.value = "";
+            
+            // Kaydedince listeyi otomatik aç
+            var panel = document.getElementById("collapsible-area");
+            if(!panel.classList.contains("open")) { toggleList(); }
+            
             updateListUI();
         }
 
         function zoomToPoint(lat, lon) {
             map.setView([lat, lon], 19);
+            // Listeyi kapat ki haritayı tam görsün
+            toggleList();
         }
 
         function deletePoint(id) {
-            if(pointMarkers[id]) {
-                map.removeLayer(pointMarkers[id]);
-                delete pointMarkers[id];
-            }
+            if(pointMarkers[id]) { map.removeLayer(pointMarkers[id]); delete pointMarkers[id]; }
             savedPoints = savedPoints.filter(p => p.id !== id);
             updateListUI();
         }
@@ -289,11 +265,7 @@
             document.getElementById("point-count").innerText = savedPoints.length;
 
             if (savedPoints.length === 0) {
-                listDiv.innerHTML = `
-                <div style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:20px;">
-                    <i class="fas fa-folder-open" style="font-size:2rem; margin-bottom:10px; opacity:0.5;"></i><br>
-                    Sistemde kayıtlı nokta bulunmuyor.
-                </div>`;
+                listDiv.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.85rem; padding: 20px 0;">Kayıtlı noktanız bulunmuyor.</div>';
                 return;
             }
 
@@ -301,11 +273,13 @@
             savedPoints.forEach(function(point) {
                 listDiv.innerHTML += `
                     <div class="point-card">
-                        <div class="point-title"><i class="fas fa-map-marker-alt" style="color:var(--primary); margin-right:5px;"></i> ${point.name}</div>
-                        <div class="point-coords">E: ${point.lat.toFixed(6)} | B: ${point.lon.toFixed(6)}</div>
+                        <div class="point-info">
+                            <h4><i class="fas fa-map-pin" style="color:var(--primary);"></i> ${point.name}</h4>
+                            <p>${point.lat.toFixed(5)}, ${point.lon.toFixed(5)}</p>
+                        </div>
                         <div class="point-actions">
-                            <button class="btn-action btn-go" onclick="zoomToPoint(${point.lat}, ${point.lon})"><i class="fas fa-search-location"></i> Git</button>
-                            <button class="btn-action btn-del" onclick="deletePoint(${point.id})"><i class="fas fa-trash-alt"></i> Sil</button>
+                            <button class="btn-icon btn-go" onclick="zoomToPoint(${point.lat}, ${point.lon})"><i class="fas fa-crosshairs"></i></button>
+                            <button class="btn-icon btn-del" onclick="deletePoint(${point.id})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `;
