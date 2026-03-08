@@ -16,25 +16,26 @@
             --border-color: rgba(255, 255, 255, 0.1);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent: #10b981; /* Zümrüt Yeşili */
+            --accent: #10b981; 
             --danger: #ef4444;
             --primary: #3b82f6;
         }
 
-        /* Sayfa Kaymasını Tamamen Engelleme */
         body, html { 
             margin: 0; padding: 0; 
             width: 100%; height: 100%; 
             font-family: 'Poppins', sans-serif; 
             overflow: hidden; 
-            position: fixed; /* Mobilde sekmeyi aşağı çekmeyi/yaylanmayı önler */
+            position: fixed; 
             background-color: #000;
         }
 
-        /* Harita Arka Planda Tam Ekran */
         #map { width: 100vw; height: 100vh; z-index: 1; }
 
-        /* Üst Bilgi Çubuğu (Yüzen) */
+        /* Harita üzerindeki butonları üst menünün altına itme */
+        .leaflet-top { margin-top: 70px !important; }
+
+        /* Yüzen Üst Çubuk */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
             background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -47,7 +48,28 @@
         .blink { animation: blinker 1.5s linear infinite; }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
-        /* ALT PANEL (BOTTOM SHEET) */
+        /* Konumuma Git Butonu (Google Maps stili) */
+        .locate-btn {
+            position: absolute;
+            top: 155px; /* Zoom butonlarının altına denk gelecek */
+            right: 10px;
+            z-index: 1000;
+            background-color: #fff;
+            border: 2px solid rgba(0,0,0,0.2);
+            border-radius: 4px;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+            color: #444;
+            font-size: 16px;
+        }
+        .locate-btn:active { background-color: #f4f4f4; }
+
+        /* ALT PANEL */
         .bottom-panel {
             position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1000;
             background: var(--panel-bg);
@@ -57,13 +79,11 @@
             border-top: 1px solid rgba(255,255,255,0.15);
         }
 
-        /* Çekmece Tutamacı (Görsel Dokunuş) */
         .drawer-handle {
             width: 40px; height: 5px; background: rgba(255,255,255,0.2);
             border-radius: 5px; margin: 10px auto;
         }
 
-        /* Sabit Kısım (Her Zaman Görünür) */
         .panel-static { padding: 0 20px 20px 20px; }
 
         .coords-row {
@@ -82,7 +102,6 @@
             border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;
         }
 
-        /* Menü Açma/Kapama Butonu */
         .toggle-btn {
             width: 100%; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
             padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer;
@@ -90,24 +109,16 @@
         }
         .toggle-btn:active { background: rgba(255,255,255,0.05); }
 
-        /* Açılır Kapanır Liste Alanı */
         .panel-collapsible {
-            max-height: 0; /* Başlangıçta kapalı */
+            max-height: 0; 
             overflow: hidden;
             transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             background: rgba(0,0,0,0.15);
         }
-        
-        .panel-collapsible.open {
-            max-height: 45vh; /* Açıldığında ekranın %45'i kadar büyür */
-        }
+        .panel-collapsible.open { max-height: 45vh; }
 
-        /* İçerik (Kaydırılabilir Alan) */
         .points-list {
-            padding: 15px 20px;
-            max-height: 45vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* iOS'ta akıcı kaydırma */
+            padding: 15px 20px; max-height: 45vh; overflow-y: auto; -webkit-overflow-scrolling: touch; 
         }
 
         .point-card {
@@ -133,22 +144,23 @@
         <div class="gps-status"><i class="fas fa-satellite blink"></i> Aktif</div>
     </div>
 
+    <button class="locate-btn" onclick="goToMyLocation()" title="Konumuma Git">
+        <i class="fas fa-crosshairs"></i>
+    </button>
+
     <div id="map"></div>
 
     <div class="bottom-panel">
         <div class="drawer-handle"></div>
-        
         <div class="panel-static">
             <div class="coords-row">
                 <span>E: <span id="lat">...</span></span>
                 <span>B: <span id="lon">...</span></span>
             </div>
-
             <div class="input-row">
                 <input type="text" id="point-name" placeholder="Nokta Adı Girin (Örn: N1)">
                 <button onclick="saveCurrentLocation()"><i class="fas fa-save"></i></button>
             </div>
-
             <button class="toggle-btn" onclick="toggleList()">
                 <span><i class="fas fa-list-ul"></i> Kayıtlı Noktalar (<span id="point-count">0</span>)</span>
                 <i class="fas fa-chevron-down" id="toggle-icon"></i>
@@ -172,7 +184,6 @@
             maxZoom: 19
         }).addTo(map);
         
-        // Zoom butonlarını sağ üste taşı
         L.control.zoom({ position: 'topright' }).addTo(map);
 
         var userMarker = null;
@@ -210,11 +221,18 @@
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
-        // Listeyi Açıp Kapatma Fonksiyonu (Accordion Animasyonu)
+        // Anlık konuma odaklanma fonksiyonu
+        function goToMyLocation() {
+            if (currentLat && currentLon) {
+                map.setView([currentLat, currentLon], 19);
+            } else {
+                alert("Konum aranıyor, lütfen bekleyin...");
+            }
+        }
+
         function toggleList() {
             var panel = document.getElementById("collapsible-area");
             var icon = document.getElementById("toggle-icon");
-            
             if (panel.classList.contains("open")) {
                 panel.classList.remove("open");
                 icon.className = "fas fa-chevron-down";
@@ -241,17 +259,13 @@
             savedPoints.push({ id: id, name: pointName, lat: currentLat, lon: currentLon });
             nameInput.value = "";
             
-            // Kaydedince listeyi otomatik aç
-            var panel = document.getElementById("collapsible-area");
-            if(!panel.classList.contains("open")) { toggleList(); }
-            
+            // Listeyi otomatik AÇMAYI iptal ettik (sadece UI'ı arka planda güncelliyoruz)
             updateListUI();
         }
 
         function zoomToPoint(lat, lon) {
             map.setView([lat, lon], 19);
-            // Listeyi kapat ki haritayı tam görsün
-            toggleList();
+            toggleList(); // Listeden bir yere giderken haritayı görmek için listeyi kapatır
         }
 
         function deletePoint(id) {
