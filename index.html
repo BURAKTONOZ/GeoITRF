@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Anlık Uydu Haritası</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        /* Temel Sıfırlamalar */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000; /* Uydu yüklenirken siyah arka plan daha iyi durur */
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        /* Glassmorphism (Buzlu Cam) Bilgi Kartı - Koyu Temaya Uygun */
+        #location-card {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            
+            /* Uydu haritasına daha çok yakışması için hafif koyu cam efekti */
+            background: rgba(20, 20, 20, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            
+            padding: 20px 30px;
+            width: 80%;
+            max-width: 320px;
+            text-align: center;
+            color: #ffffff; /* Yazıları beyaz yaptık */
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .coords {
+            font-size: 14px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
+
+        .coords span {
+            font-weight: 600;
+            color: #4da8da; /* Koordinatları belirgin bir mavi yaptık */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <div id="location-card">
+        <div class="title">📍 Anlık Konumunuz</div>
+        <div class="coords">Enlem: <span id="lat">Hesaplanıyor...</span></div>
+        <div class="coords">Boylam: <span id="lon">Hesaplanıyor...</span></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Haritayı başlat
+        var map = L.map('map').setView([39.92, 32.85], 2); 
+
+        // Esri Uydu Görünümü Katmanı
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '© Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }).addTo(map);
+
+        var userMarker = null;
+        var firstLocationFound = false; // İlk konumu bulup bulmadığımızı takip edecek değişken
+
+        if ('geolocation' in navigator) {
+            navigator.geolocation.watchPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+
+                // Koordinatları cam kartta güncelle (Haritayı kaydırsan bile buralar sürekli güncellenir)
+                document.getElementById('lat').innerText = lat.toFixed(5);
+                document.getElementById('lon').innerText = lon.toFixed(5);
+
+                var newLocation = new L.LatLng(lat, lon);
+
+                // İşaretçiyi (Marker) her zaman kullanıcının gerçek konumunda tut
+                if (userMarker) {
+                    userMarker.setLatLng(newLocation);
+                } else {
+                    userMarker = L.marker(newLocation).addTo(map)
+                        .bindPopup("Şu an buradasınız!").openPopup();
+                }
+
+                // SADECE ilk konum bulunduğunda haritayı oraya odakla ve yakınlaş
+                if (!firstLocationFound) {
+                    map.setView(newLocation, 17); // 17 zoom seviyesi uydu için idealdir
+                    firstLocationFound = true; // Bunu true yapıyoruz ki bir daha haritayı kitlemesin
+                }
+
+            }, function(error) {
+                console.warn('Hata:', error.message);
+                document.getElementById('lat').innerText = "Bulunamadı";
+                document.getElementById('lon').innerText = "Bulunamadı";
+            }, {
+                enableHighAccuracy: true,
+                maximumAge: 0
+            });
+        } else {
+            alert("Tarayıcınız konum servisini desteklemiyor.");
+        }
+    </script>
+</body>
+</html>
 
