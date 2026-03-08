@@ -3,134 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Anlık Uydu Haritası</title>
+    <title>Profesyonel CBS Terminali</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
-        /* Temel Sıfırlamalar */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000; /* Uydu yüklenirken siyah arka plan daha iyi durur */
-        }
+        /* Temel Ayarlar */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; background: #000; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; z-index: 1; }
 
-        #map {
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-        }
-
-        /* Glassmorphism (Buzlu Cam) Bilgi Kartı - Koyu Temaya Uygun */
-        #location-card {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            
-            /* Uydu haritasına daha çok yakışması için hafif koyu cam efekti */
-            background: rgba(20, 20, 20, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        /* Ortak Glassmorphism Sınıfı */
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            
-            padding: 20px 30px;
-            width: 80%;
-            max-width: 320px;
-            text-align: center;
-            color: #ffffff; /* Yazıları beyaz yaptık */
-        }
-
-        .title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             color: #fff;
         }
 
-        .coords {
-            font-size: 14px;
-            margin: 5px 0;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
+        /* Alt Kısım: Anlık Konum ve Kayıt Kartı */
+        #bottom-card {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; padding: 15px 20px; width: 90%; max-width: 350px; border-radius: 20px;
         }
+        .coords-display { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .coords-display span { color: #4da8da; font-weight: bold; }
+        
+        .save-section { display: flex; gap: 10px; }
+        .save-section input {
+            flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.3); color: white; outline: none; font-size: 14px;
+        }
+        .save-section input::placeholder { color: #aaa; }
+        .btn {
+            padding: 10px 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .btn-save { background: #4da8da; color: #000; }
+        .btn-save:hover { background: #3b8bb5; }
 
-        .coords span {
-            font-weight: 600;
-            color: #4da8da; /* Koordinatları belirgin bir mavi yaptık */
+        /* Üst Kısım: Açılır Kapanır Liste */
+        #list-container {
+            position: absolute; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end;
         }
+        #toggle-list-btn {
+            background: rgba(20, 20, 20, 0.8); color: white; border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; backdrop-filter: blur(10px);
+        }
+        #points-panel {
+            display: none; /* Başlangıçta kapalı */
+            width: 280px; max-height: 50vh; overflow-y: auto; margin-top: 10px; border-radius: 15px; padding: 10px;
+        }
+        /* Kaydırma Çubuğu Özelleştirme */
+        #points-panel::-webkit-scrollbar { width: 5px; }
+        #points-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 5px; }
+
+        /* Liste Elemanları */
+        .point-item {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 10px;
+        }
+        .point-item:last-child { margin-bottom: 0; }
+        .point-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #fff; }
+        .point-coords { font-size: 11px; color: #ccc; margin-bottom: 10px; }
+        .point-actions { display: flex; gap: 5px; }
+        .btn-zoom { background: rgba(255,255,255,0.2); color: white; font-size: 12px; flex: 1; }
+        .btn-delete { background: rgba(255, 50, 50, 0.6); color: white; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div id="map"></div>
 
-    <div id="location-card">
-        <div class="title">📍 Anlık Konumunuz</div>
-        <div class="coords">Enlem: <span id="lat">Hesaplanıyor...</span></div>
-        <div class="coords">Boylam: <span id="lon">Hesaplanıyor...</span></div>
+    <div id="list-container">
+        <button id="toggle-list-btn" onclick="toggleList()">📋 Kayıtlı Noktalar (0)</button>
+        <div id="points-panel" class="glass-panel">
+            <div id="points-list">
+                <div style="font-size:12px; text-align:center; color:#aaa;">Henüz nokta kaydedilmedi.</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bottom-card" class="glass-panel">
+        <div class="coords-display">
+            <div>Enlem: <span id="lat">Bekleniyor...</span></div>
+            <div>Boylam: <span id="lon">Bekleniyor...</span></div>
+        </div>
+        <div class="save-section">
+            <input type="text" id="point-name" placeholder="Nokta Adı Girin (Örn: P1)">
+            <button class="btn btn-save" onclick="saveCurrentLocation()">Kaydet</button>
+        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Haritayı başlat
+        // Harita ve Uydu Katmanı
         var map = L.map('map').setView([39.92, 32.85], 2); 
-
-        // Esri Uydu Görünümü Katmanı
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 19,
-            attribution: '© Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            maxZoom: 19, attribution: '© Esri'
         }).addTo(map);
 
-        var userMarker = null;
-        var firstLocationFound = false; // İlk konumu bulup bulmadığımızı takip edecek değişken
+        // Değişkenler
+        var userMarker = null; // Canlı konum işaretçisi (kırmızı nokta)
+        var firstLocationFound = false;
+        var currentLat = null;
+        var currentLon = null;
+        var savedPoints = []; // Kaydedilen noktaların tutulduğu dizi
+        var pointMarkers = {}; // Haritadaki pinleri id ile takip etmek için obje
+        var pointIdCounter = 0;
 
+        // Canlı Konum Takibi
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
+                currentLat = position.coords.latitude;
+                currentLon = position.coords.longitude;
 
-                // Koordinatları cam kartta güncelle (Haritayı kaydırsan bile buralar sürekli güncellenir)
-                document.getElementById('lat').innerText = lat.toFixed(5);
-                document.getElementById('lon').innerText = lon.toFixed(5);
+                document.getElementById('lat').innerText = currentLat.toFixed(6);
+                document.getElementById('lon').innerText = currentLon.toFixed(6);
 
-                var newLocation = new L.LatLng(lat, lon);
+                var newLocation = new L.LatLng(currentLat, currentLon);
 
-                // İşaretçiyi (Marker) her zaman kullanıcının gerçek konumunda tut
+                // Kullanıcının anlık konumu için özel kırmızı daire (haritayı pinle boğmamak için)
                 if (userMarker) {
                     userMarker.setLatLng(newLocation);
                 } else {
-                    userMarker = L.marker(newLocation).addTo(map)
-                        .bindPopup("Şu an buradasınız!").openPopup();
+                    userMarker = L.circleMarker(newLocation, {
+                        color: 'red', fillColor: '#f03', fillOpacity: 0.8, radius: 8
+                    }).addTo(map).bindPopup("Şu an buradasınız!");
                 }
 
-                // SADECE ilk konum bulunduğunda haritayı oraya odakla ve yakınlaş
                 if (!firstLocationFound) {
-                    map.setView(newLocation, 17); // 17 zoom seviyesi uydu için idealdir
-                    firstLocationFound = true; // Bunu true yapıyoruz ki bir daha haritayı kitlemesin
+                    map.setView(newLocation, 18); // İlk buluşta çok yakından başla
+                    firstLocationFound = true;
                 }
 
             }, function(error) {
-                console.warn('Hata:', error.message);
-                document.getElementById('lat').innerText = "Bulunamadı";
-                document.getElementById('lon').innerText = "Bulunamadı";
-            }, {
-                enableHighAccuracy: true,
-                maximumAge: 0
+                console.warn('Konum Hatası:', error.message);
+            }, { enableHighAccuracy: true, maximumAge: 0 });
+        }
+
+        // Listeyi Aç/Kapat Fonksiyonu
+        function toggleList() {
+            var panel = document.getElementById("points-panel");
+            if (panel.style.display === "none" || panel.style.display === "") {
+                panel.style.display = "block";
+            } else {
+                panel.style.display = "none";
+            }
+        }
+
+        // Noktayı Kaydet Fonksiyonu
+        function saveCurrentLocation() {
+            if (currentLat === null || currentLon === null) {
+                alert("Konum henüz bulunamadı, lütfen bekleyin.");
+                return;
+            }
+
+            var nameInput = document.getElementById("point-name");
+            var pointName = nameInput.value.trim();
+            
+            if (pointName === "") {
+                alert("Lütfen kaydetmeden önce bir nokta adı girin!");
+                return;
+            }
+
+            var id = pointIdCounter++;
+            
+            // Haritaya Klasik Mavi Pin Ekle
+            var marker = L.marker([currentLat, currentLon]).addTo(map).bindPopup("<b>" + pointName + "</b>");
+            pointMarkers[id] = marker;
+
+            // Diziye Ekle
+            savedPoints.push({ id: id, name: pointName, lat: currentLat, lon: currentLon });
+
+            // Inputu temizle ve listeyi güncelle
+            nameInput.value = "";
+            updateListUI();
+            
+            // Kullanıcıya listeyi açarak kaydettiğini gösterelim
+            document.getElementById("points-panel").style.display = "block";
+        }
+
+        // Noktayı Haritada Göster (Zoom)
+        function zoomToPoint(lat, lon) {
+            map.setView([lat, lon], 19);
+        }
+
+        // Noktayı Sil
+        function deletePoint(id) {
+            // Haritadan sil
+            if(pointMarkers[id]) {
+                map.removeLayer(pointMarkers[id]);
+                delete pointMarkers[id];
+            }
+            // Diziden sil
+            savedPoints = savedPoints.filter(p => p.id !== id);
+            updateListUI();
+        }
+
+        // Arayüzdeki Listeyi Güncelleme
+        function updateListUI() {
+            var listDiv = document.getElementById("points-list");
+            document.getElementById("toggle-list-btn").innerText = "📋 Kayıtlı Noktalar (" + savedPoints.length + ")";
+
+            if (savedPoints.length === 0) {
+                listDiv.innerHTML = '<div style="font-size:12px; text-align:center; color:#aaa;">Henüz nokta kaydedilmedi.</div>';
+                return;
+            }
+
+            listDiv.innerHTML = ""; // İçeriği temizle
+
+            // Dizideki her nokta için HTML oluştur
+            savedPoints.forEach(function(point) {
+                var itemHTML = `
+                    <div class="point-item">
+                        <div class="point-title">📍 ${point.name}</div>
+                        <div class="point-coords">E: ${point.lat.toFixed(5)} <br> B: ${point.lon.toFixed(5)}</div>
+                        <div class="point-actions">
+                            <button class="btn btn-zoom" onclick="zoomToPoint(${point.lat}, ${point.lon})">🔍 Git</button>
+                            <button class="btn btn-delete" onclick="deletePoint(${point.id})">🗑️ Sil</button>
+                        </div>
+                    </div>
+                `;
+                listDiv.innerHTML += itemHTML;
             });
-        } else {
-            alert("Tarayıcınız konum servisini desteklemiyor.");
         }
     </script>
 </body>
 </html>
-
