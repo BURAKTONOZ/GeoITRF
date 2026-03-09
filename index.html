@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
         :root {
@@ -27,28 +29,43 @@
         }
 
         #map { width: 100vw; height: 100vh; z-index: 1; }
-        .leaflet-top { margin-top: 70px !important; }
+        .leaflet-top { margin-top: 115px !important; } /* Zoom butonlarını yeni üst menüye göre ittik */
 
+        /* YENİ ÜST BİLGİ PANELİ (Dashboard) */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
             background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 12px 20px; border-radius: 15px; border: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; align-items: center; color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 15px; border-radius: 15px; border: 1px solid var(--border-color);
+            display: flex; flex-direction: column; gap: 10px; color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-        .top-bar h1 { font-size: 1rem; margin: 0; font-weight: 700; letter-spacing: 0.5px; }
-        .gps-status { font-size: 0.8rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 5px; }
-        .blink { animation: blinker 1.5s linear infinite; }
+        
+        .top-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;
+        }
+        .top-header h1 { font-size: 1.1rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px;}
+        .gps-status { font-size: 0.8rem; font-weight: 600; color: #cbd5e1; display: flex; align-items: center; gap: 6px; }
+        .gps-status span { color: var(--accent); }
+        .blink { animation: blinker 1.5s linear infinite; color: var(--accent); }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
+        .live-data-container { display: flex; justify-content: space-between; gap: 10px; }
+        .live-col { flex: 1; display: flex; flex-direction: column; }
+        .live-col:last-child { text-align: right; }
+        .live-label { color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px;}
+        .live-val { font-family: monospace; font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.3;}
+        .live-val span { color: var(--primary); }
+
         .locate-btn {
-            position: absolute; top: 155px; right: 10px; z-index: 1000;
+            position: absolute; top: 165px; right: 10px; z-index: 1000;
             background-color: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px;
             width: 34px; height: 34px; display: flex; justify-content: center; align-items: center;
             cursor: pointer; box-shadow: 0 1px 5px rgba(0,0,0,0.65); color: #444; font-size: 16px;
         }
         .locate-btn:active { background-color: #f4f4f4; }
 
+        /* ALT PANEL (Temizlendi ve Küçültüldü) */
         .bottom-panel {
             position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1000;
             background: var(--panel-bg); border-radius: 25px 25px 0 0;
@@ -59,11 +76,6 @@
         .drawer-handle { width: 40px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 5px; margin: 10px auto; }
         .panel-static { padding: 0 20px 20px 20px; }
 
-        .coords-row {
-            display: flex; justify-content: space-between; color: var(--primary); font-size: 0.9rem; font-weight: 600;
-            background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 10px; margin-bottom: 15px;
-        }
-
         .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .input-row input {
             flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-color);
@@ -72,15 +84,15 @@
         .input-row button {
             background: var(--accent); color: white; border: none; padding: 0 20px;
             border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; width: 60px;
+            transition: 0.2s;
         }
-        .input-row button:disabled { background: #64748b; cursor: not-allowed; }
+        .input-row button:active { transform: scale(0.95); background: #059669; }
 
         .toggle-btn {
             width: 100%; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
             padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .toggle-btn:active { background: rgba(255,255,255,0.05); }
 
         .panel-collapsible {
             max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1); background: rgba(0,0,0,0.15);
@@ -111,8 +123,26 @@
 <body>
 
     <div class="top-bar">
-        <h1>GeoITRF</h1>
-        <div class="gps-status"><i class="fas fa-satellite blink"></i> Aktif</div>
+        <div class="top-header">
+            <h1>GeoITRF</h1>
+            <div class="gps-status">
+                <i class="fas fa-satellite blink"></i> 
+                Hassasiyet: <span id="accuracy">Bekleniyor</span>
+            </div>
+        </div>
+        
+        <div class="live-data-container">
+            <div class="live-col">
+                <span class="live-label">WGS84 (E / B)</span>
+                <span class="live-val">E: <span id="live-lat">...</span></span>
+                <span class="live-val">B: <span id="live-lon">...</span></span>
+            </div>
+            <div class="live-col">
+                <span class="live-label" id="dom-label">ITRF96</span>
+                <span class="live-val">Y: <span id="live-y">...</span></span>
+                <span class="live-val">X: <span id="live-x">...</span></span>
+            </div>
+        </div>
     </div>
 
     <button class="locate-btn" onclick="goToMyLocation()" title="Konumuma Git">
@@ -124,10 +154,6 @@
     <div class="bottom-panel">
         <div class="drawer-handle"></div>
         <div class="panel-static">
-            <div class="coords-row">
-                <span>E: <span id="lat">...</span></span>
-                <span>B: <span id="lon">...</span></span>
-            </div>
             <div class="input-row">
                 <input type="text" id="point-name" placeholder="Nokta Adı Girin (Örn: P1)">
                 <button id="save-btn" onclick="saveCurrentLocation()"><i class="fas fa-save"></i></button>
@@ -156,24 +182,47 @@
 
         var userMarker = null;
         var firstLocationFound = false;
+        
+        // Anlık veriler
         var currentLat = null;
         var currentLon = null;
+        var currentX = null;
+        var currentY = null;
+        var currentDOM = null;
+        
         var savedPoints = [];
         var pointMarkers = {};
         var pointIdCounter = 0;
 
-        // Türkiye ITRF96 (3 Derece) EPSG Kodları
-        const epsgKodu = {
-            27: 5253, 30: 5254, 33: 5255, 36: 5256, 39: 5257, 42: 5258, 45: 5259
-        };
+        // Proj4js ile lokal dönüşüm fonksiyonu
+        function calculateITRF(lat, lon) {
+            let dom = Math.round(lon / 3) * 3;
+            // Dinamik Gauss-Kruger projeksiyon tanımlaması (Türkiye 3 Derece)
+            let projString = `+proj=tmerc +lat_0=0 +lon_0=${dom} +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs`;
+            let result = proj4('WGS84', projString, [lon, lat]);
+            return { y: result[0], x: result[1], dom: dom };
+        }
 
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
                 currentLat = position.coords.latitude;
                 currentLon = position.coords.longitude;
+                let acc = position.coords.accuracy;
 
-                document.getElementById('lat').innerText = currentLat.toFixed(6);
-                document.getElementById('lon').innerText = currentLon.toFixed(6);
+                // Üst panele yazdırma işlemleri
+                document.getElementById('live-lat').innerText = currentLat.toFixed(5);
+                document.getElementById('live-lon').innerText = currentLon.toFixed(5);
+                document.getElementById('accuracy').innerText = "± " + Math.round(acc) + "m";
+
+                // Lokal ITRF Dönüşümü (İnternet/API gerekmez)
+                let itrf = calculateITRF(currentLat, currentLon);
+                currentY = itrf.y;
+                currentX = itrf.x;
+                currentDOM = itrf.dom;
+
+                document.getElementById('dom-label').innerText = `ITRF96 (DOM ${currentDOM})`;
+                document.getElementById('live-y').innerText = currentY.toFixed(3);
+                document.getElementById('live-x').innerText = currentX.toFixed(3);
 
                 var newLocation = new L.LatLng(currentLat, currentLon);
 
@@ -191,6 +240,7 @@
                 }
             }, function(error) {
                 console.warn('Konum Hatası:', error.message);
+                document.getElementById('accuracy').innerText = "Hata!";
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
@@ -209,9 +259,9 @@
             }
         }
 
-        // ASYNC fonksiyon: API'den cevap bekleyecek
-        async function saveCurrentLocation() {
-            if (currentLat === null || currentLon === null) {
+        // Artık API beklemediğimiz için kaydetme işlemi milisaniyeler içinde anında gerçekleşir
+        function saveCurrentLocation() {
+            if (currentLat === null || currentLon === null || currentX === null) {
                 alert("GPS bağlantısı bekleniyor..."); return;
             }
             var nameInput = document.getElementById("point-name");
@@ -220,62 +270,24 @@
                 alert("Nokta adı girin!"); nameInput.focus(); return;
             }
 
-            var saveBtn = document.getElementById("save-btn");
-            var originalBtnIcon = saveBtn.innerHTML;
+            var id = pointIdCounter++;
+            var marker = L.marker([currentLat, currentLon]).addTo(map)
+                .bindPopup(`
+                    <div style="font-family:'Poppins',sans-serif; text-align:center;">
+                        <b style="font-size:14px; color:#0f172a;">${pointName}</b><br>
+                        <span style="font-size:12px; color:#3b82f6;">DOM: ${currentDOM}</span><br>
+                        <span style="font-size:12px;"><b>Y:</b> ${currentY.toFixed(3)}</span><br>
+                        <span style="font-size:12px;"><b>X:</b> ${currentX.toFixed(3)}</span>
+                    </div>
+                `);
+            pointMarkers[id] = marker;
+
+            savedPoints.push({ 
+                id: id, name: pointName, lat: currentLat, lon: currentLon, y_saga: currentY, x_yukari: currentX, dom: currentDOM 
+            });
             
-            // Yükleniyor animasyonu başlat
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            saveBtn.disabled = true;
-
-            try {
-                // DOM Hesaplama Formülü
-                let dom = Math.round(currentLon / 3) * 3;
-                let targetEPSG = epsgKodu[dom];
-                
-                if(!targetEPSG) {
-                    alert(`Bulunduğunuz konum Türkiye ITRF sistem sınırları dışında (DOM: ${dom})!`);
-                    saveBtn.innerHTML = originalBtnIcon;
-                    saveBtn.disabled = false;
-                    return;
-                }
-
-                const apiKey = "8XVBv03xspmOBwpcs1Aj";
-                const url = `https://api.maptiler.com/coordinates/transform/${currentLon},${currentLat}.json?s_srs=4326&t_srs=${targetEPSG}&key=${apiKey}`;
-
-                let response = await fetch(url);
-                let data = await response.json();
-
-                // MapTiler'da x=Easting (Sağa), y=Northing (Yukarı) döner.
-                let sagaDeger = data.results[0].x;
-                let yukariDeger = data.results[0].y;
-
-                var id = pointIdCounter++;
-                var marker = L.marker([currentLat, currentLon]).addTo(map)
-                    .bindPopup(`
-                        <div style="font-family:'Poppins',sans-serif; text-align:center;">
-                            <b style="font-size:14px; color:#0f172a;">${pointName}</b><br>
-                            <span style="font-size:12px; color:#3b82f6;">DOM: ${dom}</span><br>
-                            <span style="font-size:12px;"><b>Y:</b> ${sagaDeger.toFixed(3)}</span><br>
-                            <span style="font-size:12px;"><b>X:</b> ${yukariDeger.toFixed(3)}</span>
-                        </div>
-                    `);
-                pointMarkers[id] = marker;
-
-                savedPoints.push({ 
-                    id: id, name: pointName, lat: currentLat, lon: currentLon, y_saga: sagaDeger, x_yukari: yukariDeger, dom: dom 
-                });
-                
-                nameInput.value = "";
-                updateListUI();
-
-            } catch (error) {
-                console.error("Dönüşüm hatası:", error);
-                alert("Koordinat dönüştürülürken bir hata oluştu. İnternet bağlantınızı kontrol edin.");
-            } finally {
-                // İşlem bitince butonu eski haline getir
-                saveBtn.innerHTML = originalBtnIcon;
-                saveBtn.disabled = false;
-            }
+            nameInput.value = "";
+            updateListUI();
         }
 
         function zoomToPoint(lat, lon) {
@@ -299,7 +311,6 @@
             }
 
             listDiv.innerHTML = "";
-            // Listeyi sondan başa doğru (en yeni en üstte) göstermek için reverse() kullanıyoruz
             [...savedPoints].reverse().forEach(function(point) {
                 listDiv.innerHTML += `
                     <div class="point-card">
