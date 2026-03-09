@@ -29,9 +29,10 @@
         }
 
         #map { width: 100vw; height: 100vh; z-index: 1; }
-        .leaflet-top { margin-top: 115px !important; } /* Zoom butonlarını yeni üst menüye göre ittik */
+        
+        /* ---------------- DÜZELTİLEN KISIM 1 ---------------- */
+        .leaflet-top { margin-top: 140px !important; } 
 
-        /* YENİ ÜST BİLGİ PANELİ (Dashboard) */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
             background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -57,15 +58,15 @@
         .live-val { font-family: monospace; font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.3;}
         .live-val span { color: var(--primary); }
 
+        /* ---------------- DÜZELTİLEN KISIM 2 ---------------- */
         .locate-btn {
-            position: absolute; top: 165px; right: 10px; z-index: 1000;
+            position: absolute; top: 220px; right: 10px; z-index: 1000;
             background-color: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px;
             width: 34px; height: 34px; display: flex; justify-content: center; align-items: center;
             cursor: pointer; box-shadow: 0 1px 5px rgba(0,0,0,0.65); color: #444; font-size: 16px;
         }
         .locate-btn:active { background-color: #f4f4f4; }
 
-        /* ALT PANEL (Temizlendi ve Küçültüldü) */
         .bottom-panel {
             position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1000;
             background: var(--panel-bg); border-radius: 25px 25px 0 0;
@@ -183,7 +184,6 @@
         var userMarker = null;
         var firstLocationFound = false;
         
-        // Anlık veriler
         var currentLat = null;
         var currentLon = null;
         var currentX = null;
@@ -194,10 +194,8 @@
         var pointMarkers = {};
         var pointIdCounter = 0;
 
-        // Proj4js ile lokal dönüşüm fonksiyonu
         function calculateITRF(lat, lon) {
             let dom = Math.round(lon / 3) * 3;
-            // Dinamik Gauss-Kruger projeksiyon tanımlaması (Türkiye 3 Derece)
             let projString = `+proj=tmerc +lat_0=0 +lon_0=${dom} +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs`;
             let result = proj4('WGS84', projString, [lon, lat]);
             return { y: result[0], x: result[1], dom: dom };
@@ -209,12 +207,10 @@
                 currentLon = position.coords.longitude;
                 let acc = position.coords.accuracy;
 
-                // Üst panele yazdırma işlemleri
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
                 document.getElementById('accuracy').innerText = "± " + Math.round(acc) + "m";
 
-                // Lokal ITRF Dönüşümü (İnternet/API gerekmez)
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y;
                 currentX = itrf.x;
@@ -259,7 +255,6 @@
             }
         }
 
-        // Artık API beklemediğimiz için kaydetme işlemi milisaniyeler içinde anında gerçekleşir
         function saveCurrentLocation() {
             if (currentLat === null || currentLon === null || currentX === null) {
                 alert("GPS bağlantısı bekleniyor..."); return;
