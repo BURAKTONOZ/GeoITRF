@@ -16,111 +16,116 @@
             --accent: #10b981; 
             --danger: #ef4444;
             --primary: #3b82f6;
-            --bg-modal: rgba(10, 15, 26, 0.95);
-            --border-glass: rgba(255,255,255,0.1);
+            --border-glass: rgba(255, 255, 255, 0.15);
         }
 
+        /* Sayfanın esnemesini, kaymasını ve sekmelerin üst üste binmesini engeller */
         body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
+            margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh;
             font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #000;
+            position: fixed; top: 0; left: 0; touch-action: none;
         }
 
-        #map { width: 100vw; height: 100vh; z-index: 1; }
+        #map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
-        /* Üst Panel (Animasyonlu Gizlenebilir) */
+        /* ULTRA ŞEFFAF ÜST PANEL */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
-            background: rgba(0,0,0,0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             padding: 15px; border-radius: 20px; border: 1px solid var(--border-glass);
             display: flex; flex-direction: column; gap: 10px; color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s;
         }
         .top-bar.hide-up { transform: translateY(-150%); opacity: 0; pointer-events: none; }
 
         .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 8px;}
         .brand-box { display: flex; flex-direction: column; }
-        .brand-box h1 { font-size: 1.15rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; line-height: 1.1;}
-        .brand-box .creator { font-size: 0.6rem; color: rgba(255,255,255,0.6); font-weight: 700; letter-spacing: 1.5px; margin-top:2px;}
+        .brand-box h1 { font-size: 1.2rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; line-height: 1.1;}
+        .brand-box .creator { font-size: 0.65rem; color: rgba(255,255,255,0.7); font-weight: 700; letter-spacing: 1px; margin-top:2px;}
         
+        .header-right { display: flex; align-items: center; gap: 15px; }
         .gps-status { font-size: 0.8rem; font-weight: 600; color: #cbd5e1; display: flex; align-items: center; gap: 6px; }
         .gps-status span { color: var(--accent); }
         .blink { animation: blinker 1.5s linear infinite; color: var(--accent); }
         @keyframes blinker { 50% { opacity: 0.3; } }
         
+        /* Ayarlar Butonu */
+        .btn-settings-top {
+            background: rgba(255,255,255,0.1); border: 1px solid var(--border-glass);
+            color: white; border-radius: 10px; width: 34px; height: 34px;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;
+        }
+        .btn-settings-top:active { transform: scale(0.9); background: var(--primary); border-color: var(--primary); }
+
         .live-data-container { display: flex; justify-content: space-between; gap: 10px; }
         .live-col { flex: 1; display: flex; flex-direction: column; }
         .live-col:last-child { text-align: right; }
-        .live-label { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; font-weight: 600; margin-bottom: 3px;}
-        .live-val { font-family: monospace; font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.3;}
+        .live-label { color: rgba(255,255,255,0.6); font-size: 0.65rem; text-transform: uppercase; font-weight: 600; margin-bottom: 3px;}
+        .live-val { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: #fff; line-height: 1.3;}
         .live-val span { color: var(--primary); }
 
-        /* Sağ Kontroller */
+        /* Sağ Harita Kontrolleri */
         .right-controls {
             position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
             z-index: 1000; display: flex; flex-direction: column; gap: 12px; 
-            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s;
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s;
         }
         .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
-        
         .map-btn {
-            width: 45px; height: 45px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            width: 45px; height: 45px; border-radius: 14px; border: 1px solid var(--border-glass);
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             color: white; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.2s;
         }
         .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.2); }
 
-        /* Harita Marker Pop-up */
-        .leaflet-popup-content-wrapper { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); color: #fff; border-radius: 12px; border: 1px solid var(--border-glass); }
-        .leaflet-popup-tip { background: rgba(15, 23, 42, 0.9); }
-        .marker-popup { font-family: 'Poppins', sans-serif; text-align: left; }
-        .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1.1rem; }
-        .marker-popup p { margin: 0; font-size: 0.8rem; color: #94a3b8;}
-        .marker-popup hr { border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; }
-        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.4; color: var(--primary);}
-        .marker-popup .coords b { color: #fff; }
-
-        /* TAM EKRAN MODALLAR (Çakışmayı önler) */
+        /* ULTRA ŞEFFAF TAM EKRAN MODALLAR */
         .app-modal {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--bg-modal); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            z-index: 1050; /* Dock'un (1100) altında, Haritanın üstünde */
-            opacity: 0; pointer-events: none; transform: translateY(100%); 
-            transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-            display: flex; flex-direction: column; padding-bottom: 90px; /* Alt Dock İçin Boşluk */
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+            z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); 
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s;
+            display: flex; flex-direction: column; padding-bottom: 90px; box-sizing: border-box;
         }
         .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
         .modal-header { padding: 40px 20px 20px 20px; border-bottom: 1px solid var(--border-glass); color: white; font-weight: 600; display:flex; justify-content: space-between; align-items: center; font-size: 1.2rem;}
-        .modal-header-actions i { cursor: pointer; color: #94a3b8; font-size: 1.4rem; transition: 0.2s; margin-left: 20px;}
-        .modal-header-actions i:hover { color: #fff; }
-        .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+        .modal-header-actions i { cursor: pointer; color: #fff; font-size: 1.5rem; transition: 0.2s; margin-left: 20px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 10px;}
+        .modal-header-actions i:active { transform: scale(0.9); background: var(--danger); }
+        .modal-body { padding: 20px; overflow-y: auto; touch-action: pan-y; flex: 1; }
 
-        /* Kayıt Formu Modalı (Tam ekran veya ortalanmış) */
-        #modal-add .modal-body { display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .save-card {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); border-radius: 20px;
-            padding: 25px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px;
+        /* YENİ: KOMPAKT KAYIT PANELİ (Alt barın üstünde yüzer) */
+        .floating-save-panel {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+            z-index: 1050; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-glass); border-radius: 18px; padding: 15px;
+            display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 360px;
+            opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .save-card h3 { margin: 0; color: white; font-size: 1.1rem;}
-        .save-card p { margin: 0; color: var(--accent); font-weight: 600; font-size: 0.9rem;}
-        .save-card input {
-            padding: 15px; border-radius: 12px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.5); 
-            color: white; font-size: 1rem; outline: none; transition: 0.3s; width: 100%; box-sizing: border-box;
+        .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+        .save-header { color: #fff; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;}
+        .save-header span { color: rgba(255,255,255,0.7); }
+        .save-header b { color: var(--accent); }
+        .save-input-group { display: flex; gap: 10px; }
+        .save-input-group input {
+            flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-glass); 
+            background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; transition: 0.3s;
         }
-        .save-card input:focus { border-color: var(--primary); }
-        .save-card button {
-            background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; 
-            font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%;
+        .save-input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.2); }
+        .save-input-group button {
+            background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 12px; 
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s;
         }
+        .save-input-group button:active { transform: scale(0.95); }
 
-        /* Liste ve Proje Kartları */
-        .card-item { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-glass); border-radius: 16px; padding: 15px; margin-bottom: 15px; color: white; display: flex; flex-direction: column; gap: 10px;}
+        /* Liste ve Proje Kartları (Cam Efektli) */
+        .card-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); border-radius: 16px; padding: 15px; margin-bottom: 15px; color: white; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
         .card-header { display: flex; justify-content: space-between; align-items: flex-start;}
         .card-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--primary); display:flex; align-items:center; gap:8px;}
-        .itrf-coords { font-size: 0.9rem; margin: 0; font-weight: 600;}
-        .wgs-coords { margin: 5px 0 0 0; font-size: 0.8rem; color: #94a3b8; }
+        .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 600; letter-spacing: 0.5px;}
+        .wgs-coords { margin: 5px 0 0 0; font-size: 0.8rem; color: rgba(255,255,255,0.6); }
         
         .card-actions { display: flex; gap: 8px; width: 100%; margin-top: 5px;}
         .card-actions button { flex: 1; height: 42px; border-radius: 10px; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1rem; font-weight: 600;}
@@ -130,50 +135,56 @@
         .btn-select { background: rgba(16, 185, 129, 0.2); color: var(--accent); }
 
         .project-input-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .project-input-row input { flex:1; padding: 15px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(255,255,255,0.05); color: white; outline: none;}
+        .project-input-row input { flex:1; padding: 15px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: white; outline: none; box-sizing: border-box;}
         .project-input-row button { padding: 0 25px; border-radius: 14px; border: none; background: var(--primary); color: white; cursor: pointer;}
 
-        .empty-state { text-align: center; color: #94a3b8; font-size: 1rem; padding: 50px 10px; display: flex; flex-direction: column; gap: 15px; align-items: center;}
-        .empty-state i { font-size: 3.5rem; opacity: 0.5; color: var(--primary);}
-
-        /* Ayarlar Switch Butonları */
+        /* Ayarlar Switch & Listesi */
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-glass); }
-        .setting-row:last-child { border: none; }
         .setting-info h5 { margin: 0 0 5px 0; color: white; font-size: 1.1rem; }
-        .setting-info p { margin: 0; color: #94a3b8; font-size: 0.85rem; }
-        .toggle-btn { background: var(--border-glass); border: none; border-radius: 20px; width: 55px; height: 30px; position: relative; cursor: pointer; transition: 0.3s;}
-        .toggle-btn::after { content: ''; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: 0.3s;}
-        .toggle-btn.active { background: var(--accent); }
-        .toggle-btn.active::after { left: 28px; }
+        .setting-info p { margin: 0; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+        .toggle-btn { background: rgba(255,255,255,0.2); border: 1px solid var(--border-glass); border-radius: 20px; width: 55px; height: 30px; position: relative; cursor: pointer; transition: 0.3s;}
+        .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 3px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: 0.3s;}
+        .toggle-btn.active { background: var(--accent); border-color: var(--accent);}
+        .toggle-btn.active::after { left: 26px; }
 
-        /* INSTAGRAM TARZI PİLL DOCK */
+        /* ULTRA ŞEFFAF DOCK MENÜ */
         .ig-dock-wrapper {
-            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
             z-index: 1100; width: 92%; max-width: 400px;
         }
         .ig-dock {
             display: flex; align-items: center; justify-content: space-between;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 50px;
-            padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-glass); border-radius: 50px;
+            padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         .ig-dock-item {
             position: relative; width: 60px; height: 50px;
             display: flex; justify-content: center; align-items: center;
-            border-radius: 40px; color: rgba(255,255,255,0.5); font-size: 1.3rem;
+            border-radius: 40px; color: rgba(255,255,255,0.6); font-size: 1.3rem;
             cursor: pointer; transition: all 0.3s ease;
         }
         .ig-dock-item.active { color: #fff; background: rgba(255, 255, 255, 0.15); }
         .ig-dock-item:active { transform: scale(0.9); }
         
+        /* Profil İkonu */
         .profile-pic {
             width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex; justify-content: center; align-items: center; 
-            font-size: 0.9rem; color: white; font-weight: 700;
-            border: 2px solid transparent; transition: 0.3s;
+            font-size: 1rem; color: white; border: 2px solid transparent; transition: 0.3s;
         }
         .ig-dock-item.active .profile-pic { border-color: #fff; }
+
+        /* Harita Marker Pop-up Özel Tasarımı */
+        .leaflet-popup-content-wrapper { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); color: #fff; border-radius: 12px; border: 1px solid var(--border-glass); }
+        .leaflet-popup-tip { background: rgba(0, 0, 0, 0.6); }
+        .marker-popup { font-family: 'Poppins', sans-serif; }
+        .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1.1rem; }
+        .marker-popup p { margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.7);}
+        .marker-popup hr { border: 0; border-top: 1px solid var(--border-glass); margin: 8px 0; }
+        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.4; color: var(--primary);}
+        .marker-popup .coords b { color: #fff; }
     </style>
 </head>
 <body>
@@ -185,7 +196,10 @@
                 <h1>GeoITRF</h1>
                 <span class="creator">CREAT BY TONOZ</span>
             </div>
-            <div class="gps-status"><i class="fas fa-satellite blink"></i> <span id="accuracy">Bekleniyor</span></div>
+            <div class="header-right">
+                <div class="gps-status"><i class="fas fa-satellite blink"></i> <span id="accuracy">Bekleniyor</span></div>
+                <button class="btn-settings-top" onclick="switchTab('tab-settings')" title="Ayarlar"><i class="fas fa-cog"></i></button>
+            </div>
         </div>
         <div class="live-data-container">
             <div class="live-col">
@@ -211,20 +225,15 @@
     <!-- HARİTA -->
     <div id="map"></div>
 
-    <!-- YENİ NOKTA EKLEME MODALI (Tam Ekran) -->
-    <div class="app-modal" id="modal-add">
-        <div class="modal-header">
-            <span><i class="fas fa-map-pin"></i> Nokta Kaydet</span>
-            <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
+    <!-- YENİ: KOMPAKT KAYIT PANELİ (Haritayı Kapatmaz) -->
+    <div class="floating-save-panel" id="save-panel">
+        <div class="save-header">
+            <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
+            <i class="fas fa-times" style="cursor:pointer; color:rgba(255,255,255,0.6);" onclick="switchTab('tab-map')"></i>
         </div>
-        <div class="modal-body">
-            <div class="save-card">
-                <h3>Aktif Proje:</h3>
-                <p id="active-project-label-add">Varsayılan</p>
-                <hr style="border-color: rgba(255,255,255,0.1); width: 100%; margin: 5px 0;">
-                <input type="text" id="point-name" placeholder="Nokta Adı Girin (Örn: 1)">
-                <button onclick="saveCurrentLocation()"><i class="fas fa-save"></i> Kaydet</button>
-            </div>
+        <div class="save-input-group">
+            <input type="text" id="point-name" placeholder="Ad (Örn: 1)">
+            <button onclick="saveCurrentLocation()"><i class="fas fa-save"></i></button>
         </div>
     </div>
 
@@ -233,7 +242,7 @@
         <div class="modal-header">
             <span><i class="fas fa-list"></i> <span id="list-project-name">Varsayılan</span> (<span id="point-count">0</span>)</span>
             <div class="modal-header-actions">
-                <i class="fas fa-download" onclick="exportToTXT()" title="TXT İndir"></i>
+                <i class="fas fa-download" onclick="exportToTXT()" title="TXT İndir" style="background:var(--primary);"></i>
                 <i class="fas fa-times" onclick="switchTab('tab-map')"></i>
             </div>
         </div>
@@ -255,7 +264,25 @@
         </div>
     </div>
 
-    <!-- AYARLAR & PROFİL MODALI -->
+    <!-- GOOGLE GİRİŞ / PROFİL MODALI -->
+    <div class="app-modal" id="modal-profile">
+        <div class="modal-header">
+            <span><i class="fas fa-user-circle"></i> Hesabım</span>
+            <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
+        </div>
+        <div class="modal-body">
+            <div style="text-align:center; padding: 40px 10px; background:rgba(0,0,0,0.2); border-radius: 20px; border:1px solid var(--border-glass);">
+                <i class="fab fa-google" style="font-size: 3.5rem; color: #fff; margin-bottom: 20px;"></i>
+                <h3 style="color:white; margin:0 0 10px 0; font-size:1.4rem;">Bulut Senkronizasyonu</h3>
+                <p style="color:rgba(255,255,255,0.7); margin-bottom: 25px; font-size: 0.95rem;">Ölçümlerinizi Firebase'e kaydetmek ve tüm cihazlarınızdan erişmek için giriş yapın.</p>
+                <button style="background: white; color: black; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 280px; font-weight: 600; font-size: 1.05rem; cursor: pointer; transition: 0.2s;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+                    <i class="fab fa-google" style="color: #ea4335; margin-right: 8px;"></i> Google ile Giriş Yap
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AYARLAR & İZİNLER MODALI -->
     <div class="app-modal" id="modal-settings">
         <div class="modal-header">
             <span><i class="fas fa-cog"></i> Ayarlar</span>
@@ -269,16 +296,25 @@
                 </div>
                 <button class="toggle-btn active" id="btn-satellite" onclick="toggleMapLayer()"></button>
             </div>
-            <div style="margin-top: 30px; border-top: 1px solid var(--border-glass); padding-top: 20px; color:#94a3b8;">
-                <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem;">Hakkında</h5>
-                <p style="margin-bottom: 10px;"><i class="fas fa-globe" style="width:25px;"></i> Koordinat: ITRF96 / WGS84</p>
-                <p style="margin-bottom: 10px;"><i class="fas fa-ruler-combined" style="width:25px;"></i> Dilim: Otomatik DOM (3°)</p>
-                <p style="margin-bottom: 10px;"><i class="fas fa-code" style="width:25px;"></i> Geliştirici: <b>CREAT BY TONOZ</b></p>
+            
+            <!-- YENİ: GPS Durum Paneli -->
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h5>GPS Bağlantı Durumu</h5>
+                    <p id="gps-status-setting" style="margin-top:4px;"><span style="color:var(--danger);"><i class="fas fa-spinner fa-spin"></i> İzin veya Sinyal Bekleniyor...</span></p>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; border-top: 1px solid var(--border-glass); padding-top: 20px; color:rgba(255,255,255,0.7);">
+                <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem;">Uygulama Bilgileri</h5>
+                <p style="margin-bottom: 12px;"><i class="fas fa-globe" style="width:25px; color:var(--primary);"></i> <b>Koordinat:</b> ITRF96 / WGS84</p>
+                <p style="margin-bottom: 12px;"><i class="fas fa-ruler-combined" style="width:25px; color:var(--primary);"></i> <b>Dilim:</b> Otomatik DOM (3°)</p>
+                <p style="margin-bottom: 12px;"><i class="fas fa-code" style="width:25px; color:var(--primary);"></i> <b>Geliştirici:</b> CREAT BY TONOZ</p>
             </div>
         </div>
     </div>
 
-    <!-- INSTAGRAM TARZI PİLL DOCK (Sürekli Görünür) -->
+    <!-- DOCK MENÜ -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
             <div class="ig-dock-item active" id="tab-map" onclick="switchTab('tab-map')">
@@ -287,14 +323,15 @@
             <div class="ig-dock-item" id="tab-projects" onclick="switchTab('tab-projects')">
                 <i class="fas fa-folder"></i>
             </div>
+            <!-- Nokta Ekle Butonu -->
             <div class="ig-dock-item" id="tab-add" onclick="switchTab('tab-add')">
                 <i class="fas fa-plus-circle" style="font-size:1.8rem; color:var(--primary);"></i>
             </div>
             <div class="ig-dock-item" id="tab-list" onclick="switchTab('tab-list')">
                 <i class="fas fa-list-ul"></i>
             </div>
-            <div class="ig-dock-item" id="tab-settings" onclick="switchTab('tab-settings')">
-                <i class="fas fa-bars"></i>
+            <div class="ig-dock-item" id="tab-profile" onclick="switchTab('tab-profile')">
+                <div class="profile-pic"><i class="fas fa-user"></i></div>
             </div>
         </div>
     </div>
@@ -330,12 +367,18 @@
             return { y: result[0], x: result[1], dom: dom };
         }
 
+        // --- GPS Servisi & İzin Kontrolü ---
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
                 currentLat = position.coords.latitude; currentLon = position.coords.longitude;
+                let acc = Math.round(position.coords.accuracy);
+                
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
-                document.getElementById('accuracy').innerText = "± " + Math.round(position.coords.accuracy) + "m";
+                document.getElementById('accuracy').innerText = "± " + acc + "m";
+                
+                // Ayarlar menüsündeki GPS Durumunu Güncelle
+                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--accent); font-weight:600;"><i class="fas fa-check-circle"></i> Bağlı (Hassasiyet: ±${acc}m)</span>`;
 
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y; currentX = itrf.x; currentDOM = itrf.dom;
@@ -349,49 +392,57 @@
                 else { userMarker = L.circleMarker(newLoc, { color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.8, radius: 8, weight: 2, zIndexOffset: 1000 }).addTo(map); }
 
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
-            }, function(e) { document.getElementById('accuracy').innerText = "Hata!"; }, { enableHighAccuracy: true, maximumAge: 0 });
+            }, function(e) { 
+                document.getElementById('accuracy').innerText = "Hata!"; 
+                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--danger); font-weight:600;"><i class="fas fa-times-circle"></i> Konum İzni Reddedildi veya Kapalı</span><br><small style="color:#94a3b8;">Tarayıcı ayarlarından konum izni veriniz.</small>`;
+            }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
         function goToMyLocation() {
             if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); }
         }
 
-        // --- Menü Geçişleri ve UI Animasyonları ---
+        // --- Menü Geçişleri (Kompakt Panel Mantığı Eklendi) ---
         function switchTab(tabId) {
-            // Aktif ikonu değiştir
             document.querySelectorAll('.ig-dock-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
             
-            // Tüm modalları kapat
-            document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
+            // Aktif Tab Görünümü
+            if(tabId !== 'tab-settings' && tabId !== 'tab-map' && tabId !== 'tab-add') { document.getElementById(tabId).classList.add('active'); }
+            else if (tabId === 'tab-map' || tabId === 'tab-add') { document.getElementById(tabId).classList.add('active'); }
 
-            // Haritada değilsek, üst paneli ve sağ ikonları gizle
-            if (tabId !== 'tab-map') {
-                document.getElementById('top-bar').classList.add('hide-up');
-                document.getElementById('right-controls').classList.add('hide-right');
-            } else {
+            // Tüm modalları ve floating paneli gizle
+            document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
+            document.getElementById('save-panel').classList.remove('show');
+
+            // Eğer Harita veya Ekleme modundaysak üst bar görünür kalır
+            if (tabId === 'tab-map' || tabId === 'tab-add') {
                 document.getElementById('top-bar').classList.remove('hide-up');
                 document.getElementById('right-controls').classList.remove('hide-right');
+            } else {
+                document.getElementById('top-bar').classList.add('hide-up');
+                document.getElementById('right-controls').classList.add('hide-right');
             }
 
-            // İlgili modalı aç
+            // İlgili modülleri tetikle
             if (tabId === 'tab-projects') {
                 document.getElementById('modal-projects').classList.add('show');
                 updateProjectsUI();
             } else if (tabId === 'tab-add') {
-                document.getElementById('modal-add').classList.add('show');
+                document.getElementById('save-panel').classList.add('show');
                 document.getElementById('active-project-label-add').innerText = activeProject;
                 document.getElementById('point-name').value = projectsData[activeProject].autoCounter.toString();
                 setTimeout(() => document.getElementById('point-name').focus(), 300);
             } else if (tabId === 'tab-list') {
                 document.getElementById('modal-list').classList.add('show');
                 updateListUI();
+            } else if (tabId === 'tab-profile') {
+                document.getElementById('modal-profile').classList.add('show');
             } else if (tabId === 'tab-settings') {
                 document.getElementById('modal-settings').classList.add('show');
             }
         }
 
-        // --- Proje (Klasör) Yönetimi ---
+        // --- Proje & Klasör Yönetimi ---
         function renderActiveProjectMarkers() {
             for (let id in pointMarkers) { map.removeLayer(pointMarkers[id]); }
             pointMarkers = {};
@@ -432,10 +483,9 @@
             activeProject = name;
             updateProjectsUI();
             renderActiveProjectMarkers(); 
-            switchTab('tab-map'); // Klasör seçince haritaya dön
+            switchTab('tab-map'); 
         }
 
-        // KLASÖR SİLME VE İSİM DEĞİŞTİRME MANTIĞI
         function editProject(oldName) {
             if(oldName === "Varsayılan") return alert("Varsayılan klasörün adı değiştirilemez!");
             let newName = prompt("Yeni klasör adı:", oldName);
@@ -443,7 +493,6 @@
             newName = newName.trim();
             if(projectsData[newName]) return alert("Bu isimde bir klasör zaten var!");
 
-            // Verileri taşı
             projectsData[newName] = projectsData[oldName];
             delete projectsData[oldName];
 
@@ -454,7 +503,7 @@
 
         function deleteProject(name) {
             if(name === "Varsayılan") return alert("Varsayılan klasör silinemez!");
-            if(!confirm(`"${name}" klasörünü ve içindeki tüm noktaları SİLMEK istediğinize emin misiniz?`)) return;
+            if(!confirm(`"${name}" klasörünü ve içindeki noktaları SİLMEK istediğinize emin misiniz?`)) return;
 
             delete projectsData[name];
             if(activeProject === name) { activeProject = "Varsayılan"; }
@@ -468,7 +517,6 @@
                 let count = projectsData[projName].points.length;
                 let isActive = projName === activeProject;
                 
-                // Varsayılan klasör koruması (Düzenle/Sil butonu görünmez)
                 let actionButtons = '';
                 if(projName !== "Varsayılan") {
                     actionButtons = `
@@ -478,7 +526,7 @@
                 }
 
                 html += `
-                    <div class="card-item" style="border-color: ${isActive ? 'var(--accent)' : 'var(--border-glass)'}; background: ${isActive ? 'rgba(16, 185, 129, 0.05)' : ''}">
+                    <div class="card-item" style="border-color: ${isActive ? 'var(--accent)' : 'var(--border-glass)'};">
                         <div class="card-header">
                             <div class="card-info">
                                 <h4 style="color: ${isActive ? 'var(--accent)' : 'white'}"><i class="fas ${isActive ? 'fa-folder-open' : 'fa-folder'}"></i> ${projName}</h4>
@@ -513,7 +561,7 @@
             }
             
             renderActiveProjectMarkers(); 
-            switchTab('tab-map');
+            switchTab('tab-map'); // Kaydedince haritaya (aktif hale) dön
         }
 
         function editPoint(id) {
@@ -546,7 +594,7 @@
             document.getElementById("point-count").innerText = points.length;
             
             if(points.length === 0) {
-                listDiv.innerHTML = '<div class="empty-state"><i class="fas fa-map-marker-alt"></i><p>Bu projede kayıtlı nokta yok.</p></div>';
+                listDiv.innerHTML = '<div style="text-align:center; padding: 40px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--primary); opacity:0.5; margin-bottom:15px;"></i><p style="color:rgba(255,255,255,0.7);">Bu projede kayıtlı nokta yok.</p></div>';
                 return;
             }
             
@@ -582,7 +630,6 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // Başlangıç Ayarı
         renderActiveProjectMarkers();
     </script>
 </body>
