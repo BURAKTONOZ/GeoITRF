@@ -13,7 +13,7 @@
 
     <style>
         :root {
-            --accent: #10b981; 
+            --accent: #33ccdd; /* Senin kodundaki turkuaz renk */
             --danger: #ef4444;
             --primary: #3b82f6;
             --border-glass: rgba(255, 255, 255, 0.15);
@@ -28,37 +28,41 @@
         #map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
-        /* YENİ: SPLASH SCREEN (GİRİŞ EKRANI) */
+        /* YENİ: SPLASH SCREEN (GİRİŞ EKRANI) - SENİN TASARIMIN */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-            background: radial-gradient(circle at center, #1a2333 0%, #000000 100%);
+            background: #000000; /* Tam siyah arka plan */
             z-index: 9999; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
             padding: 60px 20px; box-sizing: border-box; cursor: pointer;
             transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s;
         }
         .splash-title {
-            color: var(--accent); font-size: 2.5rem; font-weight: 700; margin: 0; letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); text-align: center;
+            color: var(--accent); font-size: 2.8rem; font-weight: 700; margin: 0; letter-spacing: 2px;
+            text-shadow: 0 0 25px rgba(51, 204, 221, 0.4); text-align: center;
             animation: fadeInDown 1s ease-out;
         }
-        .splash-subtitle { color: #fff; font-size: 1rem; opacity: 0.7; letter-spacing: 5px; margin-top: 5px; text-align: center;}
+        .splash-subtitle { color: #fff; font-size: 1rem; opacity: 0.5; letter-spacing: 8px; margin-top: 5px; text-align: center;}
         
-        .globe-container { width: 100%; max-width: 400px; aspect-ratio: 1/1; position: relative; display: flex; justify-content: center; align-items: center; }
-        #globe-canvas { width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease; }
+        .globe-container { 
+            width: 100%; max-width: 450px; aspect-ratio: 1/1; position: relative; 
+            display: flex; justify-content: center; align-items: center; 
+        }
+        #globe-canvas { width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease; cursor: grab; }
+        #globe-canvas:active { cursor: grabbing; }
         
         .splash-footer { text-align: center; animation: fadeInUp 1s ease-out; }
-        .splash-footer h3 { margin: 0 0 10px 0; color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 3px; font-weight: 700;}
+        .splash-footer h3 { margin: 0 0 15px 0; color: rgba(255,255,255,0.3); font-size: 0.85rem; letter-spacing: 4px; font-weight: 700;}
         .tap-to-start {
-            color: white; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            padding: 12px 30px; border-radius: 30px; font-size: 0.9rem; font-weight: 600;
-            backdrop-filter: blur(10px); animation: pulse 2s infinite;
+            color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            padding: 14px 35px; border-radius: 30px; font-size: 0.95rem; font-weight: 600;
+            backdrop-filter: blur(10px); animation: pulse 2s infinite; letter-spacing: 1px;
         }
 
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); } 70% { box-shadow: 0 0 0 15px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(51, 204, 221, 0.3); border-color: rgba(51,204,221,0.5); } 70% { box-shadow: 0 0 0 15px rgba(51, 204, 221, 0); border-color: rgba(255,255,255,0.1); } 100% { box-shadow: 0 0 0 0 rgba(51, 204, 221, 0); } }
 
-        /* ANA UYGULAMA ARAYÜZÜ (Şeffaf Tasarım) */
+        /* ANA UYGULAMA ARAYÜZÜ */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
             background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
@@ -81,7 +85,7 @@
         .live-col:last-child { text-align: right; }
         .live-label { color: rgba(255,255,255,0.6); font-size: 0.65rem; text-transform: uppercase; font-weight: 600; margin-bottom: 3px;}
         .live-val { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: #fff;}
-        .live-val span { color: var(--primary); }
+        .live-val span { color: var(--accent); }
 
         .right-controls { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 12px; transition: 0.4s;}
         .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
@@ -93,7 +97,7 @@
         .save-header b { color: var(--accent); }
         .save-input-group { display: flex; gap: 10px; }
         .save-input-group input { flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-glass); background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; }
-        .save-input-group button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 12px; font-size: 1rem; font-weight: 600;}
+        .save-input-group button { background: var(--accent); color: #000; border: none; padding: 0 20px; border-radius: 12px; font-size: 1rem; font-weight: 700;}
 
         .app-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); transition: 0.5s; display: flex; flex-direction: column; padding-bottom: 90px;}
         .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
@@ -103,19 +107,19 @@
 
         .card-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); border-radius: 16px; padding: 15px; margin-bottom: 15px; color: white; display: flex; flex-direction: column; gap: 10px; }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start;}
-        .card-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--primary); display:flex; align-items:center; gap:8px;}
+        .card-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--accent); display:flex; align-items:center; gap:8px;}
         .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 600;}
         .wgs-coords { margin: 5px 0 0 0; font-size: 0.8rem; color: rgba(255,255,255,0.6); }
         .card-actions { display: flex; gap: 8px; width: 100%; margin-top: 5px;}
         .card-actions button { flex: 1; height: 42px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600;}
-        .btn-go { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+        .btn-go { background: rgba(51, 204, 221, 0.2); color: var(--accent); }
         .btn-edit { background: rgba(245, 158, 11, 0.2); color: #f59e0b; flex: 0.5 !important;}
         .btn-del { background: rgba(239, 68, 68, 0.2); color: var(--danger); flex: 0.5 !important;}
-        .btn-select { background: rgba(16, 185, 129, 0.2); color: var(--accent); }
+        .btn-select { background: rgba(51, 204, 221, 0.2); color: var(--accent); }
 
         .project-input-row { display: flex; gap: 10px; margin-bottom: 20px; }
         .project-input-row input { flex:1; padding: 15px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: white;}
-        .project-input-row button { padding: 0 25px; border-radius: 14px; border: none; background: var(--primary); color: white;}
+        .project-input-row button { padding: 0 25px; border-radius: 14px; border: none; background: var(--accent); color: #000;}
 
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-glass); }
         .setting-info h5 { margin: 0 0 5px 0; color: white; font-size: 1.1rem; }
@@ -129,7 +133,7 @@
         .ig-dock { display: flex; align-items: center; justify-content: space-between; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(30px); border: 1px solid var(--border-glass); border-radius: 50px; padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .ig-dock-item { width: 60px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 40px; color: rgba(255,255,255,0.6); font-size: 1.3rem; transition: 0.3s; }
         .ig-dock-item.active { color: #fff; background: rgba(255, 255, 255, 0.15); }
-        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; justify-content: center; align-items: center; font-size: 1rem; color: white; border: 2px solid transparent;}
+        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #1e3a8a); display: flex; justify-content: center; align-items: center; font-size: 1rem; color: white; border: 2px solid transparent;}
         .ig-dock-item.active .profile-pic { border-color: #fff; }
         
         .leaflet-popup-content-wrapper { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); color: #fff; border-radius: 12px; border: 1px solid var(--border-glass); }
@@ -137,12 +141,12 @@
         .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1.1rem; }
         .marker-popup p { margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.7);}
         .marker-popup hr { border: 0; border-top: 1px solid var(--border-glass); margin: 8px 0; }
-        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.4; color: var(--primary);}
+        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.4; color: var(--accent);}
     </style>
 </head>
 <body>
 
-    <!-- YENİ GİRİŞ EKRANI (COBE GLOBE) -->
+    <!-- YENİ GİRİŞ EKRANI (COBE GLOBE - Siyah/Turkuaz Tema) -->
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div>
             <h1 class="splash-title">GeoITRF</h1>
@@ -159,7 +163,7 @@
         </div>
     </div>
 
-    <!-- ANA ARAYÜZ (Giriş ekranı kaybolduktan sonra burası kullanılır) -->
+    <!-- ANA ARAYÜZ -->
     <div class="top-bar" id="top-bar">
         <div class="top-header">
             <div class="brand-box">
@@ -186,7 +190,7 @@
     </div>
 
     <div class="right-controls" id="right-controls">
-        <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-crosshairs" style="color:var(--primary);"></i></button>
+        <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-crosshairs" style="color:var(--accent);"></i></button>
         <button class="map-btn" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
         <button class="map-btn" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
     </div>
@@ -208,7 +212,7 @@
         <div class="modal-header">
             <span><i class="fas fa-list"></i> <span id="list-project-name">Varsayılan</span> (<span id="point-count">0</span>)</span>
             <div class="modal-header-actions">
-                <i class="fas fa-download" onclick="exportToTXT()" style="background:var(--primary);"></i>
+                <i class="fas fa-download" onclick="exportToTXT()" style="background:var(--accent); color:#000;"></i>
                 <i class="fas fa-times" onclick="switchTab('tab-map')"></i>
             </div>
         </div>
@@ -267,9 +271,9 @@
             </div>
             <div style="margin-top: 20px; border-top: 1px solid var(--border-glass); padding-top: 20px; color:rgba(255,255,255,0.7);">
                 <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem;">Uygulama Bilgileri</h5>
-                <p style="margin-bottom: 12px;"><i class="fas fa-globe" style="width:25px; color:var(--primary);"></i> <b>Koordinat:</b> ITRF96 / WGS84</p>
-                <p style="margin-bottom: 12px;"><i class="fas fa-ruler-combined" style="width:25px; color:var(--primary);"></i> <b>Dilim:</b> Otomatik DOM (3°)</p>
-                <p style="margin-bottom: 12px;"><i class="fas fa-code" style="width:25px; color:var(--primary);"></i> <b>Geliştirici:</b> CREAT BY TONOZ</p>
+                <p style="margin-bottom: 12px;"><i class="fas fa-globe" style="width:25px; color:var(--accent);"></i> <b>Koordinat:</b> ITRF96 / WGS84</p>
+                <p style="margin-bottom: 12px;"><i class="fas fa-ruler-combined" style="width:25px; color:var(--accent);"></i> <b>Dilim:</b> Otomatik DOM (3°)</p>
+                <p style="margin-bottom: 12px;"><i class="fas fa-code" style="width:25px; color:var(--accent);"></i> <b>Geliştirici:</b> CREAT BY TONOZ</p>
             </div>
         </div>
     </div>
@@ -283,7 +287,7 @@
                 <i class="fas fa-folder"></i>
             </div>
             <div class="ig-dock-item" id="tab-add" onclick="switchTab('tab-add')">
-                <i class="fas fa-plus-circle" style="font-size:1.8rem; color:var(--primary);"></i>
+                <i class="fas fa-plus-circle" style="font-size:1.8rem; color:var(--accent);"></i>
             </div>
             <div class="ig-dock-item" id="tab-list" onclick="switchTab('tab-list')">
                 <i class="fas fa-list-ul"></i>
@@ -303,31 +307,59 @@
         let phi = 0;
         let canvas = document.getElementById("globe-canvas");
         
-        // Cobe Globe Başlatma
+        // Cobe Globe Başlatma (Senin React kodundaki renk kodları ve marker boyutuyla)
         const globe = createGlobe(canvas, {
             devicePixelRatio: 2,
-            width: 400,
-            height: 400,
+            width: 450,
+            height: 450,
             phi: 0,
             theta: 0.2,
             dark: 1,
-            diffuse: 1.2,
+            diffuse: 1.5,
             mapSamples: 16000,
-            mapBrightness: 6,
-            baseColor: [0.3, 0.3, 0.3],
-            markerColor: [0.1, 0.8, 0.9], // Turkuaz marker
-            glowColor: [0.05, 0.1, 0.15],
+            mapBrightness: 10,
+            baseColor: [0.5, 0.5, 0.5],       // Gri Zemin
+            markerColor: [0.2, 0.8, 0.9],     // Parlak Turkuaz Noktalar
+            glowColor: [0.05, 0.05, 0.05],    // Karanlık Yansıma
+            markerElevation: 0,
             markers: [
-                { location: [39.92, 32.85], size: 0.1 }, // Ankara
-                { location: [41.00, 28.97], size: 0.05 }, // İstanbul
+                { location: [39.92, 32.85], size: 0.035 }, // Ankara
+                { location: [41.00, 28.97], size: 0.025 }, // İstanbul
+                { location: [51.51, -0.13], size: 0.025 }, // Londra
+                { location: [40.71, -74.01], size: 0.025 }, // NY
+                { location: [35.68, 139.65], size: 0.025 }  // Tokyo
             ],
             onRender: (state) => {
                 state.phi = phi;
-                phi += 0.005;
+                phi += 0.003;
             },
         });
 
         setTimeout(() => { canvas.style.opacity = '1'; }, 100);
+
+        // Dünyayı fareyle sağa sola çevirebilmen için olay dinleyicileri eklendi
+        let pointerInteracting = null;
+        let pointerInteractionMovement = 0;
+        
+        canvas.addEventListener('pointerdown', (e) => {
+            pointerInteracting = e.clientX - pointerInteractionMovement;
+            canvas.style.cursor = 'grabbing';
+        });
+        canvas.addEventListener('pointerup', () => {
+            pointerInteracting = null;
+            canvas.style.cursor = 'grab';
+        });
+        canvas.addEventListener('pointerout', () => {
+            pointerInteracting = null;
+            canvas.style.cursor = 'grab';
+        });
+        canvas.addEventListener('pointermove', (e) => {
+            if (pointerInteracting !== null) {
+                const delta = e.clientX - pointerInteracting;
+                pointerInteractionMovement = delta;
+                phi += delta * 0.0001; // Sürükleme hızı
+            }
+        });
     </script>
 
     <script>
@@ -387,7 +419,7 @@
 
                 var newLoc = new L.LatLng(currentLat, currentLon);
                 if (userMarker) { userMarker.setLatLng(newLoc); } 
-                else { userMarker = L.circleMarker(newLoc, { color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.8, radius: 8, weight: 2, zIndexOffset: 1000 }).addTo(map); }
+                else { userMarker = L.circleMarker(newLoc, { color: '#33ccdd', fillColor: '#33ccdd', fillOpacity: 0.8, radius: 8, weight: 2, zIndexOffset: 1000 }).addTo(map); }
 
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
@@ -544,7 +576,7 @@
         function updateListUI() {
             var listDiv = document.getElementById("points-list"); let points = projectsData[activeProject].points;
             document.getElementById("list-project-name").innerText = activeProject; document.getElementById("point-count").innerText = points.length;
-            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 40px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--primary); opacity:0.5; margin-bottom:15px;"></i><p style="color:rgba(255,255,255,0.7);">Bu projede kayıtlı nokta yok.</p></div>'; return; }
+            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 40px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--accent); opacity:0.5; margin-bottom:15px;"></i><p style="color:rgba(255,255,255,0.7);">Bu projede kayıtlı nokta yok.</p></div>'; return; }
             let html = "";
             [...points].reverse().forEach(p => {
                 html += `
