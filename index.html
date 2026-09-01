@@ -19,7 +19,6 @@
             --border-glass: rgba(255, 255, 255, 0.15);
         }
 
-        /* Sayfanın esnemesini, kaymasını ve sekmelerin üst üste binmesini engeller */
         body, html { 
             margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh;
             font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #000;
@@ -29,167 +28,138 @@
         #map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
-        /* ULTRA ŞEFFAF ÜST PANEL */
+        /* YENİ: SPLASH SCREEN (GİRİŞ EKRANI) */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background: radial-gradient(circle at center, #1a2333 0%, #000000 100%);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            padding: 60px 20px; box-sizing: border-box; cursor: pointer;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s;
+        }
+        .splash-title {
+            color: var(--accent); font-size: 2.5rem; font-weight: 700; margin: 0; letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); text-align: center;
+            animation: fadeInDown 1s ease-out;
+        }
+        .splash-subtitle { color: #fff; font-size: 1rem; opacity: 0.7; letter-spacing: 5px; margin-top: 5px; text-align: center;}
+        
+        .globe-container { width: 100%; max-width: 400px; aspect-ratio: 1/1; position: relative; display: flex; justify-content: center; align-items: center; }
+        #globe-canvas { width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease; }
+        
+        .splash-footer { text-align: center; animation: fadeInUp 1s ease-out; }
+        .splash-footer h3 { margin: 0 0 10px 0; color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 3px; font-weight: 700;}
+        .tap-to-start {
+            color: white; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 30px; border-radius: 30px; font-size: 0.9rem; font-weight: 600;
+            backdrop-filter: blur(10px); animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); } 70% { box-shadow: 0 0 0 15px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+
+        /* ANA UYGULAMA ARAYÜZÜ (Şeffaf Tasarım) */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
             background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             padding: 15px; border-radius: 20px; border: 1px solid var(--border-glass);
             display: flex; flex-direction: column; gap: 10px; color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.4s;
         }
         .top-bar.hide-up { transform: translateY(-150%); opacity: 0; pointer-events: none; }
-
         .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 8px;}
         .brand-box { display: flex; flex-direction: column; }
         .brand-box h1 { font-size: 1.2rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; line-height: 1.1;}
         .brand-box .creator { font-size: 0.65rem; color: rgba(255,255,255,0.7); font-weight: 700; letter-spacing: 1px; margin-top:2px;}
-        
         .header-right { display: flex; align-items: center; gap: 15px; }
         .gps-status { font-size: 0.8rem; font-weight: 600; color: #cbd5e1; display: flex; align-items: center; gap: 6px; }
         .gps-status span { color: var(--accent); }
         .blink { animation: blinker 1.5s linear infinite; color: var(--accent); }
-        @keyframes blinker { 50% { opacity: 0.3; } }
-        
-        /* Ayarlar Butonu */
-        .btn-settings-top {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--border-glass);
-            color: white; border-radius: 10px; width: 34px; height: 34px;
-            display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;
-        }
-        .btn-settings-top:active { transform: scale(0.9); background: var(--primary); border-color: var(--primary); }
-
+        .btn-settings-top { background: rgba(255,255,255,0.1); border: 1px solid var(--border-glass); color: white; border-radius: 10px; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;}
         .live-data-container { display: flex; justify-content: space-between; gap: 10px; }
         .live-col { flex: 1; display: flex; flex-direction: column; }
         .live-col:last-child { text-align: right; }
         .live-label { color: rgba(255,255,255,0.6); font-size: 0.65rem; text-transform: uppercase; font-weight: 600; margin-bottom: 3px;}
-        .live-val { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: #fff; line-height: 1.3;}
+        .live-val { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: #fff;}
         .live-val span { color: var(--primary); }
 
-        /* Sağ Harita Kontrolleri */
-        .right-controls {
-            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-            z-index: 1000; display: flex; flex-direction: column; gap: 12px; 
-            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s;
-        }
+        .right-controls { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 12px; transition: 0.4s;}
         .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
-        .map-btn {
-            width: 45px; height: 45px; border-radius: 14px; border: 1px solid var(--border-glass);
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            color: white; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.2s;
-        }
-        .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.2); }
-
-        /* ULTRA ŞEFFAF TAM EKRAN MODALLAR */
-        .app-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); 
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s;
-            display: flex; flex-direction: column; padding-bottom: 90px; box-sizing: border-box;
-        }
-        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .modal-header { padding: 40px 20px 20px 20px; border-bottom: 1px solid var(--border-glass); color: white; font-weight: 600; display:flex; justify-content: space-between; align-items: center; font-size: 1.2rem;}
-        .modal-header-actions i { cursor: pointer; color: #fff; font-size: 1.5rem; transition: 0.2s; margin-left: 20px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 10px;}
-        .modal-header-actions i:active { transform: scale(0.9); background: var(--danger); }
-        .modal-body { padding: 20px; overflow-y: auto; touch-action: pan-y; flex: 1; }
-
-        /* YENİ: KOMPAKT KAYIT PANELİ (Alt barın üstünde yüzer) */
-        .floating-save-panel {
-            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-            z-index: 1050; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--border-glass); border-radius: 18px; padding: 15px;
-            display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 360px;
-            opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        .map-btn { width: 45px; height: 45px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;}
+        
+        .floating-save-panel { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); border: 1px solid var(--border-glass); border-radius: 18px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 360px; opacity: 0; pointer-events: none; transition: 0.4s;}
         .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
         .save-header { color: #fff; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;}
-        .save-header span { color: rgba(255,255,255,0.7); }
         .save-header b { color: var(--accent); }
         .save-input-group { display: flex; gap: 10px; }
-        .save-input-group input {
-            flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-glass); 
-            background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; transition: 0.3s;
-        }
-        .save-input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.2); }
-        .save-input-group button {
-            background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 12px; 
-            font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s;
-        }
-        .save-input-group button:active { transform: scale(0.95); }
+        .save-input-group input { flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-glass); background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; }
+        .save-input-group button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 12px; font-size: 1rem; font-weight: 600;}
 
-        /* Liste ve Proje Kartları (Cam Efektli) */
-        .card-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); border-radius: 16px; padding: 15px; margin-bottom: 15px; color: white; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+        .app-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); transition: 0.5s; display: flex; flex-direction: column; padding-bottom: 90px;}
+        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .modal-header { padding: 40px 20px 20px 20px; border-bottom: 1px solid var(--border-glass); color: white; font-weight: 600; display:flex; justify-content: space-between; align-items: center; font-size: 1.2rem;}
+        .modal-header-actions i { color: #fff; font-size: 1.5rem; margin-left: 20px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 10px;}
+        .modal-body { padding: 20px; overflow-y: auto; touch-action: pan-y; flex: 1; }
+
+        .card-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); border-radius: 16px; padding: 15px; margin-bottom: 15px; color: white; display: flex; flex-direction: column; gap: 10px; }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start;}
         .card-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--primary); display:flex; align-items:center; gap:8px;}
-        .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 600; letter-spacing: 0.5px;}
+        .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 600;}
         .wgs-coords { margin: 5px 0 0 0; font-size: 0.8rem; color: rgba(255,255,255,0.6); }
-        
         .card-actions { display: flex; gap: 8px; width: 100%; margin-top: 5px;}
-        .card-actions button { flex: 1; height: 42px; border-radius: 10px; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1rem; font-weight: 600;}
+        .card-actions button { flex: 1; height: 42px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600;}
         .btn-go { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
         .btn-edit { background: rgba(245, 158, 11, 0.2); color: #f59e0b; flex: 0.5 !important;}
         .btn-del { background: rgba(239, 68, 68, 0.2); color: var(--danger); flex: 0.5 !important;}
         .btn-select { background: rgba(16, 185, 129, 0.2); color: var(--accent); }
 
         .project-input-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .project-input-row input { flex:1; padding: 15px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: white; outline: none; box-sizing: border-box;}
-        .project-input-row button { padding: 0 25px; border-radius: 14px; border: none; background: var(--primary); color: white; cursor: pointer;}
+        .project-input-row input { flex:1; padding: 15px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: white;}
+        .project-input-row button { padding: 0 25px; border-radius: 14px; border: none; background: var(--primary); color: white;}
 
-        /* Ayarlar Switch & Listesi */
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-glass); }
         .setting-info h5 { margin: 0 0 5px 0; color: white; font-size: 1.1rem; }
         .setting-info p { margin: 0; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
-        .toggle-btn { background: rgba(255,255,255,0.2); border: 1px solid var(--border-glass); border-radius: 20px; width: 55px; height: 30px; position: relative; cursor: pointer; transition: 0.3s;}
+        .toggle-btn { background: rgba(255,255,255,0.2); border: 1px solid var(--border-glass); border-radius: 20px; width: 55px; height: 30px; position: relative;}
         .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 3px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: 0.3s;}
         .toggle-btn.active { background: var(--accent); border-color: var(--accent);}
         .toggle-btn.active::after { left: 26px; }
 
-        /* ULTRA ŞEFFAF DOCK MENÜ */
-        .ig-dock-wrapper {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            z-index: 1100; width: 92%; max-width: 400px;
-        }
-        .ig-dock {
-            display: flex; align-items: center; justify-content: space-between;
-            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--border-glass); border-radius: 50px;
-            padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-        .ig-dock-item {
-            position: relative; width: 60px; height: 50px;
-            display: flex; justify-content: center; align-items: center;
-            border-radius: 40px; color: rgba(255,255,255,0.6); font-size: 1.3rem;
-            cursor: pointer; transition: all 0.3s ease;
-        }
+        .ig-dock-wrapper { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 1100; width: 92%; max-width: 400px; }
+        .ig-dock { display: flex; align-items: center; justify-content: space-between; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(30px); border: 1px solid var(--border-glass); border-radius: 50px; padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .ig-dock-item { width: 60px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 40px; color: rgba(255,255,255,0.6); font-size: 1.3rem; transition: 0.3s; }
         .ig-dock-item.active { color: #fff; background: rgba(255, 255, 255, 0.15); }
-        .ig-dock-item:active { transform: scale(0.9); }
-        
-        /* Profil İkonu */
-        .profile-pic {
-            width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 1rem; color: white; border: 2px solid transparent; transition: 0.3s;
-        }
+        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; justify-content: center; align-items: center; font-size: 1rem; color: white; border: 2px solid transparent;}
         .ig-dock-item.active .profile-pic { border-color: #fff; }
-
-        /* Harita Marker Pop-up Özel Tasarımı */
+        
         .leaflet-popup-content-wrapper { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); color: #fff; border-radius: 12px; border: 1px solid var(--border-glass); }
         .leaflet-popup-tip { background: rgba(0, 0, 0, 0.6); }
-        .marker-popup { font-family: 'Poppins', sans-serif; }
         .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1.1rem; }
         .marker-popup p { margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.7);}
         .marker-popup hr { border: 0; border-top: 1px solid var(--border-glass); margin: 8px 0; }
         .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.4; color: var(--primary);}
-        .marker-popup .coords b { color: #fff; }
     </style>
 </head>
 <body>
 
-    <!-- ÜST BİLGİ PANELİ -->
+    <!-- YENİ GİRİŞ EKRANI (COBE GLOBE) -->
+    <div id="splash-screen" onclick="hideSplashScreen()">
+        <div>
+            <h1 class="splash-title">GeoITRF</h1>
+            <div class="splash-subtitle">PRO TERMINAL</div>
+        </div>
+        
+        <div class="globe-container">
+            <canvas id="globe-canvas"></canvas>
+        </div>
+
+        <div class="splash-footer">
+            <h3>CREAT BY TONOZ</h3>
+            <div class="tap-to-start">Başlamak İçin Dokun</div>
+        </div>
+    </div>
+
+    <!-- ANA ARAYÜZ (Giriş ekranı kaybolduktan sonra burası kullanılır) -->
     <div class="top-bar" id="top-bar">
         <div class="top-header">
             <div class="brand-box">
@@ -198,7 +168,7 @@
             </div>
             <div class="header-right">
                 <div class="gps-status"><i class="fas fa-satellite blink"></i> <span id="accuracy">Bekleniyor</span></div>
-                <button class="btn-settings-top" onclick="switchTab('tab-settings')" title="Ayarlar"><i class="fas fa-cog"></i></button>
+                <button class="btn-settings-top" onclick="switchTab('tab-settings')"><i class="fas fa-cog"></i></button>
             </div>
         </div>
         <div class="live-data-container">
@@ -215,17 +185,14 @@
         </div>
     </div>
 
-    <!-- SAĞ HARİTA KONTROLLERİ -->
     <div class="right-controls" id="right-controls">
         <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-crosshairs" style="color:var(--primary);"></i></button>
         <button class="map-btn" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
         <button class="map-btn" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
     </div>
 
-    <!-- HARİTA -->
     <div id="map"></div>
 
-    <!-- YENİ: KOMPAKT KAYIT PANELİ (Haritayı Kapatmaz) -->
     <div class="floating-save-panel" id="save-panel">
         <div class="save-header">
             <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
@@ -237,19 +204,17 @@
         </div>
     </div>
 
-    <!-- NOKTA LİSTESİ MODALI -->
     <div class="app-modal" id="modal-list">
         <div class="modal-header">
             <span><i class="fas fa-list"></i> <span id="list-project-name">Varsayılan</span> (<span id="point-count">0</span>)</span>
             <div class="modal-header-actions">
-                <i class="fas fa-download" onclick="exportToTXT()" title="TXT İndir" style="background:var(--primary);"></i>
+                <i class="fas fa-download" onclick="exportToTXT()" style="background:var(--primary);"></i>
                 <i class="fas fa-times" onclick="switchTab('tab-map')"></i>
             </div>
         </div>
         <div class="modal-body" id="points-list"></div>
     </div>
 
-    <!-- PROJELER MODALI -->
     <div class="app-modal" id="modal-projects">
         <div class="modal-header">
             <span><i class="fas fa-folder-open"></i> Projeler</span>
@@ -257,14 +222,13 @@
         </div>
         <div class="modal-body">
             <div class="project-input-row">
-                <input type="text" id="new-project-name" placeholder="Yeni Klasör Adı (Örn: Bina Aplikasyon)">
+                <input type="text" id="new-project-name" placeholder="Yeni Klasör Adı">
                 <button onclick="createNewProject()"><i class="fas fa-plus"></i></button>
             </div>
             <div id="projects-list"></div>
         </div>
     </div>
 
-    <!-- GOOGLE GİRİŞ / PROFİL MODALI -->
     <div class="app-modal" id="modal-profile">
         <div class="modal-header">
             <span><i class="fas fa-user-circle"></i> Hesabım</span>
@@ -274,15 +238,14 @@
             <div style="text-align:center; padding: 40px 10px; background:rgba(0,0,0,0.2); border-radius: 20px; border:1px solid var(--border-glass);">
                 <i class="fab fa-google" style="font-size: 3.5rem; color: #fff; margin-bottom: 20px;"></i>
                 <h3 style="color:white; margin:0 0 10px 0; font-size:1.4rem;">Bulut Senkronizasyonu</h3>
-                <p style="color:rgba(255,255,255,0.7); margin-bottom: 25px; font-size: 0.95rem;">Ölçümlerinizi Firebase'e kaydetmek ve tüm cihazlarınızdan erişmek için giriş yapın.</p>
-                <button style="background: white; color: black; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 280px; font-weight: 600; font-size: 1.05rem; cursor: pointer; transition: 0.2s;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+                <p style="color:rgba(255,255,255,0.7); margin-bottom: 25px; font-size: 0.95rem;">Ölçümlerinizi Firebase'e kaydetmek için giriş yapın.</p>
+                <button style="background: white; color: black; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 280px; font-weight: 600; font-size: 1.05rem;">
                     <i class="fab fa-google" style="color: #ea4335; margin-right: 8px;"></i> Google ile Giriş Yap
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- AYARLAR & İZİNLER MODALI -->
     <div class="app-modal" id="modal-settings">
         <div class="modal-header">
             <span><i class="fas fa-cog"></i> Ayarlar</span>
@@ -292,19 +255,16 @@
             <div class="setting-row">
                 <div class="setting-info">
                     <h5>Uydu Görünümü</h5>
-                    <p>Harita altlığını uydu veya sokak olarak ayarla.</p>
+                    <p>Harita altlığını uydu olarak ayarla.</p>
                 </div>
                 <button class="toggle-btn active" id="btn-satellite" onclick="toggleMapLayer()"></button>
             </div>
-            
-            <!-- YENİ: GPS Durum Paneli -->
             <div class="setting-row">
                 <div class="setting-info">
                     <h5>GPS Bağlantı Durumu</h5>
-                    <p id="gps-status-setting" style="margin-top:4px;"><span style="color:var(--danger);"><i class="fas fa-spinner fa-spin"></i> İzin veya Sinyal Bekleniyor...</span></p>
+                    <p id="gps-status-setting" style="margin-top:4px;"><span style="color:var(--danger);"><i class="fas fa-spinner fa-spin"></i> Sinyal Bekleniyor...</span></p>
                 </div>
             </div>
-
             <div style="margin-top: 20px; border-top: 1px solid var(--border-glass); padding-top: 20px; color:rgba(255,255,255,0.7);">
                 <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem;">Uygulama Bilgileri</h5>
                 <p style="margin-bottom: 12px;"><i class="fas fa-globe" style="width:25px; color:var(--primary);"></i> <b>Koordinat:</b> ITRF96 / WGS84</p>
@@ -314,7 +274,6 @@
         </div>
     </div>
 
-    <!-- DOCK MENÜ -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
             <div class="ig-dock-item active" id="tab-map" onclick="switchTab('tab-map')">
@@ -323,7 +282,6 @@
             <div class="ig-dock-item" id="tab-projects" onclick="switchTab('tab-projects')">
                 <i class="fas fa-folder"></i>
             </div>
-            <!-- Nokta Ekle Butonu -->
             <div class="ig-dock-item" id="tab-add" onclick="switchTab('tab-add')">
                 <i class="fas fa-plus-circle" style="font-size:1.8rem; color:var(--primary);"></i>
             </div>
@@ -337,7 +295,50 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- ES Module olarak Cobe (Dünya) Kütüphanesini Çağırıyoruz -->
+    <script type="module">
+        import createGlobe from 'https://cdn.skypack.dev/cobe';
+
+        let phi = 0;
+        let canvas = document.getElementById("globe-canvas");
+        
+        // Cobe Globe Başlatma
+        const globe = createGlobe(canvas, {
+            devicePixelRatio: 2,
+            width: 400,
+            height: 400,
+            phi: 0,
+            theta: 0.2,
+            dark: 1,
+            diffuse: 1.2,
+            mapSamples: 16000,
+            mapBrightness: 6,
+            baseColor: [0.3, 0.3, 0.3],
+            markerColor: [0.1, 0.8, 0.9], // Turkuaz marker
+            glowColor: [0.05, 0.1, 0.15],
+            markers: [
+                { location: [39.92, 32.85], size: 0.1 }, // Ankara
+                { location: [41.00, 28.97], size: 0.05 }, // İstanbul
+            ],
+            onRender: (state) => {
+                state.phi = phi;
+                phi += 0.005;
+            },
+        });
+
+        setTimeout(() => { canvas.style.opacity = '1'; }, 100);
+    </script>
+
     <script>
+        // --- SPLASH SCREEN GİZLEME ---
+        function hideSplashScreen() {
+            let splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            splash.style.transform = 'scale(1.1)';
+            setTimeout(() => { splash.style.display = 'none'; }, 800);
+        }
+
         // --- Harita ve Altlık ---
         var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 2); 
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
@@ -376,13 +377,10 @@
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
                 document.getElementById('accuracy').innerText = "± " + acc + "m";
-                
-                // Ayarlar menüsündeki GPS Durumunu Güncelle
                 document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--accent); font-weight:600;"><i class="fas fa-check-circle"></i> Bağlı (Hassasiyet: ±${acc}m)</span>`;
 
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y; currentX = itrf.x; currentDOM = itrf.dom;
-
                 document.getElementById('dom-label').innerText = `ITRF96 (DOM ${currentDOM})`;
                 document.getElementById('live-y').innerText = currentY.toFixed(3);
                 document.getElementById('live-x').innerText = currentX.toFixed(3);
@@ -394,7 +392,7 @@
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
                 document.getElementById('accuracy').innerText = "Hata!"; 
-                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--danger); font-weight:600;"><i class="fas fa-times-circle"></i> Konum İzni Reddedildi veya Kapalı</span><br><small style="color:#94a3b8;">Tarayıcı ayarlarından konum izni veriniz.</small>`;
+                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--danger); font-weight:600;"><i class="fas fa-times-circle"></i> Konum İzni Reddedildi veya Kapalı</span><br><small style="color:rgba(255,255,255,0.6);">Tarayıcı ayarlarından konum izni veriniz.</small>`;
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
@@ -402,19 +400,15 @@
             if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); }
         }
 
-        // --- Menü Geçişleri (Kompakt Panel Mantığı Eklendi) ---
+        // --- Menü Geçişleri ---
         function switchTab(tabId) {
             document.querySelectorAll('.ig-dock-item').forEach(el => el.classList.remove('active'));
-            
-            // Aktif Tab Görünümü
             if(tabId !== 'tab-settings' && tabId !== 'tab-map' && tabId !== 'tab-add') { document.getElementById(tabId).classList.add('active'); }
             else if (tabId === 'tab-map' || tabId === 'tab-add') { document.getElementById(tabId).classList.add('active'); }
 
-            // Tüm modalları ve floating paneli gizle
             document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
             document.getElementById('save-panel').classList.remove('show');
 
-            // Eğer Harita veya Ekleme modundaysak üst bar görünür kalır
             if (tabId === 'tab-map' || tabId === 'tab-add') {
                 document.getElementById('top-bar').classList.remove('hide-up');
                 document.getElementById('right-controls').classList.remove('hide-right');
@@ -423,7 +417,6 @@
                 document.getElementById('right-controls').classList.add('hide-right');
             }
 
-            // İlgili modülleri tetikle
             if (tabId === 'tab-projects') {
                 document.getElementById('modal-projects').classList.add('show');
                 updateProjectsUI();
@@ -479,12 +472,7 @@
             renderActiveProjectMarkers(); 
         }
 
-        function setActiveProject(name) {
-            activeProject = name;
-            updateProjectsUI();
-            renderActiveProjectMarkers(); 
-            switchTab('tab-map'); 
-        }
+        function setActiveProject(name) { activeProject = name; updateProjectsUI(); renderActiveProjectMarkers(); switchTab('tab-map'); }
 
         function editProject(oldName) {
             if(oldName === "Varsayılan") return alert("Varsayılan klasörün adı değiştirilemez!");
@@ -492,23 +480,17 @@
             if(!newName || newName.trim() === "" || newName.trim() === oldName) return;
             newName = newName.trim();
             if(projectsData[newName]) return alert("Bu isimde bir klasör zaten var!");
-
-            projectsData[newName] = projectsData[oldName];
-            delete projectsData[oldName];
-
+            projectsData[newName] = projectsData[oldName]; delete projectsData[oldName];
             if(activeProject === oldName) { activeProject = newName; }
-            updateProjectsUI();
-            renderActiveProjectMarkers();
+            updateProjectsUI(); renderActiveProjectMarkers();
         }
 
         function deleteProject(name) {
             if(name === "Varsayılan") return alert("Varsayılan klasör silinemez!");
             if(!confirm(`"${name}" klasörünü ve içindeki noktaları SİLMEK istediğinize emin misiniz?`)) return;
-
             delete projectsData[name];
             if(activeProject === name) { activeProject = "Varsayılan"; }
-            updateProjectsUI();
-            renderActiveProjectMarkers();
+            updateProjectsUI(); renderActiveProjectMarkers();
         }
 
         function updateProjectsUI() {
@@ -516,15 +498,8 @@
             for (let projName in projectsData) {
                 let count = projectsData[projName].points.length;
                 let isActive = projName === activeProject;
-                
                 let actionButtons = '';
-                if(projName !== "Varsayılan") {
-                    actionButtons = `
-                        <button class="btn-edit" onclick="editProject('${projName}')"><i class="fas fa-pen"></i></button>
-                        <button class="btn-del" onclick="deleteProject('${projName}')"><i class="fas fa-trash"></i></button>
-                    `;
-                }
-
+                if(projName !== "Varsayılan") { actionButtons = `<button class="btn-edit" onclick="editProject('${projName}')"><i class="fas fa-pen"></i></button><button class="btn-del" onclick="deleteProject('${projName}')"><i class="fas fa-trash"></i></button>`; }
                 html += `
                     <div class="card-item" style="border-color: ${isActive ? 'var(--accent)' : 'var(--border-glass)'};">
                         <div class="card-header">
@@ -538,8 +513,7 @@
                             ${!isActive ? `<button class="btn-select" onclick="setActiveProject('${projName}')">Bu Klasörü Seç</button>` : ''}
                             ${actionButtons}
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
             document.getElementById('projects-list').innerHTML = html;
         }
@@ -550,54 +524,27 @@
             var nameInput = document.getElementById("point-name");
             var ptName = nameInput.value.trim();
             if (!ptName) { alert("Nokta adı girin!"); return; }
-
             var id = pointIdCounter++;
-            projectsData[activeProject].points.push({ 
-                id: id, name: ptName, lat: currentLat, lon: currentLon, y_saga: currentY, x_yukari: currentX, dom: currentDOM 
-            });
-            
-            if(ptName === projectsData[activeProject].autoCounter.toString()) {
-                projectsData[activeProject].autoCounter++;
-            }
-            
-            renderActiveProjectMarkers(); 
-            switchTab('tab-map'); // Kaydedince haritaya (aktif hale) dön
+            projectsData[activeProject].points.push({ id: id, name: ptName, lat: currentLat, lon: currentLon, y_saga: currentY, x_yukari: currentX, dom: currentDOM });
+            if(ptName === projectsData[activeProject].autoCounter.toString()) { projectsData[activeProject].autoCounter++; }
+            renderActiveProjectMarkers(); switchTab('tab-map');
         }
 
         function editPoint(id) {
             let point = projectsData[activeProject].points.find(p => p.id === id);
-            if(point) {
-                let newName = prompt("Yeni Nokta Adını Girin:", point.name);
-                if(newName && newName.trim() !== "") {
-                    point.name = newName.trim();
-                    renderActiveProjectMarkers(); 
-                    updateListUI();
-                }
-            }
+            if(point) { let newName = prompt("Yeni Nokta Adını Girin:", point.name); if(newName && newName.trim() !== "") { point.name = newName.trim(); renderActiveProjectMarkers(); updateListUI(); } }
         }
 
         function deletePoint(id) {
-            if(confirm("Noktayı silmek istediğinize emin misiniz?")) {
-                projectsData[activeProject].points = projectsData[activeProject].points.filter(p => p.id !== id);
-                renderActiveProjectMarkers(); 
-                updateListUI();
-            }
+            if(confirm("Noktayı silmek istediğinize emin misiniz?")) { projectsData[activeProject].points = projectsData[activeProject].points.filter(p => p.id !== id); renderActiveProjectMarkers(); updateListUI(); }
         }
 
         function zoomToPoint(lat, lon) { map.setView([lat, lon], 19); switchTab('tab-map'); }
 
         function updateListUI() {
-            var listDiv = document.getElementById("points-list");
-            let points = projectsData[activeProject].points;
-            
-            document.getElementById("list-project-name").innerText = activeProject;
-            document.getElementById("point-count").innerText = points.length;
-            
-            if(points.length === 0) {
-                listDiv.innerHTML = '<div style="text-align:center; padding: 40px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--primary); opacity:0.5; margin-bottom:15px;"></i><p style="color:rgba(255,255,255,0.7);">Bu projede kayıtlı nokta yok.</p></div>';
-                return;
-            }
-            
+            var listDiv = document.getElementById("points-list"); let points = projectsData[activeProject].points;
+            document.getElementById("list-project-name").innerText = activeProject; document.getElementById("point-count").innerText = points.length;
+            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 40px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--primary); opacity:0.5; margin-bottom:15px;"></i><p style="color:rgba(255,255,255,0.7);">Bu projede kayıtlı nokta yok.</p></div>'; return; }
             let html = "";
             [...points].reverse().forEach(p => {
                 html += `
@@ -620,10 +567,8 @@
         function exportToTXT() {
             let points = projectsData[activeProject].points;
             if(points.length === 0) return alert("Dışa aktarılacak nokta bulunamadı!");
-            
             let txtContent = "";
             points.forEach(p => { txtContent += `${p.name} ${p.y_saga.toFixed(3)} ${p.x_yukari.toFixed(3)}\n`; });
-            
             let blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
             let link = document.createElement("a"); link.href = URL.createObjectURL(blob);
             link.download = `${activeProject.replace(/\s+/g, '_')}_olcumleri.txt`;
