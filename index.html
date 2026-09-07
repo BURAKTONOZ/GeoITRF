@@ -6,185 +6,240 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>GeoITRF - Pro Mobil Terminal</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
         :root {
-            --accent: #33ccdd; 
-            --danger: #ef4444;
+            --accent: #00f2fe; /* Daha parlak bir neon turkuaz */
+            --accent-glow: rgba(0, 242, 254, 0.4);
+            --danger: #ff4757;
             --primary: #3b82f6;
-            --border-glass: rgba(255, 255, 255, 0.15);
+            --surface: rgba(15, 23, 42, 0.65); /* Koyu lacivert/gri cam */
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --surface-border-light: rgba(255, 255, 255, 0.15);
+            --text-muted: #94a3b8;
         }
 
         body, html { 
             margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh;
-            font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #000;
-            position: fixed; top: 0; left: 0; touch-action: none;
+            font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #050b14;
+            position: fixed; top: 0; left: 0; touch-action: none; color: #fff;
         }
 
         #map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
-        /* 3D HOLOGRAFİK DÜNYA (SAF CSS) */
+        /* =========================================
+           PREMIUM HOLOGRAFİK GİRİŞ EKRANI
+           ========================================= */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-            background: #050a0f; 
+            background: radial-gradient(circle at center, #0a1128 0%, #000000 100%);
             z-index: 9999; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
             padding: 80px 20px 50px 20px; box-sizing: border-box; cursor: pointer;
-            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s;
-            overflow: hidden;
+            transition: opacity 0.8s ease, transform 0.8s ease; overflow: hidden;
         }
         
-        #splash-screen::before {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; background: radial-gradient(circle, rgba(51, 204, 221, 0.15) 0%, rgba(0,0,0,0) 70%);
-            z-index: 0;
+        /* Özel BMC Butonu - Giriş Ekranı Sağ Üst */
+        .bmc-splash-btn {
+            position: absolute; top: 25px; right: 20px; z-index: 10000;
+            background: rgba(38, 176, 161, 0.15); border: 1px solid #26B0A1;
+            color: #26B0A1; padding: 8px 16px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 600; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(38, 176, 161, 0.2);
         }
+        .bmc-splash-btn:active { transform: scale(0.95); background: #26B0A1; color: #fff; }
 
         .splash-title {
-            position: relative; z-index: 1; color: var(--accent); font-size: 2.8rem; font-weight: 700; margin: 0; letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(51, 204, 221, 0.5); text-align: center; animation: fadeInDown 1s ease-out;
+            position: relative; z-index: 1; color: var(--accent); font-size: 3rem; font-weight: 700; margin: 0; letter-spacing: 2px;
+            text-shadow: 0 0 25px var(--accent-glow); text-align: center; animation: fadeInDown 1s ease-out;
         }
-        .splash-subtitle { position: relative; z-index: 1; color: #fff; font-size: 1rem; opacity: 0.5; letter-spacing: 8px; margin-top: 5px; text-align: center;}
+        .splash-subtitle { position: relative; z-index: 1; color: #fff; font-size: 0.95rem; opacity: 0.6; letter-spacing: 10px; margin-top: 5px; text-align: center;}
         
-        .globe-container { 
-            position: relative; z-index: 1; width: 220px; height: 220px;
-            perspective: 1000px; display: flex; justify-content: center; align-items: center; 
-        }
-
-        .wireframe-globe {
-            position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spinGlobe 15s linear infinite;
-        }
-
-        .globe-core {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 60px; height: 60px; background: var(--accent);
-            border-radius: 50%; filter: blur(30px); opacity: 0.4;
-        }
-
-        .ring {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border: 1.5px solid rgba(51, 204, 221, 0.4); border-radius: 50%; box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(51, 204, 221, 0.2) inset, 0 0 8px rgba(51, 204, 221, 0.3);
-        }
-
-        .ring:nth-child(1) { transform: rotateY(0deg); }
-        .ring:nth-child(2) { transform: rotateY(36deg); }
-        .ring:nth-child(3) { transform: rotateY(72deg); }
-        .ring:nth-child(4) { transform: rotateY(108deg); }
-        .ring:nth-child(5) { transform: rotateY(144deg); }
-        .ring.latitude { border: 1.5px solid rgba(51, 204, 221, 0.6); }
+        .globe-container { position: relative; z-index: 1; width: 240px; height: 240px; perspective: 1000px; display: flex; justify-content: center; align-items: center; }
+        .wireframe-globe { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spinGlobe 15s linear infinite; }
+        .globe-core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: var(--accent); border-radius: 50%; filter: blur(35px); opacity: 0.35; }
+        .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 50%; box-sizing: border-box; box-shadow: 0 0 15px rgba(0, 242, 254, 0.1) inset; }
+        
+        .ring:nth-child(1) { transform: rotateY(0deg); } .ring:nth-child(2) { transform: rotateY(36deg); } .ring:nth-child(3) { transform: rotateY(72deg); } .ring:nth-child(4) { transform: rotateY(108deg); } .ring:nth-child(5) { transform: rotateY(144deg); }
+        .ring.latitude { border: 1px solid rgba(0, 242, 254, 0.5); }
         .ring:nth-child(6) { transform: rotateX(90deg) translateZ(0); } 
-        .ring:nth-child(7) { transform: rotateX(90deg) translateZ(55px) scale(0.866); }
-        .ring:nth-child(8) { transform: rotateX(90deg) translateZ(-55px) scale(0.866); }
-        .ring:nth-child(9) { transform: rotateX(90deg) translateZ(88px) scale(0.6); }
-        .ring:nth-child(10) { transform: rotateX(90deg) translateZ(-88px) scale(0.6); }
+        .ring:nth-child(7) { transform: rotateX(90deg) translateZ(60px) scale(0.866); } .ring:nth-child(8) { transform: rotateX(90deg) translateZ(-60px) scale(0.866); }
+        .ring:nth-child(9) { transform: rotateX(90deg) translateZ(96px) scale(0.6); } .ring:nth-child(10) { transform: rotateX(90deg) translateZ(-96px) scale(0.6); }
 
         .splash-footer { position: relative; z-index: 1; text-align: center; animation: fadeInUp 1s ease-out; }
-        .splash-footer h3 { margin: 0; color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 4px; font-weight: 700;}
+        .splash-footer h3 { margin: 0; color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 5px; font-weight: 600;}
 
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ANA UYGULAMA ARAYÜZÜ */
+        /* =========================================
+           ANA HUD (HEATS UP DISPLAY) ARAYÜZÜ
+           ========================================= */
         .top-bar {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
-            background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            padding: 15px; border-radius: 20px; border: 1px solid var(--border-glass);
-            display: flex; flex-direction: column; gap: 10px; color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.4s;
+            background: var(--surface); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            padding: 18px; border-radius: 24px; border: 1px solid var(--surface-border);
+            border-top: 1px solid var(--surface-border-light);
+            display: flex; flex-direction: column; gap: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .top-bar.hide-up { transform: translateY(-150%); opacity: 0; pointer-events: none; }
-        .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 8px;}
-        .brand-box { display: flex; flex-direction: column; }
-        .brand-box h1 { font-size: 1.2rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; line-height: 1.1;}
-        .brand-box .creator { font-size: 0.65rem; color: rgba(255,255,255,0.7); font-weight: 700; letter-spacing: 1px; margin-top:2px;}
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .gps-status { font-size: 0.8rem; font-weight: 600; color: #cbd5e1; display: flex; align-items: center; gap: 6px; }
-        .gps-status span { color: var(--accent); }
+        
+        .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;}
+        .brand-box h1 { font-size: 1.3rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; line-height: 1;}
+        .brand-box .creator { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1.5px;}
+        
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .gps-status { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 20px;}
+        .gps-status span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
         .blink { animation: blinker 1.5s linear infinite; color: var(--accent); }
-        .btn-settings-top { background: rgba(255,255,255,0.1); border: 1px solid var(--border-glass); color: white; border-radius: 10px; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;}
-        .live-data-container { display: flex; justify-content: space-between; gap: 10px; }
-        .live-col { flex: 1; display: flex; flex-direction: column; }
-        .live-col:last-child { text-align: right; }
-        .live-label { color: rgba(255,255,255,0.6); font-size: 0.65rem; text-transform: uppercase; font-weight: 600; margin-bottom: 3px;}
-        .live-val { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: #fff;}
-        .live-val span { color: var(--accent); }
-
-        .right-controls { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 12px; transition: 0.4s;}
-        .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
-        .map-btn { width: 45px; height: 45px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;}
+        @keyframes blinker { 50% { opacity: 0.3; } }
         
-        .floating-save-panel { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); border: 1px solid var(--border-glass); border-radius: 18px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 360px; opacity: 0; pointer-events: none; transition: 0.4s;}
-        .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
-        .save-header { color: #fff; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;}
-        .save-header b { color: var(--accent); }
-        .save-input-group { display: flex; gap: 10px; }
-        .save-input-group input { flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-glass); background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; }
-        .save-input-group button { background: var(--accent); color: #000; border: none; padding: 0 20px; border-radius: 12px; font-size: 1rem; font-weight: 700;}
-
-        .app-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); transition: 0.5s; display: flex; flex-direction: column; padding-bottom: 90px;}
-        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .modal-header { padding: 40px 20px 20px 20px; border-bottom: 1px solid var(--border-glass); color: white; font-weight: 600; display:flex; justify-content: space-between; align-items: center; font-size: 1.2rem;}
-        .modal-header-actions i { color: #fff; font-size: 1.5rem; margin-left: 20px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 10px;}
-        .modal-body { padding: 20px; overflow-y: auto; touch-action: pan-y; flex: 1; }
-
-        .card-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); border-radius: 16px; padding: 15px; margin-bottom: 15px; color: white; display: flex; flex-direction: column; gap: 10px; }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start;}
-        .card-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--accent); display:flex; align-items:center; gap:8px;}
-        .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 600;}
-        .wgs-coords { margin: 5px 0 0 0; font-size: 0.8rem; color: rgba(255,255,255,0.6); }
-        .card-actions { display: flex; gap: 8px; width: 100%; margin-top: 5px;}
-        .card-actions button { flex: 1; height: 42px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600;}
-        .btn-go { background: rgba(51, 204, 221, 0.2); color: var(--accent); }
-        .btn-edit { background: rgba(245, 158, 11, 0.2); color: #f59e0b; flex: 0.5 !important;}
-        .btn-del { background: rgba(239, 68, 68, 0.2); color: var(--danger); flex: 0.5 !important;}
-        .btn-select { background: rgba(51, 204, 221, 0.2); color: var(--accent); }
-
-        .project-input-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .project-input-row input { flex:1; padding: 15px; border-radius: 14px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: white;}
-        .project-input-row button { padding: 0 25px; border-radius: 14px; border: none; background: var(--accent); color: #000;}
-
-        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-glass); }
-        .setting-info h5 { margin: 0 0 5px 0; color: white; font-size: 1.1rem; }
-        .setting-info p { margin: 0; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
-        .toggle-btn { background: rgba(255,255,255,0.2); border: 1px solid var(--border-glass); border-radius: 20px; width: 55px; height: 30px; position: relative;}
-        .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 3px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: 0.3s;}
-        .toggle-btn.active { background: var(--accent); border-color: var(--accent);}
-        .toggle-btn.active::after { left: 26px; }
-
-        .ig-dock-wrapper { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 1100; width: 92%; max-width: 400px; }
-        .ig-dock { display: flex; align-items: center; justify-content: space-between; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(30px); border: 1px solid var(--border-glass); border-radius: 50px; padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .ig-dock-item { width: 60px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 40px; color: rgba(255,255,255,0.6); font-size: 1.3rem; transition: 0.3s; }
-        .ig-dock-item.active { color: #fff; background: rgba(255, 255, 255, 0.15); }
-        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #1e3a8a); display: flex; justify-content: center; align-items: center; font-size: 1rem; color: white; border: 2px solid transparent;}
-        .ig-dock-item.active .profile-pic { border-color: #fff; }
-        
-        .leaflet-popup-content-wrapper { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); color: #fff; border-radius: 12px; border: 1px solid var(--border-glass); }
-        .leaflet-popup-tip { background: rgba(0, 0, 0, 0.6); }
-        .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1.1rem; }
-        .marker-popup p { margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.7);}
-        .marker-popup hr { border: 0; border-top: 1px solid var(--border-glass); margin: 8px 0; }
-        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.4; color: var(--accent);}
-        
-        /* BMC Modal Butonu */
-        .coffee-btn {
-            background: #26B0A1; color: white; border: none; padding: 15px; border-radius: 12px; 
-            width: 100%; max-width: 280px; font-weight: 600; font-size: 1.05rem; cursor: pointer; 
-            display: flex; justify-content: center; align-items: center; gap: 8px; margin: 15px auto 0;
-            text-decoration: none;
+        .btn-settings-top { 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--surface-border); color: #fff; 
+            border-radius: 12px; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s;
         }
+        .btn-settings-top:active { transform: scale(0.9); background: rgba(255,255,255,0.1); border-color: var(--accent); color: var(--accent);}
+
+        .live-data-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .live-col { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 3px;}
+        .live-label { color: var(--text-muted); font-size: 0.6rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
+        .live-val { font-family: monospace; font-size: 0.95rem; font-weight: 600; color: #fff;}
+        .live-val span { color: var(--accent); opacity: 0.8;}
+
+        /* Sağ Harita Kontrolleri */
+        .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1);}
+        .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
+        .map-btn { 
+            width: 42px; height: 42px; border-radius: 14px; border: 1px solid var(--surface-border); 
+            background: var(--surface); backdrop-filter: blur(20px); color: white; font-size: 1.1rem; 
+            display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); color: var(--accent); border-color: var(--accent); }
+
+        /* Yüzer Kayıt Paneli */
+        .floating-save-panel { 
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; 
+            background: var(--surface); backdrop-filter: blur(25px); border: 1px solid var(--surface-border); border-top: 1px solid var(--surface-border-light); 
+            border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 12px; width: 90%; max-width: 360px; 
+            opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+        .save-header { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;}
+        .save-header b { color: var(--accent); font-weight: 600;}
+        .save-input-group { display: flex; gap: 10px; }
+        .save-input-group input { flex: 1; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-size: 1rem; outline: none; transition: 0.3s;}
+        .save-input-group input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
+        .save-input-group button { background: linear-gradient(135deg, var(--accent), #0ea5e9); color: #000; border: none; padding: 0 22px; border-radius: 14px; font-size: 1.1rem; cursor:pointer; transition: 0.2s;}
+        .save-input-group button:active { transform: scale(0.95); }
+
+        /* Premium Modallar */
+        .app-modal { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; 
+            background: rgba(5, 11, 20, 0.7); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); 
+            z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); transition: 0.5s cubic-bezier(0.32, 0.72, 0, 1); 
+            display: flex; flex-direction: column; padding-bottom: 90px;
+        }
+        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .modal-header { padding: 45px 24px 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 600; display:flex; justify-content: space-between; align-items: center; font-size: 1.3rem;}
+        .modal-header-actions i { color: var(--text-muted); font-size: 1.4rem; margin-left: 15px; background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 12px; transition: 0.2s; border: 1px solid transparent;}
+        .modal-header-actions i:active { transform: scale(0.9); color: #fff; border-color: rgba(255,255,255,0.2); }
+        .modal-body { padding: 24px; overflow-y: auto; touch-action: pan-y; flex: 1; }
+
+        /* Modern Kart Tasarımı */
+        .card-item { 
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--surface-border); border-top: 1px solid var(--surface-border-light);
+            border-radius: 20px; padding: 18px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start;}
+        .card-info h4 { margin: 0 0 4px 0; font-size: 1.1rem; color: #fff; display:flex; align-items:center; gap:8px;}
+        .card-info h4 i { color: var(--accent); }
+        .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 500; font-family: monospace; color: #e2e8f0;}
+        .wgs-coords { margin: 4px 0 0 0; font-size: 0.75rem; color: var(--text-muted); font-family: monospace;}
+        .card-actions { display: flex; gap: 10px; width: 100%; margin-top: 5px;}
+        .card-actions button { 
+            flex: 1; height: 42px; border-radius: 12px; border: 1px solid transparent; 
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); color: #fff;
+        }
+        .card-actions button:active { transform: scale(0.95); }
+        .btn-go { background: rgba(0, 242, 254, 0.1) !important; color: var(--accent) !important; border-color: rgba(0, 242, 254, 0.2) !important; }
+        .btn-edit { color: #facc15 !important; flex: 0.5 !important;}
+        .btn-del { color: var(--danger) !important; flex: 0.5 !important;}
+
+        .project-input-row { display: flex; gap: 12px; margin-bottom: 24px; }
+        .project-input-row input { flex:1; padding: 16px; border-radius: 16px; border: 1px solid var(--surface-border); background: rgba(0,0,0,0.3); color: white; outline:none; font-size: 1rem;}
+        .project-input-row input:focus { border-color: var(--accent); }
+        .project-input-row button { padding: 0 25px; border-radius: 16px; border: none; background: linear-gradient(135deg, var(--accent), #3b82f6); color: #000; font-size: 1.2rem; cursor:pointer;}
+
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .setting-info h5 { margin: 0 0 5px 0; color: white; font-size: 1.05rem; font-weight: 500;}
+        .setting-info p { margin: 0; color: var(--text-muted); font-size: 0.8rem; }
+        
+        /* Modern Switch */
+        .toggle-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 30px; width: 50px; height: 28px; position: relative; cursor: pointer; transition: 0.3s;}
+        .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+        .toggle-btn.active { background: var(--accent); }
+        .toggle-btn.active::after { left: 24px; }
+
+        /* PREMİUM DOCK MENÜ (iOS Vision Style) */
+        .ig-dock-wrapper { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 1100; width: 90%; max-width: 380px; }
+        .ig-dock { 
+            display: flex; align-items: center; justify-content: space-between; 
+            background: rgba(10, 15, 30, 0.75); backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px); 
+            border: 1px solid var(--surface-border-light); border-radius: 40px; 
+            padding: 6px; box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1); 
+        }
+        .ig-dock-item { 
+            position: relative; width: 55px; height: 50px; display: flex; justify-content: center; align-items: center; 
+            border-radius: 30px; color: var(--text-muted); font-size: 1.25rem; transition: 0.3s; cursor: pointer;
+        }
+        .ig-dock-item.active { color: var(--accent); background: transparent; }
+        .ig-dock-item.active::after {
+            content: ''; position: absolute; bottom: 2px; width: 5px; height: 5px; background: var(--accent); border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+        .ig-dock-item:active { transform: scale(0.85); }
+        
+        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 1rem; color: #fff; border: 1px solid var(--surface-border); transition: 0.3s;}
+        .ig-dock-item.active .profile-pic { border-color: var(--accent); color: var(--accent); background: rgba(0, 242, 254, 0.1);}
+        
+        /* Harita Marker Pop-up */
+        .leaflet-popup-content-wrapper { background: rgba(10, 15, 25, 0.9); backdrop-filter: blur(15px); color: #fff; border-radius: 16px; border: 1px solid var(--surface-border); box-shadow: 0 10px 25px rgba(0,0,0,0.5);}
+        .leaflet-popup-tip { background: rgba(10, 15, 25, 0.9); }
+        .marker-popup h3 { color: var(--accent); margin: 0 0 4px 0; font-size: 1.1rem; }
+        .marker-popup p { margin: 0; font-size: 0.8rem; color: var(--text-muted);}
+        .marker-popup hr { border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 10px 0; }
+        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.5; color: #e2e8f0;}
+        
+        /* Kahve Butonu - Profil İçi */
+        .coffee-btn-profile {
+            background: #26B0A1; color: white; border: none; padding: 16px; border-radius: 16px; 
+            width: 100%; font-weight: 600; font-size: 1.05rem; cursor: pointer; 
+            display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px;
+            text-decoration: none; box-shadow: 0 8px 20px rgba(38, 176, 161, 0.3); transition: 0.2s;
+        }
+        .coffee-btn-profile:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
 
-    <!-- YENİ HOLOGRAFİK GİRİŞ EKRANI -->
+    <!-- HOLOGRAFİK GİRİŞ EKRANI -->
     <div id="splash-screen" onclick="hideSplashScreen()">
-        <div>
+        <!-- Dışarıdan yükleme yapmayan Özel BMC Butonu -->
+        <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="bmc-splash-btn" onclick="event.stopPropagation()">
+            <i class="fas fa-mug-hot"></i> Kahve Ismarla
+        </a>
+
+        <div style="margin-top: 20px;">
             <h1 class="splash-title">GeoITRF</h1>
             <div class="splash-subtitle">PRO TERMINAL</div>
         </div>
@@ -202,7 +257,7 @@
         </div>
     </div>
 
-    <!-- ANA ARAYÜZ -->
+    <!-- HUD ÜST PANEL -->
     <div class="top-bar" id="top-bar">
         <div class="top-header">
             <div class="brand-box">
@@ -216,20 +271,20 @@
         </div>
         <div class="live-data-container">
             <div class="live-col">
-                <span class="live-label">WGS84</span>
-                <span class="live-val">E: <span id="live-lat">...</span></span>
-                <span class="live-val">B: <span id="live-lon">...</span></span>
+                <span class="live-label">WGS84 (Derece)</span>
+                <div class="live-val">E <span id="live-lat">...</span></div>
+                <div class="live-val">B <span id="live-lon">...</span></div>
             </div>
-            <div class="live-col">
+            <div class="live-col" style="text-align: right;">
                 <span class="live-label" id="dom-label">ITRF96</span>
-                <span class="live-val">Y: <span id="live-y">...</span></span>
-                <span class="live-val">X: <span id="live-x">...</span></span>
+                <div class="live-val">Y <span id="live-y">...</span></div>
+                <div class="live-val">X <span id="live-x">...</span></div>
             </div>
         </div>
     </div>
 
     <div class="right-controls" id="right-controls">
-        <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-crosshairs" style="color:var(--accent);"></i></button>
+        <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
         <button class="map-btn" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
         <button class="map-btn" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
     </div>
@@ -238,20 +293,20 @@
 
     <div class="floating-save-panel" id="save-panel">
         <div class="save-header">
-            <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
-            <i class="fas fa-times" style="cursor:pointer; color:rgba(255,255,255,0.6);" onclick="switchTab('tab-map')"></i>
+            <span>Aktif Klasör: <b id="active-project-label-add">Varsayılan</b></span>
+            <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="switchTab('tab-map')"></i>
         </div>
         <div class="save-input-group">
-            <input type="text" id="point-name" placeholder="Ad (Örn: 1)">
+            <input type="text" id="point-name" placeholder="Nokta Adı (Örn: P1)">
             <button onclick="saveCurrentLocation()"><i class="fas fa-save"></i></button>
         </div>
     </div>
 
     <div class="app-modal" id="modal-list">
         <div class="modal-header">
-            <span><i class="fas fa-list"></i> <span id="list-project-name">Varsayılan</span> (<span id="point-count">0</span>)</span>
-            <div class="modal-header-actions">
-                <i class="fas fa-download" onclick="exportToTXT()" style="background:var(--accent); color:#000;"></i>
+            <span><i class="fas fa-list-ul" style="color:var(--accent); margin-right:8px;"></i> <span id="list-project-name">Varsayılan</span> (<span id="point-count">0</span>)</span>
+            <div class="modal-header-actions" style="display:flex;">
+                <i class="fas fa-download" onclick="exportToTXT()" style="color:var(--accent);"></i>
                 <i class="fas fa-times" onclick="switchTab('tab-map')"></i>
             </div>
         </div>
@@ -260,85 +315,85 @@
 
     <div class="app-modal" id="modal-projects">
         <div class="modal-header">
-            <span><i class="fas fa-folder-open"></i> Projeler</span>
+            <span><i class="fas fa-folder-open" style="color:var(--accent); margin-right:8px;"></i> Projeler</span>
             <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
         </div>
         <div class="modal-body">
             <div class="project-input-row">
-                <input type="text" id="new-project-name" placeholder="Yeni Klasör Adı">
+                <input type="text" id="new-project-name" placeholder="Yeni Klasör Adı Yarat">
                 <button onclick="createNewProject()"><i class="fas fa-plus"></i></button>
             </div>
             <div id="projects-list"></div>
         </div>
     </div>
 
-    <!-- HESABIM / PROFİL MODALI -->
     <div class="app-modal" id="modal-profile">
         <div class="modal-header">
-            <span><i class="fas fa-user-circle"></i> Hesabım</span>
+            <span><i class="fas fa-user" style="color:var(--accent); margin-right:8px;"></i> Profilim</span>
             <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
         </div>
         <div class="modal-body">
-            <div style="text-align:center; padding: 40px 10px; background:rgba(0,0,0,0.2); border-radius: 20px; border:1px solid var(--border-glass); margin-bottom: 20px;">
+            <div style="text-align:center; padding: 40px 20px; background:rgba(255,255,255,0.02); border-radius: 24px; border:1px solid var(--surface-border);">
                 <i class="fab fa-google" style="font-size: 3.5rem; color: #fff; margin-bottom: 20px;"></i>
                 <h3 style="color:white; margin:0 0 10px 0; font-size:1.4rem;">Bulut Senkronizasyonu</h3>
-                <p style="color:rgba(255,255,255,0.7); margin-bottom: 25px; font-size: 0.95rem;">Ölçümlerinizi Firebase'e kaydetmek için giriş yapın.</p>
-                <button style="background: white; color: black; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 280px; font-weight: 600; font-size: 1.05rem;">
-                    <i class="fab fa-google" style="color: #ea4335; margin-right: 8px;"></i> Google ile Giriş Yap
+                <p style="color:var(--text-muted); margin-bottom: 25px; font-size: 0.9rem;">Ölçümlerinizi Firebase'e güvenle kaydetmek için giriş yapın.</p>
+                <button style="background: white; color: #000; border: none; padding: 16px; border-radius: 16px; width: 100%; font-weight: 600; font-size: 1.05rem; display:flex; justify-content:center; align-items:center; gap:10px;">
+                    <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Giriş Yap
                 </button>
             </div>
 
-            <!-- ALTERNATİF KAHVE BUTONU (Kullanıcı widget'ı kapatırsa diye) -->
-            <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="coffee-btn">
-                <i class="fas fa-mug-hot"></i> Bana Kahve Ismarla
+            <!-- Profil İçi Kahve Butonu -->
+            <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="coffee-btn-profile">
+                <i class="fas fa-mug-hot"></i> Koordinatları bulduysak, bir kahve?
             </a>
         </div>
     </div>
 
     <div class="app-modal" id="modal-settings">
         <div class="modal-header">
-            <span><i class="fas fa-cog"></i> Ayarlar</span>
+            <span><i class="fas fa-cog" style="color:var(--accent); margin-right:8px;"></i> Ayarlar</span>
             <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
         </div>
         <div class="modal-body">
             <div class="setting-row">
                 <div class="setting-info">
-                    <h5>Uydu Görünümü</h5>
-                    <p>Harita altlığını uydu olarak ayarla.</p>
+                    <h5>Uydu Altlığı</h5>
+                    <p>Harita görünümünü uydu olarak ayarla.</p>
                 </div>
                 <button class="toggle-btn active" id="btn-satellite" onclick="toggleMapLayer()"></button>
             </div>
             <div class="setting-row">
                 <div class="setting-info">
-                    <h5>GPS Bağlantı Durumu</h5>
-                    <p id="gps-status-setting" style="margin-top:4px;"><span style="color:var(--danger);"><i class="fas fa-spinner fa-spin"></i> Sinyal Bekleniyor...</span></p>
+                    <h5>GPS Durumu</h5>
+                    <p id="gps-status-setting" style="margin-top:6px;"><span style="color:var(--danger);"><i class="fas fa-spinner fa-spin"></i> Sinyal Bekleniyor...</span></p>
                 </div>
             </div>
-            <div style="margin-top: 20px; border-top: 1px solid var(--border-glass); padding-top: 20px; color:rgba(255,255,255,0.7);">
-                <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem;">Uygulama Bilgileri</h5>
-                <p style="margin-bottom: 12px;"><i class="fas fa-globe" style="width:25px; color:var(--accent);"></i> <b>Koordinat:</b> ITRF96 / WGS84</p>
-                <p style="margin-bottom: 12px;"><i class="fas fa-ruler-combined" style="width:25px; color:var(--accent);"></i> <b>Dilim:</b> Otomatik DOM (3°)</p>
-                <p style="margin-bottom: 12px;"><i class="fas fa-code" style="width:25px; color:var(--accent);"></i> <b>Geliştirici:</b> CREAT BY TONOZ</p>
+            <div style="margin-top: 30px; border-top: 1px solid var(--surface-border); padding-top: 25px;">
+                <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem; font-weight:500;">Sistem Bilgisi</h5>
+                <p style="margin-bottom: 12px; color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-globe" style="width:25px; color:var(--accent);"></i> Sistem: ITRF96 / WGS84</p>
+                <p style="margin-bottom: 12px; color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-ruler-combined" style="width:25px; color:var(--accent);"></i> Dilim: Otomatik DOM (3°)</p>
+                <p style="margin-bottom: 12px; color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-code" style="width:25px; color:var(--accent);"></i> Geliştirici: <b>CREAT BY TONOZ</b></p>
             </div>
         </div>
     </div>
 
+    <!-- PREMIUM DOCK MENÜ -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
             <div class="ig-dock-item active" id="tab-map" onclick="switchTab('tab-map')">
-                <i class="fas fa-map-marked-alt"></i>
+                <i class="fas fa-map"></i>
             </div>
             <div class="ig-dock-item" id="tab-projects" onclick="switchTab('tab-projects')">
-                <i class="fas fa-folder"></i>
+                <i class="fas fa-folder-open"></i>
             </div>
             <div class="ig-dock-item" id="tab-add" onclick="switchTab('tab-add')">
-                <i class="fas fa-plus-circle" style="font-size:1.8rem; color:var(--accent);"></i>
+                <i class="fas fa-plus-circle" style="font-size:2rem; color:var(--accent); filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.4));"></i>
             </div>
             <div class="ig-dock-item" id="tab-list" onclick="switchTab('tab-list')">
-                <i class="fas fa-list-ul"></i>
+                <i class="fas fa-list"></i>
             </div>
             <div class="ig-dock-item" id="tab-profile" onclick="switchTab('tab-profile')">
-                <div class="profile-pic"><i class="fas fa-user"></i></div>
+                <div class="profile-pic"><i class="fas fa-user" style="font-size: 0.9rem;"></i></div>
             </div>
         </div>
     </div>
@@ -350,7 +405,7 @@
         function hideSplashScreen() {
             let splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
-            splash.style.transform = 'scale(1.1)';
+            splash.style.transform = 'scale(1.05)';
             setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
 
@@ -392,7 +447,7 @@
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
                 document.getElementById('accuracy').innerText = "± " + acc + "m";
-                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--accent); font-weight:600;"><i class="fas fa-check-circle"></i> Bağlı (Hassasiyet: ±${acc}m)</span>`;
+                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--accent); font-weight:600;"><i class="fas fa-signal"></i> Bağlı (Hassasiyet: ±${acc}m)</span>`;
 
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y; currentX = itrf.x; currentDOM = itrf.dom;
@@ -402,12 +457,12 @@
 
                 var newLoc = new L.LatLng(currentLat, currentLon);
                 if (userMarker) { userMarker.setLatLng(newLoc); } 
-                else { userMarker = L.circleMarker(newLoc, { color: '#33ccdd', fillColor: '#33ccdd', fillOpacity: 0.8, radius: 8, weight: 2, zIndexOffset: 1000 }).addTo(map); }
+                else { userMarker = L.circleMarker(newLoc, { color: '#00f2fe', fillColor: '#00f2fe', fillOpacity: 0.8, radius: 8, weight: 2, zIndexOffset: 1000 }).addTo(map); }
 
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
                 document.getElementById('accuracy').innerText = "Hata!"; 
-                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--danger); font-weight:600;"><i class="fas fa-times-circle"></i> Konum İzni Reddedildi veya Kapalı</span><br><small style="color:rgba(255,255,255,0.6);">Tarayıcı ayarlarından konum izni veriniz.</small>`;
+                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--danger); font-weight:600;"><i class="fas fa-exclamation-triangle"></i> Konum İzni Gerekli</span><br><small style="color:var(--text-muted);">Tarayıcı ayarlarından konum izni veriniz.</small>`;
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
@@ -459,13 +514,13 @@
                 let popupContent = `
                     <div class="marker-popup">
                         <h3>${p.name}</h3>
-                        <p><i class="fas fa-folder"></i> ${activeProject}</p>
+                        <p><i class="fas fa-folder-open"></i> ${activeProject}</p>
                         <hr>
                         <div class="coords">
-                            <b>Y:</b> ${p.y_saga.toFixed(3)}<br>
-                            <b>X:</b> ${p.x_yukari.toFixed(3)}<br>
-                            <b>Enlem:</b> ${p.lat.toFixed(6)}<br>
-                            <b>Boylam:</b> ${p.lon.toFixed(6)}
+                            <span style="color:var(--text-muted);">Y:</span> ${p.y_saga.toFixed(3)}<br>
+                            <span style="color:var(--text-muted);">X:</span> ${p.x_yukari.toFixed(3)}<br>
+                            <span style="color:var(--text-muted);">Enlem:</span> ${p.lat.toFixed(6)}<br>
+                            <span style="color:var(--text-muted);">Boylam:</span> ${p.lon.toFixed(6)}
                         </div>
                     </div>
                 `;
@@ -516,13 +571,13 @@
                 let actionButtons = '';
                 if(projName !== "Varsayılan") { actionButtons = `<button class="btn-edit" onclick="editProject('${projName}')"><i class="fas fa-pen"></i></button><button class="btn-del" onclick="deleteProject('${projName}')"><i class="fas fa-trash"></i></button>`; }
                 html += `
-                    <div class="card-item" style="border-color: ${isActive ? 'var(--accent)' : 'var(--border-glass)'};">
+                    <div class="card-item" style="border-color: ${isActive ? 'var(--accent)' : 'var(--surface-border)'};">
                         <div class="card-header">
                             <div class="card-info">
                                 <h4 style="color: ${isActive ? 'var(--accent)' : 'white'}"><i class="fas ${isActive ? 'fa-folder-open' : 'fa-folder'}"></i> ${projName}</h4>
                                 <p class="wgs-coords">${count} Nokta Kayıtlı</p>
                             </div>
-                            ${isActive ? `<span style="color:var(--accent); font-size:0.85rem;"><i class="fas fa-check-circle"></i> Aktif</span>` : ''}
+                            ${isActive ? `<span style="color:var(--accent); font-size:0.8rem; font-weight:600;"><i class="fas fa-check-circle"></i> Seçili</span>` : ''}
                         </div>
                         <div class="card-actions">
                             ${!isActive ? `<button class="btn-select" onclick="setActiveProject('${projName}')">Bu Klasörü Seç</button>` : ''}
@@ -533,6 +588,7 @@
             document.getElementById('projects-list').innerHTML = html;
         }
 
+        // --- Nokta Yönetimi ---
         function saveCurrentLocation() {
             if (!currentLat) { alert("GPS bekleniyor..."); return; }
             var nameInput = document.getElementById("point-name");
@@ -558,19 +614,19 @@
         function updateListUI() {
             var listDiv = document.getElementById("points-list"); let points = projectsData[activeProject].points;
             document.getElementById("list-project-name").innerText = activeProject; document.getElementById("point-count").innerText = points.length;
-            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 40px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--accent); opacity:0.5; margin-bottom:15px;"></i><p style="color:rgba(255,255,255,0.7);">Bu projede kayıtlı nokta yok.</p></div>'; return; }
+            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu projede kayıtlı nokta yok.</p></div>'; return; }
             let html = "";
             [...points].reverse().forEach(p => {
                 html += `
                     <div class="card-item">
                         <div class="card-info">
-                            <h4>${p.name}</h4>
+                            <h4><i class="fas fa-map-pin"></i> ${p.name}</h4>
                             <p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} <br> X: ${p.x_yukari.toFixed(3)}</p>
                             <p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p>
                         </div>
                         <div class="card-actions">
-                            <button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-crosshairs"></i></button>
-                            <button class="btn-edit" onclick="editPoint(${p.id})"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button>
+                            <button class="btn-edit" onclick="editPoint(${p.id})"><i class="fas fa-pen"></i></button>
                             <button class="btn-del" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>`;
@@ -591,8 +647,5 @@
 
         renderActiveProjectMarkers();
     </script>
-    
-    <!-- Buy Me A Coffee Widget -->
-    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="buraktonoz" data-description="Support me on Buy me a coffee!" data-message="Koordinatları doğru bulduysak, bir yorgunluk kahveni içerim! ☕" data-color="#26B0A1" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 </body>
 </html>
