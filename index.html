@@ -6,26 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>GeoITRF - Pro Mobil Terminal</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
         :root {
-            --accent: #00f2fe; /* Daha parlak bir neon turkuaz */
-            --accent-glow: rgba(0, 242, 254, 0.4);
-            --danger: #ff4757;
-            --primary: #3b82f6;
-            --surface: rgba(15, 23, 42, 0.65); /* Koyu lacivert/gri cam */
-            --surface-border: rgba(255, 255, 255, 0.08);
-            --surface-border-light: rgba(255, 255, 255, 0.15);
-            --text-muted: #94a3b8;
+            --accent: #00e5ff; /* Neon Turkuaz */
+            --accent-glow: rgba(0, 229, 255, 0.4);
+            --bg-dark: #070b14; /* Derin Uzay Laciverti */
+            --surface: rgba(11, 17, 32, 0.5); /* Şeffaf Cam */
+            --border-light: rgba(255, 255, 255, 0.08);
+            --text-muted: #8ba3cb;
         }
 
         body, html { 
             margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh;
-            font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #050b14;
+            font-family: 'Inter', sans-serif; overflow: hidden; background-color: var(--bg-dark);
             position: fixed; top: 0; left: 0; touch-action: none; color: #fff;
         }
 
@@ -33,213 +31,232 @@
         .leaflet-control-zoom { display: none; }
 
         /* =========================================
-           PREMIUM HOLOGRAFİK GİRİŞ EKRANI
+           HOLOGRAFİK GİRİŞ EKRANI
            ========================================= */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-            background: radial-gradient(circle at center, #0a1128 0%, #000000 100%);
-            z-index: 9999; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 80px 20px 50px 20px; box-sizing: border-box; cursor: pointer;
-            transition: opacity 0.8s ease, transform 0.8s ease; overflow: hidden;
+            background: radial-gradient(circle at center, #0a1326 0%, #000000 100%);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-sizing: border-box; cursor: pointer; transition: opacity 0.8s ease, transform 0.8s ease; overflow: hidden;
+        }
+        #splash-screen::before {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 300px; height: 300px; background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%); z-index: 0;
         }
         
-        /* Özel BMC Butonu - Giriş Ekranı Sağ Üst */
+        /* Kahve Butonu - Splash Sağ Alt */
         .bmc-splash-btn {
-            position: absolute; top: 25px; right: 20px; z-index: 10000;
-            background: rgba(38, 176, 161, 0.15); border: 1px solid #26B0A1;
-            color: #26B0A1; padding: 8px 16px; border-radius: 30px;
-            font-size: 0.85rem; font-weight: 600; text-decoration: none;
-            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
-            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(38, 176, 161, 0.2);
+            position: absolute; bottom: 30px; right: 20px; z-index: 10000;
+            background: rgba(38, 176, 161, 0.1); border: 1px solid rgba(38, 176, 161, 0.3);
+            color: #26B0A1; padding: 10px 18px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 500; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px); transition: 0.3s;
         }
         .bmc-splash-btn:active { transform: scale(0.95); background: #26B0A1; color: #fff; }
 
-        .splash-title {
-            position: relative; z-index: 1; color: var(--accent); font-size: 3rem; font-weight: 700; margin: 0; letter-spacing: 2px;
-            text-shadow: 0 0 25px var(--accent-glow); text-align: center; animation: fadeInDown 1s ease-out;
-        }
-        .splash-subtitle { position: relative; z-index: 1; color: #fff; font-size: 0.95rem; opacity: 0.6; letter-spacing: 10px; margin-top: 5px; text-align: center;}
+        .splash-header { position: absolute; top: 60px; text-align: center; z-index: 1;}
+        .splash-title { color: var(--accent); font-size: 2.8rem; font-weight: 700; margin: 0; letter-spacing: 3px; text-shadow: 0 0 20px var(--accent-glow); animation: fadeInDown 1s ease-out; }
+        .splash-subtitle { color: #fff; font-size: 0.8rem; opacity: 0.6; letter-spacing: 12px; margin-top: 8px; font-weight: 300;}
         
-        .globe-container { position: relative; z-index: 1; width: 240px; height: 240px; perspective: 1000px; display: flex; justify-content: center; align-items: center; }
+        .globe-container { position: relative; z-index: 1; width: 220px; height: 220px; perspective: 1000px; display: flex; justify-content: center; align-items: center; margin-top: 40px;}
         .wireframe-globe { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spinGlobe 15s linear infinite; }
-        .globe-core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: var(--accent); border-radius: 50%; filter: blur(35px); opacity: 0.35; }
-        .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 50%; box-sizing: border-box; box-shadow: 0 0 15px rgba(0, 242, 254, 0.1) inset; }
-        
+        .globe-core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: var(--accent); border-radius: 50%; filter: blur(35px); opacity: 0.4; }
+        .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 50%; box-sizing: border-box; box-shadow: 0 0 15px rgba(0, 229, 255, 0.05) inset; }
         .ring:nth-child(1) { transform: rotateY(0deg); } .ring:nth-child(2) { transform: rotateY(36deg); } .ring:nth-child(3) { transform: rotateY(72deg); } .ring:nth-child(4) { transform: rotateY(108deg); } .ring:nth-child(5) { transform: rotateY(144deg); }
-        .ring.latitude { border: 1px solid rgba(0, 242, 254, 0.5); }
-        .ring:nth-child(6) { transform: rotateX(90deg) translateZ(0); } 
-        .ring:nth-child(7) { transform: rotateX(90deg) translateZ(60px) scale(0.866); } .ring:nth-child(8) { transform: rotateX(90deg) translateZ(-60px) scale(0.866); }
-        .ring:nth-child(9) { transform: rotateX(90deg) translateZ(96px) scale(0.6); } .ring:nth-child(10) { transform: rotateX(90deg) translateZ(-96px) scale(0.6); }
+        .ring.latitude { border: 1px solid rgba(0, 229, 255, 0.4); }
+        .ring:nth-child(6) { transform: rotateX(90deg) translateZ(0); } .ring:nth-child(7) { transform: rotateX(90deg) translateZ(55px) scale(0.866); } .ring:nth-child(8) { transform: rotateX(90deg) translateZ(-55px) scale(0.866); }
+        .ring:nth-child(9) { transform: rotateX(90deg) translateZ(88px) scale(0.6); } .ring:nth-child(10) { transform: rotateX(90deg) translateZ(-88px) scale(0.6); }
 
-        .splash-footer { position: relative; z-index: 1; text-align: center; animation: fadeInUp 1s ease-out; }
-        .splash-footer h3 { margin: 0; color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 5px; font-weight: 600;}
+        .splash-footer { position: absolute; bottom: 40px; left: 20px; z-index: 1; opacity: 0.5;}
+        .splash-footer h3 { margin: 0; color: #fff; font-size: 0.7rem; letter-spacing: 2px; font-weight: 500;}
 
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* =========================================
-           ANA HUD (HEATS UP DISPLAY) ARAYÜZÜ
+           ULTRA ZARİF HUD (ÜST BAR)
            ========================================= */
-        .top-bar {
+        .hud-container {
             position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
-            background: var(--surface); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            padding: 18px; border-radius: 24px; border: 1px solid var(--surface-border);
-            border-top: 1px solid var(--surface-border-light);
-            display: flex; flex-direction: column; gap: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-            transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column; gap: 8px; pointer-events: none; /* Harita tıklamalarını engellemez */
+            transition: 0.4s ease;
         }
-        .top-bar.hide-up { transform: translateY(-150%); opacity: 0; pointer-events: none; }
-        
-        .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;}
-        .brand-box h1 { font-size: 1.3rem; margin: 0; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; line-height: 1;}
-        .brand-box .creator { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1.5px;}
-        
-        .header-right { display: flex; align-items: center; gap: 12px; }
-        .gps-status { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 20px;}
-        .gps-status span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
-        .blink { animation: blinker 1.5s linear infinite; color: var(--accent); }
-        @keyframes blinker { 50% { opacity: 0.3; } }
-        
-        .btn-settings-top { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--surface-border); color: #fff; 
-            border-radius: 12px; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s;
-        }
-        .btn-settings-top:active { transform: scale(0.9); background: rgba(255,255,255,0.1); border-color: var(--accent); color: var(--accent);}
+        .hud-container.hide-up { transform: translateY(-150%); opacity: 0; }
 
-        .live-data-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .live-col { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 3px;}
-        .live-label { color: var(--text-muted); font-size: 0.6rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
-        .live-val { font-family: monospace; font-size: 0.95rem; font-weight: 600; color: #fff;}
-        .live-val span { color: var(--accent); opacity: 0.8;}
+        .hud-top {
+            display: flex; justify-content: space-between; align-items: center; pointer-events: all;
+            background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border-light);
+            border-radius: 16px; padding: 10px 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .menu-btn { font-size: 1.2rem; color: #fff; cursor: pointer; padding: 5px; transition: 0.2s;}
+        .menu-btn:active { transform: scale(0.9); color: var(--accent); }
+
+        .hud-title { font-size: 1rem; font-weight: 600; letter-spacing: 1px; color: #fff;}
+        .hud-title span { color: var(--accent); font-weight: 300; font-size: 0.8rem; letter-spacing: 2px;}
+
+        .gps-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-muted); font-weight: 500;}
+        .gps-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger);}
+        .gps-dot.connected { background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .blink { animation: blinker 1.5s infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
+
+        .hud-coords {
+            display: flex; justify-content: space-between; pointer-events: all; gap: 8px;
+        }
+        .coord-box {
+            flex: 1; background: linear-gradient(180deg, rgba(11, 17, 32, 0.7) 0%, rgba(11, 17, 32, 0.4) 100%); 
+            backdrop-filter: blur(10px); border: 1px solid var(--border-light); border-top: none;
+            border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 2px;
+        }
+        .coord-box.right { text-align: right; }
+        .c-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px;}
+        .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 400; color: #fff; letter-spacing: 0.5px;}
+        .c-val.glow { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 
         /* Sağ Harita Kontrolleri */
-        .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1);}
+        .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; transition: 0.4s;}
         .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
         .map-btn { 
-            width: 42px; height: 42px; border-radius: 14px; border: 1px solid var(--surface-border); 
-            background: var(--surface); backdrop-filter: blur(20px); color: white; font-size: 1.1rem; 
-            display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); 
+            background: var(--surface); backdrop-filter: blur(15px); color: white; font-size: 1rem; 
+            display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); color: var(--accent); border-color: var(--accent); }
+        .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
 
-        /* Yüzer Kayıt Paneli */
-        .floating-save-panel { 
-            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; 
-            background: var(--surface); backdrop-filter: blur(25px); border: 1px solid var(--surface-border); border-top: 1px solid var(--surface-border-light); 
-            border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 12px; width: 90%; max-width: 360px; 
-            opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        /* =========================================
+           SOL GİZLİ ÇEKMECE (HAMBURGER MENÜ)
+           ========================================= */
+        .drawer-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            z-index: 1040; opacity: 0; pointer-events: none; transition: 0.4s ease;
         }
-        .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
-        .save-header { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center;}
-        .save-header b { color: var(--accent); font-weight: 600;}
-        .save-input-group { display: flex; gap: 10px; }
-        .save-input-group input { flex: 1; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-size: 1rem; outline: none; transition: 0.3s;}
-        .save-input-group input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
-        .save-input-group button { background: linear-gradient(135deg, var(--accent), #0ea5e9); color: #000; border: none; padding: 0 22px; border-radius: 14px; font-size: 1.1rem; cursor:pointer; transition: 0.2s;}
-        .save-input-group button:active { transform: scale(0.95); }
+        .drawer-overlay.show { opacity: 1; pointer-events: all; }
+        
+        .side-drawer {
+            position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 1050;
+            background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border-right: 1px solid var(--border-light);
+            transform: translateX(-100%); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+        }
+        .side-drawer.show { transform: translateX(0); }
 
-        /* Premium Modallar */
+        .drawer-header { padding: 30px 20px 20px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;}
+        .drawer-header h2 { margin: 0; font-size: 1.2rem; font-weight: 600; color: #fff;}
+        .drawer-close { font-size: 1.5rem; color: var(--text-muted); cursor: pointer;}
+        
+        .drawer-body { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 25px;}
+        
+        /* Çekmece İçi Elemanlar */
+        .drawer-section h3 { margin: 0 0 10px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;}
+        .drawer-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); border-radius: 12px; padding: 15px;}
+        
+        .google-login-btn { background: #fff; color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer;}
+        
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+        .setting-info p { margin: 0; color: #fff; font-size: 0.9rem;}
+        .setting-info small { color: var(--text-muted); font-size: 0.75rem;}
+        .toggle-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 20px; width: 44px; height: 24px; position: relative;}
+        .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s;}
+        .toggle-btn.active { background: var(--accent); }
+        .toggle-btn.active::after { left: 22px; }
+
+        .info-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin: 0 0 8px 0;}
+        .info-text b { color: var(--accent); font-weight: 500;}
+
+        /* =========================================
+           BİRLEŞTİRİLMİŞ KAYITLAR MODALI (Projeler + Liste)
+           ========================================= */
         .app-modal { 
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; 
-            background: rgba(5, 11, 20, 0.7); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); 
-            z-index: 1050; opacity: 0; pointer-events: none; transform: translateY(100%); transition: 0.5s cubic-bezier(0.32, 0.72, 0, 1); 
-            display: flex; flex-direction: column; padding-bottom: 90px;
+            background: var(--bg-dark); z-index: 1030; opacity: 0; pointer-events: none; 
+            transform: translateY(20px) scale(0.95); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+            display: flex; flex-direction: column; padding-bottom: 80px; box-sizing: border-box;
         }
-        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .modal-header { padding: 45px 24px 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 600; display:flex; justify-content: space-between; align-items: center; font-size: 1.3rem;}
-        .modal-header-actions i { color: var(--text-muted); font-size: 1.4rem; margin-left: 15px; background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 12px; transition: 0.2s; border: 1px solid transparent;}
-        .modal-header-actions i:active { transform: scale(0.9); color: #fff; border-color: rgba(255,255,255,0.2); }
-        .modal-body { padding: 24px; overflow-y: auto; touch-action: pan-y; flex: 1; }
+        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+        
+        .modal-header { padding: 40px 20px 15px; border-bottom: 1px solid var(--border-light); display:flex; justify-content: space-between; align-items: center;}
+        .modal-title { font-size: 1.2rem; font-weight: 600;}
+        
+        /* Proje Seçici */
+        .project-selector { display: flex; gap: 10px; padding: 15px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border-light);}
+        .project-selector select { 
+            flex: 1; padding: 12px 15px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid var(--border-light); 
+            border-radius: 12px; font-family: 'Inter'; font-size: 0.95rem; outline: none; appearance: none;
+        }
+        .project-selector button { width: 44px; background: rgba(255,255,255,0.05); color: var(--accent); border: 1px solid var(--border-light); border-radius: 12px; font-size: 1.2rem; cursor: pointer; transition: 0.2s;}
+        .project-selector button:active { background: var(--accent); color: #000;}
 
-        /* Modern Kart Tasarımı */
+        .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+        
+        /* Liste Kartları */
         .card-item { 
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--surface-border); border-top: 1px solid var(--surface-border-light);
-            border-radius: 20px; padding: 18px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: 0.3s;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-light);
+            border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
         }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start;}
-        .card-info h4 { margin: 0 0 4px 0; font-size: 1.1rem; color: #fff; display:flex; align-items:center; gap:8px;}
-        .card-info h4 i { color: var(--accent); }
-        .itrf-coords { font-size: 0.95rem; margin: 0; font-weight: 500; font-family: monospace; color: #e2e8f0;}
-        .wgs-coords { margin: 4px 0 0 0; font-size: 0.75rem; color: var(--text-muted); font-family: monospace;}
-        .card-actions { display: flex; gap: 10px; width: 100%; margin-top: 5px;}
-        .card-actions button { 
-            flex: 1; height: 42px; border-radius: 12px; border: 1px solid transparent; 
-            font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); color: #fff;
-        }
-        .card-actions button:active { transform: scale(0.95); }
-        .btn-go { background: rgba(0, 242, 254, 0.1) !important; color: var(--accent) !important; border-color: rgba(0, 242, 254, 0.2) !important; }
-        .btn-edit { color: #facc15 !important; flex: 0.5 !important;}
-        .btn-del { color: var(--danger) !important; flex: 0.5 !important;}
-
-        .project-input-row { display: flex; gap: 12px; margin-bottom: 24px; }
-        .project-input-row input { flex:1; padding: 16px; border-radius: 16px; border: 1px solid var(--surface-border); background: rgba(0,0,0,0.3); color: white; outline:none; font-size: 1rem;}
-        .project-input-row input:focus { border-color: var(--accent); }
-        .project-input-row button { padding: 0 25px; border-radius: 16px; border: none; background: linear-gradient(135deg, var(--accent), #3b82f6); color: #000; font-size: 1.2rem; cursor:pointer;}
-
-        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .setting-info h5 { margin: 0 0 5px 0; color: white; font-size: 1.05rem; font-weight: 500;}
-        .setting-info p { margin: 0; color: var(--text-muted); font-size: 0.8rem; }
+        .card-info h4 { margin: 0 0 5px 0; font-size: 1rem; color: #fff; display:flex; align-items:center; gap:8px;}
+        .itrf-coords { font-size: 0.9rem; margin: 0; font-family: 'JetBrains Mono', monospace; color: var(--accent);}
+        .wgs-coords { margin: 2px 0 0 0; font-size: 0.7rem; color: var(--text-muted); font-family: monospace;}
         
-        /* Modern Switch */
-        .toggle-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 30px; width: 50px; height: 28px; position: relative; cursor: pointer; transition: 0.3s;}
-        .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
-        .toggle-btn.active { background: var(--accent); }
-        .toggle-btn.active::after { left: 24px; }
+        .card-actions { display: flex; flex-direction: column; gap: 6px;}
+        .card-actions button { width: 36px; height: 36px; border-radius: 10px; border: none; font-size: 0.9rem; cursor: pointer;}
+        .btn-go { background: rgba(0, 229, 255, 0.15); color: var(--accent); }
+        .btn-del { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
-        /* PREMİUM DOCK MENÜ (iOS Vision Style) */
-        .ig-dock-wrapper { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 1100; width: 90%; max-width: 380px; }
+        .export-bar { padding: 15px 20px; border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.3);}
+        .export-btn { width: 100%; padding: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-light); border-radius: 14px; font-family: 'Inter'; font-weight: 500; font-size: 1rem;}
+        
+        /* Yüzer Nokta Kayıt Paneli */
+        .floating-save-panel { 
+            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; 
+            background: var(--surface); backdrop-filter: blur(25px); border: 1px solid var(--border-light); 
+            border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 340px; 
+            opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+        .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+        .save-header { color: var(--text-muted); font-size: 0.8rem; display: flex; justify-content: space-between;}
+        .save-header b { color: #fff; }
+        .save-input-group { display: flex; gap: 10px; }
+        .save-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.3); color: white; font-size: 1rem; outline: none; font-family: 'Inter';}
+        .save-input-group input:focus { border-color: var(--accent); }
+        .save-input-group button { background: var(--accent); color: #000; border: none; width: 50px; border-radius: 12px; font-size: 1.2rem; cursor:pointer;}
+
+        /* =========================================
+           KOMPAKT DOCK MENÜ (3 BUTON)
+           ========================================= */
+        .ig-dock-wrapper { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; width: max-content; }
         .ig-dock { 
-            display: flex; align-items: center; justify-content: space-between; 
-            background: rgba(10, 15, 30, 0.75); backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px); 
-            border: 1px solid var(--surface-border-light); border-radius: 40px; 
-            padding: 6px; box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1); 
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); 
+            border: 1px solid var(--border-light); border-radius: 40px; 
+            padding: 8px 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); 
         }
-        .ig-dock-item { 
-            position: relative; width: 55px; height: 50px; display: flex; justify-content: center; align-items: center; 
-            border-radius: 30px; color: var(--text-muted); font-size: 1.25rem; transition: 0.3s; cursor: pointer;
+        .dock-item { 
+            width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; 
+            border-radius: 25px; color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; cursor: pointer;
         }
-        .ig-dock-item.active { color: var(--accent); background: transparent; }
-        .ig-dock-item.active::after {
-            content: ''; position: absolute; bottom: 2px; width: 5px; height: 5px; background: var(--accent); border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
+        .dock-item.active { color: #fff; }
+        .dock-item.main-add { 
+            background: var(--accent); color: #000; font-size: 1.5rem; width: 55px; height: 55px; margin: 0 10px;
+            box-shadow: 0 0 20px var(--accent-glow);
         }
-        .ig-dock-item:active { transform: scale(0.85); }
-        
-        .profile-pic { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 1rem; color: #fff; border: 1px solid var(--surface-border); transition: 0.3s;}
-        .ig-dock-item.active .profile-pic { border-color: var(--accent); color: var(--accent); background: rgba(0, 242, 254, 0.1);}
-        
+        .dock-item.main-add:active { transform: scale(0.9); }
+
         /* Harita Marker Pop-up */
-        .leaflet-popup-content-wrapper { background: rgba(10, 15, 25, 0.9); backdrop-filter: blur(15px); color: #fff; border-radius: 16px; border: 1px solid var(--surface-border); box-shadow: 0 10px 25px rgba(0,0,0,0.5);}
-        .leaflet-popup-tip { background: rgba(10, 15, 25, 0.9); }
-        .marker-popup h3 { color: var(--accent); margin: 0 0 4px 0; font-size: 1.1rem; }
-        .marker-popup p { margin: 0; font-size: 0.8rem; color: var(--text-muted);}
-        .marker-popup hr { border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 10px 0; }
-        .marker-popup .coords { font-size: 0.85rem; font-family: monospace; line-height: 1.5; color: #e2e8f0;}
-        
-        /* Kahve Butonu - Profil İçi */
-        .coffee-btn-profile {
-            background: #26B0A1; color: white; border: none; padding: 16px; border-radius: 16px; 
-            width: 100%; font-weight: 600; font-size: 1.05rem; cursor: pointer; 
-            display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px;
-            text-decoration: none; box-shadow: 0 8px 20px rgba(38, 176, 161, 0.3); transition: 0.2s;
-        }
-        .coffee-btn-profile:active { transform: scale(0.96); }
+        .leaflet-popup-content-wrapper { background: rgba(11, 17, 32, 0.9); backdrop-filter: blur(10px); color: #fff; border-radius: 12px; border: 1px solid var(--border-light);}
+        .leaflet-popup-tip { background: rgba(11, 17, 32, 0.9); }
+        .marker-popup { font-family: 'Inter', sans-serif; }
+        .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1rem; font-weight: 600; }
+        .marker-popup p { margin: 0; font-size: 0.75rem; color: var(--text-muted);}
+        .marker-popup hr { border: 0; border-top: 1px solid var(--border-light); margin: 8px 0; }
+        .marker-popup .coords { font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; line-height: 1.5; color: #fff;}
     </style>
 </head>
 <body>
 
     <!-- HOLOGRAFİK GİRİŞ EKRANI -->
     <div id="splash-screen" onclick="hideSplashScreen()">
-        <!-- Dışarıdan yükleme yapmayan Özel BMC Butonu -->
-        <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="bmc-splash-btn" onclick="event.stopPropagation()">
-            <i class="fas fa-mug-hot"></i> Kahve Ismarla
-        </a>
-
-        <div style="margin-top: 20px;">
+        <div class="splash-header">
             <h1 class="splash-title">GeoITRF</h1>
             <div class="splash-subtitle">PRO TERMINAL</div>
         </div>
@@ -255,30 +272,80 @@
         <div class="splash-footer">
             <h3>CREAT BY TONOZ</h3>
         </div>
+
+        <!-- Buy Me A Coffee (Sağ Alt) -->
+        <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="bmc-splash-btn" onclick="event.stopPropagation()">
+            <i class="fas fa-mug-hot"></i> Kahve Ismarla
+        </a>
     </div>
 
-    <!-- HUD ÜST PANEL -->
-    <div class="top-bar" id="top-bar">
-        <div class="top-header">
-            <div class="brand-box">
-                <h1>GeoITRF</h1>
-                <span class="creator">CREAT BY TONOZ</span>
+    <!-- SOL GİZLİ ÇEKMECE -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+    <div class="side-drawer" id="side-drawer">
+        <div class="drawer-header">
+            <h2>Menü</h2>
+            <i class="fas fa-times drawer-close" onclick="toggleDrawer()"></i>
+        </div>
+        <div class="drawer-body">
+            <div class="drawer-section">
+                <h3>Hesap</h3>
+                <div class="drawer-card">
+                    <button class="google-login-btn">
+                        <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Giriş
+                    </button>
+                    <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin:10px 0 0 0;">Bulut senkronizasyonu için.</p>
+                </div>
             </div>
-            <div class="header-right">
-                <div class="gps-status"><i class="fas fa-satellite blink"></i> <span id="accuracy">Bekleniyor</span></div>
-                <button class="btn-settings-top" onclick="switchTab('tab-settings')"><i class="fas fa-cog"></i></button>
+
+            <div class="drawer-section">
+                <h3>Ayarlar</h3>
+                <div class="drawer-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <p>Uydu Görünümü</p>
+                            <small>Harita altlığını uydu yap.</small>
+                        </div>
+                        <button class="toggle-btn active" id="btn-satellite" onclick="toggleMapLayer()"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="drawer-section">
+                <h3>Sistem Bilgisi</h3>
+                <div class="drawer-card">
+                    <p class="info-text">Sistem: <b>ITRF96 / WGS84</b></p>
+                    <p class="info-text">Projeksiyon: <b>3° Dilim (Otomatik)</b></p>
+                    <p class="info-text" style="margin-bottom:0;">Geliştirici: <b style="color:#fff;">CREAT BY TONOZ</b></p>
+                </div>
+            </div>
+            
+            <!-- Çekmece içi alternatif Kahve butonu -->
+            <a href="https://buymeacoffee.com/buraktonoz" target="_blank" style="text-decoration:none; display:block; text-align:center; padding:12px; background:rgba(38, 176, 161, 0.1); border:1px solid rgba(38,176,161,0.3); color:#26B0A1; border-radius:10px; font-size:0.85rem; font-weight:500;">
+                <i class="fas fa-mug-hot"></i> Bana Kahve Ismarla
+            </a>
+        </div>
+    </div>
+
+    <!-- İNCE VE ZARİF HUD (ÜST BAR) -->
+    <div class="hud-container" id="hud-bar">
+        <div class="hud-top">
+            <i class="fas fa-bars menu-btn" onclick="toggleDrawer()"></i>
+            <div class="hud-title">GeoITRF <span>PRO</span></div>
+            <div class="gps-indicator">
+                <span id="accuracy">Bekleniyor</span>
+                <div class="gps-dot blink" id="gps-dot"></div>
             </div>
         </div>
-        <div class="live-data-container">
-            <div class="live-col">
-                <span class="live-label">WGS84 (Derece)</span>
-                <div class="live-val">E <span id="live-lat">...</span></div>
-                <div class="live-val">B <span id="live-lon">...</span></div>
+        <div class="hud-coords">
+            <div class="coord-box">
+                <span class="c-label">WGS84 (E/B)</span>
+                <span class="c-val" id="live-lat">--.-----</span>
+                <span class="c-val" id="live-lon">--.-----</span>
             </div>
-            <div class="live-col" style="text-align: right;">
-                <span class="live-label" id="dom-label">ITRF96</span>
-                <div class="live-val">Y <span id="live-y">...</span></div>
-                <div class="live-val">X <span id="live-x">...</span></div>
+            <div class="coord-box right">
+                <span class="c-label" id="dom-label">ITRF96</span>
+                <span class="c-val glow" id="live-y">---.---</span>
+                <span class="c-val glow" id="live-x">---.---</span>
             </div>
         </div>
     </div>
@@ -291,109 +358,54 @@
 
     <div id="map"></div>
 
+    <!-- YÜZER KAYIT PANELİ -->
     <div class="floating-save-panel" id="save-panel">
         <div class="save-header">
-            <span>Aktif Klasör: <b id="active-project-label-add">Varsayılan</b></span>
-            <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="switchTab('tab-map')"></i>
+            <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
+            <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted);" onclick="switchTab('tab-map')"></i>
         </div>
         <div class="save-input-group">
             <input type="text" id="point-name" placeholder="Nokta Adı (Örn: P1)">
-            <button onclick="saveCurrentLocation()"><i class="fas fa-save"></i></button>
+            <button onclick="saveCurrentLocation()"><i class="fas fa-check"></i></button>
         </div>
     </div>
 
-    <div class="app-modal" id="modal-list">
+    <!-- BİRLEŞTİRİLMİŞ KAYITLAR MODALI (Projeler + Noktalar) -->
+    <div class="app-modal" id="modal-records">
         <div class="modal-header">
-            <span><i class="fas fa-list-ul" style="color:var(--accent); margin-right:8px;"></i> <span id="list-project-name">Varsayılan</span> (<span id="point-count">0</span>)</span>
-            <div class="modal-header-actions" style="display:flex;">
-                <i class="fas fa-download" onclick="exportToTXT()" style="color:var(--accent);"></i>
-                <i class="fas fa-times" onclick="switchTab('tab-map')"></i>
-            </div>
+            <span class="modal-title">Kayıt Yöneticisi</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="switchTab('tab-map')"></i>
         </div>
-        <div class="modal-body" id="points-list"></div>
-    </div>
+        
+        <!-- Klasör Seçici -->
+        <div class="project-selector">
+            <select id="project-select" onchange="changeProject(this.value)">
+                <option value="Varsayılan">Varsayılan</option>
+            </select>
+            <button onclick="createNewProject()" title="Yeni Klasör"><i class="fas fa-folder-plus"></i></button>
+            <button onclick="deleteProject()" title="Klasörü Sil" style="color:var(--danger); border-color:rgba(239,68,68,0.2);"><i class="fas fa-trash"></i></button>
+        </div>
 
-    <div class="app-modal" id="modal-projects">
-        <div class="modal-header">
-            <span><i class="fas fa-folder-open" style="color:var(--accent); margin-right:8px;"></i> Projeler</span>
-            <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
+        <div class="modal-body" id="points-list">
+            <!-- Noktalar buraya gelecek -->
         </div>
-        <div class="modal-body">
-            <div class="project-input-row">
-                <input type="text" id="new-project-name" placeholder="Yeni Klasör Adı Yarat">
-                <button onclick="createNewProject()"><i class="fas fa-plus"></i></button>
-            </div>
-            <div id="projects-list"></div>
-        </div>
-    </div>
 
-    <div class="app-modal" id="modal-profile">
-        <div class="modal-header">
-            <span><i class="fas fa-user" style="color:var(--accent); margin-right:8px;"></i> Profilim</span>
-            <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
-        </div>
-        <div class="modal-body">
-            <div style="text-align:center; padding: 40px 20px; background:rgba(255,255,255,0.02); border-radius: 24px; border:1px solid var(--surface-border);">
-                <i class="fab fa-google" style="font-size: 3.5rem; color: #fff; margin-bottom: 20px;"></i>
-                <h3 style="color:white; margin:0 0 10px 0; font-size:1.4rem;">Bulut Senkronizasyonu</h3>
-                <p style="color:var(--text-muted); margin-bottom: 25px; font-size: 0.9rem;">Ölçümlerinizi Firebase'e güvenle kaydetmek için giriş yapın.</p>
-                <button style="background: white; color: #000; border: none; padding: 16px; border-radius: 16px; width: 100%; font-weight: 600; font-size: 1.05rem; display:flex; justify-content:center; align-items:center; gap:10px;">
-                    <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Giriş Yap
-                </button>
-            </div>
-
-            <!-- Profil İçi Kahve Butonu -->
-            <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="coffee-btn-profile">
-                <i class="fas fa-mug-hot"></i> Koordinatları bulduysak, bir kahve?
-            </a>
+        <div class="export-bar">
+            <button class="export-btn" onclick="exportToTXT()"><i class="fas fa-download"></i> Bu Klasörü TXT Olarak İndir</button>
         </div>
     </div>
 
-    <div class="app-modal" id="modal-settings">
-        <div class="modal-header">
-            <span><i class="fas fa-cog" style="color:var(--accent); margin-right:8px;"></i> Ayarlar</span>
-            <div class="modal-header-actions"><i class="fas fa-times" onclick="switchTab('tab-map')"></i></div>
-        </div>
-        <div class="modal-body">
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h5>Uydu Altlığı</h5>
-                    <p>Harita görünümünü uydu olarak ayarla.</p>
-                </div>
-                <button class="toggle-btn active" id="btn-satellite" onclick="toggleMapLayer()"></button>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h5>GPS Durumu</h5>
-                    <p id="gps-status-setting" style="margin-top:6px;"><span style="color:var(--danger);"><i class="fas fa-spinner fa-spin"></i> Sinyal Bekleniyor...</span></p>
-                </div>
-            </div>
-            <div style="margin-top: 30px; border-top: 1px solid var(--surface-border); padding-top: 25px;">
-                <h5 style="color:white; margin-bottom:15px; font-size: 1.1rem; font-weight:500;">Sistem Bilgisi</h5>
-                <p style="margin-bottom: 12px; color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-globe" style="width:25px; color:var(--accent);"></i> Sistem: ITRF96 / WGS84</p>
-                <p style="margin-bottom: 12px; color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-ruler-combined" style="width:25px; color:var(--accent);"></i> Dilim: Otomatik DOM (3°)</p>
-                <p style="margin-bottom: 12px; color:var(--text-muted); font-size:0.9rem;"><i class="fas fa-code" style="width:25px; color:var(--accent);"></i> Geliştirici: <b>CREAT BY TONOZ</b></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- PREMIUM DOCK MENÜ -->
+    <!-- KOMPAKT 3'LÜ DOCK -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
-            <div class="ig-dock-item active" id="tab-map" onclick="switchTab('tab-map')">
+            <div class="dock-item active" id="tab-map" onclick="switchTab('tab-map')">
                 <i class="fas fa-map"></i>
             </div>
-            <div class="ig-dock-item" id="tab-projects" onclick="switchTab('tab-projects')">
+            <div class="dock-item main-add" id="tab-add" onclick="switchTab('tab-add')">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="dock-item" id="tab-records" onclick="switchTab('tab-records')">
                 <i class="fas fa-folder-open"></i>
-            </div>
-            <div class="ig-dock-item" id="tab-add" onclick="switchTab('tab-add')">
-                <i class="fas fa-plus-circle" style="font-size:2rem; color:var(--accent); filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.4));"></i>
-            </div>
-            <div class="ig-dock-item" id="tab-list" onclick="switchTab('tab-list')">
-                <i class="fas fa-list"></i>
-            </div>
-            <div class="ig-dock-item" id="tab-profile" onclick="switchTab('tab-profile')">
-                <div class="profile-pic"><i class="fas fa-user" style="font-size: 0.9rem;"></i></div>
             </div>
         </div>
     </div>
@@ -401,7 +413,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // --- SPLASH SCREEN GİZLEME ---
+        // --- SPLASH SCREEN ---
         function hideSplashScreen() {
             let splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
@@ -409,7 +421,15 @@
             setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
 
-        // --- Harita ve Altlık ---
+        // --- SOL ÇEKMECE YÖNETİMİ ---
+        function toggleDrawer() {
+            let drawer = document.getElementById('side-drawer');
+            let overlay = document.getElementById('drawer-overlay');
+            drawer.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+
+        // --- HARİTA VE ALTLIK ---
         var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 2); 
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
         var streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
@@ -423,7 +443,7 @@
             isSatellite = !isSatellite;
         }
 
-        // --- Veri Yapısı ---
+        // --- VERİ YAPISI ---
         var userMarker = null, firstLocationFound = false;
         var currentLat = null, currentLon = null, currentX = null, currentY = null, currentDOM = null;
         var pointMarkers = {}, pointIdCounter = 0;
@@ -438,7 +458,7 @@
             return { y: result[0], x: result[1], dom: dom };
         }
 
-        // --- GPS Servisi & İzin Kontrolü ---
+        // --- GPS SERVİSİ ---
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
                 currentLat = position.coords.latitude; currentLon = position.coords.longitude;
@@ -446,23 +466,26 @@
                 
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
-                document.getElementById('accuracy').innerText = "± " + acc + "m";
-                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--accent); font-weight:600;"><i class="fas fa-signal"></i> Bağlı (Hassasiyet: ±${acc}m)</span>`;
+                
+                document.getElementById('accuracy').innerText = "±" + acc + "m";
+                let dot = document.getElementById('gps-dot');
+                dot.classList.remove('blink'); dot.classList.add('connected');
 
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y; currentX = itrf.x; currentDOM = itrf.dom;
-                document.getElementById('dom-label').innerText = `ITRF96 (DOM ${currentDOM})`;
+                document.getElementById('dom-label').innerText = `ITRF96 (D${currentDOM})`;
                 document.getElementById('live-y').innerText = currentY.toFixed(3);
                 document.getElementById('live-x').innerText = currentX.toFixed(3);
 
                 var newLoc = new L.LatLng(currentLat, currentLon);
                 if (userMarker) { userMarker.setLatLng(newLoc); } 
-                else { userMarker = L.circleMarker(newLoc, { color: '#00f2fe', fillColor: '#00f2fe', fillOpacity: 0.8, radius: 8, weight: 2, zIndexOffset: 1000 }).addTo(map); }
+                else { userMarker = L.circleMarker(newLoc, { color: '#00e5ff', fillColor: '#00e5ff', fillOpacity: 0.8, radius: 6, weight: 2, zIndexOffset: 1000 }).addTo(map); }
 
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
-                document.getElementById('accuracy').innerText = "Hata!"; 
-                document.getElementById('gps-status-setting').innerHTML = `<span style="color:var(--danger); font-weight:600;"><i class="fas fa-exclamation-triangle"></i> Konum İzni Gerekli</span><br><small style="color:var(--text-muted);">Tarayıcı ayarlarından konum izni veriniz.</small>`;
+                document.getElementById('accuracy').innerText = "GPS Kapalı"; 
+                document.getElementById('gps-dot').classList.remove('connected');
+                document.getElementById('gps-dot').classList.add('blink');
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
@@ -470,42 +493,37 @@
             if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); }
         }
 
-        // --- Menü Geçişleri ---
+        // --- TAB GEÇİŞLERİ (3 Buton) ---
         function switchTab(tabId) {
-            document.querySelectorAll('.ig-dock-item').forEach(el => el.classList.remove('active'));
-            if(tabId !== 'tab-settings' && tabId !== 'tab-map' && tabId !== 'tab-add') { document.getElementById(tabId).classList.add('active'); }
-            else if (tabId === 'tab-map' || tabId === 'tab-add') { document.getElementById(tabId).classList.add('active'); }
+            document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
+            if(tabId !== 'tab-add') document.getElementById(tabId).classList.add('active');
 
-            document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
+            document.getElementById('modal-records').classList.remove('show');
             document.getElementById('save-panel').classList.remove('show');
 
             if (tabId === 'tab-map' || tabId === 'tab-add') {
-                document.getElementById('top-bar').classList.remove('hide-up');
+                document.getElementById('hud-bar').classList.remove('hide-up');
                 document.getElementById('right-controls').classList.remove('hide-right');
             } else {
-                document.getElementById('top-bar').classList.add('hide-up');
+                document.getElementById('hud-bar').classList.add('hide-up');
                 document.getElementById('right-controls').classList.add('hide-right');
             }
 
-            if (tabId === 'tab-projects') {
-                document.getElementById('modal-projects').classList.add('show');
-                updateProjectsUI();
-            } else if (tabId === 'tab-add') {
+            if (tabId === 'tab-add') {
+                document.getElementById('tab-map').classList.add('active'); // Harita arkada seçili görünsün
                 document.getElementById('save-panel').classList.add('show');
                 document.getElementById('active-project-label-add').innerText = activeProject;
                 document.getElementById('point-name').value = projectsData[activeProject].autoCounter.toString();
                 setTimeout(() => document.getElementById('point-name').focus(), 300);
-            } else if (tabId === 'tab-list') {
-                document.getElementById('modal-list').classList.add('show');
+            } 
+            else if (tabId === 'tab-records') {
+                document.getElementById('modal-records').classList.add('show');
+                updateDropdownUI();
                 updateListUI();
-            } else if (tabId === 'tab-profile') {
-                document.getElementById('modal-profile').classList.add('show');
-            } else if (tabId === 'tab-settings') {
-                document.getElementById('modal-settings').classList.add('show');
             }
         }
 
-        // --- Proje & Klasör Yönetimi ---
+        // --- BİRLEŞTİRİLMİŞ KAYIT YÖNETİCİSİ ---
         function renderActiveProjectMarkers() {
             for (let id in pointMarkers) { map.removeLayer(pointMarkers[id]); }
             pointMarkers = {};
@@ -517,10 +535,10 @@
                         <p><i class="fas fa-folder-open"></i> ${activeProject}</p>
                         <hr>
                         <div class="coords">
-                            <span style="color:var(--text-muted);">Y:</span> ${p.y_saga.toFixed(3)}<br>
-                            <span style="color:var(--text-muted);">X:</span> ${p.x_yukari.toFixed(3)}<br>
-                            <span style="color:var(--text-muted);">Enlem:</span> ${p.lat.toFixed(6)}<br>
-                            <span style="color:var(--text-muted);">Boylam:</span> ${p.lon.toFixed(6)}
+                            Y: ${p.y_saga.toFixed(3)}<br>
+                            X: ${p.x_yukari.toFixed(3)}<br>
+                            E: ${p.lat.toFixed(6)}<br>
+                            B: ${p.lon.toFixed(6)}
                         </div>
                     </div>
                 `;
@@ -530,65 +548,41 @@
         }
 
         function createNewProject() {
-            let input = document.getElementById("new-project-name");
-            let name = input.value.trim();
-            if(!name) return alert("Lütfen klasör adı girin.");
+            let name = prompt("Yeni klasör adı girin:");
+            if(!name || name.trim() === "") return;
+            name = name.trim();
             if(projectsData[name]) return alert("Bu isimde bir klasör zaten var.");
             
             projectsData[name] = { points: [], autoCounter: 1 };
+            changeProject(name); // Yeni açılanı otomatik seç
+        }
+
+        function changeProject(name) {
             activeProject = name;
-            input.value = "";
-            updateProjectsUI();
-            renderActiveProjectMarkers(); 
+            updateDropdownUI();
+            updateListUI();
+            renderActiveProjectMarkers();
         }
 
-        function setActiveProject(name) { activeProject = name; updateProjectsUI(); renderActiveProjectMarkers(); switchTab('tab-map'); }
-
-        function editProject(oldName) {
-            if(oldName === "Varsayılan") return alert("Varsayılan klasörün adı değiştirilemez!");
-            let newName = prompt("Yeni klasör adı:", oldName);
-            if(!newName || newName.trim() === "" || newName.trim() === oldName) return;
-            newName = newName.trim();
-            if(projectsData[newName]) return alert("Bu isimde bir klasör zaten var!");
-            projectsData[newName] = projectsData[oldName]; delete projectsData[oldName];
-            if(activeProject === oldName) { activeProject = newName; }
-            updateProjectsUI(); renderActiveProjectMarkers();
+        function deleteProject() {
+            if(activeProject === "Varsayılan") return alert("Varsayılan klasör silinemez!");
+            if(!confirm(`"${activeProject}" klasörünü SİLMEK istediğinize emin misiniz?`)) return;
+            
+            delete projectsData[activeProject];
+            changeProject("Varsayılan");
         }
 
-        function deleteProject(name) {
-            if(name === "Varsayılan") return alert("Varsayılan klasör silinemez!");
-            if(!confirm(`"${name}" klasörünü ve içindeki noktaları SİLMEK istediğinize emin misiniz?`)) return;
-            delete projectsData[name];
-            if(activeProject === name) { activeProject = "Varsayılan"; }
-            updateProjectsUI(); renderActiveProjectMarkers();
-        }
-
-        function updateProjectsUI() {
+        function updateDropdownUI() {
+            let select = document.getElementById("project-select");
             let html = "";
             for (let projName in projectsData) {
-                let count = projectsData[projName].points.length;
-                let isActive = projName === activeProject;
-                let actionButtons = '';
-                if(projName !== "Varsayılan") { actionButtons = `<button class="btn-edit" onclick="editProject('${projName}')"><i class="fas fa-pen"></i></button><button class="btn-del" onclick="deleteProject('${projName}')"><i class="fas fa-trash"></i></button>`; }
-                html += `
-                    <div class="card-item" style="border-color: ${isActive ? 'var(--accent)' : 'var(--surface-border)'};">
-                        <div class="card-header">
-                            <div class="card-info">
-                                <h4 style="color: ${isActive ? 'var(--accent)' : 'white'}"><i class="fas ${isActive ? 'fa-folder-open' : 'fa-folder'}"></i> ${projName}</h4>
-                                <p class="wgs-coords">${count} Nokta Kayıtlı</p>
-                            </div>
-                            ${isActive ? `<span style="color:var(--accent); font-size:0.8rem; font-weight:600;"><i class="fas fa-check-circle"></i> Seçili</span>` : ''}
-                        </div>
-                        <div class="card-actions">
-                            ${!isActive ? `<button class="btn-select" onclick="setActiveProject('${projName}')">Bu Klasörü Seç</button>` : ''}
-                            ${actionButtons}
-                        </div>
-                    </div>`;
+                let selected = projName === activeProject ? "selected" : "";
+                html += `<option value="${projName}" ${selected}>${projName} (${projectsData[projName].points.length})</option>`;
             }
-            document.getElementById('projects-list').innerHTML = html;
+            select.innerHTML = html;
         }
 
-        // --- Nokta Yönetimi ---
+        // --- NOKTA YÖNETİMİ ---
         function saveCurrentLocation() {
             if (!currentLat) { alert("GPS bekleniyor..."); return; }
             var nameInput = document.getElementById("point-name");
@@ -600,33 +594,37 @@
             renderActiveProjectMarkers(); switchTab('tab-map');
         }
 
-        function editPoint(id) {
-            let point = projectsData[activeProject].points.find(p => p.id === id);
-            if(point) { let newName = prompt("Yeni Nokta Adını Girin:", point.name); if(newName && newName.trim() !== "") { point.name = newName.trim(); renderActiveProjectMarkers(); updateListUI(); } }
-        }
-
         function deletePoint(id) {
-            if(confirm("Noktayı silmek istediğinize emin misiniz?")) { projectsData[activeProject].points = projectsData[activeProject].points.filter(p => p.id !== id); renderActiveProjectMarkers(); updateListUI(); }
+            if(confirm("Noktayı silmek istediğinize emin misiniz?")) { 
+                projectsData[activeProject].points = projectsData[activeProject].points.filter(p => p.id !== id); 
+                renderActiveProjectMarkers(); 
+                updateDropdownUI(); // Sayı güncellensin
+                updateListUI(); 
+            }
         }
 
         function zoomToPoint(lat, lon) { map.setView([lat, lon], 19); switchTab('tab-map'); }
 
         function updateListUI() {
-            var listDiv = document.getElementById("points-list"); let points = projectsData[activeProject].points;
-            document.getElementById("list-project-name").innerText = activeProject; document.getElementById("point-count").innerText = points.length;
-            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu projede kayıtlı nokta yok.</p></div>'; return; }
+            var listDiv = document.getElementById("points-list"); 
+            let points = projectsData[activeProject].points;
+            
+            if(points.length === 0) { 
+                listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu klasörde kayıtlı nokta yok.</p></div>'; 
+                return; 
+            }
+            
             let html = "";
             [...points].reverse().forEach(p => {
                 html += `
                     <div class="card-item">
                         <div class="card-info">
-                            <h4><i class="fas fa-map-pin"></i> ${p.name}</h4>
-                            <p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} <br> X: ${p.x_yukari.toFixed(3)}</p>
+                            <h4>${p.name}</h4>
+                            <p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} &nbsp; X: ${p.x_yukari.toFixed(3)}</p>
                             <p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p>
                         </div>
                         <div class="card-actions">
                             <button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button>
-                            <button class="btn-edit" onclick="editPoint(${p.id})"><i class="fas fa-pen"></i></button>
                             <button class="btn-del" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>`;
@@ -636,7 +634,7 @@
 
         function exportToTXT() {
             let points = projectsData[activeProject].points;
-            if(points.length === 0) return alert("Dışa aktarılacak nokta bulunamadı!");
+            if(points.length === 0) return alert("İndirilecek nokta yok!");
             let txtContent = "";
             points.forEach(p => { txtContent += `${p.name} ${p.y_saga.toFixed(3)} ${p.x_yukari.toFixed(3)}\n`; });
             let blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
