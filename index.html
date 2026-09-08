@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>GeoITRF - Pro Mobil Terminal</title>
 
+    <!-- PWA (Mobil Uygulama) Ayarları -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
+    <link rel="apple-touch-icon" href="logo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- HARİTA CSS (Daha stabil olan Cloudflare CDN'ine geçirildi) -->
+    <!-- Stabil Leaflet -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
@@ -22,7 +29,7 @@
             --accent: #00e5ff; 
             --accent-glow: rgba(0, 229, 255, 0.4);
             --bg-dark: #070b14; 
-            --surface: rgba(11, 17, 32, 0.5); 
+            --surface: rgba(11, 17, 32, 0.6); 
             --border-light: rgba(255, 255, 255, 0.08);
             --text-muted: #8ba3cb;
             --danger: #ef4444;
@@ -77,10 +84,9 @@
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HUD Bar */
+        /* HUD Bar - Z-index düşürüldü ki çekmece arkasında kalsın */
         .hud-container { position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; transition: 0.4s ease; }
-        .hud-container.hide-up { transform: translateY(-150%); opacity: 0; }
-        .hud-top { display: flex; justify-content: space-between; align-items: center; pointer-events: all; background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border-light); border-radius: 16px; padding: 10px 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .hud-top { display: flex; justify-content: space-between; align-items: center; pointer-events: all; background: var(--surface); backdrop-filter: blur(15px); border: 1px solid var(--border-light); border-radius: 16px; padding: 10px 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 1.2rem; color: #fff; cursor: pointer; padding: 5px; transition: 0.2s;}
         .menu-btn:active { transform: scale(0.9); color: var(--accent); }
         .hud-title { font-size: 1rem; font-weight: 600; letter-spacing: 1px; color: #fff;}
@@ -99,43 +105,35 @@
         .c-val.glow { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 
         /* Sağ Kontroller */
-        .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; transition: 0.4s;}
-        .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
-        .map-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); background: var(--surface); backdrop-filter: blur(15px); color: white; font-size: 1rem; display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px;}
+        .map-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); background: var(--surface); backdrop-filter: blur(15px); color: white; font-size: 1rem; display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor:pointer; }
         .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
 
-        /* Çekmece */
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1040; opacity: 0; pointer-events: none; transition: 0.4s ease; }
+        /* ÇEKMECE VE OVERLAY (Z-Index En Yüksek) */
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); z-index: 1200; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .drawer-overlay.show { opacity: 1; pointer-events: all; }
-        .side-drawer { position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 1050; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border-right: 1px solid var(--border-light); transform: translateX(-100%); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; }
+        .side-drawer { position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 1250; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border-right: 1px solid var(--border-light); transform: translateX(-100%); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
         .side-drawer.show { transform: translateX(0); }
         .drawer-header { padding: 30px 20px 20px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;}
         .drawer-header h2 { margin: 0; font-size: 1.2rem; font-weight: 600; color: #fff;}
         .drawer-close { font-size: 1.5rem; color: var(--text-muted); cursor: pointer;}
-        .drawer-body { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 25px;}
+        .drawer-body { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px;}
         .drawer-section h3 { margin: 0 0 10px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;}
         .drawer-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); border-radius: 12px; padding: 15px;}
         
-        .google-login-btn { background: #fff; color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s;}
-        .google-login-btn:active { transform: scale(0.95); }
-        .logout-btn { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .logout-btn:active { transform: scale(0.95); background: var(--danger); color: #fff;}
-        
-        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
-        .setting-info p { margin: 0; color: #fff; font-size: 0.9rem;}
-        .setting-info small { color: var(--text-muted); font-size: 0.75rem;}
-        .toggle-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 20px; width: 44px; height: 24px; position: relative; cursor: pointer; transition: 0.3s;}
-        .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s;}
-        .toggle-btn.active { background: var(--accent); }
-        .toggle-btn.active::after { left: 22px; }
+        .pwa-install-btn { background: linear-gradient(135deg, var(--accent), #3b82f6); color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);}
+        .pwa-install-btn:active { transform: scale(0.95); }
+
         .info-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin: 0 0 8px 0;}
         .info-text b { color: var(--accent); font-weight: 500;}
 
-        /* Modallar */
-        .app-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: var(--bg-dark); z-index: 1030; opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; padding-bottom: 80px; box-sizing: border-box; }
+        /* Modallar (Z-index 1150) */
+        .app-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: var(--bg-dark); z-index: 1150; opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; padding-bottom: 80px; box-sizing: border-box; }
         .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
         .modal-header { padding: 40px 20px 15px; border-bottom: 1px solid var(--border-light); display:flex; justify-content: space-between; align-items: center;}
         .modal-title { font-size: 1.2rem; font-weight: 600;}
+        
+        /* Liste & Kayıt Yönetimi */
         .project-selector { display: flex; gap: 10px; padding: 15px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border-light);}
         .project-selector select { flex: 1; padding: 12px 15px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid var(--border-light); border-radius: 12px; font-family: 'Inter'; font-size: 0.95rem; outline: none;}
         .project-selector button { width: 44px; background: rgba(255,255,255,0.05); color: var(--accent); border: 1px solid var(--border-light); border-radius: 12px; font-size: 1.2rem; cursor: pointer; transition: 0.2s;}
@@ -149,9 +147,10 @@
         .btn-go { background: rgba(0, 229, 255, 0.15); color: var(--accent); }
         .btn-del { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
         .export-bar { padding: 15px 20px; border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.3);}
-        .export-btn { width: 100%; padding: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-light); border-radius: 14px; font-family: 'Inter'; font-weight: 500; font-size: 1rem; cursor: pointer;}
+        .export-btn { width: 100%; padding: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-light); border-radius: 14px; font-family: 'Inter'; font-weight: 500; font-size: 1rem; cursor: pointer; transition:0.2s;}
+        .export-btn:active { transform:scale(0.95); }
 
-        /* Yüzer Kayıt Paneli */
+        /* Yüzer Nokta Kayıt Paneli */
         .floating-save-panel { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; background: var(--surface); backdrop-filter: blur(25px); border: 1px solid var(--border-light); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 340px; opacity: 0; pointer-events: none; transition: 0.4s; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
         .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
         .save-header { color: var(--text-muted); font-size: 0.8rem; display: flex; justify-content: space-between;}
@@ -160,17 +159,28 @@
         .save-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.3); color: white; font-size: 1rem; outline: none; font-family: 'Inter';}
         .save-input-group button { background: var(--accent); color: #000; border: none; width: 50px; border-radius: 12px; font-size: 1.2rem; cursor:pointer;}
 
-        /* Dock */
+        /* KOMPAKT 5'Lİ DOCK (Z-index 1100) */
         .ig-dock-wrapper { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; width: max-content; }
-        .ig-dock { display: flex; align-items: center; gap: 10px; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border: 1px solid var(--border-light); border-radius: 40px; padding: 8px 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        .dock-item { width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 25px; color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; cursor: pointer; }
-        .dock-item.active { color: #fff; }
-        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.5rem; width: 55px; height: 55px; margin: 0 10px; box-shadow: 0 0 20px var(--accent-glow); }
+        .ig-dock { display: flex; align-items: center; gap: 5px; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border: 1px solid var(--border-light); border-radius: 40px; padding: 8px 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .dock-item { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 22px; color: var(--text-muted); font-size: 1.1rem; transition: 0.3s; cursor: pointer; }
+        .dock-item.active { color: #fff; background: rgba(255,255,255,0.1); }
+        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.4rem; width: 52px; height: 52px; margin: 0 5px; box-shadow: 0 0 15px var(--accent-glow); }
         .dock-item.main-add:active { transform: scale(0.9); }
+
+        /* Profil Sayfası Özel */
+        .stat-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; flex: 1;}
+        .stat-box h4 { margin:0; font-size: 1.5rem; color: var(--accent);}
+        .stat-box p { margin:5px 0 0 0; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;}
+        
+        .google-login-btn { background: #fff; color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s;}
+        .logout-btn { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+
+        /* PWA Install Yönergeleri */
+        .install-step { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-light);}
+        .install-step i { color: var(--accent); font-size: 1.5rem; margin-bottom: 10px;}
 
         .leaflet-popup-content-wrapper { background: rgba(11, 17, 32, 0.9); backdrop-filter: blur(10px); color: #fff; border-radius: 12px; border: 1px solid var(--border-light);}
         .leaflet-popup-tip { background: rgba(11, 17, 32, 0.9); }
-        .marker-popup { font-family: 'Inter', sans-serif; }
         .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 1rem; font-weight: 600; }
         .marker-popup p { margin: 0; font-size: 0.75rem; color: var(--text-muted);}
         .marker-popup hr { border: 0; border-top: 1px solid var(--border-light); margin: 8px 0; }
@@ -200,7 +210,7 @@
         </a>
     </div>
 
-    <!-- GİZLİ ÇEKMECE -->
+    <!-- GİZLİ ÇEKMECE & BLUR OVERLAY -->
     <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
     <div class="side-drawer" id="side-drawer">
         <div class="drawer-header">
@@ -208,34 +218,13 @@
             <i class="fas fa-times drawer-close" onclick="toggleDrawer()"></i>
         </div>
         <div class="drawer-body">
+            
             <div class="drawer-section">
-                <h3>Hesap & Senkronizasyon</h3>
-                <div class="drawer-card" id="auth-logged-out">
-                    <button class="google-login-btn" onclick="loginWithGoogle()">
-                        <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Giriş
+                <h3>Uygulamayı İndir</h3>
+                <div class="drawer-card" style="padding:10px;">
+                    <button class="pwa-install-btn" onclick="openInstallModal()">
+                        <i class="fas fa-mobile-alt"></i> Ana Ekrana Ekle
                     </button>
-                    <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin:10px 0 0 0;">Bulut yedeklemesi için giriş yap.</p>
-                </div>
-                <div class="drawer-card" id="auth-logged-in" style="display: none; align-items:center; flex-direction:column; gap:8px;">
-                    <img id="user-photo" src="" alt="Profil" style="width:50px; height:50px; border-radius:50%; border:2px solid var(--accent);">
-                    <div style="text-align:center;">
-                        <div id="user-name" style="font-weight:600; font-size:0.9rem;"></div>
-                        <div id="user-email" style="font-size:0.75rem; color:var(--text-muted);"></div>
-                    </div>
-                    <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
-                </div>
-            </div>
-
-            <div class="drawer-section">
-                <h3>Ayarlar</h3>
-                <div class="drawer-card">
-                    <div class="setting-row">
-                        <div class="setting-info">
-                            <p>Uydu Görünümü</p>
-                            <small>Harita altlığını uydu yap.</small>
-                        </div>
-                        <button class="toggle-btn active" id="btn-satellite" onclick="toggleMapLayer()"></button>
-                    </div>
                 </div>
             </div>
 
@@ -243,7 +232,7 @@
                 <h3>Sistem Bilgisi</h3>
                 <div class="drawer-card">
                     <p class="info-text">Sistem: <b>ITRF96 / WGS84</b></p>
-                    <p class="info-text">Projeksiyon: <b>3° Dilim (Otomatik)</b></p>
+                    <p class="info-text">Projeksiyon: <b>3° Dilim (Oto)</b></p>
                     <p class="info-text" style="margin-bottom:0;">Geliştirici: <b style="color:#fff;">CREAT BY TONOZ</b></p>
                 </div>
             </div>
@@ -278,6 +267,7 @@
         </div>
     </div>
 
+    <!-- SAĞ KONTROLLER -->
     <div class="right-controls" id="right-controls">
         <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
         <button class="map-btn" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
@@ -286,10 +276,11 @@
 
     <div id="map"></div>
 
+    <!-- YÜZER NOKTA KAYIT PANELİ -->
     <div class="floating-save-panel" id="save-panel">
         <div class="save-header">
             <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
-            <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted);" onclick="switchTab('tab-map')"></i>
+            <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted);" onclick="closeModals()"></i>
         </div>
         <div class="save-input-group">
             <input type="text" id="point-name" placeholder="Nokta Adı (Örn: P1)">
@@ -297,12 +288,12 @@
         </div>
     </div>
 
+    <!-- BİRLEŞİK KAYIT YÖNETİCİSİ MODALI -->
     <div class="app-modal" id="modal-records">
         <div class="modal-header">
-            <span class="modal-title">Kayıt Yöneticisi</span>
-            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="switchTab('tab-map')"></i>
+            <span class="modal-title"><i class="fas fa-folder-open" style="color:var(--accent); margin-right:8px;"></i> Projeler & Kayıtlar</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="closeModals()"></i>
         </div>
-        
         <div class="project-selector">
             <select id="project-select" onchange="changeProject(this.value)">
                 <option value="Varsayılan">Varsayılan</option>
@@ -310,26 +301,94 @@
             <button onclick="createNewProject()" title="Yeni Klasör"><i class="fas fa-folder-plus"></i></button>
             <button onclick="deleteProject()" title="Klasörü Sil" style="color:var(--danger); border-color:rgba(239,68,68,0.2);"><i class="fas fa-trash"></i></button>
         </div>
-
         <div class="modal-body" id="points-list"></div>
-
         <div class="export-bar">
-            <button class="export-btn" onclick="exportToTXT()"><i class="fas fa-download"></i> Bu Klasörü TXT Olarak İndir</button>
+            <button class="export-btn" onclick="exportToTXT()"><i class="fas fa-download"></i> Bu Klasörü İndir (TXT)</button>
         </div>
     </div>
 
+    <!-- GELİŞMİŞ PROFİL MODALI -->
+    <div class="app-modal" id="modal-profile">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fas fa-user-circle" style="color:var(--accent); margin-right:8px;"></i> Profil & Bulut</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="closeModals()"></i>
+        </div>
+        <div class="modal-body">
+            
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <div class="stat-box">
+                    <h4 id="stat-total-points">0</h4>
+                    <p>Toplam Kayıt</p>
+                </div>
+                <div class="stat-box">
+                    <h4 id="stat-total-folders" style="color:#3b82f6;">1</h4>
+                    <p>Klasör</p>
+                </div>
+            </div>
+
+            <div class="drawer-card" id="auth-logged-out" style="margin-bottom:20px;">
+                <button class="google-login-btn" onclick="loginWithGoogle()">
+                    <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Senkronize Et
+                </button>
+                <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin:10px 0 0 0;">Cihaz değiştirdiğinde verilerini kaybetme.</p>
+            </div>
+            
+            <div class="drawer-card" id="auth-logged-in" style="display: none; align-items:center; flex-direction:column; gap:8px; margin-bottom:20px;">
+                <img id="user-photo" src="" alt="Profil" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--accent);">
+                <div style="text-align:center;">
+                    <div id="user-name" style="font-weight:600; font-size:1rem;"></div>
+                    <div id="user-email" style="font-size:0.8rem; color:var(--text-muted);"></div>
+                </div>
+                <p style="font-size:0.7rem; color:var(--accent); margin:5px 0;">Son Senkronizasyon: <span id="last-sync-time">Şimdi</span></p>
+                <button class="logout-btn" onclick="logout()">Hesaptan Çıkış Yap</button>
+            </div>
+
+            <button class="export-btn" style="background:rgba(0, 229, 255, 0.1); color:var(--accent); border-color:var(--accent);" onclick="exportAllData()">
+                <i class="fas fa-file-export"></i> Tüm Verileri Yedekle
+            </button>
+        </div>
+    </div>
+
+    <!-- PWA (ANA EKRANA EKLE) BİLGİ MODALI -->
+    <div class="app-modal" id="modal-install">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fas fa-mobile-alt" style="color:var(--accent); margin-right:8px;"></i> Ana Ekrana Ekle</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="closeModals()"></i>
+        </div>
+        <div class="modal-body">
+            
+            <div class="install-step">
+                <i class="fab fa-apple"></i>
+                <h3 style="margin:0 0 5px 0; font-size:1rem;">iPhone / iPad (iOS)</h3>
+                <p style="margin:0; font-size:0.85rem; color:var(--text-muted);">Safari'de alt menüdeki <b>Paylaş</b> (Yukarı ok) simgesine dokunun ve listeden <b>"Ana Ekrana Ekle"</b> seçeneğini seçin.</p>
+            </div>
+
+            <div class="install-step">
+                <i class="fab fa-android" style="color:#a4c639;"></i>
+                <h3 style="margin:0 0 5px 0; font-size:1rem;">Android (Chrome)</h3>
+                <p style="margin:0; font-size:0.85rem; color:var(--text-muted);">Tarayıcının sağ üst köşesindeki <b>Üç Nokta</b> menüsüne dokunun ve <b>"Ana ekrana ekle"</b> veya "Uygulamayı Yükle" seçeneğini seçin.</p>
+            </div>
+            
+            <button id="pwa-auto-btn" class="pwa-install-btn" style="display:none; margin-top:20px;" onclick="triggerAutoInstall()">
+                Tek Tıkla Otomatik Yükle
+            </button>
+        </div>
+    </div>
+
+    <!-- 5 BUTONLU DOCK MENÜ -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
-            <div class="dock-item active" id="tab-map" onclick="switchTab('tab-map')"><i class="fas fa-map"></i></div>
-            <div class="dock-item main-add" id="tab-add" onclick="switchTab('tab-add')"><i class="fas fa-plus"></i></div>
-            <div class="dock-item" id="tab-records" onclick="switchTab('tab-records')"><i class="fas fa-folder-open"></i></div>
+            <div class="dock-item active" id="tab-map" onclick="switchTab('tab-map')" title="Harita"><i class="fas fa-map"></i></div>
+            <div class="dock-item" id="tab-layer" onclick="toggleMapLayer()" title="Uydu/Sokak"><i class="fas fa-layer-group"></i></div>
+            <div class="dock-item main-add" id="tab-add" onclick="switchTab('tab-add')" title="Nokta Ekle"><i class="fas fa-plus"></i></div>
+            <div class="dock-item" id="tab-records" onclick="switchTab('tab-records')" title="Kayıtlar"><i class="fas fa-folder-open"></i></div>
+            <div class="dock-item" id="tab-profile" onclick="switchTab('tab-profile')" title="Profil"><i class="fas fa-user"></i></div>
         </div>
     </div>
 
-    <!-- HARİTA KÜTÜPHANESİ (STABİL CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
-    <!-- FIREBASE -->
+    <!-- FIREBASE & MANTIK -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBI0jB3Ouiz2pB5jz4eXLc30PnCkInqlYk",
@@ -348,12 +407,27 @@
         let projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
         let activeProject = "Varsayılan";
 
+        // PWA Kurulum Algılayıcı (Android için)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); deferredPrompt = e;
+            document.getElementById('pwa-auto-btn').style.display = 'flex';
+        });
+        function triggerAutoInstall() {
+            if(deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; document.getElementById('pwa-auto-btn').style.display = 'none'; }
+        }
+        function openInstallModal() { toggleDrawer(); switchTab('tab-install'); }
+
         function syncToFirebase() {
             if (auth.currentUser) {
-                db.collection('users').doc(auth.currentUser.uid).set({
-                    projectsData: projectsData
-                }).catch(err => console.error("Firebase kayıt hatası: ", err));
+                db.collection('users').doc(auth.currentUser.uid).set({ projectsData: projectsData })
+                .then(() => {
+                    let date = new Date();
+                    document.getElementById('last-sync-time').innerText = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
+                })
+                .catch(err => console.error("Firebase kayıt hatası: ", err));
             }
+            updateStats();
         }
 
         auth.onAuthStateChanged((user) => {
@@ -368,7 +442,7 @@
                     if (doc.exists && doc.data().projectsData) {
                         projectsData = doc.data().projectsData;
                         if(!projectsData[activeProject]) activeProject = "Varsayılan";
-                        updateDropdownUI(); updateListUI(); renderActiveProjectMarkers();
+                        updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
                     } else { syncToFirebase(); }
                 });
             } else {
@@ -376,12 +450,33 @@
                 document.getElementById('auth-logged-out').style.display = 'block';
                 projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
                 activeProject = "Varsayılan";
-                updateDropdownUI(); updateListUI(); renderActiveProjectMarkers();
+                updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
             }
         });
 
         function loginWithGoogle() { auth.signInWithPopup(provider).catch(err => alert("Giriş başarısız: " + err.message)); }
-        function logout() { auth.signOut(); toggleDrawer(); }
+        function logout() { auth.signOut(); closeModals(); }
+
+        function updateStats() {
+            let total = Object.values(projectsData).reduce((sum, proj) => sum + proj.points.length, 0);
+            let folders = Object.keys(projectsData).length;
+            document.getElementById('stat-total-points').innerText = total;
+            document.getElementById('stat-total-folders').innerText = folders;
+        }
+
+        function exportAllData() {
+            let txtContent = "GEOITRF - TUM YEDEK\n===================\n";
+            for (let projName in projectsData) {
+                txtContent += `\nKLASOR: ${projName}\n`;
+                projectsData[projName].points.forEach(p => {
+                    txtContent += `${p.name} \t Y:${p.y_saga.toFixed(3)} \t X:${p.x_yukari.toFixed(3)} \t E:${p.lat.toFixed(6)} \t B:${p.lon.toFixed(6)}\n`;
+                });
+            }
+            let blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
+            let link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.download = `GeoITRF_TamYedek.txt`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
 
         // --- MAP & UI ---
         function hideSplashScreen() {
@@ -390,7 +485,6 @@
             splash.style.transform = 'scale(1.05)';
             setTimeout(() => { 
                 splash.style.display = 'none'; 
-                // Güvenlik kilidi eklenmiş boyut yenileme (Çökmeyi önler)
                 if (typeof map !== 'undefined' && map) { map.invalidateSize(); }
             }, 800);
         }
@@ -400,7 +494,6 @@
             document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
-        // Harita Başlangıç Zoom Seviyesi Yükseltildi
         var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 14); 
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
         var streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
@@ -408,10 +501,18 @@
         var isSatellite = true;
 
         function toggleMapLayer() {
-            var btn = document.getElementById('btn-satellite');
-            if(isSatellite) { map.removeLayer(satelliteLayer); streetLayer.addTo(map); btn.classList.remove('active'); } 
-            else { map.removeLayer(streetLayer); satelliteLayer.addTo(map); btn.classList.add('active'); }
+            var btn = document.getElementById('btn-satellite'); // Çekmecedeki buton için
+            if(isSatellite) { 
+                map.removeLayer(satelliteLayer); streetLayer.addTo(map); 
+                if(btn) btn.classList.remove('active'); 
+                document.getElementById('tab-layer').classList.add('active'); // Alt dock efekti
+            } else { 
+                map.removeLayer(streetLayer); satelliteLayer.addTo(map); 
+                if(btn) btn.classList.add('active'); 
+                document.getElementById('tab-layer').classList.remove('active');
+            }
             isSatellite = !isSatellite;
+            setTimeout(() => { document.getElementById('tab-layer').classList.remove('active'); }, 300); // Tıklama efekti temizle
         }
 
         var userMarker = null, firstLocationFound = false;
@@ -432,7 +533,6 @@
                 
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
-                
                 document.getElementById('accuracy').innerText = "±" + acc + "m";
                 let dot = document.getElementById('gps-dot');
                 dot.classList.remove('blink'); dot.classList.add('connected');
@@ -450,28 +550,29 @@
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
                 document.getElementById('accuracy').innerText = "GPS Hatası"; 
-                document.getElementById('gps-dot').classList.remove('connected');
-                document.getElementById('gps-dot').classList.add('blink');
-            // Kilitlenmeyi önleyen timeout eklendi
+                document.getElementById('gps-dot').classList.remove('connected'); document.getElementById('gps-dot').classList.add('blink');
             }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 });
         }
 
-        function goToMyLocation() { if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor veya İzin Reddedildi."); } }
+        function goToMyLocation() { if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); } }
+
+        function closeModals() {
+            document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
+            document.getElementById('save-panel').classList.remove('show');
+            document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-map').classList.add('active'); // Varsayılan haritaya dön
+        }
 
         function switchTab(tabId) {
-            document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
-            if(tabId !== 'tab-add') document.getElementById(tabId).classList.add('active');
-
-            document.getElementById('modal-records').classList.remove('show');
-            document.getElementById('save-panel').classList.remove('show');
-
-            if (tabId === 'tab-map' || tabId === 'tab-add') {
-                document.getElementById('hud-bar').classList.remove('hide-up');
-                document.getElementById('right-controls').classList.remove('hide-right');
-            } else {
-                document.getElementById('hud-bar').classList.add('hide-up');
-                document.getElementById('right-controls').classList.add('hide-right');
+            // Sadece tablara geçiş yapılıyorsa dock UI güncelle
+            if(tabId !== 'tab-install' && tabId !== 'tab-layer') {
+                document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
+                if(tabId !== 'tab-add') document.getElementById(tabId).classList.add('active');
             }
+
+            // Önce tüm modalları kapat
+            document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
+            document.getElementById('save-panel').classList.remove('show');
 
             if (tabId === 'tab-add') {
                 document.getElementById('tab-map').classList.add('active'); 
@@ -483,6 +584,13 @@
             else if (tabId === 'tab-records') {
                 document.getElementById('modal-records').classList.add('show');
                 updateDropdownUI(); updateListUI();
+            }
+            else if (tabId === 'tab-profile') {
+                document.getElementById('modal-profile').classList.add('show');
+                updateStats();
+            }
+            else if (tabId === 'tab-install') {
+                document.getElementById('modal-install').classList.add('show');
             }
         }
 
@@ -502,24 +610,16 @@
             if(!name || name.trim() === "") return;
             name = name.trim();
             if(projectsData[name]) return alert("Bu isimde bir klasör zaten var.");
-            
             projectsData[name] = { points: [], autoCounter: 1 };
-            changeProject(name); 
-            syncToFirebase();
+            changeProject(name); syncToFirebase();
         }
 
-        function changeProject(name) {
-            activeProject = name;
-            updateDropdownUI(); updateListUI(); renderActiveProjectMarkers();
-        }
+        function changeProject(name) { activeProject = name; updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); }
 
         function deleteProject() {
             if(activeProject === "Varsayılan") return alert("Varsayılan klasör silinemez!");
             if(!confirm(`"${activeProject}" klasörünü SİLMEK istediğinize emin misiniz?`)) return;
-            
-            delete projectsData[activeProject];
-            changeProject("Varsayılan");
-            syncToFirebase();
+            delete projectsData[activeProject]; changeProject("Varsayılan"); syncToFirebase();
         }
 
         function updateDropdownUI() {
@@ -538,16 +638,13 @@
             var id = Date.now(); 
             projectsData[activeProject].points.push({ id: id, name: ptName, lat: currentLat, lon: currentLon, y_saga: currentY, x_yukari: currentX, dom: currentDOM });
             if(ptName === projectsData[activeProject].autoCounter.toString()) { projectsData[activeProject].autoCounter++; }
-            
-            renderActiveProjectMarkers(); switchTab('tab-map');
-            syncToFirebase();
+            renderActiveProjectMarkers(); switchTab('tab-map'); syncToFirebase();
         }
 
         function deletePoint(id) {
             if(confirm("Noktayı silmek istediğinize emin misiniz?")) { 
                 projectsData[activeProject].points = projectsData[activeProject].points.filter(p => p.id !== id); 
-                renderActiveProjectMarkers(); updateDropdownUI(); updateListUI(); 
-                syncToFirebase();
+                renderActiveProjectMarkers(); updateDropdownUI(); updateListUI(); syncToFirebase();
             }
         }
 
@@ -574,6 +671,7 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
+        renderActiveProjectMarkers();
     </script>
 </body>
 </html>
