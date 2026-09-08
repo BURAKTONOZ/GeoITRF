@@ -3,6 +3,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <!-- Ekranın köşelerine tam oturması için viewport-fit=cover -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>GeoITRF - Pro Mobil Terminal</title>
 
@@ -46,12 +47,14 @@
             --danger: #ef4444;
         }
 
+        /* UYGULAMA GÖVDESİ SABİT KİLİTLENDİ */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             font-family: 'Inter', sans-serif; overflow: hidden; background-color: #000;
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; touch-action: none; color: #fff;
         }
 
+        /* HARİTA EKRANIN TÜM KÖŞELERİNE YAPIŞTIRILDI */
         #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
@@ -95,7 +98,7 @@
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HUD Bar */
+        /* HUD Bar (Üst Panel) */
         .hud-container { 
             position: absolute; 
             top: calc(env(safe-area-inset-top) + 15px); 
@@ -336,7 +339,7 @@
         </div>
         <div class="modal-body" id="points-list"></div>
         <div class="export-bar">
-            <button class="export-btn" onclick="exportToTXT()"><i class="fas fa-download"></i> Bu Klasörü İndir (TXT)</button>
+            <button class="export-btn" onclick="exportToTXT()"><i class="fas fa-share-square"></i> Bu Klasörü Paylaş / İndir</button>
         </div>
     </div>
 
@@ -377,7 +380,7 @@
             </div>
 
             <button class="export-btn" style="background:rgba(0, 229, 255, 0.1); color:var(--accent); border-color:rgba(0, 229, 255, 0.3);" onclick="exportAllData()">
-                <i class="fas fa-file-export"></i> Tüm Verileri Yedekle
+                <i class="fas fa-file-export"></i> Tüm Verileri Paylaş / İndir
             </button>
         </div>
     </div>
@@ -496,6 +499,38 @@
             document.getElementById('stat-total-folders').innerText = folders;
         }
 
+        // AKILLI PAYLAŞIM VE İNDİRME FONKSİYONLARI (Mobile Uyumlu)
+        function downloadOrShareFile(content, fileName) {
+            let file = new File([content], fileName, { type: "text/plain" });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: fileName,
+                    text: 'GeoITRF Ölçüm Verileri'
+                }).catch(err => console.log("Paylaşım iptal edildi."));
+            } else {
+                let blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+                let link = document.createElement("a"); 
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                document.body.appendChild(link); 
+                link.click(); 
+                document.body.removeChild(link);
+            }
+        }
+
+        function exportToTXT() {
+            let points = projectsData[activeProject].points;
+            if(points.length === 0) return alert("Paylaşılacak nokta yok!");
+            
+            let txtContent = "";
+            points.forEach(p => { txtContent += `${p.name} ${p.y_saga.toFixed(3)} ${p.x_yukari.toFixed(3)}\n`; });
+            let fileName = `${activeProject.replace(/\s+/g, '_')}_olcumleri.txt`;
+
+            downloadOrShareFile(txtContent, fileName);
+        }
+
         function exportAllData() {
             let txtContent = "GEOITRF - TUM YEDEK\n===================\n";
             for (let projName in projectsData) {
@@ -504,10 +539,8 @@
                     txtContent += `${p.name} \t Y:${p.y_saga.toFixed(3)} \t X:${p.x_yukari.toFixed(3)} \t E:${p.lat.toFixed(6)} \t B:${p.lon.toFixed(6)}\n`;
                 });
             }
-            let blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
-            let link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.download = `GeoITRF_TamYedek.txt`;
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            
+            downloadOrShareFile(txtContent, "GeoITRF_TamYedek.txt");
         }
 
         // --- MAP & UI ---
@@ -686,17 +719,6 @@
                 html += `<div class="card-item"><div class="card-info"><h4>${p.name}</h4><p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} &nbsp; X: ${p.x_yukari.toFixed(3)}</p><p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p></div><div class="card-actions"><button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button><button class="btn-del" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button></div></div>`;
             });
             listDiv.innerHTML = html;
-        }
-
-        function exportToTXT() {
-            let points = projectsData[activeProject].points;
-            if(points.length === 0) return alert("İndirilecek nokta yok!");
-            let txtContent = "";
-            points.forEach(p => { txtContent += `${p.name} ${p.y_saga.toFixed(3)} ${p.x_yukari.toFixed(3)}\n`; });
-            let blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
-            let link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.download = `${activeProject.replace(/\s+/g, '_')}_olcumleri.txt`;
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         renderActiveProjectMarkers();
