@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
-    
-    <!-- Firebase SDK Compat Kütüphaneleri -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -185,7 +183,6 @@
             <h1 class="splash-title">GeoITRF</h1>
             <div class="splash-subtitle">PRO TERMINAL</div>
         </div>
-        
         <div class="globe-container">
             <div class="wireframe-globe">
                 <div class="globe-core"></div>
@@ -193,11 +190,9 @@
                 <div class="ring latitude"></div><div class="ring latitude"></div><div class="ring latitude"></div><div class="ring latitude"></div><div class="ring latitude"></div>
             </div>
         </div>
-
         <div class="splash-footer">
             <h3>CREAT BY TONOZ</h3>
         </div>
-
         <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="bmc-splash-btn" onclick="event.stopPropagation()">
             <i class="fas fa-mug-hot"></i> Kahve Ismarla
         </a>
@@ -213,16 +208,12 @@
         <div class="drawer-body">
             <div class="drawer-section">
                 <h3>Hesap & Senkronizasyon</h3>
-                
-                <!-- Çıkış Yapmış Kullanıcı Görünümü -->
                 <div class="drawer-card" id="auth-logged-out">
                     <button class="google-login-btn" onclick="loginWithGoogle()">
                         <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Giriş
                     </button>
                     <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin:10px 0 0 0;">Bulut yedeklemesi için giriş yap.</p>
                 </div>
-
-                <!-- Giriş Yapmış Kullanıcı Görünümü -->
                 <div class="drawer-card" id="auth-logged-in" style="display: none; align-items:center; flex-direction:column; gap:8px;">
                     <img id="user-photo" src="" alt="Profil" style="width:50px; height:50px; border-radius:50%; border:2px solid var(--accent);">
                     <div style="text-align:center;">
@@ -231,7 +222,6 @@
                     </div>
                     <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
                 </div>
-
             </div>
 
             <div class="drawer-section">
@@ -334,7 +324,7 @@
         </div>
     </div>
 
-    <!-- FIREBASE YAPILANDIRMASI VE BAŞLATMA -->
+    <!-- FIREBASE -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBI0jB3Ouiz2pB5jz4eXLc30PnCkInqlYk",
@@ -353,7 +343,6 @@
         let projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
         let activeProject = "Varsayılan";
 
-        // Firebase'e Senkronizasyon (Veri değiştiğinde çağrılır)
         function syncToFirebase() {
             if (auth.currentUser) {
                 db.collection('users').doc(auth.currentUser.uid).set({
@@ -362,58 +351,43 @@
             }
         }
 
-        // Firebase Oturum Dinleyicisi
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // UI Güncelleme (Giriş Yapıldı)
                 document.getElementById('auth-logged-out').style.display = 'none';
                 document.getElementById('auth-logged-in').style.display = 'flex';
                 document.getElementById('user-photo').src = user.photoURL || '';
                 document.getElementById('user-name').innerText = user.displayName;
                 document.getElementById('user-email').innerText = user.email;
 
-                // Firestore'dan Kullanıcı Verisini Çekme
                 db.collection('users').doc(user.uid).get().then((doc) => {
                     if (doc.exists && doc.data().projectsData) {
                         projectsData = doc.data().projectsData;
-                        // Eğer aktif proje silinmişse Varsayılana dön
                         if(!projectsData[activeProject]) activeProject = "Varsayılan";
-                        updateDropdownUI();
-                        updateListUI();
-                        renderActiveProjectMarkers();
-                    } else {
-                        // Yeni kullanıcı ise varsayılan yapıyı buluta kaydet
-                        syncToFirebase();
-                    }
+                        updateDropdownUI(); updateListUI(); renderActiveProjectMarkers();
+                    } else { syncToFirebase(); }
                 });
             } else {
-                // UI Güncelleme (Çıkış Yapıldı)
                 document.getElementById('auth-logged-in').style.display = 'none';
                 document.getElementById('auth-logged-out').style.display = 'block';
-                // Verileri sıfırla
                 projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
                 activeProject = "Varsayılan";
-                updateDropdownUI();
-                updateListUI();
-                renderActiveProjectMarkers();
+                updateDropdownUI(); updateListUI(); renderActiveProjectMarkers();
             }
         });
 
-        function loginWithGoogle() {
-            auth.signInWithPopup(provider).catch(err => alert("Giriş başarısız: " + err.message));
-        }
+        function loginWithGoogle() { auth.signInWithPopup(provider).catch(err => alert("Giriş başarısız: " + err.message)); }
+        function logout() { auth.signOut(); toggleDrawer(); }
 
-        function logout() {
-            auth.signOut();
-            toggleDrawer(); // Çıkış yapınca menüyü kapat
-        }
-
-        // --- DİĞER FONKSİYONLAR (Harita, UI, Hesaplamalar) ---
+        // --- MAP & UI ---
         function hideSplashScreen() {
             let splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
             splash.style.transform = 'scale(1.05)';
-            setTimeout(() => { splash.style.display = 'none'; }, 800);
+            setTimeout(() => { 
+                splash.style.display = 'none'; 
+                // GİZLİ EKRAN HATASINI ÇÖZEN KOD BURADA
+                map.invalidateSize(); 
+            }, 800);
         }
 
         function toggleDrawer() {
@@ -421,7 +395,8 @@
             document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
-        var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 2); 
+        // Başlangıç yakınlaştırması (zoom) 2'den 14'e çıkarıldı
+        var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 14); 
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
         var streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
         satelliteLayer.addTo(map); 
@@ -436,7 +411,7 @@
 
         var userMarker = null, firstLocationFound = false;
         var currentLat = null, currentLon = null, currentX = null, currentY = null, currentDOM = null;
-        var pointMarkers = {}, pointIdCounter = Date.now(); // Rastgele ID için
+        var pointMarkers = {}, pointIdCounter = Date.now();
         
         function calculateITRF(lat, lon) {
             let dom = Math.round(lon / 3) * 3;
@@ -452,8 +427,10 @@
                 
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
+                
                 document.getElementById('accuracy').innerText = "±" + acc + "m";
-                document.getElementById('gps-dot').className = "gps-dot connected";
+                let dot = document.getElementById('gps-dot');
+                dot.classList.remove('blink'); dot.classList.add('connected');
 
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y; currentX = itrf.x; currentDOM = itrf.dom;
@@ -464,11 +441,13 @@
                 var newLoc = new L.LatLng(currentLat, currentLon);
                 if (userMarker) { userMarker.setLatLng(newLoc); } 
                 else { userMarker = L.circleMarker(newLoc, { color: '#00e5ff', fillColor: '#00e5ff', fillOpacity: 0.8, radius: 6, weight: 2, zIndexOffset: 1000 }).addTo(map); }
+
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
-                document.getElementById('accuracy').innerText = "GPS Kapalı"; 
-                document.getElementById('gps-dot').className = "gps-dot blink";
-            }, { enableHighAccuracy: true, maximumAge: 0 });
+                document.getElementById('accuracy').innerText = "GPS Hatası"; 
+                document.getElementById('gps-dot').classList.remove('connected');
+                document.getElementById('gps-dot').classList.add('blink');
+            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }); // Timeout eklendi
         }
 
         function goToMyLocation() { if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); } }
@@ -504,7 +483,7 @@
         function renderActiveProjectMarkers() {
             for (let id in pointMarkers) { map.removeLayer(pointMarkers[id]); }
             pointMarkers = {};
-            if(!projectsData[activeProject]) return; // Güvenlik kontrolü
+            if(!projectsData[activeProject]) return; 
             projectsData[activeProject].points.forEach(p => {
                 let popupContent = `<div class="marker-popup"><h3>${p.name}</h3><p><i class="fas fa-folder-open"></i> ${activeProject}</p><hr><div class="coords">Y: ${p.y_saga.toFixed(3)}<br>X: ${p.x_yukari.toFixed(3)}<br>E: ${p.lat.toFixed(6)}<br>B: ${p.lon.toFixed(6)}</div></div>`;
                 let marker = L.marker([p.lat, p.lon]).addTo(map).bindPopup(popupContent);
@@ -517,8 +496,9 @@
             if(!name || name.trim() === "") return;
             name = name.trim();
             if(projectsData[name]) return alert("Bu isimde bir klasör zaten var.");
+            
             projectsData[name] = { points: [], autoCounter: 1 };
-            changeProject(name);
+            changeProject(name); 
             syncToFirebase();
         }
 
@@ -530,6 +510,7 @@
         function deleteProject() {
             if(activeProject === "Varsayılan") return alert("Varsayılan klasör silinemez!");
             if(!confirm(`"${activeProject}" klasörünü SİLMEK istediğinize emin misiniz?`)) return;
+            
             delete projectsData[activeProject];
             changeProject("Varsayılan");
             syncToFirebase();
@@ -548,8 +529,7 @@
             if (!currentLat) { alert("GPS bekleniyor..."); return; }
             var nameInput = document.getElementById("point-name"); var ptName = nameInput.value.trim();
             if (!ptName) { alert("Nokta adı girin!"); return; }
-            
-            var id = Date.now(); // Benzersiz ID
+            var id = Date.now(); 
             projectsData[activeProject].points.push({ id: id, name: ptName, lat: currentLat, lon: currentLon, y_saga: currentY, x_yukari: currentX, dom: currentDOM });
             if(ptName === projectsData[activeProject].autoCounter.toString()) { projectsData[activeProject].autoCounter++; }
             
@@ -568,8 +548,7 @@
         function zoomToPoint(lat, lon) { map.setView([lat, lon], 19); switchTab('tab-map'); }
 
         function updateListUI() {
-            var listDiv = document.getElementById("points-list"); 
-            let points = projectsData[activeProject].points;
+            var listDiv = document.getElementById("points-list"); let points = projectsData[activeProject].points;
             if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu klasörde kayıtlı nokta yok.</p></div>'; return; }
             let html = "";
             [...points].reverse().forEach(p => {
@@ -589,6 +568,7 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
+        renderActiveProjectMarkers();
     </script>
 </body>
 </html>
