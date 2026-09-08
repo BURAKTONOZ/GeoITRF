@@ -3,10 +3,23 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- Ekranın köşelerine tam oturması için viewport-fit=cover -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>GeoITRF - Pro Mobil Terminal</title>
 
+    <!-- SEO Ayarları -->
+    <meta name="description" content="Sahada enlem, boylam ve ITRF96 koordinat ölçümlerini kolaylaştıran ücretsiz, mobil uyumlu haritacılık terminali. Harita Mühendisi Burak Tonoz tarafından geliştirilmiştir.">
+    <meta name="keywords" content="ITRF96 koordinat dönüştürücü, WGS84 ölçüm, ücretsiz haritacılık programı, arazide gps koordinat alma, topoğraf, aplikasyon, numarataj, harita mühendisi, Burak Tonoz, mobil nivo, rtk alternatif">
+    <meta name="author" content="Burak Tonoz">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Sosyal Medya (Open Graph) Etiketleri -->
+    <meta property="og:title" content="GeoITRF - Ücretsiz Koordinat Ölçüm Terminali">
+    <meta property="og:description" content="Sahada cep telefonuyla hassas WGS84 ve ITRF96 koordinatları alın, projelerinizi yönetin ve anında TXT olarak indirin.">
+    <meta property="og:image" content="https://buraktonoz.com/GeoITRF/logo.png">
+    <meta property="og:url" content="https://buraktonoz.com/GeoITRF/">
+    <meta property="og:type" content="website">
+
+    <!-- PWA (Mobil Uygulama) Ayarları -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#070b14">
     <link rel="apple-touch-icon" href="logo.png">
@@ -27,20 +40,18 @@
             --accent: #00e5ff; 
             --accent-glow: rgba(0, 229, 255, 0.4);
             --bg-dark: #070b14; 
-            --surface: rgba(11, 17, 32, 0.85); /* Fluluk kaldırıldı, net ve keskin yapıldı */
+            --surface: rgba(11, 17, 32, 0.85); 
             --border-light: rgba(255, 255, 255, 0.12);
             --text-muted: #8ba3cb;
             --danger: #ef4444;
         }
 
-        /* UYGULAMA GÖVDESİ SABİT KİLİTLENDİ */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             font-family: 'Inter', sans-serif; overflow: hidden; background-color: #000;
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; touch-action: none; color: #fff;
         }
 
-        /* HARİTA EKRANIN TÜM KÖŞELERİNE YAPIŞTIRILDI (SİYAH BOŞLUKLARI ENGELLER) */
         #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
@@ -84,7 +95,7 @@
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HUD Bar (Üst Panel) - Bulanıklık olmadan cam gibi net */
+        /* HUD Bar */
         .hud-container { 
             position: absolute; 
             top: calc(env(safe-area-inset-top) + 15px); 
@@ -117,7 +128,7 @@
         .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 400; color: #fff; letter-spacing: 0.5px;}
         .c-val.glow { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 
-        /* Sağ Kontroller - Fluluk Kaldırıldı */
+        /* Sağ Kontroller */
         .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px;}
         .map-btn { 
             width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); 
@@ -180,7 +191,7 @@
         .save-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; outline: none; font-family: 'Inter';}
         .save-input-group button { background: var(--accent); color: #000; border: none; width: 50px; border-radius: 12px; font-size: 1.2rem; cursor:pointer;}
 
-        /* KOMPAKT 5'Lİ DOCK - Fluluk Kaldırıldı */
+        /* KOMPAKT 5'Lİ DOCK */
         .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 20px); left: 50%; transform: translateX(-50%); z-index: 1100; width: max-content; }
         .ig-dock { display: flex; align-items: center; gap: 5px; background: rgba(11, 17, 32, 0.9); border: 1px solid var(--border-light); border-radius: 40px; padding: 8px 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
         .dock-item { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 22px; color: var(--text-muted); font-size: 1.1rem; transition: 0.3s; cursor: pointer; }
@@ -249,11 +260,12 @@
             </div>
 
             <div class="drawer-section">
-                <h3>Sistem Bilgisi</h3>
+                <h3>Sistem Bilgisi & Hakkında</h3>
                 <div class="drawer-card">
-                    <p class="info-text">Sistem: <b>ITRF96 / WGS84</b></p>
-                    <p class="info-text">Projeksiyon: <b>3° Dilim (Oto)</b></p>
-                    <p class="info-text" style="margin-bottom:0;">Geliştirici: <b style="color:#fff;">CREAT BY TONOZ</b></p>
+                    <p class="info-text"><b>GeoITRF</b>, sahada çalışan harita mühendisleri, topoğraflar ve numarataj ekipleri için tasarlanmış ücretsiz bir web terminalidir.</p>
+                    <p class="info-text">Ankara Büyükşehir Belediyesi Fen İşleri Dairesi Başkanlığı Numarataj Şube Müdürlüğü altyapı ve saha tecrübeleriyle, Harita Mühendisi <b>Burak Tonoz</b> tarafından meslektaşlarının kullanımına sunulmuştur.</p>
+                    <p class="info-text" style="margin-top:10px;">Sistem: <b>ITRF96 / WGS84</b></p>
+                    <p class="info-text" style="margin-bottom:0;">Projeksiyon: <b>3° Dilim (Oto DOM)</b></p>
                 </div>
             </div>
             
