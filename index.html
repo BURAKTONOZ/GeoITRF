@@ -8,7 +8,9 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- HARİTA CSS (Daha stabil olan Cloudflare CDN'ine geçirildi) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -324,6 +326,9 @@
         </div>
     </div>
 
+    <!-- HARİTA KÜTÜPHANESİ (STABİL CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
     <!-- FIREBASE -->
     <script>
         const firebaseConfig = {
@@ -385,8 +390,8 @@
             splash.style.transform = 'scale(1.05)';
             setTimeout(() => { 
                 splash.style.display = 'none'; 
-                // GİZLİ EKRAN HATASINI ÇÖZEN KOD BURADA
-                map.invalidateSize(); 
+                // Güvenlik kilidi eklenmiş boyut yenileme (Çökmeyi önler)
+                if (typeof map !== 'undefined' && map) { map.invalidateSize(); }
             }, 800);
         }
 
@@ -395,7 +400,7 @@
             document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
-        // Başlangıç yakınlaştırması (zoom) 2'den 14'e çıkarıldı
+        // Harita Başlangıç Zoom Seviyesi Yükseltildi
         var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 14); 
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
         var streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
@@ -447,10 +452,11 @@
                 document.getElementById('accuracy').innerText = "GPS Hatası"; 
                 document.getElementById('gps-dot').classList.remove('connected');
                 document.getElementById('gps-dot').classList.add('blink');
-            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }); // Timeout eklendi
+            // Kilitlenmeyi önleyen timeout eklendi
+            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 });
         }
 
-        function goToMyLocation() { if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); } }
+        function goToMyLocation() { if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor veya İzin Reddedildi."); } }
 
         function switchTab(tabId) {
             document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
@@ -568,7 +574,6 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        renderActiveProjectMarkers();
     </script>
 </body>
 </html>
