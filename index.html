@@ -9,16 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
+    
+    <!-- Firebase SDK Compat Kütüphaneleri -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
-            --accent: #00e5ff; /* Neon Turkuaz */
+            --accent: #00e5ff; 
             --accent-glow: rgba(0, 229, 255, 0.4);
-            --bg-dark: #070b14; /* Derin Uzay Laciverti */
-            --surface: rgba(11, 17, 32, 0.5); /* Şeffaf Cam */
+            --bg-dark: #070b14; 
+            --surface: rgba(11, 17, 32, 0.5); 
             --border-light: rgba(255, 255, 255, 0.08);
             --text-muted: #8ba3cb;
+            --danger: #ef4444;
         }
 
         body, html { 
@@ -30,9 +37,7 @@
         #map { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
         .leaflet-control-zoom { display: none; }
 
-        /* =========================================
-           HOLOGRAFİK GİRİŞ EKRANI
-           ========================================= */
+        /* Splash Screen */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
             background: radial-gradient(circle at center, #0a1326 0%, #000000 100%);
@@ -44,7 +49,6 @@
             width: 300px; height: 300px; background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%); z-index: 0;
         }
         
-        /* Kahve Butonu - Splash Sağ Alt */
         .bmc-splash-btn {
             position: absolute; bottom: 30px; right: 20px; z-index: 10000;
             background: rgba(38, 176, 161, 0.1); border: 1px solid rgba(38, 176, 161, 0.3);
@@ -73,176 +77,97 @@
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* =========================================
-           ULTRA ZARİF HUD (ÜST BAR)
-           ========================================= */
-        .hud-container {
-            position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000;
-            display: flex; flex-direction: column; gap: 8px; pointer-events: none; /* Harita tıklamalarını engellemez */
-            transition: 0.4s ease;
-        }
+        /* HUD Bar */
+        .hud-container { position: absolute; top: 15px; left: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; transition: 0.4s ease; }
         .hud-container.hide-up { transform: translateY(-150%); opacity: 0; }
-
-        .hud-top {
-            display: flex; justify-content: space-between; align-items: center; pointer-events: all;
-            background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border-light);
-            border-radius: 16px; padding: 10px 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-        
+        .hud-top { display: flex; justify-content: space-between; align-items: center; pointer-events: all; background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border-light); border-radius: 16px; padding: 10px 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 1.2rem; color: #fff; cursor: pointer; padding: 5px; transition: 0.2s;}
         .menu-btn:active { transform: scale(0.9); color: var(--accent); }
-
         .hud-title { font-size: 1rem; font-weight: 600; letter-spacing: 1px; color: #fff;}
         .hud-title span { color: var(--accent); font-weight: 300; font-size: 0.8rem; letter-spacing: 2px;}
-
         .gps-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-muted); font-weight: 500;}
         .gps-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger);}
         .gps-dot.connected { background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
         .blink { animation: blinker 1.5s infinite; }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
-        .hud-coords {
-            display: flex; justify-content: space-between; pointer-events: all; gap: 8px;
-        }
-        .coord-box {
-            flex: 1; background: linear-gradient(180deg, rgba(11, 17, 32, 0.7) 0%, rgba(11, 17, 32, 0.4) 100%); 
-            backdrop-filter: blur(10px); border: 1px solid var(--border-light); border-top: none;
-            border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 2px;
-        }
+        .hud-coords { display: flex; justify-content: space-between; pointer-events: all; gap: 8px; }
+        .coord-box { flex: 1; background: linear-gradient(180deg, rgba(11, 17, 32, 0.7) 0%, rgba(11, 17, 32, 0.4) 100%); backdrop-filter: blur(10px); border: 1px solid var(--border-light); border-top: none; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 2px; }
         .coord-box.right { text-align: right; }
         .c-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px;}
         .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 400; color: #fff; letter-spacing: 0.5px;}
         .c-val.glow { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 
-        /* Sağ Harita Kontrolleri */
+        /* Sağ Kontroller */
         .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; transition: 0.4s;}
         .right-controls.hide-right { transform: translate(150%, -50%); opacity: 0; pointer-events: none; }
-        .map-btn { 
-            width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); 
-            background: var(--surface); backdrop-filter: blur(15px); color: white; font-size: 1rem; 
-            display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+        .map-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); background: var(--surface); backdrop-filter: blur(15px); color: white; font-size: 1rem; display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
 
-        /* =========================================
-           SOL GİZLİ ÇEKMECE (HAMBURGER MENÜ)
-           ========================================= */
-        .drawer-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
-            z-index: 1040; opacity: 0; pointer-events: none; transition: 0.4s ease;
-        }
+        /* Çekmece */
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1040; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .drawer-overlay.show { opacity: 1; pointer-events: all; }
-        
-        .side-drawer {
-            position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 1050;
-            background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border-right: 1px solid var(--border-light);
-            transform: translateX(-100%); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex; flex-direction: column;
-        }
+        .side-drawer { position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 1050; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border-right: 1px solid var(--border-light); transform: translateX(-100%); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; }
         .side-drawer.show { transform: translateX(0); }
-
         .drawer-header { padding: 30px 20px 20px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;}
         .drawer-header h2 { margin: 0; font-size: 1.2rem; font-weight: 600; color: #fff;}
         .drawer-close { font-size: 1.5rem; color: var(--text-muted); cursor: pointer;}
-        
         .drawer-body { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 25px;}
-        
-        /* Çekmece İçi Elemanlar */
         .drawer-section h3 { margin: 0 0 10px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;}
         .drawer-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); border-radius: 12px; padding: 15px;}
         
-        .google-login-btn { background: #fff; color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer;}
+        .google-login-btn { background: #fff; color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s;}
+        .google-login-btn:active { transform: scale(0.95); }
+        .logout-btn { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .logout-btn:active { transform: scale(0.95); background: var(--danger); color: #fff;}
         
         .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
         .setting-info p { margin: 0; color: #fff; font-size: 0.9rem;}
         .setting-info small { color: var(--text-muted); font-size: 0.75rem;}
-        .toggle-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 20px; width: 44px; height: 24px; position: relative;}
+        .toggle-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 20px; width: 44px; height: 24px; position: relative; cursor: pointer; transition: 0.3s;}
         .toggle-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s;}
         .toggle-btn.active { background: var(--accent); }
         .toggle-btn.active::after { left: 22px; }
-
         .info-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin: 0 0 8px 0;}
         .info-text b { color: var(--accent); font-weight: 500;}
 
-        /* =========================================
-           BİRLEŞTİRİLMİŞ KAYITLAR MODALI (Projeler + Liste)
-           ========================================= */
-        .app-modal { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; 
-            background: var(--bg-dark); z-index: 1030; opacity: 0; pointer-events: none; 
-            transform: translateY(20px) scale(0.95); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
-            display: flex; flex-direction: column; padding-bottom: 80px; box-sizing: border-box;
-        }
+        /* Modallar */
+        .app-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: var(--bg-dark); z-index: 1030; opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; padding-bottom: 80px; box-sizing: border-box; }
         .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
-        
         .modal-header { padding: 40px 20px 15px; border-bottom: 1px solid var(--border-light); display:flex; justify-content: space-between; align-items: center;}
         .modal-title { font-size: 1.2rem; font-weight: 600;}
-        
-        /* Proje Seçici */
         .project-selector { display: flex; gap: 10px; padding: 15px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border-light);}
-        .project-selector select { 
-            flex: 1; padding: 12px 15px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid var(--border-light); 
-            border-radius: 12px; font-family: 'Inter'; font-size: 0.95rem; outline: none; appearance: none;
-        }
+        .project-selector select { flex: 1; padding: 12px 15px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid var(--border-light); border-radius: 12px; font-family: 'Inter'; font-size: 0.95rem; outline: none;}
         .project-selector button { width: 44px; background: rgba(255,255,255,0.05); color: var(--accent); border: 1px solid var(--border-light); border-radius: 12px; font-size: 1.2rem; cursor: pointer; transition: 0.2s;}
-        .project-selector button:active { background: var(--accent); color: #000;}
-
         .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
-        
-        /* Liste Kartları */
-        .card-item { 
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border-light);
-            border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
-        }
+        .card-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
         .card-info h4 { margin: 0 0 5px 0; font-size: 1rem; color: #fff; display:flex; align-items:center; gap:8px;}
         .itrf-coords { font-size: 0.9rem; margin: 0; font-family: 'JetBrains Mono', monospace; color: var(--accent);}
         .wgs-coords { margin: 2px 0 0 0; font-size: 0.7rem; color: var(--text-muted); font-family: monospace;}
-        
         .card-actions { display: flex; flex-direction: column; gap: 6px;}
         .card-actions button { width: 36px; height: 36px; border-radius: 10px; border: none; font-size: 0.9rem; cursor: pointer;}
         .btn-go { background: rgba(0, 229, 255, 0.15); color: var(--accent); }
         .btn-del { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-
         .export-bar { padding: 15px 20px; border-top: 1px solid var(--border-light); background: rgba(0,0,0,0.3);}
-        .export-btn { width: 100%; padding: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-light); border-radius: 14px; font-family: 'Inter'; font-weight: 500; font-size: 1rem;}
-        
-        /* Yüzer Nokta Kayıt Paneli */
-        .floating-save-panel { 
-            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; 
-            background: var(--surface); backdrop-filter: blur(25px); border: 1px solid var(--border-light); 
-            border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 340px; 
-            opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-        }
+        .export-btn { width: 100%; padding: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-light); border-radius: 14px; font-family: 'Inter'; font-weight: 500; font-size: 1rem; cursor: pointer;}
+
+        /* Yüzer Kayıt Paneli */
+        .floating-save-panel { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; background: var(--surface); backdrop-filter: blur(25px); border: 1px solid var(--border-light); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 340px; opacity: 0; pointer-events: none; transition: 0.4s; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
         .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
         .save-header { color: var(--text-muted); font-size: 0.8rem; display: flex; justify-content: space-between;}
         .save-header b { color: #fff; }
         .save-input-group { display: flex; gap: 10px; }
         .save-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.3); color: white; font-size: 1rem; outline: none; font-family: 'Inter';}
-        .save-input-group input:focus { border-color: var(--accent); }
         .save-input-group button { background: var(--accent); color: #000; border: none; width: 50px; border-radius: 12px; font-size: 1.2rem; cursor:pointer;}
 
-        /* =========================================
-           KOMPAKT DOCK MENÜ (3 BUTON)
-           ========================================= */
+        /* Dock */
         .ig-dock-wrapper { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; width: max-content; }
-        .ig-dock { 
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); 
-            border: 1px solid var(--border-light); border-radius: 40px; 
-            padding: 8px 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); 
-        }
-        .dock-item { 
-            width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; 
-            border-radius: 25px; color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; cursor: pointer;
-        }
+        .ig-dock { display: flex; align-items: center; gap: 10px; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(30px); border: 1px solid var(--border-light); border-radius: 40px; padding: 8px 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .dock-item { width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 25px; color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; cursor: pointer; }
         .dock-item.active { color: #fff; }
-        .dock-item.main-add { 
-            background: var(--accent); color: #000; font-size: 1.5rem; width: 55px; height: 55px; margin: 0 10px;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
+        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.5rem; width: 55px; height: 55px; margin: 0 10px; box-shadow: 0 0 20px var(--accent-glow); }
         .dock-item.main-add:active { transform: scale(0.9); }
 
-        /* Harita Marker Pop-up */
         .leaflet-popup-content-wrapper { background: rgba(11, 17, 32, 0.9); backdrop-filter: blur(10px); color: #fff; border-radius: 12px; border: 1px solid var(--border-light);}
         .leaflet-popup-tip { background: rgba(11, 17, 32, 0.9); }
         .marker-popup { font-family: 'Inter', sans-serif; }
@@ -254,7 +179,7 @@
 </head>
 <body>
 
-    <!-- HOLOGRAFİK GİRİŞ EKRANI -->
+    <!-- GİRİŞ EKRANI -->
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
             <h1 class="splash-title">GeoITRF</h1>
@@ -273,13 +198,12 @@
             <h3>CREAT BY TONOZ</h3>
         </div>
 
-        <!-- Buy Me A Coffee (Sağ Alt) -->
         <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="bmc-splash-btn" onclick="event.stopPropagation()">
             <i class="fas fa-mug-hot"></i> Kahve Ismarla
         </a>
     </div>
 
-    <!-- SOL GİZLİ ÇEKMECE -->
+    <!-- GİZLİ ÇEKMECE -->
     <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
     <div class="side-drawer" id="side-drawer">
         <div class="drawer-header">
@@ -288,13 +212,26 @@
         </div>
         <div class="drawer-body">
             <div class="drawer-section">
-                <h3>Hesap</h3>
-                <div class="drawer-card">
-                    <button class="google-login-btn">
+                <h3>Hesap & Senkronizasyon</h3>
+                
+                <!-- Çıkış Yapmış Kullanıcı Görünümü -->
+                <div class="drawer-card" id="auth-logged-out">
+                    <button class="google-login-btn" onclick="loginWithGoogle()">
                         <i class="fab fa-google" style="color: #ea4335;"></i> Google ile Giriş
                     </button>
-                    <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin:10px 0 0 0;">Bulut senkronizasyonu için.</p>
+                    <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin:10px 0 0 0;">Bulut yedeklemesi için giriş yap.</p>
                 </div>
+
+                <!-- Giriş Yapmış Kullanıcı Görünümü -->
+                <div class="drawer-card" id="auth-logged-in" style="display: none; align-items:center; flex-direction:column; gap:8px;">
+                    <img id="user-photo" src="" alt="Profil" style="width:50px; height:50px; border-radius:50%; border:2px solid var(--accent);">
+                    <div style="text-align:center;">
+                        <div id="user-name" style="font-weight:600; font-size:0.9rem;"></div>
+                        <div id="user-email" style="font-size:0.75rem; color:var(--text-muted);"></div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+                </div>
+
             </div>
 
             <div class="drawer-section">
@@ -319,14 +256,13 @@
                 </div>
             </div>
             
-            <!-- Çekmece içi alternatif Kahve butonu -->
             <a href="https://buymeacoffee.com/buraktonoz" target="_blank" style="text-decoration:none; display:block; text-align:center; padding:12px; background:rgba(38, 176, 161, 0.1); border:1px solid rgba(38,176,161,0.3); color:#26B0A1; border-radius:10px; font-size:0.85rem; font-weight:500;">
                 <i class="fas fa-mug-hot"></i> Bana Kahve Ismarla
             </a>
         </div>
     </div>
 
-    <!-- İNCE VE ZARİF HUD (ÜST BAR) -->
+    <!-- HUD (ÜST BAR) -->
     <div class="hud-container" id="hud-bar">
         <div class="hud-top">
             <i class="fas fa-bars menu-btn" onclick="toggleDrawer()"></i>
@@ -358,7 +294,6 @@
 
     <div id="map"></div>
 
-    <!-- YÜZER KAYIT PANELİ -->
     <div class="floating-save-panel" id="save-panel">
         <div class="save-header">
             <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
@@ -370,14 +305,12 @@
         </div>
     </div>
 
-    <!-- BİRLEŞTİRİLMİŞ KAYITLAR MODALI (Projeler + Noktalar) -->
     <div class="app-modal" id="modal-records">
         <div class="modal-header">
             <span class="modal-title">Kayıt Yöneticisi</span>
             <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="switchTab('tab-map')"></i>
         </div>
         
-        <!-- Klasör Seçici -->
         <div class="project-selector">
             <select id="project-select" onchange="changeProject(this.value)">
                 <option value="Varsayılan">Varsayılan</option>
@@ -386,34 +319,96 @@
             <button onclick="deleteProject()" title="Klasörü Sil" style="color:var(--danger); border-color:rgba(239,68,68,0.2);"><i class="fas fa-trash"></i></button>
         </div>
 
-        <div class="modal-body" id="points-list">
-            <!-- Noktalar buraya gelecek -->
-        </div>
+        <div class="modal-body" id="points-list"></div>
 
         <div class="export-bar">
             <button class="export-btn" onclick="exportToTXT()"><i class="fas fa-download"></i> Bu Klasörü TXT Olarak İndir</button>
         </div>
     </div>
 
-    <!-- KOMPAKT 3'LÜ DOCK -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
-            <div class="dock-item active" id="tab-map" onclick="switchTab('tab-map')">
-                <i class="fas fa-map"></i>
-            </div>
-            <div class="dock-item main-add" id="tab-add" onclick="switchTab('tab-add')">
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="dock-item" id="tab-records" onclick="switchTab('tab-records')">
-                <i class="fas fa-folder-open"></i>
-            </div>
+            <div class="dock-item active" id="tab-map" onclick="switchTab('tab-map')"><i class="fas fa-map"></i></div>
+            <div class="dock-item main-add" id="tab-add" onclick="switchTab('tab-add')"><i class="fas fa-plus"></i></div>
+            <div class="dock-item" id="tab-records" onclick="switchTab('tab-records')"><i class="fas fa-folder-open"></i></div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
+    <!-- FIREBASE YAPILANDIRMASI VE BAŞLATMA -->
     <script>
-        // --- SPLASH SCREEN ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI0jB3Ouiz2pB5jz4eXLc30PnCkInqlYk",
+            authDomain: "geoitrf.firebaseapp.com",
+            projectId: "geoitrf",
+            storageBucket: "geoitrf.firebasestorage.app",
+            messagingSenderId: "220881339704",
+            appId: "1:220881339704:web:610f1f57d98ca2cedeadcd",
+            measurementId: "G-0N1PBRC8DS"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        let projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
+        let activeProject = "Varsayılan";
+
+        // Firebase'e Senkronizasyon (Veri değiştiğinde çağrılır)
+        function syncToFirebase() {
+            if (auth.currentUser) {
+                db.collection('users').doc(auth.currentUser.uid).set({
+                    projectsData: projectsData
+                }).catch(err => console.error("Firebase kayıt hatası: ", err));
+            }
+        }
+
+        // Firebase Oturum Dinleyicisi
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // UI Güncelleme (Giriş Yapıldı)
+                document.getElementById('auth-logged-out').style.display = 'none';
+                document.getElementById('auth-logged-in').style.display = 'flex';
+                document.getElementById('user-photo').src = user.photoURL || '';
+                document.getElementById('user-name').innerText = user.displayName;
+                document.getElementById('user-email').innerText = user.email;
+
+                // Firestore'dan Kullanıcı Verisini Çekme
+                db.collection('users').doc(user.uid).get().then((doc) => {
+                    if (doc.exists && doc.data().projectsData) {
+                        projectsData = doc.data().projectsData;
+                        // Eğer aktif proje silinmişse Varsayılana dön
+                        if(!projectsData[activeProject]) activeProject = "Varsayılan";
+                        updateDropdownUI();
+                        updateListUI();
+                        renderActiveProjectMarkers();
+                    } else {
+                        // Yeni kullanıcı ise varsayılan yapıyı buluta kaydet
+                        syncToFirebase();
+                    }
+                });
+            } else {
+                // UI Güncelleme (Çıkış Yapıldı)
+                document.getElementById('auth-logged-in').style.display = 'none';
+                document.getElementById('auth-logged-out').style.display = 'block';
+                // Verileri sıfırla
+                projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
+                activeProject = "Varsayılan";
+                updateDropdownUI();
+                updateListUI();
+                renderActiveProjectMarkers();
+            }
+        });
+
+        function loginWithGoogle() {
+            auth.signInWithPopup(provider).catch(err => alert("Giriş başarısız: " + err.message));
+        }
+
+        function logout() {
+            auth.signOut();
+            toggleDrawer(); // Çıkış yapınca menüyü kapat
+        }
+
+        // --- DİĞER FONKSİYONLAR (Harita, UI, Hesaplamalar) ---
         function hideSplashScreen() {
             let splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
@@ -421,15 +416,11 @@
             setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
 
-        // --- SOL ÇEKMECE YÖNETİMİ ---
         function toggleDrawer() {
-            let drawer = document.getElementById('side-drawer');
-            let overlay = document.getElementById('drawer-overlay');
-            drawer.classList.toggle('show');
-            overlay.classList.toggle('show');
+            document.getElementById('side-drawer').classList.toggle('show');
+            document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
-        // --- HARİTA VE ALTLIK ---
         var map = L.map('map', { zoomControl: false }).setView([39.92, 32.85], 2); 
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
         var streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
@@ -443,14 +434,10 @@
             isSatellite = !isSatellite;
         }
 
-        // --- VERİ YAPISI ---
         var userMarker = null, firstLocationFound = false;
         var currentLat = null, currentLon = null, currentX = null, currentY = null, currentDOM = null;
-        var pointMarkers = {}, pointIdCounter = 0;
+        var pointMarkers = {}, pointIdCounter = Date.now(); // Rastgele ID için
         
-        var projectsData = { "Varsayılan": { points: [], autoCounter: 1 } };
-        var activeProject = "Varsayılan";
-
         function calculateITRF(lat, lon) {
             let dom = Math.round(lon / 3) * 3;
             let projString = `+proj=tmerc +lat_0=0 +lon_0=${dom} +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs`;
@@ -458,7 +445,6 @@
             return { y: result[0], x: result[1], dom: dom };
         }
 
-        // --- GPS SERVİSİ ---
         if ('geolocation' in navigator) {
             navigator.geolocation.watchPosition(function(position) {
                 currentLat = position.coords.latitude; currentLon = position.coords.longitude;
@@ -466,10 +452,8 @@
                 
                 document.getElementById('live-lat').innerText = currentLat.toFixed(5);
                 document.getElementById('live-lon').innerText = currentLon.toFixed(5);
-                
                 document.getElementById('accuracy').innerText = "±" + acc + "m";
-                let dot = document.getElementById('gps-dot');
-                dot.classList.remove('blink'); dot.classList.add('connected');
+                document.getElementById('gps-dot').className = "gps-dot connected";
 
                 let itrf = calculateITRF(currentLat, currentLon);
                 currentY = itrf.y; currentX = itrf.x; currentDOM = itrf.dom;
@@ -480,20 +464,15 @@
                 var newLoc = new L.LatLng(currentLat, currentLon);
                 if (userMarker) { userMarker.setLatLng(newLoc); } 
                 else { userMarker = L.circleMarker(newLoc, { color: '#00e5ff', fillColor: '#00e5ff', fillOpacity: 0.8, radius: 6, weight: 2, zIndexOffset: 1000 }).addTo(map); }
-
                 if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
             }, function(e) { 
                 document.getElementById('accuracy').innerText = "GPS Kapalı"; 
-                document.getElementById('gps-dot').classList.remove('connected');
-                document.getElementById('gps-dot').classList.add('blink');
+                document.getElementById('gps-dot').className = "gps-dot blink";
             }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
-        function goToMyLocation() {
-            if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); }
-        }
+        function goToMyLocation() { if (currentLat) { map.setView([currentLat, currentLon], 19); } else { alert("GPS Bekleniyor..."); } }
 
-        // --- TAB GEÇİŞLERİ (3 Buton) ---
         function switchTab(tabId) {
             document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
             if(tabId !== 'tab-add') document.getElementById(tabId).classList.add('active');
@@ -510,7 +489,7 @@
             }
 
             if (tabId === 'tab-add') {
-                document.getElementById('tab-map').classList.add('active'); // Harita arkada seçili görünsün
+                document.getElementById('tab-map').classList.add('active'); 
                 document.getElementById('save-panel').classList.add('show');
                 document.getElementById('active-project-label-add').innerText = activeProject;
                 document.getElementById('point-name').value = projectsData[activeProject].autoCounter.toString();
@@ -518,30 +497,16 @@
             } 
             else if (tabId === 'tab-records') {
                 document.getElementById('modal-records').classList.add('show');
-                updateDropdownUI();
-                updateListUI();
+                updateDropdownUI(); updateListUI();
             }
         }
 
-        // --- BİRLEŞTİRİLMİŞ KAYIT YÖNETİCİSİ ---
         function renderActiveProjectMarkers() {
             for (let id in pointMarkers) { map.removeLayer(pointMarkers[id]); }
             pointMarkers = {};
-
+            if(!projectsData[activeProject]) return; // Güvenlik kontrolü
             projectsData[activeProject].points.forEach(p => {
-                let popupContent = `
-                    <div class="marker-popup">
-                        <h3>${p.name}</h3>
-                        <p><i class="fas fa-folder-open"></i> ${activeProject}</p>
-                        <hr>
-                        <div class="coords">
-                            Y: ${p.y_saga.toFixed(3)}<br>
-                            X: ${p.x_yukari.toFixed(3)}<br>
-                            E: ${p.lat.toFixed(6)}<br>
-                            B: ${p.lon.toFixed(6)}
-                        </div>
-                    </div>
-                `;
+                let popupContent = `<div class="marker-popup"><h3>${p.name}</h3><p><i class="fas fa-folder-open"></i> ${activeProject}</p><hr><div class="coords">Y: ${p.y_saga.toFixed(3)}<br>X: ${p.x_yukari.toFixed(3)}<br>E: ${p.lat.toFixed(6)}<br>B: ${p.lon.toFixed(6)}</div></div>`;
                 let marker = L.marker([p.lat, p.lon]).addTo(map).bindPopup(popupContent);
                 pointMarkers[p.id] = marker;
             });
@@ -552,29 +517,26 @@
             if(!name || name.trim() === "") return;
             name = name.trim();
             if(projectsData[name]) return alert("Bu isimde bir klasör zaten var.");
-            
             projectsData[name] = { points: [], autoCounter: 1 };
-            changeProject(name); // Yeni açılanı otomatik seç
+            changeProject(name);
+            syncToFirebase();
         }
 
         function changeProject(name) {
             activeProject = name;
-            updateDropdownUI();
-            updateListUI();
-            renderActiveProjectMarkers();
+            updateDropdownUI(); updateListUI(); renderActiveProjectMarkers();
         }
 
         function deleteProject() {
             if(activeProject === "Varsayılan") return alert("Varsayılan klasör silinemez!");
             if(!confirm(`"${activeProject}" klasörünü SİLMEK istediğinize emin misiniz?`)) return;
-            
             delete projectsData[activeProject];
             changeProject("Varsayılan");
+            syncToFirebase();
         }
 
         function updateDropdownUI() {
-            let select = document.getElementById("project-select");
-            let html = "";
+            let select = document.getElementById("project-select"); let html = "";
             for (let projName in projectsData) {
                 let selected = projName === activeProject ? "selected" : "";
                 html += `<option value="${projName}" ${selected}>${projName} (${projectsData[projName].points.length})</option>`;
@@ -582,24 +544,24 @@
             select.innerHTML = html;
         }
 
-        // --- NOKTA YÖNETİMİ ---
         function saveCurrentLocation() {
             if (!currentLat) { alert("GPS bekleniyor..."); return; }
-            var nameInput = document.getElementById("point-name");
-            var ptName = nameInput.value.trim();
+            var nameInput = document.getElementById("point-name"); var ptName = nameInput.value.trim();
             if (!ptName) { alert("Nokta adı girin!"); return; }
-            var id = pointIdCounter++;
+            
+            var id = Date.now(); // Benzersiz ID
             projectsData[activeProject].points.push({ id: id, name: ptName, lat: currentLat, lon: currentLon, y_saga: currentY, x_yukari: currentX, dom: currentDOM });
             if(ptName === projectsData[activeProject].autoCounter.toString()) { projectsData[activeProject].autoCounter++; }
+            
             renderActiveProjectMarkers(); switchTab('tab-map');
+            syncToFirebase();
         }
 
         function deletePoint(id) {
             if(confirm("Noktayı silmek istediğinize emin misiniz?")) { 
                 projectsData[activeProject].points = projectsData[activeProject].points.filter(p => p.id !== id); 
-                renderActiveProjectMarkers(); 
-                updateDropdownUI(); // Sayı güncellensin
-                updateListUI(); 
+                renderActiveProjectMarkers(); updateDropdownUI(); updateListUI(); 
+                syncToFirebase();
             }
         }
 
@@ -608,26 +570,10 @@
         function updateListUI() {
             var listDiv = document.getElementById("points-list"); 
             let points = projectsData[activeProject].points;
-            
-            if(points.length === 0) { 
-                listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu klasörde kayıtlı nokta yok.</p></div>'; 
-                return; 
-            }
-            
+            if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu klasörde kayıtlı nokta yok.</p></div>'; return; }
             let html = "";
             [...points].reverse().forEach(p => {
-                html += `
-                    <div class="card-item">
-                        <div class="card-info">
-                            <h4>${p.name}</h4>
-                            <p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} &nbsp; X: ${p.x_yukari.toFixed(3)}</p>
-                            <p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button>
-                            <button class="btn-del" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>`;
+                html += `<div class="card-item"><div class="card-info"><h4>${p.name}</h4><p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} &nbsp; X: ${p.x_yukari.toFixed(3)}</p><p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p></div><div class="card-actions"><button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button><button class="btn-del" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button></div></div>`;
             });
             listDiv.innerHTML = html;
         }
@@ -643,7 +589,6 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        renderActiveProjectMarkers();
     </script>
 </body>
 </html>
