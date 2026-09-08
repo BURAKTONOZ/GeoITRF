@@ -1,0 +1,15 @@
+{
+  "name": "GeoITRF Pro Terminal",
+  "short_name": "GeoITRF",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#00e5ff",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
