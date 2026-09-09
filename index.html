@@ -3,24 +3,45 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- Ekranın köşelerine tam oturması için viewport-fit=cover -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>GeoITRF - Pro Mobil Terminal</title>
-
-    <!-- SEO Ayarları -->
-    <meta name="description" content="Sahada enlem, boylam ve ITRF96 koordinat ölçümlerini kolaylaştıran ücretsiz, mobil uyumlu haritacılık terminali. Harita Mühendisi Burak Tonoz tarafından geliştirilmiştir.">
-    <meta name="keywords" content="ITRF96 koordinat dönüştürücü, WGS84 ölçüm, ücretsiz haritacılık programı, arazide gps koordinat alma, topoğraf, aplikasyon, numarataj, harita mühendisi, Burak Tonoz, mobil nivo, rtk alternatif">
+    
+    <!-- SEO BAŞLIĞI VE AÇIKLAMALARI -->
+    <title>GeoITRF | Ücretsiz ITRF ve ITRF96 Koordinat Ölçüm Uygulaması</title>
+    <meta name="description" content="Arazide WGS84 enlem boylam verilerini anında ITRF ve ITRF96 sistemine dönüştüren, harita, orman ve elektrik mühendislerine özel ücretsiz koordinat ölçüm uygulaması.">
+    <meta name="keywords" content="ITRF96 dönüştürücü, ITRF çevirici, WGS84 koordinat ölçüm uygulaması, arazide gps koordinat alma, topoğraf, orman kadastrosu, harita mühendisi, Burak Tonoz, ücretsiz koordinat programı">
     <meta name="author" content="Burak Tonoz">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://buraktonoz.com/GeoITRF/">
     
-    <!-- Sosyal Medya (Open Graph) Etiketleri -->
-    <meta property="og:title" content="GeoITRF - Ücretsiz Koordinat Ölçüm Terminali">
-    <meta property="og:description" content="Sahada cep telefonuyla hassas WGS84 ve ITRF96 koordinatları alın, projelerinizi yönetin ve anında TXT olarak indirin.">
+    <!-- SOSYAL MEDYA (Open Graph) -->
+    <meta property="og:title" content="GeoITRF | ITRF ve ITRF96 Koordinat Ölçüm Uygulaması">
+    <meta property="og:description" content="Sahada cep telefonuyla hassas WGS84 ve ITRF96 koordinatları alın, projelerinizi yönetin ve anında indirin.">
     <meta property="og:image" content="https://buraktonoz.com/GeoITRF/logo.png">
     <meta property="og:url" content="https://buraktonoz.com/GeoITRF/">
     <meta property="og:type" content="website">
 
-    <!-- PWA (Mobil Uygulama) Ayarları -->
+    <!-- JSON-LD (GOOGLE MÜHENDİSLİK YAZILIMI ŞEMASI) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "GeoITRF",
+      "operatingSystem": "Web, Android, iOS",
+      "applicationCategory": "UtilitiesApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "TRY"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Burak Tonoz"
+      },
+      "description": "Arazide WGS84 enlem boylam verilerini ITRF ve ITRF96 sistemine dönüştüren ücretsiz koordinat ölçüm uygulaması."
+    }
+    </script>
+
+    <!-- PWA AYARLARI -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#070b14">
     <link rel="apple-touch-icon" href="logo.png">
@@ -53,6 +74,9 @@
             font-family: 'Inter', sans-serif; overflow: hidden; background-color: #000;
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; touch-action: none; color: #fff;
         }
+
+        /* GİZLİ SEO METİNLERİ (Sadece Google Botları Okur) */
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
 
         /* HARİTA EKRANIN TÜM KÖŞELERİNE YAPIŞTIRILDI */
         #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 1; }
@@ -131,7 +155,7 @@
         .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 400; color: #fff; letter-spacing: 0.5px;}
         .c-val.glow { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 
-        /* Sağ Kontroller */
+        /* Sağ Kontroller & Kahve Butonu */
         .right-controls { position: absolute; right: 15px; top: 55%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px;}
         .map-btn { 
             width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); 
@@ -139,6 +163,8 @@
             display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor:pointer; 
         }
         .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
+        .coffee-btn { color: #f59e0b; margin-top: 5px; text-decoration: none;}
+        .coffee-btn:active { background: rgba(245, 158, 11, 0.2); }
 
         /* ÇEKMECE VE OVERLAY */
         .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1200; opacity: 0; pointer-events: none; transition: 0.4s ease; }
@@ -223,10 +249,16 @@
 </head>
 <body>
 
+    <!-- GİZLİ SEO METİNLERİ (Sadece Arama Motorları İçin) -->
+    <div class="sr-only">
+        <h1>GeoITRF - Ücretsiz ITRF ve ITRF96 Koordinat Ölçüm Uygulaması</h1>
+        <p>Harita, orman ve elektrik mühendisleri için arazide WGS84 enlem boylam dönüşümü yapan profesyonel araç. Sahada pratik nokta kaydetme, ITRF96 dilim orta meridyeni bulma ve koordinat ölçüm işlemlerini tamamen ücretsiz yapın.</p>
+    </div>
+
     <!-- GİRİŞ EKRANI -->
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
-            <h1 class="splash-title">GeoITRF</h1>
+            <h2 class="splash-title">GeoITRF</h2>
             <div class="splash-subtitle">PRO TERMINAL</div>
         </div>
         <div class="globe-container">
@@ -265,23 +297,20 @@
             <div class="drawer-section">
                 <h3>Sistem Bilgisi & Hakkında</h3>
                 <div class="drawer-card">
-                    <p class="info-text"><b>GeoITRF</b>, sahada çalışan harita mühendisleri, topoğraflar ve numarataj ekipleri için tasarlanmış ücretsiz bir web terminalidir.</p>
-                    <p class="info-text">Ankara Büyükşehir Belediyesi Fen İşleri Dairesi Başkanlığı Numarataj Şube Müdürlüğü altyapı ve saha tecrübeleriyle, Harita Mühendisi <b>Burak Tonoz</b> tarafından meslektaşlarının kullanımına sunulmuştur.</p>
-                    <p class="info-text" style="margin-top:10px;">Sistem: <b>ITRF96 / WGS84</b></p>
+                    <p class="info-text"><b>GeoITRF;</b> arazide çalışan harita, orman ve elektrik mühendislerinin pratik koordinat dönüşümü ve nokta kayıt ihtiyacını karşılamak için Harita Mühendisi <b>Burak Tonoz</b> tarafından geliştirilmiş ücretsiz bir uygulamadır.</p>
+                    <p class="info-text">Bu araç sahada işinizi kolaylaştırdıysa ve uykusuz gecelerde yazılan bu kodların yeni özelliklerle gelişmesini isterseniz, sağdaki butondan bir kahve ısmarlayabilirsiniz! ☕ Unutmayın, mühendisler kahveyle çalışır.</p>
+                    <p class="info-text" style="margin-top:10px;">Sistem: <b>ITRF / ITRF96 / WGS84</b></p>
                     <p class="info-text" style="margin-bottom:0;">Projeksiyon: <b>3° Dilim (Oto DOM)</b></p>
                 </div>
             </div>
             
-            <a href="https://buymeacoffee.com/buraktonoz" target="_blank" style="text-decoration:none; display:block; text-align:center; padding:12px; background:rgba(38, 176, 161, 0.15); border:1px solid rgba(38,176,161,0.4); color:#26B0A1; border-radius:10px; font-size:0.85rem; font-weight:600;">
-                <i class="fas fa-mug-hot"></i> Bana Kahve Ismarla
-            </a>
         </div>
     </div>
 
     <!-- HUD (ÜST BAR) -->
     <div class="hud-container" id="hud-bar">
         <div class="hud-top">
-            <i class="fas fa-bars menu-btn" onclick="toggleDrawer()"></i>
+            <i class="fas fa-bars menu-btn" aria-label="Menüyü Aç" onclick="toggleDrawer()"></i>
             <div class="hud-title">GeoITRF <span>PRO</span></div>
             <div class="gps-indicator">
                 <span id="accuracy">Bekleniyor</span>
@@ -302,11 +331,12 @@
         </div>
     </div>
 
-    <!-- SAĞ KONTROLLER -->
+    <!-- SAĞ KONTROLLER & KAHVE BUTONU -->
     <div class="right-controls" id="right-controls">
-        <button class="map-btn" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
-        <button class="map-btn" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
-        <button class="map-btn" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
+        <button class="map-btn" aria-label="Mevcut Konuma Git" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
+        <button class="map-btn" aria-label="Haritayı Yakınlaştır" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
+        <button class="map-btn" aria-label="Haritayı Uzaklaştır" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
+        <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="map-btn coffee-btn" aria-label="Geliştiriciye Kahve Ismarla"><i class="fas fa-coffee"></i></a>
     </div>
 
     <!-- HARİTA KONTEYNERİ -->
@@ -319,8 +349,8 @@
             <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted);" onclick="closeModals()"></i>
         </div>
         <div class="save-input-group">
-            <input type="text" id="point-name" placeholder="Nokta Adı (Örn: P1)">
-            <button onclick="saveCurrentLocation()"><i class="fas fa-check"></i></button>
+            <input type="text" id="point-name" aria-label="Nokta Adı" placeholder="Nokta Adı (Örn: P1)">
+            <button aria-label="Noktayı Kaydet" onclick="saveCurrentLocation()"><i class="fas fa-check"></i></button>
         </div>
     </div>
 
@@ -331,11 +361,11 @@
             <i class="fas fa-times" style="color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="closeModals()"></i>
         </div>
         <div class="project-selector">
-            <select id="project-select" onchange="changeProject(this.value)">
+            <select id="project-select" aria-label="Klasör Seçin" onchange="changeProject(this.value)">
                 <option value="Varsayılan">Varsayılan</option>
             </select>
-            <button onclick="createNewProject()" title="Yeni Klasör"><i class="fas fa-folder-plus"></i></button>
-            <button onclick="deleteProject()" title="Klasörü Sil" style="color:var(--danger); border-color:rgba(239,68,68,0.2);"><i class="fas fa-trash"></i></button>
+            <button onclick="createNewProject()" aria-label="Yeni Klasör Ekle" title="Yeni Klasör"><i class="fas fa-folder-plus"></i></button>
+            <button onclick="deleteProject()" aria-label="Klasörü Sil" title="Klasörü Sil" style="color:var(--danger); border-color:rgba(239,68,68,0.2);"><i class="fas fa-trash"></i></button>
         </div>
         <div class="modal-body" id="points-list"></div>
         <div class="export-bar">
@@ -414,11 +444,11 @@
     <!-- 5 BUTONLU DOCK MENÜ -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
-            <div class="dock-item active" id="tab-map" onclick="switchTab('tab-map')" title="Harita"><i class="fas fa-map"></i></div>
-            <div class="dock-item" id="tab-layer" onclick="toggleMapLayer()" title="Uydu/Sokak"><i class="fas fa-layer-group"></i></div>
-            <div class="dock-item main-add" id="tab-add" onclick="switchTab('tab-add')" title="Nokta Ekle"><i class="fas fa-plus"></i></div>
-            <div class="dock-item" id="tab-records" onclick="switchTab('tab-records')" title="Kayıtlar"><i class="fas fa-folder-open"></i></div>
-            <div class="dock-item" id="tab-profile" onclick="switchTab('tab-profile')" title="Profil"><i class="fas fa-user"></i></div>
+            <div class="dock-item active" id="tab-map" aria-label="Harita Sekmesi" onclick="switchTab('tab-map')" title="Harita"><i class="fas fa-map"></i></div>
+            <div class="dock-item" id="tab-layer" aria-label="Harita Altlığı Değiştir" onclick="toggleMapLayer()" title="Uydu/Sokak"><i class="fas fa-layer-group"></i></div>
+            <div class="dock-item main-add" id="tab-add" aria-label="Nokta Kaydet Sekmesi" onclick="switchTab('tab-add')" title="Nokta Ekle"><i class="fas fa-plus"></i></div>
+            <div class="dock-item" id="tab-records" aria-label="Kayıtlar Sekmesi" onclick="switchTab('tab-records')" title="Kayıtlar"><i class="fas fa-folder-open"></i></div>
+            <div class="dock-item" id="tab-profile" aria-label="Profil Sekmesi" onclick="switchTab('tab-profile')" title="Profil"><i class="fas fa-user"></i></div>
         </div>
     </div>
 
@@ -499,7 +529,7 @@
             document.getElementById('stat-total-folders').innerText = folders;
         }
 
-        // AKILLI PAYLAŞIM VE İNDİRME FONKSİYONLARI (Mobile Uyumlu)
+        // AKILLI PAYLAŞIM VE İNDİRME FONKSİYONLARI
         function downloadOrShareFile(content, fileName) {
             let file = new File([content], fileName, { type: "text/plain" });
 
@@ -507,7 +537,7 @@
                 navigator.share({
                     files: [file],
                     title: fileName,
-                    text: 'GeoITRF Ölçüm Verileri'
+                    text: 'GeoITRF Koordinat Ölçüm Verileri'
                 }).catch(err => console.log("Paylaşım iptal edildi."));
             } else {
                 let blob = new Blob([content], { type: "text/plain;charset=utf-8" });
@@ -525,7 +555,7 @@
             if(points.length === 0) return alert("Paylaşılacak nokta yok!");
             
             let txtContent = "";
-            points.forEach(p => { txtContent += `${p.name} ${p.y_saga.toFixed(3)} ${p.x_yukari.toFixed(3)}\n`; });
+            points.forEach(p => { txtContent += `${p.name} \t ${p.y_saga.toFixed(3)} \t ${p.x_yukari.toFixed(3)}\n`; });
             let fileName = `${activeProject.replace(/\s+/g, '_')}_olcumleri.txt`;
 
             downloadOrShareFile(txtContent, fileName);
@@ -716,7 +746,7 @@
             if(points.length === 0) { listDiv.innerHTML = '<div style="text-align:center; padding: 60px 10px;"><i class="fas fa-map-marker-alt" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i><p style="color:var(--text-muted);">Bu klasörde kayıtlı nokta yok.</p></div>'; return; }
             let html = "";
             [...points].reverse().forEach(p => {
-                html += `<div class="card-item"><div class="card-info"><h4>${p.name}</h4><p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} &nbsp; X: ${p.x_yukari.toFixed(3)}</p><p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p></div><div class="card-actions"><button class="btn-go" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button><button class="btn-del" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button></div></div>`;
+                html += `<div class="card-item"><div class="card-info"><h4>${p.name}</h4><p class="itrf-coords">Y: ${p.y_saga.toFixed(3)} &nbsp; X: ${p.x_yukari.toFixed(3)}</p><p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}</p></div><div class="card-actions"><button class="btn-go" aria-label="Noktaya Git" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button><button class="btn-del" aria-label="Noktayı Sil" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button></div></div>`;
             });
             listDiv.innerHTML = html;
         }
