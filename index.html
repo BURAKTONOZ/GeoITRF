@@ -163,8 +163,27 @@
             display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor:pointer; 
         }
         .map-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
-        .coffee-btn { color: #f59e0b; margin-top: 5px; text-decoration: none;}
-        .coffee-btn:active { background: rgba(245, 158, 11, 0.2); }
+        .coffee-btn { color: #f59e0b; margin-top: 5px; outline: none; border: 1px solid rgba(245, 158, 11, 0.4);}
+        .coffee-btn:active { background: rgba(245, 158, 11, 0.2); transform: scale(0.9);}
+
+        /* KAHVE ANİMASYON (TOAST) MODALI */
+        .coffee-toast {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(11, 17, 32, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 20px;
+            padding: 30px; text-align: center; z-index: 9999;
+            opacity: 0; pointer-events: none;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+        .coffee-toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: all;}
+        .coffee-toast-icon {
+            font-size: 3.5rem; color: #f59e0b; margin-bottom: 15px;
+            animation: floatCoffee 2s ease-in-out infinite; text-shadow: 0 10px 20px rgba(245, 158, 11, 0.4);
+        }
+        @keyframes floatCoffee { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        .coffee-toast-text { color: #fff; font-size: 1.1rem; font-weight: 500; line-height: 1.5; font-family: 'Inter';}
+        .coffee-toast-text span { color: #f59e0b; font-weight: 700; }
 
         /* ÇEKMECE VE OVERLAY */
         .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1200; opacity: 0; pointer-events: none; transition: 0.4s ease; }
@@ -255,6 +274,12 @@
         <p>Harita, orman ve elektrik mühendisleri için arazide WGS84 enlem boylam dönüşümü yapan profesyonel araç. Sahada pratik nokta kaydetme, ITRF96 dilim orta meridyeni bulma ve koordinat ölçüm işlemlerini tamamen ücretsiz yapın.</p>
     </div>
 
+    <!-- KAHVE ANİMASYON EKRANI (TOAST) -->
+    <div id="coffee-toast" class="coffee-toast">
+        <div class="coffee-toast-icon"><i class="fas fa-coffee"></i></div>
+        <div class="coffee-toast-text">Unutma, <span>mühendisler</span><br>kahveyle çalışır! ☕</div>
+    </div>
+
     <!-- GİRİŞ EKRANI -->
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
@@ -271,7 +296,7 @@
         <div class="splash-footer">
             <h3>CREAT BY TONOZ</h3>
         </div>
-        <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="bmc-splash-btn" onclick="event.stopPropagation()">
+        <a href="#" class="bmc-splash-btn" onclick="event.stopPropagation(); showCoffeeAnimation();">
             <i class="fas fa-mug-hot"></i> Kahve Ismarla
         </a>
     </div>
@@ -336,7 +361,8 @@
         <button class="map-btn" aria-label="Mevcut Konuma Git" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
         <button class="map-btn" aria-label="Haritayı Yakınlaştır" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
         <button class="map-btn" aria-label="Haritayı Uzaklaştır" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
-        <a href="https://buymeacoffee.com/buraktonoz" target="_blank" class="map-btn coffee-btn" aria-label="Geliştiriciye Kahve Ismarla"><i class="fas fa-coffee"></i></a>
+        <!-- Kahve Butonu Artık Animasyon Fonksiyonunu Çağırıyor -->
+        <button class="map-btn coffee-btn" aria-label="Geliştiriciye Kahve Ismarla" onclick="showCoffeeAnimation()"><i class="fas fa-coffee"></i></button>
     </div>
 
     <!-- HARİTA KONTEYNERİ -->
@@ -483,6 +509,20 @@
         }
         function openInstallModal() { toggleDrawer(); switchTab('tab-install'); }
 
+        // --- KAHVE ANİMASYON FONKSİYONU ---
+        function showCoffeeAnimation() {
+            const toast = document.getElementById('coffee-toast');
+            toast.classList.add('show');
+            
+            // 2 saniye sonra mesajı kapat ve siteye yönlendir
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    window.open('https://buymeacoffee.com/buraktonoz', '_blank');
+                }, 400); // Kapanma animasyonunun (0.4s) bitmesini bekle
+            }, 2000);
+        }
+
         function syncToFirebase() {
             if (auth.currentUser) {
                 db.collection('users').doc(auth.currentUser.uid).set({ projectsData: projectsData })
@@ -529,7 +569,6 @@
             document.getElementById('stat-total-folders').innerText = folders;
         }
 
-        // AKILLI PAYLAŞIM VE İNDİRME FONKSİYONLARI
         function downloadOrShareFile(content, fileName) {
             let file = new File([content], fileName, { type: "text/plain" });
 
