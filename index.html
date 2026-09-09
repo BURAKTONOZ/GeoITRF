@@ -94,15 +94,6 @@
             width: 300px; height: 300px; background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%); z-index: 0;
         }
         
-        .bmc-splash-btn {
-            position: absolute; bottom: calc(env(safe-area-inset-bottom) + 30px); right: 20px; z-index: 10000;
-            background: rgba(38, 176, 161, 0.15); border: 1px solid rgba(38, 176, 161, 0.4);
-            color: #26B0A1; padding: 10px 18px; border-radius: 30px;
-            font-size: 0.85rem; font-weight: 600; text-decoration: none;
-            display: flex; align-items: center; gap: 8px; transition: 0.3s;
-        }
-        .bmc-splash-btn:active { transform: scale(0.95); background: #26B0A1; color: #fff; }
-
         .splash-header { position: absolute; top: calc(env(safe-area-inset-top) + 60px); text-align: center; z-index: 1;}
         .splash-title { color: var(--accent); font-size: 2.8rem; font-weight: 700; margin: 0; letter-spacing: 3px; text-shadow: 0 0 20px var(--accent-glow); animation: fadeInDown 1s ease-out; }
         .splash-subtitle { color: #fff; font-size: 0.8rem; opacity: 0.6; letter-spacing: 12px; margin-top: 8px; font-weight: 300;}
@@ -166,32 +157,33 @@
         .coffee-btn { color: #f59e0b; margin-top: 5px; outline: none; border: 1px solid rgba(245, 158, 11, 0.4);}
         .coffee-btn:active { background: rgba(245, 158, 11, 0.2); transform: scale(0.9);}
 
-        /* YENİ: KAHVE ANİMASYON (TOAST) MODALI */
+        /* MOBİL UYUMLU KAHVE ANİMASYON (TOAST) MODALI */
         .coffee-toast {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
             background: rgba(11, 17, 32, 0.95); backdrop-filter: blur(20px);
             border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 20px;
-            padding: 40px 30px 30px; text-align: center; z-index: 9999;
-            width: 85%; max-width: 320px;
+            padding: 35px 20px 25px; text-align: center; z-index: 9999;
+            width: 85%; max-width: 300px; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(245, 158, 11, 0.2);
         }
         .coffee-toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: all;}
         .coffee-toast-icon {
-            font-size: 3.5rem; color: #f59e0b; margin-bottom: 15px;
+            font-size: 3rem; color: #f59e0b; margin-bottom: 12px;
             animation: floatCoffee 2s ease-in-out infinite; text-shadow: 0 10px 20px rgba(245, 158, 11, 0.4);
         }
         @keyframes floatCoffee { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-        .coffee-toast-text { color: #fff; font-size: 1.1rem; font-weight: 500; line-height: 1.5; font-family: 'Inter';}
+        .coffee-toast-text { color: #fff; font-size: 1rem; font-weight: 500; line-height: 1.5; font-family: 'Inter';}
         .coffee-toast-text span { color: #f59e0b; font-weight: 700; }
         
         .buy-me-coffee-btn {
-            display: inline-flex; justify-content: center; align-items: center; gap: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
             background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;
             border: none; padding: 12px; border-radius: 12px; width: 100%;
             font-weight: 600; font-family: 'Inter'; font-size: 0.95rem; text-decoration: none;
-            margin-top: 20px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); transition: 0.2s;
+            margin-top: 18px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); transition: 0.2s;
         }
         .buy-me-coffee-btn:active { transform: scale(0.95); }
 
@@ -241,13 +233,13 @@
         .export-btn:active { transform:scale(0.95); }
 
         /* Yüzer Kayıt Paneli */
-        .floating-save-panel { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 90px); left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; background: var(--surface); border: 1px solid var(--border-light); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 340px; opacity: 0; pointer-events: none; transition: 0.4s; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
+        .floating-save-panel { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 90px); left: 50%; transform: translateX(-50%) translateY(20px); z-index: 1050; background: var(--surface); border: 1px solid var(--border-light); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 340px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: 0.4s; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
         .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
         .save-header { color: var(--text-muted); font-size: 0.8rem; display: flex; justify-content: space-between;}
         .save-header b { color: #fff; }
         .save-input-group { display: flex; gap: 10px; }
-        .save-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; outline: none; font-family: 'Inter';}
-        .save-input-group button { background: var(--accent); color: #000; border: none; width: 50px; border-radius: 12px; font-size: 1.2rem; cursor:pointer;}
+        .save-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; outline: none; font-family: 'Inter'; width: 100%;}
+        .save-input-group button { background: var(--accent); color: #000; border: none; width: 50px; border-radius: 12px; font-size: 1.2rem; cursor:pointer; flex-shrink: 0;}
 
         /* KOMPAKT 5'Lİ DOCK */
         .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 20px); left: 50%; transform: translateX(-50%); z-index: 1100; width: max-content; }
@@ -284,7 +276,7 @@
         <p>Harita, orman ve elektrik mühendisleri için arazide WGS84 enlem boylam dönüşümü yapan profesyonel araç. Sahada pratik nokta kaydetme, ITRF96 dilim orta meridyeni bulma ve koordinat ölçüm işlemlerini tamamen ücretsiz yapın.</p>
     </div>
 
-    <!-- YENİ ETKİLEŞİMLİ KAHVE ANİMASYON EKRANI (TOAST) -->
+    <!-- MOBİL UYUMLU KAHVE ANİMASYON EKRANI (TOAST) -->
     <div id="coffee-toast" class="coffee-toast">
         <i class="fas fa-times" style="position:absolute; top:15px; right:15px; font-size:1.2rem; color:var(--text-muted); cursor:pointer; transition:0.2s;" onclick="closeCoffeeToast()" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'"></i>
         <div class="coffee-toast-icon"><i class="fas fa-coffee"></i></div>
@@ -294,7 +286,7 @@
         </a>
     </div>
 
-    <!-- GİRİŞ EKRANI -->
+    <!-- GİRİŞ EKRANI (Kahve butonu kaldırıldı) -->
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
             <h2 class="splash-title">GeoITRF</h2>
@@ -310,9 +302,6 @@
         <div class="splash-footer">
             <h3>CREAT BY TONOZ</h3>
         </div>
-        <a href="#" class="bmc-splash-btn" onclick="event.stopPropagation(); showCoffeeAnimation();">
-            <i class="fas fa-mug-hot"></i> Kahve Ismarla
-        </a>
     </div>
 
     <!-- GİZLİ ÇEKMECE & OVERLAY -->
@@ -375,7 +364,7 @@
         <button class="map-btn" aria-label="Mevcut Konuma Git" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
         <button class="map-btn" aria-label="Haritayı Yakınlaştır" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
         <button class="map-btn" aria-label="Haritayı Uzaklaştır" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
-        <!-- Kahve Butonu Artık Modal Açıyor -->
+        <!-- Kahve Butonu Modal Açıyor -->
         <button class="map-btn coffee-btn" aria-label="Geliştiriciye Kahve Ismarla" onclick="showCoffeeAnimation()"><i class="fas fa-coffee"></i></button>
     </div>
 
