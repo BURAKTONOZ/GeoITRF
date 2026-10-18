@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | GeoITRF PRO v2.0 -->
+<!-- CREAT BY TONOZ | GeoITRF PRO v2.1 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -63,11 +63,11 @@
             --accent-glow: rgba(0, 229, 255, 0.4);
             --accent-secondary: #3b82f6;
             --bg-dark: #070b14; 
-            --surface: rgba(11, 17, 32, 0.88); 
+            --surface: rgba(11, 17, 32, 0.90); 
             --surface-solid: #0b1120;
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --input-bg: rgba(0, 0, 0, 0.5);
-            --border-light: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(0, 0, 0, 0.55);
+            --border-light: rgba(255, 255, 255, 0.14);
             --text-main: #ffffff;
             --text-muted: #8ba3cb;
             --danger: #ef4444;
@@ -81,10 +81,10 @@
             --accent-glow: rgba(2, 132, 199, 0.35);
             --accent-secondary: #2563eb;
             --bg-dark: #f1f5f9;
-            --surface: rgba(255, 255, 255, 0.94);
+            --surface: rgba(255, 255, 255, 0.95);
             --surface-solid: #ffffff;
             --card-bg: rgba(15, 23, 42, 0.05);
-            --input-bg: #ffffff;
+            --input-bg: #f8fafc;
             --border-light: rgba(15, 23, 42, 0.18);
             --text-main: #0f172a;
             --text-muted: #475569;
@@ -93,46 +93,91 @@
             --warning: #d97706;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Inter', sans-serif; overflow: hidden; background-color: var(--bg-dark);
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; touch-action: none; color: var(--text-main);
+        /* MOBİL EKRAN KAYMASINI TAMAMEN ENGELLEYEN SABİT KILIF */
+        html, body { 
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            font-family: 'Inter', sans-serif;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            touch-action: none;
+            color: var(--text-main);
+            overscroll-behavior: none;
         }
 
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
 
-        /* HARİTA */
-        #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 1; }
+        /* HARİTA KONTEYNERİ */
+        #map {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
         .leaflet-control-zoom { display: none; }
 
-        /* HARİTA MERKEZ NİŞANGAHI (CROSSHAIR) */
+        /* HARİTA MERKEZ NİŞANGAHI (TAM EKRAN MERKEZİNDE KİLİTLİ) */
         .map-crosshair {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 500; pointer-events: none; display: none;
-            width: 44px; height: 44px; align-items: center; justify-content: center;
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            z-index: 500;
+            pointer-events: none;
+            display: none;
         }
-        .map-crosshair.active { display: flex; }
+        .map-crosshair.active { display: block; }
         .crosshair-ring {
-            width: 30px; height: 30px; border: 2px solid var(--accent); border-radius: 50%;
-            box-shadow: 0 0 12px rgba(0,0,0,0.8), inset 0 0 8px var(--accent-glow);
-            position: relative;
+            position: absolute;
+            top: -16px; left: -16px;
+            width: 32px; height: 32px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.85), inset 0 0 6px var(--accent-glow);
         }
-        .crosshair-ring::before, .crosshair-ring::after {
-            content: ''; position: absolute; background: var(--accent);
+        .crosshair-line-h {
+            position: absolute;
+            top: -1px; left: -24px;
+            width: 48px; height: 2px;
+            background: var(--accent);
             box-shadow: 0 0 4px #000;
         }
-        .crosshair-ring::before { top: 50%; left: -8px; right: -8px; height: 2px; transform: translateY(-50%); }
-        .crosshair-ring::after { left: 50%; top: -8px; bottom: -8px; width: 2px; transform: translateX(-50%); }
+        .crosshair-line-v {
+            position: absolute;
+            left: -1px; top: -24px;
+            width: 2px; height: 48px;
+            background: var(--accent);
+            box-shadow: 0 0 4px #000;
+        }
         .crosshair-dot {
-            position: absolute; width: 4px; height: 4px; background: #ff3b30; border-radius: 50%;
+            position: absolute;
+            top: -3px; left: -3px;
+            width: 6px; height: 6px;
+            background: #ff2d55;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            z-index: 2;
         }
         .crosshair-badge {
-            position: absolute; top: 44px; white-space: nowrap;
-            background: var(--surface); color: var(--accent); border: 1px solid var(--border-light);
-            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 3px 8px;
-            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 600;
+            position: absolute;
+            top: 24px; left: 0;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background: var(--surface);
+            color: var(--accent);
+            border: 1px solid var(--border-light);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            font-weight: 700;
         }
 
         /* Splash Screen */
@@ -140,16 +185,16 @@
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #0a1326 0%, #000000 100%);
             z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            cursor: pointer; transition: opacity 0.7s ease, transform 0.7s ease; overflow: hidden;
+            cursor: pointer; transition: opacity 0.6s ease; overflow: hidden;
         }
         #splash-screen::before {
             content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 300px; height: 300px; background: radial-gradient(circle, rgba(0, 229, 255, 0.4) 0%, rgba(0,0,0,0) 70%); z-index: 0;
         }
-        .splash-header { position: absolute; top: calc(env(safe-area-inset-top) + 60px); text-align: center; z-index: 1;}
-        .splash-title { color: #00e5ff; font-size: 2.8rem; font-weight: 700; margin: 0; letter-spacing: 3px; text-shadow: 0 0 20px rgba(0, 229, 255, 0.4); animation: fadeInDown 1s ease-out; }
-        .splash-subtitle { color: #fff; font-size: 0.8rem; opacity: 0.7; letter-spacing: 8px; margin-top: 8px; font-weight: 400;}
-        .globe-container { position: relative; z-index: 1; width: 220px; height: 220px; perspective: 1000px; display: flex; justify-content: center; align-items: center; margin-top: 30px;}
+        .splash-header { position: absolute; top: calc(env(safe-area-inset-top) + 55px); text-align: center; z-index: 1;}
+        .splash-title { color: #00e5ff; font-size: 2.6rem; font-weight: 700; margin: 0; letter-spacing: 3px; text-shadow: 0 0 20px rgba(0, 229, 255, 0.4); }
+        .splash-subtitle { color: #fff; font-size: 0.78rem; opacity: 0.7; letter-spacing: 7px; margin-top: 8px; font-weight: 400;}
+        .globe-container { position: relative; z-index: 1; width: 210px; height: 210px; perspective: 1000px; display: flex; justify-content: center; align-items: center; margin-top: 20px;}
         .wireframe-globe { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spinGlobe 15s linear infinite; }
         .globe-core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: #00e5ff; border-radius: 50%; filter: blur(35px); opacity: 0.4; }
         .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 50%; box-shadow: 0 0 15px rgba(0, 229, 255, 0.05) inset; }
@@ -157,95 +202,90 @@
         .ring.latitude { border: 1px solid rgba(0, 229, 255, 0.4); }
         .ring:nth-child(6) { transform: rotateX(90deg) translateZ(0); } .ring:nth-child(7) { transform: rotateX(90deg) translateZ(55px) scale(0.866); } .ring:nth-child(8) { transform: rotateX(90deg) translateZ(-55px) scale(0.866); }
         .ring:nth-child(9) { transform: rotateX(90deg) translateZ(88px) scale(0.6); } .ring:nth-child(10) { transform: rotateX(90deg) translateZ(-88px) scale(0.6); }
-        .splash-tap-hint { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 85px); color: #00e5ff; font-size: 0.78rem; letter-spacing: 2px; opacity: 0.8; animation: blinker 2s infinite; z-index: 1; }
-        .splash-footer { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 35px); left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 1; opacity: 0.55;}
-        .splash-footer h3 { margin: 0; color: #fff; font-size: 0.7rem; letter-spacing: 2px; font-weight: 500;}
+        .splash-tap-hint { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 80px); color: #00e5ff; font-size: 0.76rem; letter-spacing: 2px; opacity: 0.85; animation: blinker 2s infinite; z-index: 1; }
+        .splash-footer { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 30px); left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 1; opacity: 0.55;}
+        .splash-footer h3 { margin: 0; color: #fff; font-size: 0.68rem; letter-spacing: 2px; font-weight: 500;}
 
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
         /* HUD Bar (Üst Panel) */
         .hud-container { 
-            position: absolute; 
-            top: calc(env(safe-area-inset-top) + 10px); 
-            left: 12px; right: 12px; z-index: 1000; 
-            display: flex; flex-direction: column; gap: 6px; pointer-events: none; transition: 0.3s ease; 
+            position: fixed; 
+            top: calc(env(safe-area-inset-top) + 8px); 
+            left: 10px; right: 10px; z-index: 1000; 
+            display: flex; flex-direction: column; gap: 5px; pointer-events: none; 
         }
         .hud-top { 
             display: flex; justify-content: space-between; align-items: center; pointer-events: all; 
             background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light); 
-            border-radius: 16px; padding: 8px 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.35); 
+            border-radius: 14px; padding: 7px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.35); 
         }
-        .hud-left-group { display: flex; align-items: center; gap: 10px; }
-        .menu-btn { font-size: 1.15rem; color: var(--text-main); cursor: pointer; padding: 4px; transition: 0.2s;}
-        .menu-btn:active { transform: scale(0.9); color: var(--accent); }
-        .hud-title { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.8px; color: var(--text-main);}
-        .hud-title span { color: var(--accent); font-weight: 500; font-size: 0.72rem; letter-spacing: 1.5px; padding: 2px 6px; border-radius: 6px; background: rgba(0,229,255,0.1);}
-        .hud-right-group { display: flex; align-items: center; gap: 8px; }
-        .gps-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); font-weight: 600; font-family: 'JetBrains Mono', monospace;}
-        .gps-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger);}
+        .hud-left-group { display: flex; align-items: center; gap: 10px; min-width: 0; }
+        .menu-btn { font-size: 1.15rem; color: var(--text-main); cursor: pointer; padding: 4px; }
+        .hud-title { font-size: 0.92rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-main); white-space: nowrap;}
+        .hud-title span { color: var(--accent); font-weight: 600; font-size: 0.68rem; letter-spacing: 1px; padding: 2px 5px; border-radius: 5px; background: rgba(0,229,255,0.12);}
+        .hud-right-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .gps-indicator { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; color: var(--text-muted); font-weight: 600; font-family: 'JetBrains Mono', monospace; white-space: nowrap;}
+        .gps-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); flex-shrink: 0;}
         .gps-dot.connected { background: var(--success); box-shadow: 0 0 10px var(--success); }
         .blink { animation: blinker 1.5s infinite; }
 
-        .hud-coords { display: flex; justify-content: space-between; pointer-events: all; gap: 6px; }
+        .hud-coords { display: grid; grid-template-columns: 1fr 1fr; pointer-events: all; gap: 6px; }
         .coord-box { 
-            flex: 1; background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light); 
-            border-radius: 13px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.28); cursor: pointer; position: relative; transition: 0.2s;
+            min-width: 0; background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light); 
+            border-radius: 12px; padding: 7px 10px; display: flex; flex-direction: column; gap: 1px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.28); cursor: pointer; overflow: hidden;
         }
-        .coord-box:active { transform: scale(0.97); border-color: var(--accent); }
+        .coord-box:active { border-color: var(--accent); }
         .coord-box.right { text-align: right; }
-        .c-header { display: flex; justify-content: space-between; align-items: center; }
+        .c-header { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
         .coord-box.right .c-header { flex-direction: row-reverse; }
-        .c-label { font-size: 0.58rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;}
-        .c-copy-icon { font-size: 0.6rem; color: var(--text-muted); opacity: 0.6; }
-        .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 500; color: var(--text-main); letter-spacing: 0.3px;}
+        .c-label { font-size: 0.56rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .c-copy-icon { font-size: 0.58rem; color: var(--text-muted); opacity: 0.6; flex-shrink: 0; }
+        .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .c-val.glow { color: var(--accent); font-weight: 700; }
 
-        /* Alt Bilgi Çubuğu (Kot, Hız, Semt, Mod) */
+        /* Alt Bilgi Çubuğu (Kot, Hız, Semt) */
         .hud-subbar {
             display: flex; justify-content: space-between; align-items: center; pointer-events: all;
             background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light);
-            border-radius: 11px; padding: 5px 12px; font-size: 0.68rem; color: var(--text-muted);
+            border-radius: 10px; padding: 4px 10px; font-size: 0.65rem; color: var(--text-muted);
             font-family: 'JetBrains Mono', monospace; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
-        .hud-subbar-item { display: flex; align-items: center; gap: 4px; }
+        .hud-subbar-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .hud-subbar-item b { color: var(--text-main); font-weight: 600; }
-        .hud-subbar-item i { color: var(--accent); font-size: 0.65rem; }
+        .hud-subbar-item i { color: var(--accent); font-size: 0.62rem; }
         .dom-selector-pill {
             background: rgba(0, 229, 255, 0.12); color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.3);
-            padding: 2px 7px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.65rem;
+            padding: 2px 6px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.62rem; white-space: nowrap;
         }
 
-        /* Sağ Kontroller */
-        .right-controls { position: absolute; right: 12px; top: 54%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 8px;}
+        /* Sağ & Sol Harita Kontrolleri */
+        .right-controls { position: fixed; right: 10px; top: 53%; transform: translateY(-50%); z-index: 950; display: flex; flex-direction: column; gap: 8px;}
+        .left-controls { position: fixed; left: 10px; top: 53%; transform: translateY(-50%); z-index: 950; display: flex; flex-direction: column; gap: 8px;}
         .map-btn { 
             width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); 
             background: var(--surface); backdrop-filter: blur(12px); color: var(--text-main); font-size: 0.95rem; 
             display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.35); cursor:pointer; 
         }
-        .map-btn:active { transform: scale(0.9); }
+        .map-btn:active { transform: scale(0.92); }
         .map-btn.active-tool { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
         .coffee-btn { color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);}
 
-        /* Sol Hızlı Araçlar (Alan Ölçüm, Dönüştürücü, Etiket Göster/Gizle) */
-        .left-controls { position: absolute; left: 12px; top: 54%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 8px;}
-
-        /* CANLI NOKTA APLİKASYON (STAKEOUT) PANELİ VE RADARI */
+        /* CANLI NOKTA APLİKASYON (STAKEOUT) PANELİ */
         .stakeout-panel {
-            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 84px); left: 12px; right: 12px;
+            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 82px); left: 10px; right: 10px;
             z-index: 1060; background: var(--surface); backdrop-filter: blur(18px);
-            border: 2px solid var(--accent); border-radius: 20px; padding: 12px 14px;
-            display: none; flex-direction: column; gap: 10px;
+            border: 2px solid var(--accent); border-radius: 18px; padding: 11px 12px;
+            display: none; flex-direction: column; gap: 8px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px var(--accent-glow);
         }
-        .stakeout-panel.show { display: flex; animation: fadeInUp 0.3s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .stakeout-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 8px; }
-        .stakeout-target-title { font-size: 0.85rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+        .stakeout-panel.show { display: flex; }
+        .stakeout-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 6px; }
+        .stakeout-target-title { font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
         .stakeout-target-title span { color: var(--accent); font-family: 'JetBrains Mono', monospace; }
-        .stakeout-controls { display: flex; gap: 8px; align-items: center; }
+        .stakeout-controls { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
         .stakeout-icon-btn {
             background: var(--card-bg); border: 1px solid var(--border-light); color: var(--text-main);
             width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
@@ -253,103 +293,102 @@
         }
         .stakeout-icon-btn.active { background: rgba(0,229,255,0.2); color: var(--accent); border-color: var(--accent); }
 
-        .stakeout-body { display: flex; align-items: center; gap: 14px; }
+        .stakeout-body { display: flex; align-items: center; gap: 12px; }
         .stakeout-radar {
-            width: 92px; height: 92px; border-radius: 50%; border: 2px solid var(--border-light);
+            width: 84px; height: 84px; border-radius: 50%; border: 2px solid var(--border-light);
             background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, rgba(0,0,0,0.4) 80%);
             position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
         .stakeout-radar::before {
-            content: ''; position: absolute; width: 52px; height: 52px; border-radius: 50%;
+            content: ''; position: absolute; width: 46px; height: 46px; border-radius: 50%;
             border: 1px dashed rgba(0,229,255,0.35);
         }
         .stakeout-radar-cross-h { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.12); }
         .stakeout-radar-cross-v { position: absolute; height: 100%; width: 1px; background: rgba(255,255,255,0.12); }
-        .stakeout-north-badge { position: absolute; top: 2px; font-size: 0.55rem; font-weight: 800; color: var(--danger); }
+        .stakeout-north-badge { position: absolute; top: 2px; font-size: 0.52rem; font-weight: 800; color: var(--danger); }
         .stakeout-arrow {
-            font-size: 2.2rem; color: var(--accent); transition: transform 0.25s ease-out;
+            font-size: 2rem; color: var(--accent); transition: transform 0.2s ease-out;
             filter: drop-shadow(0 0 8px var(--accent-glow)); z-index: 2;
         }
         .stakeout-panel.arrived { border-color: var(--success); }
         .stakeout-panel.arrived .stakeout-arrow { color: var(--success); }
 
-        .stakeout-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .stakeout-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
         .stakeout-command-banner {
             background: rgba(0, 229, 255, 0.14); border: 1px solid rgba(0, 229, 255, 0.35);
-            border-radius: 10px; padding: 6px 10px; font-weight: 800; font-size: 0.92rem;
-            color: var(--accent); text-align: center; letter-spacing: 0.5px;
+            border-radius: 10px; padding: 6px 8px; font-weight: 800; font-size: 0.82rem;
+            color: var(--accent); text-align: center; letter-spacing: 0.3px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .stakeout-panel.arrived .stakeout-command-banner {
             background: rgba(16, 185, 129, 0.2); border-color: var(--success); color: var(--success);
         }
-        .stakeout-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .stakeout-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
         .stakeout-metric-box {
             background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 8px;
-            padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;
-            font-size: 0.7rem;
+            padding: 4px 6px; display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.66rem; min-width: 0;
         }
-        .stakeout-metric-box span { color: var(--text-muted); font-weight: 600; }
-        .stakeout-metric-box b { font-family: 'JetBrains Mono', monospace; color: var(--text-main); font-size: 0.76rem; }
+        .stakeout-metric-box span { color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+        .stakeout-metric-box b { font-family: 'JetBrains Mono', monospace; color: var(--text-main); font-size: 0.72rem; white-space: nowrap; }
 
         /* ALAN & MESAFE ÖLÇÜM PANELİ */
         .measure-bar {
-            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 84px); left: 12px; right: 12px;
+            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 82px); left: 10px; right: 10px;
             z-index: 1055; background: var(--surface); backdrop-filter: blur(16px);
-            border: 1px solid var(--warning); border-radius: 16px; padding: 10px 14px;
+            border: 1px solid var(--warning); border-radius: 16px; padding: 10px 12px;
             display: none; flex-direction: column; gap: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
         }
         .measure-bar.show { display: flex; }
-        .measure-stats { display: flex; justify-content: space-around; text-align: center; gap: 8px; }
-        .measure-stat-item { flex: 1; background: var(--card-bg); padding: 6px; border-radius: 10px; border: 1px solid var(--border-light); }
-        .measure-stat-item small { display: block; font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
-        .measure-stat-item b { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--warning); }
-        .measure-actions { display: flex; gap: 6px; }
+        .measure-stats { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; gap: 6px; }
+        .measure-stat-item { min-width: 0; background: var(--card-bg); padding: 6px 4px; border-radius: 10px; border: 1px solid var(--border-light); }
+        .measure-stat-item small { display: block; font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; }
+        .measure-stat-item b { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--warning); }
+        .measure-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .measure-actions button {
-            flex: 1; padding: 7px; border-radius: 8px; border: 1px solid var(--border-light);
-            background: var(--card-bg); color: var(--text-main); font-size: 0.75rem; font-weight: 600; cursor: pointer;
+            padding: 7px 4px; border-radius: 8px; border: 1px solid var(--border-light);
+            background: var(--card-bg); color: var(--text-main); font-size: 0.72rem; font-weight: 600; cursor: pointer;
         }
 
         /* MOBİL UYUMLU KAHVE ANİMASYON (TOAST) MODALI */
         .coffee-toast {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-            background: var(--surface-solid); backdrop-filter: blur(20px);
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            background: var(--surface-solid);
             border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 20px;
-            padding: 35px 20px 25px; text-align: center; z-index: 9999;
-            width: 85%; max-width: 300px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(245, 158, 11, 0.2);
+            padding: 32px 20px 22px; text-align: center; z-index: 9999;
+            width: 86%; max-width: 300px;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.85), 0 0 30px rgba(245, 158, 11, 0.2);
         }
-        .coffee-toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: all;}
+        .coffee-toast.show { display: flex; }
         .coffee-toast-icon {
-            font-size: 3rem; color: #f59e0b; margin-bottom: 12px;
+            font-size: 2.8rem; color: #f59e0b; margin-bottom: 12px;
             animation: floatCoffee 2s ease-in-out infinite; text-shadow: 0 10px 20px rgba(245, 158, 11, 0.4);
         }
-        @keyframes floatCoffee { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-        .coffee-toast-text { color: var(--text-main); font-size: 1rem; font-weight: 500; line-height: 1.5;}
+        @keyframes floatCoffee { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .coffee-toast-text { color: var(--text-main); font-size: 0.95rem; font-weight: 500; line-height: 1.5;}
         .coffee-toast-text span { color: #f59e0b; font-weight: 700; }
         .buy-me-coffee-btn {
             display: flex; justify-content: center; align-items: center; gap: 10px;
             background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;
             border: none; padding: 12px; border-radius: 12px; width: 100%;
-            font-weight: 600; font-size: 0.95rem; text-decoration: none;
-            margin-top: 18px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); transition: 0.2s;
+            font-weight: 600; font-size: 0.92rem; text-decoration: none;
+            margin-top: 16px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         }
 
-        /* GENEL BİLDİRİM TOAST (ALERT YERİNE) */
+        /* GENEL BİLDİRİM TOAST */
         .app-toast {
             position: fixed; top: calc(env(safe-area-inset-top) + 145px); left: 50%;
-            transform: translateX(-50%) translateY(-15px); z-index: 9500;
+            transform: translateX(-50%); z-index: 9500;
             background: var(--surface-solid); color: var(--text-main);
-            border: 1px solid var(--accent); border-radius: 30px; padding: 8px 18px;
-            font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: 0.3s ease;
-            max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            border: 1px solid var(--accent); border-radius: 30px; padding: 8px 16px;
+            font-size: 0.78rem; font-weight: 600; display: none; align-items: center; gap: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.65);
+            max-width: 92%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .app-toast.show { display: flex; }
 
-        /* ÖZEL DİYALOG MODALI (PROMPT / CONFIRM YERİNE) */
+        /* ÖZEL DİYALOG MODALI */
         .custom-dialog-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.65); backdrop-filter: blur(5px);
@@ -358,148 +397,256 @@
         .custom-dialog-overlay.show { display: flex; }
         .custom-dialog-box {
             background: var(--surface-solid); border: 1px solid var(--border-light);
-            border-radius: 20px; padding: 22px; width: 100%; max-width: 340px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8); display: flex; flex-direction: column; gap: 14px;
+            border-radius: 20px; padding: 20px; width: 100%; max-width: 340px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); display: flex; flex-direction: column; gap: 12px;
         }
-        .custom-dialog-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin: 0; }
-        .custom-dialog-msg { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
+        .custom-dialog-title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; }
+        .custom-dialog-msg { font-size: 0.84rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
         .custom-dialog-input {
-            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light);
-            background: var(--input-bg); color: var(--text-main); font-size: 0.95rem; outline: none; font-family: 'Inter';
+            width: 100%; min-width: 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-light);
+            background: var(--input-bg); color: var(--text-main); font-size: 0.88rem; outline: none; font-family: 'Inter';
         }
         .custom-dialog-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
         .dialog-btn {
-            flex: 1; padding: 11px; border-radius: 11px; font-weight: 600; font-size: 0.88rem;
+            flex: 1; padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
             cursor: pointer; border: 1px solid var(--border-light); background: var(--card-bg); color: var(--text-main);
         }
         .dialog-btn.primary { background: var(--accent); color: #000; border: none; }
         .dialog-btn.danger { background: var(--danger); color: #fff; border: none; }
 
-        /* ÇEKMECE VE OVERLAY */
-        .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1200; opacity: 0; pointer-events: none; transition: 0.35s ease; }
-        .drawer-overlay.show { opacity: 1; pointer-events: all; }
-        .side-drawer { position: fixed; top: 0; left: 0; width: 300px; max-width: 85%; height: 100%; z-index: 1250; background: var(--surface-solid); border-right: 1px solid var(--border-light); transform: translateX(-100%); transition: 0.35s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.7);}
+        /* YAN ÇEKMECE VE OVERLAY */
+        .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1200; display: none; }
+        .drawer-overlay.show { display: block; }
+        .side-drawer { position: fixed; top: 0; left: 0; width: 290px; max-width: 84%; height: 100%; z-index: 1250; background: var(--surface-solid); border-right: 1px solid var(--border-light); transform: translateX(-105%); transition: transform 0.3s ease; display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.7);}
         .side-drawer.show { transform: translateX(0); }
-        .drawer-header { padding: calc(env(safe-area-inset-top) + 25px) 20px 15px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;}
-        .drawer-header h2 { margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-main);}
-        .drawer-close { font-size: 1.4rem; color: var(--text-muted); cursor: pointer;}
-        .drawer-body { padding: 18px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 18px; padding-bottom: calc(env(safe-area-inset-bottom) + 25px);}
-        .drawer-section h3 { margin: 0 0 8px 0; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700;}
-        .drawer-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px;}
-        .setting-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.85rem; }
+        .drawer-header { padding: calc(env(safe-area-inset-top) + 20px) 18px 14px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;}
+        .drawer-header h2 { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main);}
+        .drawer-close { font-size: 1.35rem; color: var(--text-muted); cursor: pointer;}
+        .drawer-body { padding: 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px; padding-bottom: calc(env(safe-area-inset-bottom) + 24px);}
+        .drawer-section h3 { margin: 0 0 8px 0; font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700;}
+        .drawer-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px;}
+        .setting-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.82rem; }
         .setting-row select {
             background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-light);
-            padding: 7px 10px; border-radius: 8px; font-family: 'Inter'; font-size: 0.8rem; outline: none;
+            padding: 6px 8px; border-radius: 8px; font-family: 'Inter'; font-size: 0.78rem; outline: none; max-width: 145px;
         }
         .toggle-switch {
-            width: 44px; height: 24px; background: rgba(139, 163, 203, 0.3); border-radius: 14px;
-            position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0;
+            width: 42px; height: 24px; background: rgba(139, 163, 203, 0.3); border-radius: 14px;
+            position: relative; cursor: pointer; transition: 0.25s; flex-shrink: 0;
         }
         .toggle-switch::after {
             content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
-            background: #fff; border-radius: 50%; transition: 0.3s;
+            background: #fff; border-radius: 50%; transition: 0.25s;
         }
         .toggle-switch.active { background: var(--accent); }
-        .toggle-switch.active::after { left: 23px; background: #000; }
+        .toggle-switch.active::after { left: 21px; background: #000; }
 
-        .pwa-install-btn { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); color: #000; border: none; padding: 11px; border-radius: 10px; width: 100%; font-weight: 700; font-family: 'Inter'; font-size: 0.85rem; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s;}
-        .info-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; margin: 0;}
+        .pwa-install-btn { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); color: #000; border: none; padding: 11px; border-radius: 10px; width: 100%; font-weight: 700; font-family: 'Inter'; font-size: 0.84rem; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
+        .info-text { font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; margin: 0;}
         .info-text b { color: var(--accent); font-weight: 600;}
 
-        /* Modallar */
+        /* TAM EKRAN MODALLAR (KAYITLAR, DÖNÜŞTÜRÜCÜ, PROFİL) - ALTTAKİ SİYAH BOŞLUK TAMAMEN GİDERİLDİ */
         .app-modal { 
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; 
-            background: var(--bg-dark); z-index: 1150; opacity: 0; pointer-events: none; 
-            transform: translateY(20px) scale(0.97); transition: 0.35s cubic-bezier(0.25, 1, 0.5, 1); 
-            display: flex; flex-direction: column; padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%; 
+            background: var(--bg-dark);
+            z-index: 1150;
+            display: none;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
         }
-        .app-modal.show { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
-        .modal-header { padding: calc(env(safe-area-inset-top) + 22px) 18px 14px; border-bottom: 1px solid var(--border-light); display:flex; justify-content: space-between; align-items: center; background: var(--surface-solid);}
-        .modal-title { font-size: 1.1rem; font-weight: 700;}
+        .app-modal.show { display: flex; }
+        .modal-header {
+            padding: calc(env(safe-area-inset-top) + 18px) 16px 14px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--surface-solid);
+            flex-shrink: 0;
+        }
+        .modal-title { font-size: 1.05rem; font-weight: 700;}
         
-        .project-selector { display: flex; gap: 8px; padding: 12px 18px; background: var(--card-bg); border-bottom: 1px solid var(--border-light); align-items: center;}
-        .project-selector select { flex: 1; padding: 10px 12px; background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 11px; font-family: 'Inter'; font-size: 0.9rem; font-weight: 600; outline: none;}
-        .project-selector button { width: 40px; height: 40px; background: var(--card-bg); color: var(--accent); border: 1px solid var(--border-light); border-radius: 11px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;}
+        .project-selector {
+            display: flex; gap: 8px; padding: 10px 16px;
+            background: var(--card-bg); border-bottom: 1px solid var(--border-light);
+            align-items: center; flex-shrink: 0;
+        }
+        .project-selector select {
+            flex: 1; min-width: 0; padding: 10px 12px;
+            background: var(--input-bg); color: var(--text-main);
+            border: 1px solid var(--border-light); border-radius: 10px;
+            font-family: 'Inter'; font-size: 0.88rem; font-weight: 600; outline: none;
+        }
+        .project-selector button {
+            width: 40px; height: 40px; flex-shrink: 0;
+            background: var(--card-bg); color: var(--accent);
+            border: 1px solid var(--border-light); border-radius: 10px;
+            font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
         
-        .search-filter-bar { display: flex; gap: 8px; padding: 8px 18px; border-bottom: 1px solid var(--border-light); }
-        .search-filter-bar input { flex: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-light); background: var(--input-bg); color: var(--text-main); font-size: 0.82rem; outline: none; }
+        .search-filter-bar {
+            display: flex; gap: 8px; padding: 8px 16px;
+            border-bottom: 1px solid var(--border-light); flex-shrink: 0;
+        }
+        .search-filter-bar input {
+            flex: 1; min-width: 0; padding: 8px 12px; border-radius: 10px;
+            border: 1px solid var(--border-light); background: var(--input-bg);
+            color: var(--text-main); font-size: 0.82rem; outline: none;
+        }
 
-        .modal-body { padding: 14px 18px; overflow-y: auto; flex: 1; }
-        .card-item { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 15px; padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px;}
+        .modal-body {
+            padding: 14px 16px;
+            overflow-y: auto;
+            flex: 1 1 auto;
+            min-height: 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .card-item {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 14px; padding: 12px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; gap: 10px;
+        }
         .card-info { flex: 1; min-width: 0; }
-        .card-info h4 { margin: 0 0 4px 0; font-size: 0.95rem; color: var(--text-main); display:flex; align-items:center; gap:6px; flex-wrap: wrap;}
-        .point-badge { font-size: 0.62rem; padding: 2px 6px; border-radius: 6px; background: rgba(0,229,255,0.15); color: var(--accent); font-weight: 600; }
-        .itrf-coords { font-size: 0.82rem; margin: 0; font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600;}
+        .card-info h4 { margin: 0 0 4px 0; font-size: 0.92rem; color: var(--text-main); display:flex; align-items:center; gap:6px; flex-wrap: wrap;}
+        .point-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 6px; background: rgba(0,229,255,0.15); color: var(--accent); font-weight: 600; }
+        .itrf-coords { font-size: 0.8rem; margin: 0; font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600;}
         .wgs-coords { margin: 2px 0 0 0; font-size: 0.68rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;}
         .point-note { margin: 4px 0 0 0; font-size: 0.72rem; color: var(--text-muted); font-style: italic; }
         .card-actions { display: flex; gap: 6px; flex-shrink: 0;}
-        .card-actions button { width: 35px; height: 35px; border-radius: 10px; border: none; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;}
+        .card-actions button { width: 36px; height: 36px; border-radius: 10px; border: none; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;}
         .btn-stake { background: rgba(16, 185, 129, 0.18); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.35) !important; }
         .btn-go { background: rgba(0, 229, 255, 0.15); color: var(--accent); }
         .btn-del { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
-        .export-bar { padding: 12px 18px; border-top: 1px solid var(--border-light); background: var(--surface-solid); display: flex; flex-direction: column; gap: 8px;}
+        .export-bar {
+            padding: 12px 16px calc(env(safe-area-inset-bottom) + 16px);
+            border-top: 1px solid var(--border-light);
+            background: var(--surface-solid);
+            display: flex; flex-direction: column; gap: 8px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
         .export-format-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .format-btn {
-            padding: 9px 6px; background: var(--card-bg); color: var(--text-main);
+            min-width: 0; padding: 9px 4px; background: var(--card-bg); color: var(--text-main);
             border: 1px solid var(--border-light); border-radius: 10px; font-family: 'Inter';
-            font-weight: 600; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+            font-weight: 600; font-size: 0.73rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .format-btn i { color: var(--accent); }
-        .format-btn:active { transform: scale(0.95); border-color: var(--accent); }
+        .format-btn i { color: var(--accent); flex-shrink: 0; }
+        .format-btn:active { transform: scale(0.96); border-color: var(--accent); }
 
-        /* Yüzer Kayıt Paneli (Gelişmiş: Hassas Epok & Kategori & Kaynak) */
+        /* YÜZER NOKTA KAYIT PANELİ (MOBİL TAŞMA HATASI TAMAMEN DÜZELTİLDİ + ELLE GİRİŞ EKLENDİ) */
         .floating-save-panel { 
-            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 84px); left: 50%; 
-            transform: translateX(-50%) translateY(20px); z-index: 1050; 
-            background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); 
-            border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 10px; 
-            width: 92%; max-width: 370px; opacity: 0; pointer-events: none; transition: 0.35s; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.65); 
+            position: fixed;
+            bottom: calc(env(safe-area-inset-bottom) + 78px);
+            left: 10px; right: 10px;
+            margin: 0 auto;
+            max-width: 390px;
+            z-index: 1080; 
+            background: var(--surface-solid);
+            border: 1px solid var(--accent); 
+            border-radius: 18px;
+            padding: 12px;
+            display: none;
+            flex-direction: column;
+            gap: 8px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            max-height: calc(100% - 170px);
+            overflow-y: auto;
         }
-        .floating-save-panel.show { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
-        .save-header { color: var(--text-muted); font-size: 0.78rem; display: flex; justify-content: space-between; align-items: center;}
+        .floating-save-panel.show { display: flex; }
+        .save-header { color: var(--text-muted); font-size: 0.76rem; display: flex; justify-content: space-between; align-items: center;}
         .save-header b { color: var(--accent); }
-        .save-source-tabs { display: flex; gap: 6px; background: var(--input-bg); padding: 4px; border-radius: 10px; border: 1px solid var(--border-light); }
+        
+        /* 3'LÜ KAYNAK SEÇİMİ (CANLI GPS / NİŞANGAH / ELLE GİR) */
+        .save-source-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            background: var(--input-bg);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+        }
         .save-source-tab {
-            flex: 1; text-align: center; padding: 6px; font-size: 0.72rem; font-weight: 600;
+            text-align: center; padding: 7px 4px; font-size: 0.7rem; font-weight: 700;
             border-radius: 7px; cursor: pointer; color: var(--text-muted); transition: 0.2s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .save-source-tab.active { background: var(--accent); color: #000; }
-        .save-row { display: flex; gap: 8px; }
-        .save-row input, .save-row select {
-            flex: 1; padding: 10px 12px; border-radius: 11px; border: 1px solid var(--border-light);
-            background: var(--input-bg); color: var(--text-main); font-size: 0.88rem; outline: none; font-family: 'Inter';
+
+        /* Canlı / Nişangah Koordinat Önizleme Bandı */
+        .save-coord-preview {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 9px; padding: 6px 10px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; color: var(--accent); display: flex; justify-content: space-between; align-items: center;
         }
-        .save-actions-row { display: flex; gap: 8px; }
+
+        /* Elle Koordinat Giriş Alanı (Nokta Ekle Paneli İçinde) */
+        .save-manual-box {
+            display: none; flex-direction: column; gap: 6px;
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 10px; padding: 8px;
+        }
+        .save-manual-box.active { display: flex; }
+        .save-grid-2 {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+        .save-input, .save-select {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            padding: 9px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-size: 0.82rem;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .save-actions-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
         .btn-save-instant {
-            flex: 1; background: var(--accent); color: #000; border: none; padding: 11px;
-            border-radius: 11px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+            width: 100%; min-width: 0; background: var(--accent); color: #000; border: none; padding: 10px 8px;
+            border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
         }
         .btn-save-epoch {
-            flex: 1; background: rgba(16, 185, 129, 0.18); color: var(--success); border: 1px solid var(--success);
-            padding: 11px; border-radius: 11px; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+            width: 100%; min-width: 0; background: rgba(16, 185, 129, 0.18); color: var(--success); border: 1px solid var(--success);
+            padding: 10px 8px; border-radius: 10px; font-weight: 700; font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
         }
         .epoch-progress-wrap { display: none; flex-direction: column; gap: 4px; }
         .epoch-progress-wrap.active { display: flex; }
         .epoch-bar-bg { width: 100%; height: 6px; background: var(--input-bg); border-radius: 4px; overflow: hidden; }
         .epoch-bar-fill { width: 0%; height: 100%; background: var(--success); transition: width 0.2s; }
-        .epoch-status-text { font-size: 0.7rem; color: var(--success); font-family: 'JetBrains Mono', monospace; text-align: center; }
+        .epoch-status-text { font-size: 0.68rem; color: var(--success); font-family: 'JetBrains Mono', monospace; text-align: center; }
 
         /* KOMPAKT 5'Lİ DOCK */
-        .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 16px); left: 50%; transform: translateX(-50%); z-index: 1100; width: max-content; }
-        .ig-dock { display: flex; align-items: center; gap: 5px; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); border-radius: 40px; padding: 7px 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
-        .dock-item { width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; border-radius: 22px; color: var(--text-muted); font-size: 1.05rem; transition: 0.25s; cursor: pointer; }
-        .dock-item.active { color: var(--text-main); background: rgba(0, 229, 255, 0.18); color: var(--accent); }
-        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.35rem; width: 50px; height: 50px; margin: 0 4px; box-shadow: 0 0 15px var(--accent-glow); }
-        .dock-item.main-add:active { transform: scale(0.9); }
+        .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 12px); left: 50%; transform: translateX(-50%); z-index: 1100; }
+        .ig-dock { display: flex; align-items: center; gap: 5px; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); border-radius: 40px; padding: 6px 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
+        .dock-item { width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; border-radius: 22px; color: var(--text-muted); font-size: 1.05rem; transition: 0.2s; cursor: pointer; }
+        .dock-item.active { background: rgba(0, 229, 255, 0.18); color: var(--accent); }
+        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.3rem; width: 48px; height: 48px; margin: 0 4px; box-shadow: 0 0 15px var(--accent-glow); }
+        .dock-item.main-add:active { transform: scale(0.92); }
 
         /* Profil & Araçlar Sayfası Özel */
-        .stat-box { background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; flex: 1;}
-        .stat-box h4 { margin:0; font-size: 1.35rem; color: var(--accent); font-family: 'JetBrains Mono', monospace;}
-        .stat-box p { margin:4px 0 0 0; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;}
+        .stat-box { background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; flex: 1; min-width: 0;}
+        .stat-box h4 { margin:0; font-size: 1.3rem; color: var(--accent); font-family: 'JetBrains Mono', monospace;}
+        .stat-box p { margin:4px 0 0 0; font-size: 0.64rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;}
         
-        .google-login-btn { background: #fff; color: #000; border: 1px solid var(--border-light); padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer;}
+        .google-login-btn { background: #fff; color: #000; border: 1px solid var(--border-light); padding: 12px; border-radius: 10px; width: 100%; font-weight: 600; font-family: 'Inter'; font-size: 0.88rem; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer;}
         .logout-btn { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 10px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 8px; }
 
         .install-step { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-light);}
@@ -517,7 +664,7 @@
             background: var(--success); color: #fff; font-weight: 700; font-size: 0.75rem; cursor: pointer;
         }
         .point-map-label {
-            background: rgba(7, 11, 20, 0.85); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.45);
+            background: rgba(7, 11, 20, 0.88); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.5);
             border-radius: 6px; padding: 1px 6px; font-family: 'JetBrains Mono', monospace;
             font-size: 0.68rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.5);
         }
@@ -565,7 +712,7 @@
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
             <h2 class="splash-title">GeoITRF</h2>
-            <div class="splash-subtitle">PRO TERMINAL v2.0</div>
+            <div class="splash-subtitle">PRO TERMINAL v2.1</div>
         </div>
         <div class="globe-container">
             <div class="wireframe-globe">
@@ -652,7 +799,7 @@
                 <h3>Hızlı Araçlar & Kurulum</h3>
                 <div class="drawer-card" style="gap:8px;">
                     <button class="pwa-install-btn" style="background:rgba(0,229,255,0.15); color:var(--accent); border:1px solid rgba(0,229,255,0.35);" onclick="toggleDrawer(); openConverterModal();">
-                        <i class="fas fa-exchange-alt"></i> Manuel Koordinat Dönüştürücü / Ekle
+                        <i class="fas fa-exchange-alt"></i> Koordinat Dönüştürücü & Hesaplama
                     </button>
                     <button class="pwa-install-btn" onclick="openInstallModal()">
                         <i class="fas fa-mobile-alt"></i> Uygulamayı Ana Ekrana Ekle
@@ -689,7 +836,7 @@
         <div class="hud-coords">
             <div class="coord-box" onclick="copyCoords('WGS84')" title="WGS84 Koordinatlarını Kopyala">
                 <div class="c-header">
-                    <span class="c-label" id="wgs-box-label">WGS84 (ENLEM / BOYLAM)</span>
+                    <span class="c-label" id="wgs-box-label">WGS84 (E / B)</span>
                     <i class="fas fa-copy c-copy-icon"></i>
                 </div>
                 <span class="c-val" id="live-lat">--.------</span>
@@ -697,7 +844,7 @@
             </div>
             <div class="coord-box right" onclick="copyCoords('PROJ')" title="Sağa/Yukarı Koordinatlarını Kopyala">
                 <div class="c-header">
-                    <span class="c-label" id="dom-label">Y (SAĞA) / X (YUKARI)</span>
+                    <span class="c-label" id="dom-label">ITRF96 (Y / X)</span>
                     <i class="fas fa-copy c-copy-icon"></i>
                 </div>
                 <span class="c-val glow" id="live-y">---.---</span>
@@ -705,15 +852,17 @@
             </div>
         </div>
         <div class="hud-subbar">
-            <div class="hud-subbar-item"><i class="fas fa-mountain"></i> Z (Kot): <b id="live-alt">--.- m</b></div>
+            <div class="hud-subbar-item"><i class="fas fa-mountain"></i> Z: <b id="live-alt">--.- m</b></div>
             <div class="hud-subbar-item"><i class="fas fa-compass"></i> Semt: <b id="live-heading">---°</b></div>
             <div class="hud-subbar-item"><i class="fas fa-tachometer-alt"></i> Hız: <b id="live-speed">0.0 km/s</b></div>
         </div>
     </div>
 
-    <!-- HARİTA MERKEZ NİŞANGAHI (CROSSHAIR) -->
+    <!-- HARİTA MERKEZ NİŞANGAHI (TAM EKRAN ORTASINA KİLİTLİ) -->
     <div class="map-crosshair" id="map-crosshair">
         <div class="crosshair-ring"></div>
+        <div class="crosshair-line-h"></div>
+        <div class="crosshair-line-v"></div>
         <div class="crosshair-dot"></div>
         <div class="crosshair-badge" id="crosshair-coords-badge">Nişangah Aktif</div>
     </div>
@@ -722,7 +871,7 @@
     <div class="left-controls">
         <button class="map-btn" id="btn-crosshair-toggle" aria-label="Nişangah Modu" title="Harita Merkez Nişangahı" onclick="toggleCrosshairMode()"><i class="fas fa-crosshairs"></i></button>
         <button class="map-btn" id="btn-measure-toggle" aria-label="Alan ve Mesafe Ölç" title="Alan ve Mesafe Ölçümü" onclick="toggleMeasureTool()"><i class="fas fa-ruler-combined"></i></button>
-        <button class="map-btn" id="btn-converter-open" aria-label="Koordinat Dönüştürücü" title="Manuel Koordinat Dönüştürücü & Nokta Git" onclick="openConverterModal()"><i class="fas fa-calculator"></i></button>
+        <button class="map-btn" id="btn-converter-open" aria-label="Koordinat Dönüştürücü" title="Manuel Koordinat Dönüştürücü" onclick="openConverterModal()"><i class="fas fa-calculator"></i></button>
         <button class="map-btn" id="btn-theme-quick" aria-label="Arazi Modu" title="Güneş Işığı / Gece Modu" onclick="toggleDaylightMode()"><i class="fas fa-sun"></i></button>
     </div>
 
@@ -763,8 +912,8 @@
                 <div class="stakeout-metrics">
                     <div class="stakeout-metric-box"><span>Mesafe:</span><b id="stake-dist">--.-- m</b></div>
                     <div class="stakeout-metric-box"><span>Azimut:</span><b id="stake-bearing">---°</b></div>
-                    <div class="stakeout-metric-box"><span id="stake-dy-label">ΔY (Doğu):</span><b id="stake-dy">--.-- m</b></div>
-                    <div class="stakeout-metric-box"><span id="stake-dx-label">ΔX (Kuzey):</span><b id="stake-dx">--.-- m</b></div>
+                    <div class="stakeout-metric-box"><span id="stake-dy-label">Doğu (+Y):</span><b id="stake-dy">--.-- m</b></div>
+                    <div class="stakeout-metric-box"><span id="stake-dx-label">Kuzey (+X):</span><b id="stake-dx">--.-- m</b></div>
                 </div>
             </div>
         </div>
@@ -773,7 +922,7 @@
     <!-- ALAN VE MESAFE ÖLÇÜM ÇUBUĞU -->
     <div class="measure-bar" id="measure-bar">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:0.78rem; font-weight:700; color:var(--warning);"><i class="fas fa-draw-polygon"></i> Harita Üzerine Dokunarak Nokta Ekleyin</span>
+            <span style="font-size:0.76rem; font-weight:700; color:var(--warning);"><i class="fas fa-draw-polygon"></i> Haritaya Dokunarak Köşe Ekleyin</span>
             <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted);" onclick="toggleMeasureTool()"></i>
         </div>
         <div class="measure-stats">
@@ -797,19 +946,58 @@
         </div>
     </div>
 
-    <!-- YÜZER NOKTA KAYIT PANELİ -->
+    <!-- YÜZER NOKTA KAYIT PANELİ (CANLI GPS + NİŞANGAH + ELLE GİRME) -->
     <div class="floating-save-panel" id="save-panel">
         <div class="save-header">
-            <span>Klasör: <b id="active-project-label-add">Varsayılan</b></span>
-            <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted); font-size:1rem;" onclick="closeModals()"></i>
+            <span>Aktif Klasör: <b id="active-project-label-add">Varsayılan</b></span>
+            <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted); font-size:1.05rem; padding:2px 4px;" onclick="closeModals()"></i>
         </div>
+
+        <!-- 3'LÜ KAYNAK SEÇİCİ -->
         <div class="save-source-tabs">
-            <div class="save-source-tab active" id="src-tab-gps" onclick="setSaveSource('GPS')"><i class="fas fa-satellite-dish"></i> Canlı GPS Konumu</div>
-            <div class="save-source-tab" id="src-tab-crosshair" onclick="setSaveSource('CROSSHAIR')"><i class="fas fa-crosshairs"></i> Harita Nişangahı</div>
+            <div class="save-source-tab active" id="src-tab-gps" onclick="setSaveSource('GPS')"><i class="fas fa-satellite-dish"></i> Canlı GPS</div>
+            <div class="save-source-tab" id="src-tab-crosshair" onclick="setSaveSource('CROSSHAIR')"><i class="fas fa-crosshairs"></i> Nişangah</div>
+            <div class="save-source-tab" id="src-tab-manual" onclick="setSaveSource('MANUAL')"><i class="fas fa-keyboard"></i> Elle Gir</div>
         </div>
-        <div class="save-row">
-            <input type="text" id="point-name" aria-label="Nokta Adı" placeholder="Nokta Adı (Örn: P1)">
-            <select id="point-category" aria-label="Nokta Kodu">
+
+        <!-- Canlı GPS veya Nişangah Koordinat Önizlemesi -->
+        <div class="save-coord-preview" id="save-coord-preview">
+            <span id="save-preview-label">GPS:</span>
+            <span id="save-preview-vals">Y: ---.--- &nbsp; X: ---.---</span>
+        </div>
+
+        <!-- Elle Koordinat Giriş Bölümü (Sadece 'Elle Gir' seçildiğinde açılır) -->
+        <div class="save-manual-box" id="save-manual-box">
+            <div class="save-grid-2">
+                <select class="save-select" id="manual-add-type" onchange="toggleManualAddType()">
+                    <option value="PROJ">ITRF / Y-X (Sağa-Yukarı)</option>
+                    <option value="WGS84">Enlem / Boylam (WGS84)</option>
+                </select>
+                <select class="save-select" id="manual-add-dom">
+                    <option value="AUTO">Otomatik DOM</option>
+                    <option value="27">DOM 27°</option>
+                    <option value="30">DOM 30°</option>
+                    <option value="33" selected>DOM 33°</option>
+                    <option value="36">DOM 36°</option>
+                    <option value="39">DOM 39°</option>
+                    <option value="42">DOM 42°</option>
+                    <option value="45">DOM 45°</option>
+                </select>
+            </div>
+            <div class="save-grid-2" id="manual-proj-row">
+                <input type="number" step="any" id="manual-add-y" class="save-input" placeholder="Y (Sağa) Örn: 487520.12">
+                <input type="number" step="any" id="manual-add-x" class="save-input" placeholder="X (Yukarı) Örn: 4418950.45">
+            </div>
+            <div class="save-grid-2" id="manual-wgs-row" style="display:none;">
+                <input type="number" step="any" id="manual-add-lat" class="save-input" placeholder="Enlem Örn: 39.92077">
+                <input type="number" step="any" id="manual-add-lon" class="save-input" placeholder="Boylam Örn: 32.85411">
+            </div>
+        </div>
+
+        <!-- Nokta Adı ve Kategori (Taşmayı Önleyen Grid) -->
+        <div class="save-grid-2">
+            <input type="text" id="point-name" class="save-input" aria-label="Nokta Adı" placeholder="Nokta Adı (P1)">
+            <select id="point-category" class="save-select" aria-label="Nokta Kodu">
                 <option value="Nokta">📍 Standart Nokta</option>
                 <option value="Poligon">🔺 Poligon / Röper</option>
                 <option value="Direk">⚡ Elektrik Direği</option>
@@ -819,16 +1007,20 @@
                 <option value="Bina">🏢 Bina Köşesi</option>
             </select>
         </div>
-        <div class="save-row">
-            <input type="text" id="point-desc" aria-label="Açıklama Notu" placeholder="Açıklama / Saha Notu (İsteğe bağlı)">
-        </div>
+
+        <!-- Açıklama Notu -->
+        <input type="text" id="point-desc" class="save-input" aria-label="Açıklama Notu" placeholder="Açıklama / Saha Notu (İsteğe bağlı)">
+
+        <!-- Epok İlerleme Çubuğu -->
         <div class="epoch-progress-wrap" id="epoch-progress-wrap">
             <div class="epoch-bar-bg"><div class="epoch-bar-fill" id="epoch-bar-fill"></div></div>
             <div class="epoch-status-text" id="epoch-status-text">Hassas Epok: 0/10 (RMS: -- m)</div>
         </div>
-        <div class="save-actions-row">
-            <button class="btn-save-instant" onclick="saveCurrentLocation()"><i class="fas fa-check"></i> Anında Kaydet</button>
-            <button class="btn-save-epoch" id="btn-start-epoch" onclick="startEpochAveraging()"><i class="fas fa-satellite"></i> Hassas Ortalama Al</button>
+
+        <!-- Kayıt Butonları -->
+        <div class="save-actions-row" id="save-actions-row">
+            <button class="btn-save-instant" id="btn-main-save" onclick="saveCurrentLocation()"><i class="fas fa-check"></i> Kaydet</button>
+            <button class="btn-save-epoch" id="btn-start-epoch" onclick="startEpochAveraging()"><i class="fas fa-satellite"></i> Hassas Ortalama</button>
         </div>
     </div>
 
@@ -836,7 +1028,7 @@
     <div class="app-modal" id="modal-records">
         <div class="modal-header">
             <span class="modal-title"><i class="fas fa-folder-open" style="color:var(--accent); margin-right:8px;"></i> Projeler & Noktalar</span>
-            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.3rem; cursor:pointer;" onclick="closeModals()"></i>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="project-selector">
             <select id="project-select" aria-label="Klasör Seçin" onchange="changeProject(this.value)">
@@ -855,7 +1047,7 @@
         </div>
         <div class="modal-body" id="points-list"></div>
         <div class="export-bar">
-            <div style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Profesyonel Formatta Dışa Aktar / Paylaş:</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Profesyonel Formatta Dışa Aktar / Paylaş:</div>
             <div class="export-format-grid">
                 <button class="format-btn" onclick="exportProject('NCN')"><i class="fas fa-drafting-compass"></i> NetCAD (.ncn)</button>
                 <button class="format-btn" onclick="exportProject('DXF')"><i class="fas fa-vector-square"></i> AutoCAD (.dxf)</button>
@@ -870,16 +1062,16 @@
     <!-- MANUEL KOORDİNAT DÖNÜŞTÜRÜCÜ & NOKTA EKLEME / APLİKASYON MODALI -->
     <div class="app-modal" id="modal-converter">
         <div class="modal-header">
-            <span class="modal-title"><i class="fas fa-exchange-alt" style="color:var(--accent); margin-right:8px;"></i> Koordinat Dönüştürücü & Manuel Giriş</span>
-            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.3rem; cursor:pointer;" onclick="closeModals()"></i>
+            <span class="modal-title"><i class="fas fa-exchange-alt" style="color:var(--accent); margin-right:8px;"></i> Koordinat Dönüştürücü</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
             <div class="drawer-card">
                 <div class="setting-row">
                     <span>Giriş Tipi</span>
                     <select id="conv-input-type" onchange="toggleConverterInputs()">
-                        <option value="PROJ">Sağa (Y) / Yukarı (X) [ITRF96 / ED50 / UTM]</option>
-                        <option value="WGS84">Enlem / Boylam [WGS84 Derece]</option>
+                        <option value="PROJ">ITRF / ED50 / UTM (Y / X)</option>
+                        <option value="WGS84">Enlem / Boylam (WGS84)</option>
                     </select>
                 </div>
                 <div class="setting-row" id="conv-dom-row">
@@ -909,10 +1101,10 @@
             <div class="drawer-card" id="conv-result-card" style="display:none;">
                 <h4 style="margin:0; color:var(--accent); font-size:0.9rem;">Dönüşüm Sonucu</h4>
                 <div id="conv-result-text" style="font-family:'JetBrains Mono', monospace; font-size:0.82rem; line-height:1.6;"></div>
-                <div style="display:flex; gap:8px; margin-top:6px;">
-                    <button class="format-btn" style="flex:1;" onclick="convShowOnMap()"><i class="fas fa-map-marked-alt"></i> Haritada Göster</button>
-                    <button class="format-btn" style="flex:1;" onclick="convSaveToProject()"><i class="fas fa-plus-circle"></i> Klasöre Kaydet</button>
-                    <button class="format-btn" style="flex:1; border-color:var(--success); color:var(--success);" onclick="convStartStakeout()"><i class="fas fa-bullseye"></i> Aplikasyon Yap</button>
+                <div class="export-format-grid" style="margin-top:6px;">
+                    <button class="format-btn" onclick="convShowOnMap()"><i class="fas fa-map-marked-alt"></i> Haritada Gör</button>
+                    <button class="format-btn" onclick="convSaveToProject()"><i class="fas fa-plus-circle"></i> Klasöre Ekle</button>
+                    <button class="format-btn" style="border-color:var(--success); color:var(--success);" onclick="convStartStakeout()"><i class="fas fa-bullseye"></i> Aplikasyon</button>
                 </div>
             </div>
         </div>
@@ -922,7 +1114,7 @@
     <div class="app-modal" id="modal-profile">
         <div class="modal-header">
             <span class="modal-title"><i class="fas fa-user-circle" style="color:var(--accent); margin-right:8px;"></i> Profil & Yedekleme</span>
-            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.3rem; cursor:pointer;" onclick="closeModals()"></i>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="modal-body">
             
@@ -974,7 +1166,7 @@
     <div class="app-modal" id="modal-install">
         <div class="modal-header">
             <span class="modal-title"><i class="fas fa-mobile-alt" style="color:var(--accent); margin-right:8px;"></i> Ana Ekrana Ekle</span>
-            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.3rem; cursor:pointer;" onclick="closeModals()"></i>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="modal-body">
             <div class="install-step">
@@ -1014,6 +1206,19 @@
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW kaydı atlandı:', err));
             });
         }
+
+        // --- MOBİL KLAVYE AÇILIP KAPANINCA EKRAN KAYMASINI SIFIRLA ---
+        function lockViewportScroll() {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            if (typeof map !== 'undefined' && map) {
+                map.invalidateSize({ pan: false });
+            }
+        }
+        window.addEventListener('resize', lockViewportScroll);
+        window.addEventListener('orientationchange', () => setTimeout(lockViewportScroll, 200));
+        document.addEventListener('focusout', () => setTimeout(lockViewportScroll, 100));
 
         // --- FIREBASE VE YEREL HAFIZA (LOCALSTORAGE) HİBRİT YAPI ---
         const firebaseConfig = {
@@ -1124,6 +1329,7 @@
                     okBtn.onclick = null;
                     cancelBtn.onclick = null;
                     inputEl.onkeydown = null;
+                    lockViewportScroll();
                     resolve(result);
                 }
 
@@ -1170,7 +1376,6 @@
 
                 db.collection('users').doc(user.uid).get().then((doc) => {
                     if (doc.exists && doc.data().projectsData) {
-                        // Yerel veriler ile bulut verilerini birleştir (veri kaybını önle)
                         const cloudData = doc.data().projectsData;
                         for (let proj in cloudData) {
                             if (!projectsData[proj]) {
@@ -1194,7 +1399,6 @@
             } else {
                 document.getElementById('auth-logged-in').style.display = 'none';
                 document.getElementById('auth-logged-out').style.display = 'block';
-                // Giriş yapılmadığında yerel hafızadaki projeleri koru!
                 projectsData = loadLocalProjects();
                 if (!projectsData[activeProject]) activeProject = "Varsayılan";
                 updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
@@ -1215,11 +1419,14 @@
         function hideSplashScreen() {
             let splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
-            splash.style.transform = 'scale(1.05)';
             setTimeout(() => { 
                 splash.style.display = 'none'; 
-                if (typeof map !== 'undefined' && map) { map.invalidateSize(); }
-            }, 700);
+                lockViewportScroll();
+                if (currentLat !== null && !firstLocationCenteredAfterSplash) {
+                    firstLocationCenteredAfterSplash = true;
+                    map.setView([currentLat, currentLon], 18, { animate: false });
+                }
+            }, 600);
         }
 
         function toggleDrawer() {
@@ -1227,7 +1434,7 @@
             document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
-        var map = L.map('map', { zoomControl: false }).setView([39.92077, 32.85411], 14); 
+        var map = L.map('map', { zoomControl: false, attributionControl: false }).setView([39.92077, 32.85411], 14); 
 
         const mapLayers = [
             {
@@ -1280,7 +1487,6 @@
                     label = `ED50 6° (D${dom})`;
                 }
             } else {
-                // 3 Derecelik Dilim (ITRF96_3 veya ED50_3)
                 if (domSetting === 'AUTO') {
                     dom = Math.round(lon / 3) * 3;
                 } else {
@@ -1363,45 +1569,98 @@
             }
         }
 
+        // --- NİŞANGAH (CROSSHAIR) HASSAS MERKEZ KOORDİNAT HESABI ---
         let crosshairActive = false;
-        let saveSourceMode = 'GPS'; // 'GPS' or 'CROSSHAIR'
+        let saveSourceMode = 'GPS'; // 'GPS' | 'CROSSHAIR' | 'MANUAL'
+        let lockedCrosshairCoords = null; // Kayıt paneli açıldığında klavye kaymasını önlemek için
+
+        function getExactCrosshairLatLng() {
+            const mapEl = document.getElementById('map');
+            const cx = mapEl.clientWidth / 2;
+            const cy = mapEl.clientHeight / 2;
+            return map.containerPointToLatLng([cx, cy]);
+        }
 
         function toggleCrosshairMode(forceState = null) {
             crosshairActive = forceState !== null ? forceState : !crosshairActive;
             document.getElementById('map-crosshair').classList.toggle('active', crosshairActive);
             document.getElementById('toggle-crosshair').classList.toggle('active', crosshairActive);
             document.getElementById('btn-crosshair-toggle').classList.toggle('active-tool', crosshairActive);
+
+            // Nişangah açıldığında otomatik olarak kayıt kaynağını da Nişangah yap!
             if (crosshairActive) {
+                if (saveSourceMode === 'GPS') {
+                    saveSourceMode = 'CROSSHAIR';
+                    syncSaveSourceTabsUI();
+                }
+                map.invalidateSize({ pan: false });
                 updateCrosshairBadge();
-                showToast("Harita merkez nişangahı açıldı", "fa-crosshairs");
+                showToast("Nişangah aktif: Harita ortasındaki nokta kaydedilecek", "fa-crosshairs");
+            } else {
+                if (saveSourceMode === 'CROSSHAIR') {
+                    saveSourceMode = 'GPS';
+                    syncSaveSourceTabsUI();
+                }
             }
             refreshLiveCoordinatesUI();
         }
 
         function updateCrosshairBadge() {
             if (!crosshairActive) return;
-            const c = map.getCenter();
+            const c = getExactCrosshairLatLng();
+            lockedCrosshairCoords = { lat: c.lat, lon: c.lng };
             const proj = calculateProjected(c.lat, c.lng);
             document.getElementById('crosshair-coords-badge').innerText = `Y:${proj.y.toFixed(2)} X:${proj.x.toFixed(2)}`;
-            if (saveSourceMode === 'CROSSHAIR') {
-                refreshLiveCoordinatesUI();
-            }
-        }
-
-        map.on('move', updateCrosshairBadge);
-
-        function setSaveSource(mode) {
-            saveSourceMode = mode;
-            document.getElementById('src-tab-gps').classList.toggle('active', mode === 'GPS');
-            document.getElementById('src-tab-crosshair').classList.toggle('active', mode === 'CROSSHAIR');
-            if (mode === 'CROSSHAIR' && !crosshairActive) {
-                toggleCrosshairMode(true);
-            }
             refreshLiveCoordinatesUI();
         }
 
+        map.on('move', updateCrosshairBadge);
+        map.on('zoomend', updateCrosshairBadge);
+
+        function syncSaveSourceTabsUI() {
+            document.getElementById('src-tab-gps').classList.toggle('active', saveSourceMode === 'GPS');
+            document.getElementById('src-tab-crosshair').classList.toggle('active', saveSourceMode === 'CROSSHAIR');
+            document.getElementById('src-tab-manual').classList.toggle('active', saveSourceMode === 'MANUAL');
+
+            const isManual = (saveSourceMode === 'MANUAL');
+            document.getElementById('save-manual-box').classList.toggle('active', isManual);
+            document.getElementById('save-coord-preview').style.display = isManual ? 'none' : 'flex';
+
+            const epochBtn = document.getElementById('btn-start-epoch');
+            const actionsRow = document.getElementById('save-actions-row');
+            if (saveSourceMode === 'GPS') {
+                epochBtn.style.display = 'flex';
+                actionsRow.style.gridTemplateColumns = 'minmax(0, 1fr) minmax(0, 1fr)';
+            } else {
+                epochBtn.style.display = 'none';
+                actionsRow.style.gridTemplateColumns = '1fr';
+            }
+        }
+
+        function setSaveSource(mode) {
+            saveSourceMode = mode;
+            if (mode === 'CROSSHAIR' && !crosshairActive) {
+                toggleCrosshairMode(true);
+            }
+            if (mode === 'CROSSHAIR') {
+                const c = getExactCrosshairLatLng();
+                lockedCrosshairCoords = { lat: c.lat, lon: c.lng };
+            }
+            if (mode === 'MANUAL' && currentDOM) {
+                document.getElementById('manual-add-dom').value = currentDOM.toString();
+            }
+            syncSaveSourceTabsUI();
+            refreshLiveCoordinatesUI();
+        }
+
+        function toggleManualAddType() {
+            const t = document.getElementById('manual-add-type').value;
+            document.getElementById('manual-proj-row').style.display = (t === 'PROJ') ? 'grid' : 'none';
+            document.getElementById('manual-wgs-row').style.display = (t === 'WGS84') ? 'grid' : 'none';
+        }
+
         // --- CANLI GPS TAKİBİ VE HUD GÜNCELLEMESİ ---
-        var userMarker = null, accuracyCircle = null, firstLocationFound = false;
+        var userMarker = null, accuracyCircle = null, firstLocationFound = false, firstLocationCenteredAfterSplash = false;
         var currentLat = null, currentLon = null, currentAlt = null, currentAcc = null, currentHeading = null, currentSpeed = null;
         var currentX = null, currentY = null, currentDOM = null;
         var pointMarkers = {};
@@ -1409,15 +1668,15 @@
         function refreshLiveCoordinatesUI() {
             let latToUse = currentLat;
             let lonToUse = currentLon;
-            let isCrosshairView = (saveSourceMode === 'CROSSHAIR' && crosshairActive);
+            let isCrosshairView = (saveSourceMode === 'CROSSHAIR' || crosshairActive);
 
             if (isCrosshairView) {
-                const center = map.getCenter();
+                const center = lockedCrosshairCoords || getExactCrosshairLatLng();
                 latToUse = center.lat;
-                lonToUse = center.lng;
-                document.getElementById('wgs-box-label').innerText = "NİŞANGAH (ENLEM / BOYLAM)";
+                lonToUse = center.lon !== undefined ? center.lon : center.lng;
+                document.getElementById('wgs-box-label').innerText = "NİŞANGAH (E / B)";
             } else {
-                document.getElementById('wgs-box-label').innerText = "WGS84 (ENLEM / BOYLAM)";
+                document.getElementById('wgs-box-label').innerText = "WGS84 (E / B)";
             }
 
             if (latToUse !== null && lonToUse !== null) {
@@ -1425,13 +1684,29 @@
                 document.getElementById('live-lon').innerText = lonToUse.toFixed(6);
 
                 let proj = calculateProjected(latToUse, lonToUse);
-                if (!isCrosshairView) {
-                    currentY = proj.y; currentX = proj.x; currentDOM = proj.dom;
+                if (currentLat !== null && currentLon !== null) {
+                    let gpsProj = calculateProjected(currentLat, currentLon);
+                    currentY = gpsProj.y; currentX = gpsProj.x; currentDOM = gpsProj.dom;
                 }
                 document.getElementById('dom-label').innerText = proj.label;
                 document.getElementById('hud-proj-pill').innerText = proj.label;
                 document.getElementById('live-y').innerText = proj.y.toFixed(3);
                 document.getElementById('live-x').innerText = proj.x.toFixed(3);
+
+                // Kayıt paneli içindeki önizleme bandını da güncelle
+                const prevLabel = document.getElementById('save-preview-label');
+                const prevVals = document.getElementById('save-preview-vals');
+                if (prevLabel && prevVals) {
+                    prevLabel.innerText = (saveSourceMode === 'CROSSHAIR') ? `🎯 Nişangah (${proj.label}):` : `📡 Canlı GPS (${proj.label}):`;
+                    prevVals.innerText = `Y:${proj.y.toFixed(2)}  X:${proj.x.toFixed(2)}`;
+                }
+            } else {
+                const prevLabel = document.getElementById('save-preview-label');
+                const prevVals = document.getElementById('save-preview-vals');
+                if (prevLabel && prevVals) {
+                    prevLabel.innerText = "📡 GPS Bekleniyor:";
+                    prevVals.innerText = "Nişangah veya Elle Gir seçebilirsiniz";
+                }
             }
         }
 
@@ -1458,12 +1733,10 @@
 
                 refreshLiveCoordinatesUI();
 
-                // Epok ortalaması aktifse örnek topla
                 if (epochActive) {
                     collectEpochSample(currentLat, currentLon, currentAlt || 0, currentAcc);
                 }
 
-                // Aplikasyon (Stakeout) aktifse canlı yönlendirmeyi güncelle
                 if (stakeoutTarget) {
                     updateStakeoutGuidance();
                 }
@@ -1474,10 +1747,14 @@
                     accuracyCircle.setLatLng(newLoc).setRadius(Math.min(currentAcc, 80));
                 } else {
                     accuracyCircle = L.circle(newLoc, { radius: Math.min(currentAcc, 80), color: '#00e5ff', weight: 1, fillOpacity: 0.08 }).addTo(map);
-                    userMarker = L.circleMarker(newLoc, { color: '#ffffff', fillColor: '#00e5ff', fillOpacity: 1, radius: 7, weight: 2, zIndexOffset: 1000 }).addTo(map);
+                    userMarker = L.circleMarker(newLoc, { color: '#ffffff', fillColor: '#00e5ff', fillOpacity: 1, radius: 7, weight: 2 }).addTo(map);
                 }
 
-                if (!firstLocationFound) { map.setView(newLoc, 18); firstLocationFound = true; }
+                if (!firstLocationFound) {
+                    firstLocationFound = true;
+                    map.invalidateSize({ pan: false });
+                    map.setView(newLoc, 18, { animate: false });
+                }
             }, function(e) { 
                 document.getElementById('accuracy').innerText = "GPS Bekleniyor"; 
                 document.getElementById('gps-dot').classList.remove('connected'); document.getElementById('gps-dot').classList.add('blink');
@@ -1485,10 +1762,13 @@
         }
 
         function goToMyLocation() {
-            if (currentLat !== null) {
-                map.setView([currentLat, currentLon], 19);
+            lockViewportScroll();
+            if (currentLat !== null && currentLon !== null) {
+                map.invalidateSize({ pan: false });
+                map.setView([currentLat, currentLon], 19, { animate: true });
+                if (crosshairActive) setTimeout(updateCrosshairBadge, 300);
             } else {
-                showToast("GPS sinyali bekleniyor...", "fa-satellite-dish");
+                showToast("GPS sinyali bekleniyor veya konum izni kapalı...", "fa-satellite-dish");
             }
         }
 
@@ -1519,6 +1799,7 @@
         let compassHeading = null;
         let audioCtx = null;
         let stakeBeepTimer = null;
+        let lastStakeDistance = null;
 
         function handleOrientation(event) {
             let heading = null;
@@ -1553,7 +1834,7 @@
                     showToast("Pusula sensörü başlatıldı", "fa-compass");
                 }
             } else {
-                showToast("Pusula sensörü dinleniyor (Telefonu 8 çizecek şekilde hareket ettirin)", "fa-compass");
+                showToast("Pusula aktif (Kalibrasyon için telefonu 8 çizecek şekilde hareket ettirin)", "fa-compass");
             }
         }
 
@@ -1579,7 +1860,7 @@
             if (!stakeoutTarget) return;
             if (stakeBeepTimer) clearTimeout(stakeBeepTimer);
 
-            if (distMeters > 50) return; // 50 metreden uzaktayken sürekli öterek rahatsız etmesin
+            if (distMeters > 50) return;
 
             let interval = 1800;
             let freq = 650;
@@ -1607,8 +1888,6 @@
             }, interval);
         }
 
-        let lastStakeDistance = null;
-
         function startStakeoutById(pointId) {
             const pt = projectsData[activeProject].points.find(p => p.id === pointId);
             if (!pt) return;
@@ -1621,6 +1900,7 @@
             document.getElementById('stake-target-name').innerText = pt.name;
             document.getElementById('stakeout-panel').classList.add('show');
             enableCompassPermission();
+            map.invalidateSize({ pan: false });
             map.setView([pt.lat, pt.lon], 19);
             updateStakeoutGuidance();
             if (lastStakeDistance !== null) triggerProximityFeedback(lastStakeDistance);
@@ -1662,22 +1942,20 @@
         function updateStakeoutGuidance() {
             if (!stakeoutTarget) return;
 
-            // Kullanıcı konumu yoksa harita merkezini geçici referans al
-            let refLat = currentLat !== null ? currentLat : map.getCenter().lat;
-            let refLon = currentLon !== null ? currentLon : map.getCenter().lng;
+            let refLat = currentLat !== null ? currentLat : getExactCrosshairLatLng().lat;
+            let refLon = currentLon !== null ? currentLon : getExactCrosshairLatLng().lng;
 
             const userProj = calculateProjected(refLat, refLon);
             const targetProj = calculateProjected(stakeoutTarget.lat, stakeoutTarget.lon);
 
-            const dY = targetProj.y - userProj.y; // Doğu (+) / Batı (-)
-            const dX = targetProj.x - userProj.x; // Kuzey (+) / Güney (-)
+            const dY = targetProj.y - userProj.y;
+            const dX = targetProj.x - userProj.x;
             const dist = Math.hypot(dY, dX);
             const wasNull = (lastStakeDistance === null);
             lastStakeDistance = dist;
 
             const bearing = calculateBearing(refLat, refLon, stakeoutTarget.lat, stakeoutTarget.lon);
 
-            // Harita üzerinde canlı kılavuz çizgisi
             const lineCoords = [[refLat, refLon], [stakeoutTarget.lat, stakeoutTarget.lon]];
             if (stakeoutLine) {
                 stakeoutLine.setLatLngs(lineCoords);
@@ -1685,8 +1963,7 @@
                 stakeoutLine = L.polyline(lineCoords, { color: '#00e5ff', weight: 3, dashArray: '8, 8' }).addTo(map);
             }
 
-            // Metrikleri yazdır
-            document.getElementById('stake-dist').innerText = dist < 10 ? `${dist.toFixed(2)} m (${Math.round(dist*100)} cm)` : `${dist.toFixed(2)} m`;
+            document.getElementById('stake-dist').innerText = dist < 10 ? `${dist.toFixed(2)}m (${Math.round(dist*100)}cm)` : `${dist.toFixed(2)} m`;
             document.getElementById('stake-bearing').innerText = `${Math.round(bearing)}°`;
             document.getElementById('stake-dy-label').innerText = dY >= 0 ? "Doğu (+Y):" : "Batı (-Y):";
             document.getElementById('stake-dy').innerText = `${Math.abs(dY).toFixed(2)} m`;
@@ -1697,7 +1974,6 @@
             const cmdEl = document.getElementById('stake-command-text');
             const arrowEl = document.getElementById('stakeout-arrow');
 
-            // 1. Hedefe varış kontrolü (<= 50 cm)
             if (dist <= 0.50) {
                 panelEl.classList.add('arrived');
                 cmdEl.innerText = `🎯 HEDEFE ULAŞILDI! (${Math.round(dist * 100)} cm)`;
@@ -1708,12 +1984,10 @@
                 panelEl.classList.remove('arrived');
             }
 
-            // 2. Pusula veya GPS Yönüne Göre Anlık "İleri / Sağa / Sola Git" Komutu
             let activeHeading = compassHeading !== null ? compassHeading : currentHeading;
             if (activeHeading !== null && !isNaN(activeHeading)) {
                 document.getElementById('radar-top-label').innerText = "İLERİ";
-                let diff = (bearing - activeHeading + 540) % 360 - 180; // -180 ile +180 arası sapma açısı
-                // FontAwesome fa-location-arrow varsayılan olarak 45 derece sağ-üste bakar, -45 ile sıfırlanır
+                let diff = (bearing - activeHeading + 540) % 360 - 180;
                 arrowEl.style.transform = `rotate(${diff - 45}deg)`;
 
                 let stepDistText = dist < 5 ? `${(dist * 100).toFixed(0)} cm` : `${dist.toFixed(1)} m`;
@@ -1731,7 +2005,6 @@
                     cmdEl.innerText = `↩️ GERİ DÖN (HEDEF ARKANIZDA)`;
                 }
             } else {
-                // Pusula verisi yoksa Kuzey yukarı referanslı yönlendirme
                 document.getElementById('radar-top-label').innerText = "KUZEY";
                 arrowEl.style.transform = `rotate(${bearing - 45}deg)`;
                 let nsDir = dX >= 0 ? `KUZEYE ${Math.abs(dX).toFixed(1)}m` : `GÜNEYE ${Math.abs(dX).toFixed(1)}m`;
@@ -1749,11 +2022,11 @@
         let epochSimInterval = null;
 
         function startEpochAveraging() {
-            if (saveSourceMode === 'CROSSHAIR') {
+            if (saveSourceMode !== 'GPS') {
                 saveCurrentLocation();
                 return;
             }
-            if ( currentLat === null ) {
+            if (currentLat === null) {
                 showToast("Önce GPS bağlantısı bekleniyor!", "fa-satellite-dish");
                 return;
             }
@@ -1766,7 +2039,6 @@
             document.getElementById('epoch-progress-wrap').classList.add('active');
             document.getElementById('btn-start-epoch').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Ölçülüyor...`;
 
-            // İlk örneği hemen al ve saniyede 1 örnek topla
             collectEpochSample(currentLat, currentLon, currentAlt || 0, currentAcc || 5);
             epochSimInterval = setInterval(() => {
                 if (!epochActive) { clearInterval(epochSimInterval); return; }
@@ -1784,7 +2056,6 @@
             let pct = Math.min(100, Math.round((count / epochTargetCount) * 100));
             document.getElementById('epoch-bar-fill').style.width = pct + "%";
 
-            // Ağırlıklı ortalama ve RMS hesabı
             let avg = computeWeightedEpochAverage(epochSamples);
             document.getElementById('epoch-status-text').innerText = `Hassas Epok: ${count}/${epochTargetCount} (RMS: ±${avg.rms.toFixed(3)} m)`;
 
@@ -1792,7 +2063,7 @@
                 epochActive = false;
                 if (epochSimInterval) clearInterval(epochSimInterval);
                 document.getElementById('epoch-progress-wrap').classList.remove('active');
-                document.getElementById('btn-start-epoch').innerHTML = `<i class="fas fa-satellite"></i> Hassas Ortalama Al`;
+                document.getElementById('btn-start-epoch').innerHTML = `<i class="fas fa-satellite"></i> Hassas Ortalama`;
                 finalizePointSave(avg.lat, avg.lon, avg.alt, `Epok(${epochTargetCount}) RMS:±${avg.rms.toFixed(2)}m`);
             }
         }
@@ -1894,7 +2165,6 @@
                 measurePolygonLayer = L.polygon(latlngs, { color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 0.2, weight: 2 }).addTo(map);
             }
 
-            // Shoelace (Gauss) Düzlem Alan ve Uzunluk Hesabı (ITRF projeksiyon koordinatları üzerinden)
             const projPts = measurePoints.map(p => calculateProjected(p.lat, p.lon));
             let totalLen = 0;
             for (let i = 0; i < projPts.length - 1; i++) {
@@ -1902,7 +2172,6 @@
             }
             let area = 0;
             if (projPts.length >= 3) {
-                // Kapalı çevre için son noktadan ilk noktaya kenar
                 totalLen += Math.hypot(projPts[0].y - projPts[projPts.length-1].y, projPts[0].x - projPts[projPts.length-1].x);
                 let sum = 0;
                 for (let i = 0; i < projPts.length; i++) {
@@ -1938,7 +2207,7 @@
             showToast(`${pts.length} noktadan poligon alanı hesaplandı`, "fa-draw-polygon");
         }
 
-        // --- MANUEL KOORDİNAT DÖNÜŞTÜRÜCÜ VE NOKTA EKLEME ---
+        // --- MANUEL KOORDİNAT DÖNÜŞTÜRÜCÜ MODALI ---
         let lastConvertedPoint = null;
 
         function openConverterModal() {
@@ -2007,6 +2276,7 @@
         function convShowOnMap() {
             if (!lastConvertedPoint) return;
             closeModals();
+            map.invalidateSize({ pan: false });
             map.setView([lastConvertedPoint.lat, lastConvertedPoint.lon], 19);
             L.popup()
                 .setLatLng([lastConvertedPoint.lat, lastConvertedPoint.lon])
@@ -2020,6 +2290,7 @@
             renderActiveProjectMarkers();
             syncData();
             closeModals();
+            map.invalidateSize({ pan: false });
             map.setView([lastConvertedPoint.lat, lastConvertedPoint.lon], 19);
             showToast(`"${lastConvertedPoint.name}" aktif klasöre kaydedildi!`, "fa-check-circle");
         }
@@ -2029,22 +2300,24 @@
             startStakeoutPoint(lastConvertedPoint);
         }
 
-        // --- SEKME GEÇİŞLERİ VE KAYIT YÖNETİMİ ---
+        // --- SEKME GEÇİŞLERİ VE KAYIT YÖNETİMİ (CANLI GPS / NİŞANGAH / ELLE GİRME) ---
         function closeModals() {
             if (epochActive) {
                 epochActive = false;
                 if (epochSimInterval) clearInterval(epochSimInterval);
                 document.getElementById('epoch-progress-wrap').classList.remove('active');
-                document.getElementById('btn-start-epoch').innerHTML = `<i class="fas fa-satellite"></i> Hassas Ortalama Al`;
+                document.getElementById('btn-start-epoch').innerHTML = `<i class="fas fa-satellite"></i> Hassas Ortalama`;
             }
             document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
             document.getElementById('save-panel').classList.remove('show');
             document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-map').classList.add('active'); 
             closeCoffeeToast();
+            lockViewportScroll();
         }
 
         function switchTab(tabId) {
+            lockViewportScroll();
             if(tabId !== 'tab-install' && tabId !== 'tab-layer') {
                 document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
                 if(tabId !== 'tab-add') document.getElementById(tabId).classList.add('active');
@@ -2056,6 +2329,14 @@
 
             if (tabId === 'tab-add') {
                 document.getElementById('tab-map').classList.add('active'); 
+                // Nişangah açıksa otomatik NİŞANGAH sekmesini seç ve o anki tam merkez koordinatını kilitle
+                if (crosshairActive) {
+                    const c = getExactCrosshairLatLng();
+                    lockedCrosshairCoords = { lat: c.lat, lon: c.lng };
+                    saveSourceMode = 'CROSSHAIR';
+                }
+                syncSaveSourceTabsUI();
+                refreshLiveCoordinatesUI();
                 document.getElementById('save-panel').classList.add('show');
                 document.getElementById('active-project-label-add').innerText = activeProject;
                 document.getElementById('point-name').value = "P" + projectsData[activeProject].autoCounter.toString();
@@ -2076,24 +2357,55 @@
 
         function saveCurrentLocation() {
             let lat, lon, alt = 0, sourceNote = "";
-            if (saveSourceMode === 'CROSSHAIR') {
-                const center = map.getCenter();
+
+            if (saveSourceMode === 'MANUAL') {
+                const mType = document.getElementById('manual-add-type').value;
+                const domVal = document.getElementById('manual-add-dom').value;
+                const domNum = domVal === 'AUTO' ? (currentDOM || 33) : parseInt(domVal, 10);
+
+                if (mType === 'PROJ') {
+                    const yVal = parseFloat(document.getElementById('manual-add-y').value);
+                    const xVal = parseFloat(document.getElementById('manual-add-x').value);
+                    if (isNaN(yVal) || isNaN(xVal)) {
+                        showToast("Lütfen geçerli Y (Sağa) ve X (Yukarı) koordinatı girin!", "fa-exclamation-circle");
+                        return;
+                    }
+                    const inv = calculateInverseWGS84(yVal, xVal, domNum);
+                    lat = inv.lat;
+                    lon = inv.lon;
+                    sourceNote = `Elle Giriş (D${domNum})`;
+                } else {
+                    const latVal = parseFloat(document.getElementById('manual-add-lat').value);
+                    const lonVal = parseFloat(document.getElementById('manual-add-lon').value);
+                    if (isNaN(latVal) || isNaN(lonVal)) {
+                        showToast("Lütfen geçerli Enlem ve Boylam girin!", "fa-exclamation-circle");
+                        return;
+                    }
+                    lat = latVal;
+                    lon = lonVal;
+                    sourceNote = "Elle Giriş (WGS84)";
+                }
+            }
+            else if (saveSourceMode === 'CROSSHAIR') {
+                const center = lockedCrosshairCoords || getExactCrosshairLatLng();
                 lat = center.lat;
-                lon = center.lng;
+                lon = center.lon !== undefined ? center.lon : center.lng;
                 sourceNote = "Nişangah";
-            } else {
-                if (currentLat === null) {
-                    showToast("GPS konumu bekleniyor! Harita nişangahı ile de nokta atabilirsiniz.", "fa-satellite-dish");
+            }
+            else {
+                if (currentLat === null || currentLon === null) {
+                    showToast("GPS sinyali bekleniyor! Nişangah veya Elle Gir sekmesini de kullanabilirsiniz.", "fa-satellite-dish");
                     return;
                 }
                 lat = currentLat;
                 lon = currentLon;
                 alt = currentAlt || 0;
             }
-            finalizePointSave(lat, lon, alt, sourceNote);
+
+            finalizePointSave(lat, lon, alt, sourceNote, saveSourceMode === 'MANUAL');
         }
 
-        function finalizePointSave(lat, lon, alt, extraNote) {
+        function finalizePointSave(lat, lon, alt, extraNote, shouldCenterMap = false) {
             var nameInput = document.getElementById("point-name");
             var ptName = nameInput.value.trim();
             if (!ptName) {
@@ -2126,6 +2438,10 @@
 
             renderActiveProjectMarkers();
             switchTab('tab-map');
+            if (shouldCenterMap) {
+                map.invalidateSize({ pan: false });
+                map.setView([lat, lon], 18);
+            }
             syncData();
             showToast(`"${ptName}" noktası kaydedildi`, "fa-map-marker-alt");
         }
@@ -2168,7 +2484,7 @@
                     .bindTooltip(p.name, {
                         permanent: true,
                         direction: 'top',
-                        offset: [-14, -15],
+                        offset: [0, -36],
                         className: 'point-map-label'
                     });
                 pointMarkers[p.id] = marker;
@@ -2251,8 +2567,9 @@
         }
 
         function zoomToPoint(lat, lon) {
-            map.setView([lat, lon], 19);
             switchTab('tab-map');
+            map.invalidateSize({ pan: false });
+            map.setView([lat, lon], 19);
         }
 
         function updateListUI() {
@@ -2329,7 +2646,6 @@
             const safeProj = activeProject.replace(/\s+/g, '_');
 
             if (format === 'NCN') {
-                // NetCAD .NCN Formatı: NoktaAdı Y(Sağa) X(Yukarı) Z(Kot) Kod
                 let ncn = "";
                 points.forEach(p => {
                     const proj = calculateProjected(p.lat, p.lon);
@@ -2368,7 +2684,6 @@
                 downloadOrShareFile(kml, `${safeProj}.kml`, "application/vnd.google-earth.kml+xml");
             }
             else if (format === 'DXF') {
-                // AutoCAD DXF R12 (POINT + TEXT Katmanlı)
                 let entities = "";
                 points.forEach(p => {
                     const proj = calculateProjected(p.lat, p.lon);
@@ -2408,7 +2723,6 @@
                 downloadOrShareFile(JSON.stringify(geojson, null, 2), `${safeProj}.geojson`, "application/geo+json");
             }
             else {
-                // Standart TXT
                 let txtContent = "";
                 points.forEach(p => {
                     const proj = calculateProjected(p.lat, p.lon);
@@ -2472,7 +2786,6 @@
                                 }
                             });
                         } else if (typeof parsed === 'object') {
-                            // Sistem JSON yedeği
                             for (let k in parsed) {
                                 if (parsed[k] && Array.isArray(parsed[k].points)) {
                                     projectsData[k] = parsed[k];
@@ -2509,7 +2822,6 @@
                         }
                     }
                     else {
-                        // NCN, TXT, CSV satır satır okuma
                         const lines = content.split(/\r?\n/);
                         lines.forEach((line, idx) => {
                             let clean = line.trim();
@@ -2523,13 +2835,11 @@
 
                                 if (!isNaN(v1) && !isNaN(v2)) {
                                     let lat, lon, y, x;
-                                    // Değerler 90'dan küçükse WGS84 (Enlem/Boylam), büyükse Y/X (Sağa/Yukarı)
                                     if (Math.abs(v1) <= 90 && Math.abs(v2) <= 180) {
                                         lat = v1; lon = v2;
                                         const proj = calculateProjected(lat, lon);
                                         y = proj.y; x = proj.x;
                                     } else {
-                                        // NCN formatında genellikle Y (Sağa ~ 400.000-600.000) ve X (Yukarı ~ 4.000.000+)
                                         if (v1 > 1000000 && v2 < 1000000) {
                                             x = v1; y = v2;
                                         } else {
@@ -2559,7 +2869,10 @@
                         renderActiveProjectMarkers();
                         const pts = projectsData[activeProject].points;
                         const lastPt = pts[pts.length - 1];
-                        if (lastPt) map.setView([lastPt.lat, lastPt.lon], 17);
+                        if (lastPt) {
+                            map.invalidateSize({ pan: false });
+                            map.setView([lastPt.lat, lastPt.lon], 17);
+                        }
                         showToast(`${importedCount} nokta başarıyla içe aktarıldı!`, "fa-file-import");
                     } else {
                         showToast("Dosyada geçerli koordinat bulunamadı", "fa-exclamation-triangle");
