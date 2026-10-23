@@ -1,0 +1,25 @@
+{
+  "name": "GeoITRF Pro Terminal | Jeodezik Saha Ölçüm & Aplikasyon",
+  "short_name": "GeoITRF Pro",
+  "description": "ITRF96, ED50, UTM, WGS84 Koordinat Ölçüm, Nokta Aplikasyonu, Alan Hesabı ve NCN/DXF/KML Aktarım Uygulaması",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070b14",
+  "theme_color": "#00e5ff",
+  "categories": ["utilities", "navigation", "productivity"],
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
