@@ -1,4 +1,4 @@
-const CACHE_NAME = 'geoitrf-pro-v2.1';
+const CACHE_NAME = 'geoitrf-pro-v3.0';
 const TILE_CACHE_NAME = 'geoitrf-tiles-v2.1';
 
 const APP_ASSETS = [

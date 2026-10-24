@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | GeoITRF PRO v2.1 -->
+<!-- CREAT BY TONOZ | GeoITRF PRO v3.0 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -739,6 +739,108 @@
             font-size: 0.68rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.5);
         }
         body.hide-map-labels .point-map-label { display: none !important; }
+
+        /* ===================== v3 EKLEMELERİ ===================== */
+
+        /* Sol kontrollerdeki TKGM kısayol butonu */
+        .map-btn.tkgm-on { background: rgba(245, 158, 11, 0.22); color: var(--warning); border-color: var(--warning); box-shadow: 0 0 12px rgba(245, 158, 11, 0.45); }
+
+        /* Harita popup buton grubu (Aplikasyon + Yol Tarifi) */
+        .popup-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+        .popup-btn-row .popup-stake-btn { margin-top: 0; }
+        .popup-nav-btn {
+            width: 100%; padding: 6px; border-radius: 8px; border: none;
+            background: #4285F4; color: #fff; font-weight: 700; font-size: 0.75rem; cursor: pointer;
+        }
+        .popup-stake-btn, .popup-nav-btn { display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; }
+
+        /* NOKTA LİSTESİ KARTI (Koordinat kayması giderildi) */
+        .card-item.point-card { flex-direction: column; align-items: stretch; gap: 8px; }
+        .point-card .pc-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .point-card .pc-head h4 { margin: 0; font-size: 0.92rem; color: var(--text-main); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; word-break: break-word; }
+        .pc-coords {
+            display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 10px; row-gap: 3px;
+            align-items: baseline;
+            background: var(--input-bg); border: 1px solid var(--border-light); border-radius: 10px; padding: 7px 10px;
+        }
+        .pc-lbl { font-size: 0.66rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; white-space: nowrap; }
+        .pc-val { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; font-weight: 600; color: var(--accent); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+        .pc-val.sub { font-size: 0.72rem; font-weight: 500; color: var(--text-muted); }
+        .pc-sep { grid-column: 1 / -1; height: 1px; background: var(--border-light); margin: 2px 0; }
+        .point-card .point-note { margin: 0; }
+        .pc-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+        .pc-actions button {
+            min-width: 0; height: 36px; border-radius: 10px; border: 1px solid transparent; font-size: 0.7rem; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; font-family: 'Inter', sans-serif;
+        }
+        .pc-actions button i { font-size: 0.82rem; flex-shrink: 0; }
+        .btn-nav { background: rgba(66, 133, 244, 0.18); color: #4f8ef7; border: 1px solid rgba(66, 133, 244, 0.4) !important; }
+        @media (max-width: 420px) {
+            .pc-actions button { flex-direction: column; height: 46px; gap: 3px; font-size: 0.62rem; }
+            .pc-actions button i { font-size: 0.9rem; }
+        }
+
+        /* Alan hesabı için nokta seçim modu */
+        .area-select-bar {
+            display: none; flex-direction: column; gap: 8px; padding: 10px 16px;
+            background: rgba(245, 158, 11, 0.1); border-bottom: 1px solid rgba(245, 158, 11, 0.45); flex-shrink: 0;
+        }
+        .area-select-bar.show { display: flex; }
+        .area-select-info { font-size: 0.74rem; color: var(--text-main); line-height: 1.35; }
+        .area-select-info b { color: var(--warning); }
+        .area-select-actions { display: grid; grid-template-columns: 1fr 1fr 1.6fr; gap: 6px; }
+        .area-select-actions button {
+            padding: 8px 4px; border-radius: 9px; border: 1px solid var(--border-light); background: var(--card-bg);
+            color: var(--text-main); font-size: 0.72rem; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: 'Inter', sans-serif;
+        }
+        .area-select-actions button.primary { background: var(--warning); color: #000; border-color: var(--warning); }
+        .area-select-actions button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+        .area-btn-active { background: var(--warning) !important; color: #000 !important; border-color: var(--warning) !important; }
+        .point-card.selectable { cursor: pointer; }
+        .point-card.selected { border-color: var(--warning); background: rgba(245, 158, 11, 0.1); }
+        .pc-check {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border-light);
+            display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800;
+            font-family: 'JetBrains Mono', monospace; color: transparent;
+        }
+        .point-card.selected .pc-check { background: var(--warning); border-color: var(--warning); color: #000; }
+
+        /* Ölçüm çubuğu ek bilgiler */
+        .measure-hint { font-size: 0.68rem; color: var(--text-muted); text-align: center; line-height: 1.3; }
+        .measure-hint b { color: var(--warning); }
+        .measure-actions.v3 { grid-template-columns: repeat(4, 1fr); }
+        .measure-actions button { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .measure-vertex-label {
+            background: rgba(245, 158, 11, 0.92); color: #000; border: none; border-radius: 5px;
+            padding: 0 5px; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 800; box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+        .measure-vertex-label::before { display: none; }
+
+        /* YOL TARİFİ / HARİTA UYGULAMASI SEÇİM PANELİ */
+        .nav-sheet-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            z-index: 9550; display: none; align-items: flex-end; justify-content: center;
+        }
+        .nav-sheet-overlay.show { display: flex; }
+        .nav-sheet {
+            width: 100%; max-width: 440px; background: var(--surface-solid); border: 1px solid var(--border-light);
+            border-radius: 20px 20px 0 0; padding: 16px 16px calc(env(safe-area-inset-bottom) + 18px);
+            display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -10px 40px rgba(0,0,0,0.7);
+            max-height: 85%; overflow-y: auto;
+        }
+        .nav-sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .nav-sheet-title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; }
+        .nav-sheet-sub { font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+        .nav-opt {
+            display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px;
+            background: var(--card-bg); border: 1px solid var(--border-light); color: var(--text-main);
+            font-size: 0.86rem; font-weight: 600; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif; width: 100%;
+        }
+        .nav-opt:active { transform: scale(0.98); border-color: var(--accent); }
+        .nav-opt i { width: 22px; text-align: center; font-size: 1.1rem; flex-shrink: 0; }
+        .nav-opt small { display: block; font-size: 0.66rem; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+        .nav-opt.primary { border-color: rgba(66, 133, 244, 0.6); background: rgba(66, 133, 244, 0.14); }
     </style>
 </head>
 <body>
@@ -782,7 +884,7 @@
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
             <h2 class="splash-title">GeoITRF</h2>
-            <div class="splash-subtitle">PRO TERMINAL v2.1</div>
+            <div class="splash-subtitle">PRO TERMINAL v3.0</div>
         </div>
         <div class="globe-container">
             <div class="wireframe-globe">
@@ -941,6 +1043,7 @@
     <div class="left-controls">
         <button class="map-btn" id="btn-crosshair-toggle" aria-label="Nişangah Modu" title="Harita Merkez Nişangahı" onclick="toggleCrosshairMode()"><i class="fas fa-crosshairs"></i></button>
         <button class="map-btn" id="btn-measure-toggle" aria-label="Alan ve Mesafe Ölç" title="Alan ve Mesafe Ölçümü" onclick="toggleMeasureTool()"><i class="fas fa-ruler-combined"></i></button>
+        <button class="map-btn" id="btn-tkgm-quick" aria-label="TKGM Parselleri Göster/Kapat" title="TKGM Kadastro Parselleri Göster / Kapat" onclick="toggleTkgmParsels()"><i class="fas fa-border-all"></i></button>
         <button class="map-btn" id="btn-converter-open" aria-label="Koordinat Dönüştürücü" title="Manuel Koordinat Dönüştürücü" onclick="openConverterModal()"><i class="fas fa-calculator"></i></button>
         <button class="map-btn" id="btn-theme-quick" aria-label="Arazi Modu" title="Güneş Işığı / Gece Modu" onclick="toggleDaylightMode()"><i class="fas fa-sun"></i></button>
     </div>
@@ -992,9 +1095,10 @@
     <!-- ALAN VE MESAFE ÖLÇÜM ÇUBUĞU -->
     <div class="measure-bar" id="measure-bar">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:0.76rem; font-weight:700; color:var(--warning);"><i class="fas fa-draw-polygon"></i> Haritaya Dokunarak Köşe Ekleyin</span>
+            <span style="font-size:0.76rem; font-weight:700; color:var(--warning);"><i class="fas fa-draw-polygon"></i> Haritaya Dokunun veya Nokta Seçin</span>
             <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted);" onclick="toggleMeasureTool()"></i>
         </div>
+        <div class="measure-hint" id="measure-hint">Köşe: <b>0</b> • Alan hesabı için <b>en az 3 nokta</b> gerekli. Haritadaki kayıtlı noktalara dokunarak da köşe ekleyebilirsiniz.</div>
         <div class="measure-stats">
             <div class="measure-stat-item">
                 <small>Toplam Uzunluk</small>
@@ -1009,8 +1113,9 @@
                 <b id="measure-ha-val">0.00 daa</b>
             </div>
         </div>
-        <div class="measure-actions">
-            <button onclick="addGpsPointToMeasure()"><i class="fas fa-crosshairs"></i> GPS Ekle</button>
+        <div class="measure-actions v3">
+            <button onclick="addGpsPointToMeasure()"><i class="fas fa-crosshairs"></i> GPS</button>
+            <button onclick="openAreaPointPicker()" style="color:var(--warning);"><i class="fas fa-check-double"></i> Nokta Seç</button>
             <button onclick="undoMeasurePoint()"><i class="fas fa-undo"></i> Geri Al</button>
             <button onclick="clearMeasurePoints()" style="color:var(--danger);"><i class="fas fa-trash"></i> Temizle</button>
         </div>
@@ -1145,9 +1250,18 @@
         </div>
         <div class="search-filter-bar">
             <input type="text" id="point-search-input" placeholder="🔍 Nokta adı, kod veya koordinat ara..." oninput="updateListUI()">
-            <button onclick="measureActiveProjectPolygon()" style="padding:8px 12px; border-radius:10px; border:1px solid var(--border-light); background:var(--card-bg); color:var(--warning); font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap;" title="Klasördeki Noktalardan Alan Hesapla">
+            <button id="btn-area-select" onclick="startAreaSelection(false)" style="padding:8px 12px; border-radius:10px; border:1px solid var(--border-light); background:var(--card-bg); color:var(--warning); font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap;" title="Noktaları Seçerek Alan Hesapla (en az 3 nokta)">
                 <i class="fas fa-draw-polygon"></i> Alan
             </button>
+        </div>
+        <!-- ALAN HESABI İÇİN NOKTA SEÇİM ÇUBUĞU (v3) -->
+        <div class="area-select-bar" id="area-select-bar">
+            <div class="area-select-info" id="area-select-info">Alan köşelerini <b>sırayla</b> seçin (en az <b>3 nokta</b>). Seçili: <b>0</b></div>
+            <div class="area-select-actions">
+                <button onclick="toggleSelectAllAreaPoints()"><i class="fas fa-check-double"></i> Tümü</button>
+                <button onclick="cancelAreaSelection()" style="color:var(--danger);"><i class="fas fa-times"></i> İptal</button>
+                <button class="primary" id="btn-area-calc" onclick="confirmAreaSelection()" disabled><i class="fas fa-calculator"></i> Alanı Hesapla</button>
+            </div>
         </div>
         <div class="modal-body" id="points-list"></div>
         <div class="export-bar">
@@ -1297,6 +1411,47 @@
             <div class="dock-item main-add" id="tab-add" aria-label="Nokta Kaydet Sekmesi" onclick="switchTab('tab-add')" title="Nokta Ekle"><i class="fas fa-plus"></i></div>
             <div class="dock-item" id="tab-records" aria-label="Kayıtlar Sekmesi" onclick="switchTab('tab-records')" title="Projeler & Kayıtlar"><i class="fas fa-folder-open"></i></div>
             <div class="dock-item" id="tab-profile" aria-label="Profil Sekmesi" onclick="switchTab('tab-profile')" title="Profil & Bulut"><i class="fas fa-user"></i></div>
+        </div>
+    </div>
+
+    <!-- YOL TARİFİ / HARİTA UYGULAMASI SEÇİM PANELİ (v3) -->
+    <div class="nav-sheet-overlay" id="nav-sheet-overlay" onclick="if(event.target === this) closeNavSheet()">
+        <div class="nav-sheet">
+            <div class="nav-sheet-head">
+                <div style="min-width:0;">
+                    <p class="nav-sheet-title"><i class="fas fa-route" style="color:#4f8ef7; margin-right:6px;"></i> Yol Tarifi Al: <span id="nav-sheet-name" style="color:var(--accent);">P1</span></p>
+                    <div class="nav-sheet-sub" id="nav-sheet-coords">E: -- / B: --</div>
+                </div>
+                <i class="fas fa-times" style="cursor:pointer; color:var(--text-muted); font-size:1.2rem; padding:2px 4px;" onclick="closeNavSheet()"></i>
+            </div>
+            <button class="nav-opt primary" onclick="launchNavApp('google')">
+                <i class="fab fa-google" style="color:#4285F4;"></i>
+                <span>Google Haritalar'da Aç<small>Yüklüyse uygulamada açılır, yol tarifi başlatılır</small></span>
+            </button>
+            <button class="nav-opt" id="nav-opt-geo" onclick="launchNavApp('geo')">
+                <i class="fas fa-map-marked-alt" style="color:var(--success);"></i>
+                <span>Yüklü Harita Uygulamaları<small>Telefondaki harita uygulamalarından seçin</small></span>
+            </button>
+            <button class="nav-opt" id="nav-opt-apple" onclick="launchNavApp('apple')">
+                <i class="fab fa-apple" style="color:var(--text-main);"></i>
+                <span>Apple Haritalar<small>iOS yol tarifi</small></span>
+            </button>
+            <button class="nav-opt" onclick="launchNavApp('yandex')">
+                <i class="fab fa-yandex" style="color:#fc3f1d;"></i>
+                <span>Yandex Haritalar / Navigasyon<small>Araç ile yol tarifi</small></span>
+            </button>
+            <button class="nav-opt" onclick="launchNavApp('waze')">
+                <i class="fab fa-waze" style="color:#33ccff;"></i>
+                <span>Waze<small>Navigasyonu başlat</small></span>
+            </button>
+            <button class="nav-opt" id="nav-opt-share" onclick="launchNavApp('share')">
+                <i class="fas fa-share-alt" style="color:var(--accent);"></i>
+                <span>Başka Uygulama ile Paylaş / Aç<small>WhatsApp, Telegram vb. konum bağlantısı gönderin</small></span>
+            </button>
+            <button class="nav-opt" onclick="launchNavApp('copy')">
+                <i class="fas fa-copy" style="color:var(--text-muted);"></i>
+                <span>Koordinatı Kopyala<small>Enlem, Boylam (WGS84)</small></span>
+            </button>
         </div>
     </div>
 
@@ -1592,6 +1747,8 @@
             const tkgmSwitch = document.getElementById('toggle-tkgm-switch');
             if (tkgmCard) tkgmCard.classList.toggle('active', tkgmParselsActive);
             if (tkgmSwitch) tkgmSwitch.classList.toggle('active', tkgmParselsActive);
+            const tkgmQuickBtn = document.getElementById('btn-tkgm-quick');
+            if (tkgmQuickBtn) tkgmQuickBtn.classList.toggle('tkgm-on', tkgmParselsActive);
         }
         updateLayersModalUI();
 
@@ -2270,7 +2427,7 @@
             document.getElementById('btn-measure-toggle').classList.toggle('active-tool', measureModeActive);
             if (measureModeActive) {
                 closeModals();
-                showToast("Alan/Mesafe ölçümü: Haritaya dokunarak köşe ekleyin", "fa-ruler-combined");
+                showToast("Alan/Mesafe: Haritaya veya kayıtlı noktalara dokunun (alan için en az 3 nokta)", "fa-ruler-combined");
             } else {
                 clearMeasurePoints();
             }
@@ -2289,11 +2446,26 @@
             addMeasureVertex(currentLat, currentLon);
         }
 
-        function addMeasureVertex(lat, lon) {
-            measurePoints.push({ lat, lon });
-            let vm = L.circleMarker([lat, lon], { radius: 5, color: '#f59e0b', fillColor: '#fff', fillOpacity: 1, weight: 2 }).addTo(map);
+        function addMeasureVertex(lat, lon, label = null) {
+            measurePoints.push({ lat, lon, label });
+            const vmLabel = label ? `${measurePoints.length}: ${label}` : `${measurePoints.length}`;
+            let vm = L.circleMarker([lat, lon], { radius: 5, color: '#f59e0b', fillColor: '#fff', fillOpacity: 1, weight: 2, interactive: false })
+                .addTo(map)
+                .bindTooltip(vmLabel, { permanent: true, direction: 'right', offset: [6, 0], className: 'measure-vertex-label' });
             measureVertexMarkers.push(vm);
             redrawMeasureGeometry();
+        }
+
+        // v3: Haritadaki kayıtlı bir noktaya dokunulduğunda ölçüme köşe olarak ekle (tam koordinata yapışır)
+        function addSavedPointToMeasure(p) {
+            const last = measurePoints[measurePoints.length - 1];
+            if (last && Math.abs(last.lat - p.lat) < 1e-10 && Math.abs(last.lon - p.lon) < 1e-10) {
+                showToast(`"${p.name}" zaten son köşe olarak ekli`, "fa-info-circle");
+                return;
+            }
+            addMeasureVertex(p.lat, p.lon, p.name);
+            const n = measurePoints.length;
+            showToast(n < 3 ? `"${p.name}" eklendi • Alan için ${3 - n} nokta daha seçin` : `"${p.name}" köşe olarak eklendi (${n} köşe)`, "fa-map-pin");
         }
 
         function undoMeasurePoint() {
@@ -2348,27 +2520,133 @@
         }
 
         function updateMeasureStatsUI(len, area) {
+            const n = measurePoints.length;
             document.getElementById('measure-length-val').innerText = len >= 1000 ? `${(len/1000).toFixed(3)} km` : `${len.toFixed(2)} m`;
+            const hintEl = document.getElementById('measure-hint');
+            if (n < 3) {
+                // v3: Alan hesabı için en az 3 köşe zorunlu
+                document.getElementById('measure-area-val').innerText = `${n}/3 nokta`;
+                document.getElementById('measure-ha-val').innerText = `—`;
+                if (hintEl) hintEl.innerHTML = `Köşe: <b>${n}</b> • Alan hesabı için <b>${3 - n} nokta daha</b> ekleyin. Haritadaki kayıtlı noktalara dokunarak da seçebilirsiniz.`;
+                return;
+            }
             document.getElementById('measure-area-val').innerText = `${area.toFixed(2)} m²`;
             let dekar = area / 1000;
             let hektar = area / 10000;
             document.getElementById('measure-ha-val').innerText = area >= 10000 ? `${hektar.toFixed(3)} ha` : `${dekar.toFixed(2)} daa`;
+            if (hintEl) hintEl.innerHTML = `Köşe: <b>${n}</b> • Kapalı poligon alanı hesaplandı (${n} noktadan).`;
         }
 
-        function measureActiveProjectPolygon() {
-            const pts = projectsData[activeProject].points;
-            if (pts.length < 2) {
-                showToast("Alan/Mesafe hesabı için klasörde en az 2 nokta olmalı", "fa-info-circle");
+        // --- v3: ALAN HESABI İÇİN NOKTA SEÇİM MODU (EN AZ 3 NOKTA) ---
+        let areaSelectMode = false;
+        let areaSelectedIds = [];
+        let areaSelectAppend = false;
+
+        function startAreaSelection(appendToMeasure = false) {
+            const pts = projectsData[activeProject] ? projectsData[activeProject].points : [];
+            if (pts.length < 3) {
+                showToast("Alan hesabı için klasörde en az 3 nokta olmalı", "fa-info-circle");
                 return;
             }
+            if (areaSelectMode && !appendToMeasure) {
+                cancelAreaSelection();
+                return;
+            }
+            areaSelectMode = true;
+            areaSelectAppend = appendToMeasure;
+            areaSelectedIds = [];
+            document.getElementById('area-select-bar').classList.add('show');
+            document.getElementById('btn-area-select').classList.add('area-btn-active');
+            updateAreaSelectUI();
+            updateListUI();
+            showToast("Alan köşelerini sırayla seçin (en az 3 nokta)", "fa-draw-polygon");
+        }
+
+        function openAreaPointPicker() {
+            const pts = projectsData[activeProject] ? projectsData[activeProject].points : [];
+            if (pts.length < 3) {
+                showToast("Aktif klasörde en az 3 nokta olmalı. Haritaya dokunarak da köşe ekleyebilirsiniz.", "fa-info-circle");
+                return;
+            }
+            switchTab('tab-records');
+            startAreaSelection(true);
+        }
+
+        function resetAreaSelectionState() {
+            areaSelectMode = false;
+            areaSelectAppend = false;
+            areaSelectedIds = [];
+            const bar = document.getElementById('area-select-bar');
+            if (bar) bar.classList.remove('show');
+            const btn = document.getElementById('btn-area-select');
+            if (btn) btn.classList.remove('area-btn-active');
+        }
+
+        function cancelAreaSelection() {
+            resetAreaSelectionState();
+            updateListUI();
+        }
+
+        function toggleAreaPointSelection(id) {
+            if (!areaSelectMode) return;
+            const idx = areaSelectedIds.indexOf(id);
+            if (idx >= 0) areaSelectedIds.splice(idx, 1);
+            else areaSelectedIds.push(id);
+            updateAreaSelectUI();
+            updateListUI();
+        }
+
+        function toggleSelectAllAreaPoints() {
+            const pts = projectsData[activeProject] ? projectsData[activeProject].points : [];
+            if (areaSelectedIds.length === pts.length) areaSelectedIds = [];
+            else areaSelectedIds = pts.map(p => p.id);
+            updateAreaSelectUI();
+            updateListUI();
+        }
+
+        function updateAreaSelectUI() {
+            const n = areaSelectedIds.length;
+            const info = document.getElementById('area-select-info');
+            const btn = document.getElementById('btn-area-calc');
+            if (info) {
+                info.innerHTML = n < 3
+                    ? `Alan köşelerini <b>sırayla</b> seçin (en az <b>3 nokta</b>). Seçili: <b>${n}</b> • ${3 - n} nokta daha gerekli`
+                    : `Seçili: <b>${n} nokta</b> • Poligon seçim sırasına göre kapatılacak.`;
+            }
+            if (btn) {
+                btn.disabled = n < 3;
+                btn.innerHTML = `<i class="fas fa-calculator"></i> Alanı Hesapla (${n})`;
+            }
+        }
+
+        function confirmAreaSelection() {
+            if (areaSelectedIds.length < 3) {
+                showToast("Alan hesabı için en az 3 nokta seçmelisiniz", "fa-exclamation-circle");
+                return;
+            }
+            const allPts = projectsData[activeProject].points;
+            const selected = areaSelectedIds.map(id => allPts.find(p => p.id === id)).filter(Boolean);
+            const append = areaSelectAppend && measureModeActive;
+            resetAreaSelectionState();
             closeModals();
+
             measureModeActive = true;
             document.getElementById('measure-bar').classList.add('show');
             document.getElementById('btn-measure-toggle').classList.add('active-tool');
-            clearMeasurePoints();
-            pts.forEach(p => addMeasureVertex(p.lat, p.lon));
-            if (measurePolygonLayer) map.fitBounds(measurePolygonLayer.getBounds(), { padding: [40, 40] });
-            showToast(`${pts.length} noktadan poligon alanı hesaplandı`, "fa-draw-polygon");
+            if (!append) clearMeasurePoints();
+            selected.forEach(p => addMeasureVertex(p.lat, p.lon, p.name));
+
+            const fitLayer = measurePolygonLayer || measurePolylineLayer;
+            if (fitLayer) {
+                map.invalidateSize({ pan: false });
+                map.fitBounds(fitLayer.getBounds(), { padding: [50, 50] });
+            }
+            showToast(`${measurePoints.length} köşeden poligon alanı hesaplandı`, "fa-draw-polygon");
+        }
+
+        // Eski fonksiyon adı korunuyor (geriye dönük uyumluluk): artık nokta seçim modunu açar
+        function measureActiveProjectPolygon() {
+            startAreaSelection(false);
         }
 
         // --- MANUEL KOORDİNAT DÖNÜŞTÜRÜCÜ MODALI ---
@@ -2444,7 +2722,7 @@
             map.setView([lastConvertedPoint.lat, lastConvertedPoint.lon], 19);
             L.popup()
                 .setLatLng([lastConvertedPoint.lat, lastConvertedPoint.lon])
-                .setContent(`<div class="marker-popup"><h3>${lastConvertedPoint.name}</h3><div class="coords">Y: ${lastConvertedPoint.y_saga.toFixed(3)}<br>X: ${lastConvertedPoint.x_yukari.toFixed(3)}</div></div>`)
+                .setContent(`<div class="marker-popup"><h3>${lastConvertedPoint.name}</h3><div class="coords">Y: ${lastConvertedPoint.y_saga.toFixed(3)}<br>X: ${lastConvertedPoint.x_yukari.toFixed(3)}</div><div class="popup-btn-row"><button class="popup-stake-btn" onclick="convStartStakeout()"><i class="fas fa-bullseye"></i> Aplikasyon Yap</button><button class="popup-nav-btn" onclick="openNavSheet(${lastConvertedPoint.lat}, ${lastConvertedPoint.lon}, lastConvertedPoint.name)"><i class="fas fa-route"></i> Yol Tarifi Al</button></div></div>`)
                 .openOn(map);
         }
 
@@ -2475,6 +2753,8 @@
             document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
             document.getElementById('save-panel').classList.remove('show');
             document.getElementById('layers-panel').classList.remove('show');
+            resetAreaSelectionState();
+            closeNavSheet();
             document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-map').classList.add('active'); 
             closeCoffeeToast();
@@ -2498,6 +2778,8 @@
             document.getElementById('save-panel').classList.remove('show');
             if (layersPanelEl) layersPanelEl.classList.remove('show');
             closeCoffeeToast();
+            resetAreaSelectionState();
+            closeNavSheet();
 
             if (tabId === 'tab-layer') {
                 updateLayersModalUI();
@@ -2649,9 +2931,14 @@
                             E: ${p.lat.toFixed(6)}<br>
                             B: ${p.lon.toFixed(6)}
                         </div>
-                        <button class="popup-stake-btn" onclick="startStakeoutById(${p.id})">
-                            <i class="fas fa-bullseye"></i> Bu Noktaya Aplikasyon Yap
-                        </button>
+                        <div class="popup-btn-row">
+                            <button class="popup-stake-btn" onclick="startStakeoutById(${p.id})">
+                                <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                            </button>
+                            <button class="popup-nav-btn" onclick="openNavSheetById(${p.id})">
+                                <i class="fas fa-route"></i> Yol Tarifi Al
+                            </button>
+                        </div>
                     </div>`;
 
                 let marker = L.marker([p.lat, p.lon])
@@ -2663,6 +2950,18 @@
                         offset: [0, -36],
                         className: 'point-map-label'
                     });
+
+                // v3: Ölçüm modu açıkken noktaya dokunmak popup yerine noktayı alan köşesi olarak seçer
+                marker.off('click', marker._openPopup);
+                marker.on('click', function(e) {
+                    if (e && e.originalEvent) L.DomEvent.stop(e.originalEvent);
+                    if (measureModeActive) {
+                        marker.closePopup();
+                        addSavedPointToMeasure(p);
+                    } else {
+                        marker.openPopup();
+                    }
+                });
                 pointMarkers[p.id] = marker;
             });
         }
@@ -2689,6 +2988,7 @@
 
         function changeProject(name) {
             activeProject = name;
+            resetAreaSelectionState();
             updateDropdownUI();
             updateListUI();
             renderActiveProjectMarkers();
@@ -2772,23 +3072,162 @@
                 const proj = calculateProjected(p.lat, p.lon);
                 const catHtml = p.category ? `<span class="point-badge">${p.category}</span>` : '';
                 const noteHtml = p.desc ? `<p class="point-note"><i class="fas fa-sticky-note"></i> ${p.desc}</p>` : '';
-                const altInfo = p.alt ? ` • Z:${Number(p.alt).toFixed(1)}m` : '';
+                const altRow = p.alt ? `<span class="pc-lbl">Z (Kot)</span><span class="pc-val sub">${Number(p.alt).toFixed(2)} m</span>` : '';
+
+                // v3: Alan seçim modu
+                const selIdx = areaSelectMode ? areaSelectedIds.indexOf(p.id) : -1;
+                const isSelected = selIdx >= 0;
+                const cardClasses = `card-item point-card${areaSelectMode ? ' selectable' : ''}${isSelected ? ' selected' : ''}`;
+                const cardClick = areaSelectMode ? ` onclick="toggleAreaPointSelection(${p.id})"` : '';
+                const checkHtml = areaSelectMode ? `<div class="pc-check">${isSelected ? (selIdx + 1) : ''}</div>` : '';
+                const actionsHtml = areaSelectMode ? '' : `
+                    <div class="pc-actions">
+                        <button class="btn-stake" title="Canlı Aplikasyon (Noktayı Bul)" onclick="startStakeoutById(${p.id})"><i class="fas fa-bullseye"></i> Aplikasyon</button>
+                        <button class="btn-nav" title="Google Haritalar'da Aç / Yol Tarifi Al" onclick="openNavSheetById(${p.id})"><i class="fas fa-route"></i> Yol Tarifi</button>
+                        <button class="btn-go" title="Haritada Göster" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i> Harita</button>
+                        <button class="btn-del" title="Noktayı Sil" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i> Sil</button>
+                    </div>`;
+
                 html += `
-                <div class="card-item">
-                    <div class="card-info">
+                <div class="${cardClasses}"${cardClick}>
+                    <div class="pc-head">
+                        ${checkHtml}
                         <h4>${p.name} ${catHtml}</h4>
-                        <p class="itrf-coords">Y: ${proj.y.toFixed(3)} &nbsp; X: ${proj.x.toFixed(3)}</p>
-                        <p class="wgs-coords">E: ${p.lat.toFixed(6)} / B: ${p.lon.toFixed(6)}${altInfo}</p>
-                        ${noteHtml}
                     </div>
-                    <div class="card-actions">
-                        <button class="btn-stake" title="Canlı Aplikasyon (Noktayı Bul)" onclick="startStakeoutById(${p.id})"><i class="fas fa-bullseye"></i></button>
-                        <button class="btn-go" title="Haritada Göster" onclick="zoomToPoint(${p.lat}, ${p.lon})"><i class="fas fa-location-arrow"></i></button>
-                        <button class="btn-del" title="Noktayı Sil" onclick="deletePoint(${p.id})"><i class="fas fa-trash"></i></button>
+                    <div class="pc-coords">
+                        <span class="pc-lbl">Y (Sağa)</span><span class="pc-val">${proj.y.toFixed(3)}</span>
+                        <span class="pc-lbl">X (Yukarı)</span><span class="pc-val">${proj.x.toFixed(3)}</span>
+                        <div class="pc-sep"></div>
+                        <span class="pc-lbl">Enlem</span><span class="pc-val sub">${p.lat.toFixed(7)}</span>
+                        <span class="pc-lbl">Boylam</span><span class="pc-val sub">${p.lon.toFixed(7)}</span>
+                        ${altRow}
                     </div>
+                    ${noteHtml}
+                    ${actionsHtml}
                 </div>`;
             });
             listDiv.innerHTML = html;
+        }
+
+        // --- v3: YOL TARİFİ / HARİCİ HARİTA UYGULAMALARINDA AÇMA ---
+        let navTarget = null;
+        const isAndroidDevice = /Android/i.test(navigator.userAgent);
+        const isIOSDevice = /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        function findPointById(id) {
+            for (let projName in projectsData) {
+                const pt = (projectsData[projName].points || []).find(p => p.id === id);
+                if (pt) return pt;
+            }
+            return null;
+        }
+
+        function openNavSheetById(id) {
+            const pt = findPointById(id);
+            if (!pt) { showToast("Nokta bulunamadı", "fa-exclamation-circle"); return; }
+            openNavSheet(pt.lat, pt.lon, pt.name);
+        }
+
+        function openNavSheet(lat, lon, name) {
+            if (lat === undefined || lat === null || isNaN(lat) || isNaN(lon)) {
+                showToast("Geçerli koordinat bulunamadı", "fa-exclamation-circle");
+                return;
+            }
+            navTarget = { lat: Number(lat), lon: Number(lon), name: name || 'Hedef Nokta' };
+            map.closePopup();
+            document.getElementById('nav-sheet-name').innerText = navTarget.name;
+            document.getElementById('nav-sheet-coords').innerText = `E: ${navTarget.lat.toFixed(6)} / B: ${navTarget.lon.toFixed(6)}`;
+            document.getElementById('nav-opt-geo').style.display = isIOSDevice ? 'none' : 'flex';
+            document.getElementById('nav-opt-apple').style.display = isIOSDevice ? 'flex' : 'none';
+            document.getElementById('nav-sheet-overlay').classList.add('show');
+        }
+
+        function closeNavSheet() {
+            const el = document.getElementById('nav-sheet-overlay');
+            if (el) el.classList.remove('show');
+        }
+
+        function openExternalUrl(url) {
+            // Uygulama bağlantıları (https universal link) yeni sekmede açılır; yüklü uygulama varsa telefon onu tercih eder
+            const w = window.open(url, '_blank', 'noopener');
+            if (!w) window.location.href = url;
+        }
+
+        function launchNavApp(app) {
+            if (!navTarget) return;
+            const { lat, lon, name } = navTarget;
+            const ll = `${lat.toFixed(7)},${lon.toFixed(7)}`;
+            const label = encodeURIComponent(name);
+            const googleDirUrl = `https://www.google.com/maps/dir/?api=1&destination=${ll}&travelmode=driving`;
+
+            switch (app) {
+                case 'google':
+                    if (isAndroidDevice) {
+                        // Android: Google Maps uygulamasını doğrudan yol tarifi modunda aç, yoksa web'e düş
+                        window.location.href = `intent://maps.google.com/maps?daddr=${ll}&directionsmode=driving#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(googleDirUrl)};end`;
+                    } else if (isIOSDevice) {
+                        // iOS: Google Maps uygulaması yüklüyse aç, değilse web yol tarifine yönlendir
+                        const start = Date.now();
+                        window.location.href = `comgooglemaps://?daddr=${ll}&directionsmode=driving`;
+                        setTimeout(() => {
+                            if (!document.hidden && Date.now() - start < 2500) openExternalUrl(googleDirUrl);
+                        }, 1200);
+                    } else {
+                        openExternalUrl(googleDirUrl);
+                    }
+                    break;
+                case 'geo':
+                    if (isAndroidDevice) {
+                        // Android: Yüklü tüm harita/navigasyon uygulamalarını listeleyen sistem seçicisi
+                        window.location.href = `geo:${ll}?q=${ll}(${label})`;
+                    } else {
+                        openExternalUrl(googleDirUrl);
+                    }
+                    break;
+                case 'apple':
+                    window.location.href = `https://maps.apple.com/?daddr=${ll}&dirflg=d&q=${label}`;
+                    break;
+                case 'yandex':
+                    if (isAndroidDevice) {
+                        window.location.href = `intent://build_route_on_map?lat_to=${lat}&lon_to=${lon}#Intent;scheme=yandexnavi;package=ru.yandex.yandexnavi;S.browser_fallback_url=${encodeURIComponent(`https://yandex.com.tr/maps/?rtext=~${ll}&rtt=auto`)};end`;
+                    } else {
+                        openExternalUrl(`https://yandex.com.tr/maps/?rtext=~${ll}&rtt=auto`);
+                    }
+                    break;
+                case 'waze':
+                    openExternalUrl(`https://waze.com/ul?ll=${ll}&navigate=yes`);
+                    break;
+                case 'share': {
+                    const shareUrl = `https://www.google.com/maps/search/?api=1&query=${ll}`;
+                    const shareText = `${name} konumu (E: ${lat.toFixed(6)}, B: ${lon.toFixed(6)})`;
+                    if (navigator.share) {
+                        navigator.share({ title: name, text: shareText, url: shareUrl }).catch(() => {});
+                    } else {
+                        copyTextToClipboard(`${shareText}\n${shareUrl}`, "Konum bağlantısı panoya kopyalandı");
+                    }
+                    break;
+                }
+                case 'copy':
+                    copyTextToClipboard(`${lat.toFixed(7)}, ${lon.toFixed(7)}`, "Koordinat panoya kopyalandı");
+                    break;
+            }
+            closeNavSheet();
+        }
+
+        function copyTextToClipboard(text, okMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast(okMsg, "fa-copy")).catch(() => fallbackCopy());
+            } else {
+                fallbackCopy();
+            }
+            function fallbackCopy() {
+                const ta = document.createElement('textarea');
+                ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); showToast(okMsg, "fa-copy"); } catch (e) { showToast("Kopyalanamadı", "fa-exclamation-circle"); }
+                document.body.removeChild(ta);
+                lockViewportScroll();
+            }
         }
 
         // --- ÇOKLU FORMAT DIŞA AKTARIM (NCN, DXF, KML, CSV, TXT, GEOJSON) ---
