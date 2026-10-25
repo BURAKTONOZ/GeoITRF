@@ -3,6 +3,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     
     <!-- SEO BAŞLIĞI VE AÇIKLAMALARI -->
@@ -888,6 +889,65 @@
             background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.45); color: var(--danger);
             border-radius: 20px; padding: 2px 8px; font-size: 0.68rem; font-weight: 700; cursor: pointer; white-space: nowrap;
         }
+        .parcel-vertex-label {
+            background: rgba(16, 185, 129, 0.92); color: #000; border: 1px solid #fff; border-radius: 5px;
+            padding: 0 5px; font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 800;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.65); white-space: nowrap;
+        }
+        .parcel-vertex-label::before { display: none; }
+        .query-input-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .query-input {
+            width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--border-light);
+            background: var(--input-bg); color: var(--text-main); font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; font-weight: 700; outline: none; transition: 0.2s;
+        }
+        .query-input:focus { border-color: var(--accent); }
+
+        /* Pasif / İşlem Görmüş Parsel ("Gittiği Parseller") Uyarı ve Seçim Kartı */
+        .passive-parcel-box {
+            display: none; flex-direction: column; gap: 10px;
+            background: rgba(245, 158, 11, 0.12); border: 1.5px solid var(--warning);
+            border-radius: 14px; padding: 12px;
+        }
+        .passive-parcel-box.show { display: flex; }
+        .passive-parcel-header {
+            display: flex; align-items: flex-start; gap: 8px;
+            color: var(--warning); font-size: 0.82rem; font-weight: 700; line-height: 1.35;
+        }
+        .passive-parcel-reason {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 9px; padding: 8px 10px; font-size: 0.76rem; color: var(--text-main); line-height: 1.4;
+        }
+        .passive-parcel-reason b { color: var(--warning); }
+        .passive-parcel-list {
+            display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto;
+        }
+        .passive-parcel-item {
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+            background: var(--surface-solid); border: 1px solid var(--border-light);
+            border-radius: 10px; padding: 9px 10px; cursor: pointer; transition: 0.2s;
+        }
+        .passive-parcel-item:hover, .passive-parcel-item:active {
+            border-color: var(--accent); background: rgba(0, 229, 255, 0.1);
+        }
+        .passive-parcel-item-info { min-width: 0; flex: 1; }
+        .passive-parcel-item-title { font-size: 0.82rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+        .passive-parcel-item-sub { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
+        .passive-parcel-go-btn {
+            background: var(--success); color: #fff; border: none; border-radius: 8px;
+            padding: 6px 10px; font-size: 0.72rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+            display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+        }
+        .coord-parcel-btn-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px;
+        }
+        .btn-coord-parcel {
+            padding: 9px 8px; border-radius: 10px; border: 1px solid var(--border-light);
+            background: var(--card-bg); color: var(--text-main); font-size: 0.73rem; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+            font-family: 'Inter', sans-serif; white-space: nowrap;
+        }
+        .btn-coord-parcel i { color: var(--accent); }
     </style>
 </head>
 <body>
@@ -1469,22 +1529,98 @@
                 </div>
             </div>
 
-            <!-- PARSEL SORGULAMA BÖLÜMÜ (İLERİDE EKLENECEK UYARISI) -->
+            <!-- PARSEL SORGULAMA BÖLÜMÜ (TKGM İDARİ YAPI & ADA/PARSEL API) -->
             <div id="query-pane-parcel" style="display:none; flex-direction:column; gap:12px;">
-                <div class="drawer-card" style="text-align:center; padding:30px 18px; align-items:center; gap:12px;">
-                    <div style="width:64px; height:64px; border-radius:50%; background:rgba(245, 158, 11, 0.15); border:1px solid rgba(245, 158, 11, 0.4); display:flex; align-items:center; justify-content:center; color:var(--warning); font-size:1.8rem;">
-                        <i class="fas fa-tools"></i>
+                <div class="drawer-card" style="gap:11px;">
+                    <div style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
+                        <i class="fas fa-vector-square" style="color:var(--success);"></i> <b>Ada ve Parsel</b> sorgulandığında parsel sınırı ve tüm <b>köşe noktaları (K1, K2...)</b> haritada geçici olarak çizilir. Köşelere tıklayarak <b>aplikasyon</b> yapabilir veya <b>klasöre kaydedebilirsiniz</b>.
                     </div>
-                    <h3 style="margin:0; font-size:1.05rem; color:var(--text-main);">TKGM Ada / Parsel Sorgulama</h3>
-                    <p style="margin:0; font-size:0.84rem; color:var(--text-muted); line-height:1.5;">
-                        TKGM Ada / Parsel numarasına göre doğrudan parsel sorgulama özelliği <b>ileride eklenecektir</b>.
-                    </p>
-                    <p style="margin:0; font-size:0.76rem; color:var(--accent); line-height:1.4;">
-                        Şimdilik <b>Adres Sorgula</b> sekmesinden konum bulabilir ve sol menüdeki <b>TKGM Parsel</b> butonuyla harita üzerinde kadastro parsel sınırlarını görüntüleyebilirsiniz.
-                    </p>
-                    <button class="pwa-install-btn" style="margin-top:6px; max-width:240px;" onclick="switchQueryMode('ADDRESS')">
-                        <i class="fas fa-map-signs"></i> Adres Sorgulamaya Dön
-                    </button>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>1. İl Seçin</span>
+                            <span class="status-tag" id="p-status-il"></span>
+                        </div>
+                        <select class="query-select" id="p-select-il" onchange="onParcelIlChange(this.value)">
+                            <option value="">-- İl Seçiniz --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>2. İlçe Seçin</span>
+                            <span class="status-tag" id="p-status-ilce"></span>
+                        </div>
+                        <select class="query-select" id="p-select-ilce" onchange="onParcelIlceChange(this.value)" disabled>
+                            <option value="">-- Önce İl Seçiniz --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>3. Mahalle / Köy Seçin</span>
+                            <span class="status-tag" id="p-status-mahalle"></span>
+                        </div>
+                        <select class="query-select" id="p-select-mahalle" disabled>
+                            <option value="">-- Önce İlçe Seçiniz --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-input-grid-2">
+                        <div class="query-field-group">
+                            <div class="query-field-label">
+                                <span>4. Ada No</span>
+                                <span class="status-tag" style="color:var(--text-muted);">Yoksa 0</span>
+                            </div>
+                            <input type="text" inputmode="numeric" class="query-input" id="p-input-ada" placeholder="Örn: 101 veya 0">
+                        </div>
+                        <div class="query-field-group">
+                            <div class="query-field-label">
+                                <span>5. Parsel No</span>
+                                <span class="status-tag" style="color:var(--warning);">Zorunlu</span>
+                            </div>
+                            <input type="text" inputmode="numeric" class="query-input" id="p-input-parsel" placeholder="Örn: 1">
+                        </div>
+                    </div>
+
+                    <div class="query-actions-grid">
+                        <button class="pwa-install-btn" id="btn-execute-parcel-query" onclick="executeParcelQuery()">
+                            <i class="fas fa-search-location"></i> Parseli Sorgula ve Çiz
+                        </button>
+                        <button class="btn-query-clear" onclick="clearTempQueryLayer(true)" title="Haritadaki Geçici Çizimi Temizle">
+                            <i class="fas fa-eraser"></i> Temizle
+                        </button>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border-light); padding-top:8px; margin-top:2px;">
+                        <div style="font-size:0.68rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">
+                            Koordinattan Doğrudan Parsel Sorgula (/parsel/{lat}/{lon}):
+                        </div>
+                        <div class="coord-parcel-btn-row">
+                            <button class="btn-coord-parcel" onclick="queryParcelByCurrentCoord('CROSSHAIR')">
+                                <i class="fas fa-crosshairs"></i> Harita Merkezinden
+                            </button>
+                            <button class="btn-coord-parcel" onclick="queryParcelByCurrentCoord('GPS')">
+                                <i class="fas fa-satellite-dish"></i> Canlı GPS Konumundan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SENARYO C: PASİF / İŞLEM GÖRMÜŞ PARSEL ("GİTTİĞİ PARSELLER") UYARI VE SEÇİM ALANI -->
+                    <div class="passive-parcel-box" id="passive-parcel-box">
+                        <div class="passive-parcel-header">
+                            <i class="fas fa-exclamation-triangle" style="font-size:1.1rem; margin-top:1px;"></i>
+                            <div>
+                                <div id="passive-parcel-title">Bu Parsel İşlem Görmüş (Pasif Parsel)!</div>
+                                <div style="font-size:0.7rem; font-weight:500; color:var(--text-muted);">Aşağıdaki yeni aktif parsellerden gitmek istediğinizi seçin:</div>
+                            </div>
+                        </div>
+                        <div class="passive-parcel-reason" id="passive-parcel-reason"></div>
+                        <div class="passive-parcel-list" id="passive-parcel-list"></div>
+                        <button class="pwa-install-btn" id="btn-draw-all-passive" style="background:rgba(245,158,11,0.2); color:var(--warning); border:1px solid var(--warning); padding:9px; font-size:0.78rem;" onclick="drawAllSuccessorParcels()">
+                            <i class="fas fa-layer-group"></i> Gittiği Tüm Parselleri Haritada Çiz
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2904,8 +3040,12 @@
             startStakeoutPoint(lastConvertedPoint);
         }
 
-        // --- v4: ADRES VE PARSEL SORGULAMA MOTORU (TKGM MAKS API) ---
-        const MAKS_API_BASE = 'https://cbsapi.tkgm.gov.tr/megsiswebapi.v3.1/api/maksIdariYapi';
+        // --- v4: ADRES VE PARSEL SORGULAMA MOTORU (TKGM MAKS & İDARİ YAPI / PARSEL API) ---
+        const TKGM_API_BASE = 'https://cbsapi.tkgm.gov.tr/megsiswebapi.v3.1/api';
+        const MAKS_API_BASE = `${TKGM_API_BASE}/maksIdariYapi`;
+        const PARSEL_IDARI_API_BASE = `${TKGM_API_BASE}/idariYapi`;
+        const PARSEL_QUERY_API_BASE = `${TKGM_API_BASE}/parsel`;
+
         let maksCache = {
             il: [],
             ilce: [],
@@ -2913,14 +3053,25 @@
             yol: [],
             kapi: []
         };
+        let parcelCache = {
+            il: [],
+            ilce: [],
+            mahalle: []
+        };
         let tempQueryLayerGroup = null;
         let lastTempQueryPoint = null;
+        let lastQueriedParcelVertices = [];
+        let lastPassiveSuccessorFeatures = [];
+        let lastPassiveReasonText = '';
 
         function openQueryModal() {
             closeModals();
             document.getElementById('modal-query').classList.add('show');
             if (maksCache.il.length === 0) {
                 loadMaksIller();
+            }
+            if (parcelCache.il.length === 0) {
+                loadParcelIller();
             }
         }
 
@@ -2935,7 +3086,7 @@
                 parcelBtn.classList.add('active');
                 addrPane.style.display = 'none';
                 parcelPane.style.display = 'flex';
-                showToast("Parsel sorgulama özelliği ileride eklenecektir", "fa-info-circle");
+                if (parcelCache.il.length === 0) loadParcelIller();
             } else {
                 parcelBtn.classList.remove('active');
                 addrBtn.classList.add('active');
@@ -2954,16 +3105,35 @@
             });
         }
 
+        // Tüm istekler GET metodu, headers: { "Accept": "application/json" } ve referrerPolicy: 'no-referrer' ile atılır
+        async function fetchTkgmJson(url) {
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                referrerPolicy: 'no-referrer'
+            });
+            if (!res.ok) {
+                const err = new Error(`HTTP ${res.status}`);
+                err.status = res.status;
+                throw err;
+            }
+            return await res.json();
+        }
+
         async function fetchMaksGeoJSON(endpoint) {
-            const res = await fetch(`${MAKS_API_BASE}/${endpoint}`);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
+            const data = await fetchTkgmJson(`${MAKS_API_BASE}/${endpoint}`);
+            return Array.isArray(data?.features) ? data.features : [];
+        }
+
+        async function fetchParcelIdariGeoJSON(endpoint) {
+            const data = await fetchTkgmJson(`${PARSEL_IDARI_API_BASE}/${endpoint}`);
             return Array.isArray(data?.features) ? data.features : [];
         }
 
         async function loadMaksIller() {
             const sel = document.getElementById('q-select-il');
             const st = document.getElementById('q-status-il');
+            if (!sel || !st) return;
             st.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
             sel.disabled = true;
             try {
@@ -2980,9 +3150,671 @@
                 st.innerText = `Bağlantı hatası`;
                 sel.innerHTML = `<option value="">-- İller yüklenemedi (Tekrar deneyin) --</option>`;
                 sel.disabled = false;
-                showToast("İl listesi alınamadı, internet bağlantınızı kontrol edin", "fa-exclamation-triangle");
             }
         }
+
+        // --- PARSEL SORGULAMA İDARİ YAPI ZİNCİRİ (ilListe -> ilceListe -> mahalleListe -> parsel) ---
+        async function loadParcelIller() {
+            const sel = document.getElementById('p-select-il');
+            const st = document.getElementById('p-status-il');
+            if (!sel || !st) return;
+            st.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            sel.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchParcelIdariGeoJSON('ilListe'));
+                parcelCache.il = features;
+                let html = `<option value="">-- İl Seçiniz (${features.length}) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                sel.innerHTML = html;
+                sel.disabled = false;
+                st.innerText = `${features.length} il`;
+            } catch (e) {
+                st.innerText = `Bağlantı hatası`;
+                sel.innerHTML = `<option value="">-- İller yüklenemedi (Tekrar deneyin) --</option>`;
+                sel.disabled = false;
+            }
+        }
+
+        async function onParcelIlChange(ilId) {
+            const selIlce = document.getElementById('p-select-ilce');
+            const selMah = document.getElementById('p-select-mahalle');
+            const stIlce = document.getElementById('p-status-ilce');
+
+            parcelCache.ilce = [];
+            parcelCache.mahalle = [];
+            selMah.innerHTML = `<option value="">-- Önce İlçe Seçiniz --</option>`;
+            selMah.disabled = true;
+            document.getElementById('p-status-mahalle').innerText = '';
+
+            if (!ilId) {
+                selIlce.innerHTML = `<option value="">-- Önce İl Seçiniz --</option>`;
+                selIlce.disabled = true;
+                stIlce.innerText = '';
+                return;
+            }
+
+            stIlce.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            selIlce.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchParcelIdariGeoJSON(`ilceListe/${encodeURIComponent(ilId)}`));
+                parcelCache.ilce = features;
+                let html = `<option value="">-- İlçe Seçiniz (${features.length}) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                selIlce.innerHTML = html;
+                selIlce.disabled = false;
+                stIlce.innerText = `${features.length} ilçe`;
+            } catch (e) {
+                stIlce.innerText = `Hata`;
+                selIlce.innerHTML = `<option value="">-- İlçeler yüklenemedi --</option>`;
+                showToast("İlçe listesi alınamadı", "fa-exclamation-triangle");
+            }
+        }
+
+        async function onParcelIlceChange(ilceId) {
+            const selMah = document.getElementById('p-select-mahalle');
+            const stMah = document.getElementById('p-status-mahalle');
+            parcelCache.mahalle = [];
+
+            if (!ilceId) {
+                selMah.innerHTML = `<option value="">-- Önce İlçe Seçiniz --</option>`;
+                selMah.disabled = true;
+                stMah.innerText = '';
+                return;
+            }
+
+            stMah.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            selMah.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchParcelIdariGeoJSON(`mahalleListe/${encodeURIComponent(ilceId)}`));
+                parcelCache.mahalle = features;
+                let html = `<option value="">-- Mahalle / Köy Seçiniz (${features.length}) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                selMah.innerHTML = html;
+                selMah.disabled = false;
+                stMah.innerText = `${features.length} mahalle`;
+            } catch (e) {
+                stMah.innerText = `Hata`;
+                selMah.innerHTML = `<option value="">-- Mahalleler yüklenemedi --</option>`;
+                showToast("Mahalle listesi alınamadı", "fa-exclamation-triangle");
+            }
+        }
+
+        function extractParcelDistinctVertices(geometry, adaStr, parselStr, fullTitle) {
+            if (!geometry || !geometry.coordinates) return [];
+            let rings = [];
+            if (geometry.type === 'Polygon') {
+                rings = geometry.coordinates;
+            } else if (geometry.type === 'MultiPolygon') {
+                geometry.coordinates.forEach(poly => {
+                    if (Array.isArray(poly)) rings.push(...poly);
+                });
+            }
+
+            const vertices = [];
+            const seen = new Set();
+            let counter = 1;
+
+            rings.forEach(ring => {
+                if (!Array.isArray(ring)) return;
+                // GeoJSON poligonlarında son nokta ilk noktanın tekrarıdır (kapanış noktası)
+                for (let i = 0; i < ring.length; i++) {
+                    const pt = ring[i];
+                    if (!Array.isArray(pt) || pt.length < 2) continue;
+                    const lon = Number(pt[0]);
+                    const lat = Number(pt[1]);
+                    if (isNaN(lat) || isNaN(lon)) continue;
+                    const key = `${lat.toFixed(7)}_${lon.toFixed(7)}`;
+                    if (seen.has(key)) continue;
+                    seen.add(key);
+
+                    const proj = calculateProjected(lat, lon);
+                    const vName = `K${counter}`;
+                    vertices.push({
+                        index: counter,
+                        id: Date.now() + counter,
+                        name: `${adaStr}/${parselStr} ${vName}`,
+                        shortName: vName,
+                        category: 'Sinir',
+                        desc: `${fullTitle} (${vName} Köşesi)`,
+                        lat: lat,
+                        lon: lon,
+                        alt: 0,
+                        y_saga: proj.y,
+                        x_yukari: proj.x,
+                        dom: proj.dom
+                    });
+                    counter++;
+                }
+            });
+            return vertices;
+        }
+
+        function startParcelVertexStakeout(idx) {
+            const v = lastQueriedParcelVertices.find(item => item.index === idx);
+            if (!v) return;
+            if (measureModeActive) {
+                addSavedPointToMeasure(v);
+                return;
+            }
+            startStakeoutPoint(v);
+        }
+
+        function saveParcelVertexToProject(idx) {
+            const v = lastQueriedParcelVertices.find(item => item.index === idx);
+            if (!v) return;
+            projectsData[activeProject].points.push({
+                ...v,
+                id: Date.now() + Math.floor(Math.random() * 1000)
+            });
+            renderActiveProjectMarkers();
+            syncData();
+            showToast(`"${v.name}" aktif klasöre eklendi!`, "fa-check-circle");
+        }
+
+        function saveAllParcelVerticesToProject() {
+            if (!lastQueriedParcelVertices || lastQueriedParcelVertices.length === 0) return;
+            const baseTime = Date.now();
+            lastQueriedParcelVertices.forEach((v, i) => {
+                projectsData[activeProject].points.push({
+                    ...v,
+                    id: baseTime + i
+                });
+            });
+            renderActiveProjectMarkers();
+            syncData();
+            showToast(`${lastQueriedParcelVertices.length} parsel köşe noktası "${activeProject}" klasörüne kaydedildi!`, "fa-layer-group");
+        }
+
+        function hidePassiveParcelUI() {
+            const box = document.getElementById('passive-parcel-box');
+            if (box) box.classList.remove('show');
+            lastPassiveSuccessorFeatures = [];
+            lastPassiveReasonText = '';
+        }
+
+        // SENARYO C: Pasif / İşlem Görmüş Parsellerin ("gittigiParselListe") Özyinelemeli (Recursive) Çözümleyicisi
+        async function resolvePassiveSuccessorsRecursive(feature, depth = 0) {
+            if (!feature || depth > 5) return { activeFeatures: [], reasons: [] };
+
+            const props = feature.properties || {};
+            const reasons = [];
+            if (props.gittigiParselSebep && String(props.gittigiParselSebep).trim() !== '') {
+                const oldLabel = `${props.adaNo || '0'}/${props.parselNo || ''}`;
+                reasons.push(`${oldLabel}: ${String(props.gittigiParselSebep).trim()}`);
+            }
+
+            let rawList = props.gittigiParselListe;
+            if (!rawList || String(rawList).trim() === '') {
+                return { activeFeatures: [], reasons };
+            }
+
+            let parsed = null;
+            try {
+                parsed = typeof rawList === 'string' ? JSON.parse(rawList) : rawList;
+            } catch (err) {
+                console.error("gittigiParselListe JSON.parse hatası:", err);
+                return { activeFeatures: [], reasons };
+            }
+
+            const childFeatures = Array.isArray(parsed?.features)
+                ? parsed.features
+                : (Array.isArray(parsed) ? parsed : (parsed?.type === 'Feature' ? [parsed] : []));
+
+            const activeFeatures = [];
+
+            for (const child of childFeatures) {
+                const cProps = child?.properties || {};
+                const hasGeom = Boolean(child?.geometry && Array.isArray(child.geometry.coordinates) && child.geometry.coordinates.length > 0);
+                const hasNestedList = Boolean(cProps.gittigiParselListe && String(cProps.gittigiParselListe).trim() !== '');
+
+                if (hasGeom && String(cProps.durum ?? '1') !== '0') {
+                    activeFeatures.push(child);
+                } else if (!hasGeom && hasNestedList) {
+                    // Zincirleme değişiklik: içindeki gittigiParselListe'yi de recursive olarak çöz
+                    const sub = await resolvePassiveSuccessorsRecursive(child, depth + 1);
+                    reasons.push(...sub.reasons);
+                    activeFeatures.push(...sub.activeFeatures);
+                } else if (!hasGeom && cProps.mahalleId && cProps.parselNo) {
+                    // Geometri boşsa yeni adaNo/parselNo ile /parsel/{mahalleId}/{yeniAda}/{yeniParsel} uç noktasına istek at
+                    try {
+                        const yeniAda = (cProps.adaNo !== undefined && cProps.adaNo !== null && String(cProps.adaNo).trim() !== '') ? String(cProps.adaNo).trim() : '0';
+                        const yeniParsel = String(cProps.parselNo).trim();
+                        const fUrl = `${PARSEL_QUERY_API_BASE}/${encodeURIComponent(cProps.mahalleId)}/${encodeURIComponent(yeniAda)}/${encodeURIComponent(yeniParsel)}`;
+                        const fData = await fetchTkgmJson(fUrl);
+                        const fFeat = fData?.type === 'FeatureCollection' ? fData?.features?.[0] : (fData?.type === 'Feature' || fData?.properties ? fData : null);
+                        if (fFeat) {
+                            if (fFeat.geometry && String(fFeat.properties?.durum ?? '1') !== '0') {
+                                activeFeatures.push(fFeat);
+                            } else {
+                                const sub2 = await resolvePassiveSuccessorsRecursive(fFeat, depth + 1);
+                                reasons.push(...sub2.reasons);
+                                activeFeatures.push(...sub2.activeFeatures);
+                            }
+                        }
+                    } catch (e) {}
+                } else if (hasGeom) {
+                    activeFeatures.push(child);
+                }
+            }
+
+            return { activeFeatures, reasons };
+        }
+
+        // Aktif bir parsel Feature objesini ve köşe noktalarını haritaya çizen ortak fonksiyon
+        function renderActiveParcelFeatureOnMap(feat, fallbackAda = '0', fallbackParsel = '', passiveNote = '') {
+            if (!feat || !feat.geometry) {
+                showToast("Parsel geometrisi bulunamadı!", "fa-exclamation-triangle");
+                return;
+            }
+
+            clearTempQueryLayer(false);
+            tempQueryLayerGroup = L.featureGroup().addTo(map);
+
+            const props = feat.properties || {};
+            const ilAd = props.ilAd || '';
+            const ilceAd = props.ilceAd || '';
+            const mahAd = props.mahalleAd || '';
+            const adaNo = (props.adaNo !== undefined && props.adaNo !== null && String(props.adaNo) !== '') ? props.adaNo : fallbackAda;
+            const parselNo = (props.parselNo !== undefined && props.parselNo !== null && String(props.parselNo) !== '') ? props.parselNo : fallbackParsel;
+            const nitelik = props.nitelik || '-';
+            const alanText = props.alan ? `${props.alan} m²` : '-';
+            const pafta = props.pafta || '-';
+            const mevkii = props.mevkii || '-';
+
+            const fullTitle = `${[ilAd, ilceAd, mahAd].filter(Boolean).join(' / ')} - Ada: ${adaNo} Parsel: ${parselNo}`;
+            const shortBadge = `${mahAd ? mahAd + ' ' : ''}${adaNo}/${parselNo} Parsel`;
+            const passiveBannerHtml = passiveNote
+                ? `<div style="margin:4px 0; padding:4px 6px; border-radius:6px; background:rgba(245,158,11,0.18); border:1px solid var(--warning); color:var(--warning); font-size:0.68rem; font-weight:700;"><i class="fas fa-exchange-alt"></i> ${passiveNote}</div>`
+                : '';
+
+            // 1) Parsel Poligonunu Çiz
+            const polyLayer = L.geoJSON(feat, {
+                style: {
+                    color: '#10b981',
+                    weight: 3.5,
+                    opacity: 0.95,
+                    fillColor: '#10b981',
+                    fillOpacity: 0.18
+                }
+            }).addTo(tempQueryLayerGroup);
+
+            // 2) Parsel Köşe Noktalarını (K1, K2...) Çıkar ve Çiz
+            lastQueriedParcelVertices = extractParcelDistinctVertices(feat.geometry, adaNo, parselNo, fullTitle);
+
+            const bounds = polyLayer.getBounds();
+            const center = bounds.isValid() ? bounds.getCenter() : L.latLng(lastQueriedParcelVertices[0]?.lat || 39.92, lastQueriedParcelVertices[0]?.lon || 32.85);
+            const centerProj = calculateProjected(center.lat, center.lng);
+
+            lastTempQueryPoint = {
+                id: Date.now(),
+                name: `Ada:${adaNo} P:${parselNo}`,
+                category: 'Sinir',
+                desc: `${fullTitle} (${nitelik} - ${alanText})`,
+                lat: center.lat,
+                lon: center.lng,
+                alt: 0,
+                y_saga: centerProj.y,
+                x_yukari: centerProj.x,
+                dom: centerProj.dom
+            };
+
+            const parcelPopupHtml = `
+                <div class="marker-popup">
+                    <h3><i class="fas fa-vector-square"></i> Ada: ${adaNo} / Parsel: ${parselNo}</h3>
+                    <p><b>${[ilAd, ilceAd, mahAd].filter(Boolean).join(' • ')}</b></p>
+                    ${passiveBannerHtml}
+                    <hr>
+                    <div class="coords" style="font-size:0.72rem;">
+                        <b>Tapu Alanı:</b> ${alanText}<br>
+                        <b>Nitelik:</b> ${nitelik}<br>
+                        <b>Mevkii / Pafta:</b> ${mevkii} / ${pafta}<br>
+                        <b>Köşe Sayısı:</b> ${lastQueriedParcelVertices.length} adet (K1..K${lastQueriedParcelVertices.length})<br>
+                        <b>Merkez Y:</b> ${centerProj.y.toFixed(3)}<br>
+                        <b>Merkez X:</b> ${centerProj.x.toFixed(3)}
+                    </div>
+                    <div class="popup-btn-row">
+                        <button class="popup-stake-btn" onclick="startTempQueryStakeout()">
+                            <i class="fas fa-bullseye"></i> Merkeze Aplikasyon
+                        </button>
+                        <button class="popup-nav-btn" onclick="openNavSheet(${center.lat}, ${center.lng}, 'Ada ${adaNo} Parsel ${parselNo}')">
+                            <i class="fas fa-route"></i> Yol Tarifi Al
+                        </button>
+                    </div>
+                    <button onclick="saveAllParcelVerticesToProject()" style="margin-top:6px; width:100%; padding:7px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.16); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                        <i class="fas fa-layer-group"></i> Tüm Köşeleri (${lastQueriedParcelVertices.length} Nokta) Klasöre Ekle
+                    </button>
+                </div>`;
+
+            polyLayer.bindPopup(parcelPopupHtml);
+
+            // Her bir parsel köşesini ayrı tıklanabilir işaretçi ve etiket ile haritaya ekle
+            lastQueriedParcelVertices.forEach(v => {
+                const vMarker = L.circleMarker([v.lat, v.lon], {
+                    radius: 7,
+                    color: '#ffffff',
+                    weight: 2,
+                    fillColor: '#f59e0b',
+                    fillOpacity: 1
+                }).addTo(tempQueryLayerGroup);
+
+                const vPopupHtml = `
+                    <div class="marker-popup">
+                        <h3><i class="fas fa-map-pin"></i> ${v.shortName} Köşe Noktası (${adaNo}/${parselNo})</h3>
+                        <p>${[ilAd, ilceAd, mahAd].filter(Boolean).join(' / ')}</p>
+                        <hr>
+                        <div class="coords">
+                            Y (Sağa): ${v.y_saga.toFixed(3)}<br>
+                            X (Yukarı): ${v.x_yukari.toFixed(3)}<br>
+                            E: ${v.lat.toFixed(7)}<br>
+                            B: ${v.lon.toFixed(7)}
+                        </div>
+                        <div class="popup-btn-row">
+                            <button class="popup-stake-btn" onclick="startParcelVertexStakeout(${v.index})">
+                                <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                            </button>
+                            <button class="popup-nav-btn" onclick="openNavSheet(${v.lat}, ${v.lon}, '${v.name.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-route"></i> Yol Tarifi Al
+                            </button>
+                        </div>
+                        <button onclick="saveParcelVertexToProject(${v.index})" style="margin-top:6px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                            <i class="fas fa-plus-circle"></i> Bu Köşeyi (${v.shortName}) Klasöre Kaydet
+                        </button>
+                        <button onclick="saveAllParcelVerticesToProject()" style="margin-top:5px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--warning); background:rgba(245,158,11,0.14); color:var(--warning); font-weight:700; font-size:0.71rem; cursor:pointer;">
+                            <i class="fas fa-layer-group"></i> Tüm Parsel Köşelerini (${lastQueriedParcelVertices.length}) Kaydet
+                        </button>
+                    </div>`;
+
+                vMarker.bindPopup(vPopupHtml);
+                vMarker.bindTooltip(v.shortName, {
+                    permanent: true,
+                    direction: 'top',
+                    offset: [0, -8],
+                    className: 'parcel-vertex-label'
+                });
+
+                vMarker.off('click', vMarker._openPopup);
+                vMarker.on('click', function(e) {
+                    if (e && e.originalEvent) L.DomEvent.stop(e.originalEvent);
+                    if (measureModeActive) {
+                        vMarker.closePopup();
+                        addSavedPointToMeasure(v);
+                    } else {
+                        vMarker.openPopup();
+                    }
+                });
+            });
+
+            closeModals();
+            map.invalidateSize({ pan: false });
+            if (bounds.isValid()) {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 19 });
+            } else {
+                map.setView([center.lat, center.lng], 19);
+            }
+            L.popup()
+                .setLatLng([center.lat, center.lng])
+                .setContent(parcelPopupHtml)
+                .openOn(map);
+
+            const badge = document.getElementById('temp-query-badge');
+            const badgeText = document.getElementById('temp-query-badge-text');
+            if (badge && badgeText) {
+                badgeText.innerText = `${shortBadge} (${lastQueriedParcelVertices.length} Köşe)`;
+                badge.classList.add('show');
+            }
+            showToast(`${shortBadge} ve ${lastQueriedParcelVertices.length} köşe noktası çizildi`, "fa-vector-square");
+        }
+
+        // Pasif parselin gittiği parseller listesinden kullanıcının seçtiği parsele gitme
+        function selectSuccessorParcel(index) {
+            const feat = lastPassiveSuccessorFeatures[index];
+            if (!feat) return;
+            const p = feat.properties || {};
+            renderActiveParcelFeatureOnMap(feat, p.adaNo || '0', p.parselNo || '', lastPassiveReasonText);
+        }
+
+        // Pasif parselin gittiği tüm yeni parselleri tek seferde haritada çizme (istenirse herhangi birine tıklanıp seçilebilir)
+        function drawAllSuccessorParcels() {
+            if (!lastPassiveSuccessorFeatures || lastPassiveSuccessorFeatures.length === 0) return;
+            if (lastPassiveSuccessorFeatures.length === 1) {
+                selectSuccessorParcel(0);
+                return;
+            }
+
+            clearTempQueryLayer(false);
+            tempQueryLayerGroup = L.featureGroup().addTo(map);
+            lastQueriedParcelVertices = [];
+
+            const colors = ['#10b981', '#00e5ff', '#f59e0b', '#a855f7', '#ec4899', '#3b82f6'];
+
+            lastPassiveSuccessorFeatures.forEach((feat, idx) => {
+                if (!feat || !feat.geometry) return;
+                const p = feat.properties || {};
+                const adaNo = p.adaNo || '0';
+                const parselNo = p.parselNo || '';
+                const nitelik = p.nitelik || '-';
+                const alanText = p.alan ? `${p.alan} m²` : '-';
+                const color = colors[idx % colors.length];
+
+                const layer = L.geoJSON(feat, {
+                    style: {
+                        color: color,
+                        weight: 3.5,
+                        opacity: 0.95,
+                        fillColor: color,
+                        fillOpacity: 0.22
+                    }
+                }).addTo(tempQueryLayerGroup);
+
+                const b = layer.getBounds();
+                if (b.isValid()) {
+                    const c = b.getCenter();
+                    const lbl = L.circleMarker([c.lat, c.lng], { radius: 1, opacity: 0, fillOpacity: 0 })
+                        .addTo(tempQueryLayerGroup)
+                        .bindTooltip(`${adaNo}/${parselNo}`, { permanent: true, direction: 'center', className: 'parcel-vertex-label' });
+                }
+
+                layer.bindPopup(`
+                    <div class="marker-popup">
+                        <h3><i class="fas fa-vector-square"></i> Yeni Aktif Parsel: ${adaNo}/${parselNo}</h3>
+                        <p>${lastPassiveReasonText}</p>
+                        <hr>
+                        <div class="coords">
+                            <b>Alan:</b> ${alanText}<br>
+                            <b>Nitelik:</b> ${nitelik}
+                        </div>
+                        <button class="popup-stake-btn" onclick="selectSuccessorParcel(${idx})">
+                            <i class="fas fa-map-pin"></i> Bu Parseli Seç ve Köşelerini Göster
+                        </button>
+                    </div>
+                `);
+            });
+
+            const bounds = tempQueryLayerGroup.getBounds();
+            closeModals();
+            map.invalidateSize({ pan: false });
+            if (bounds.isValid()) {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 19 });
+            }
+
+            const badge = document.getElementById('temp-query-badge');
+            const badgeText = document.getElementById('temp-query-badge-text');
+            if (badge && badgeText) {
+                badgeText.innerText = `Gittiği ${lastPassiveSuccessorFeatures.length} Yeni Parsel`;
+                badge.classList.add('show');
+            }
+            showToast(`Gittiği ${lastPassiveSuccessorFeatures.length} yeni parsel haritada çizildi`, "fa-layer-group");
+        }
+
+        // Pasif parsel tespit edildiğinde modal içinde gittiği parselleri ve sebebi listele
+        function showPassiveParcelSelectionUI(oldAda, oldParsel, reasons, activeFeatures) {
+            lastPassiveSuccessorFeatures = activeFeatures;
+            lastPassiveReasonText = reasons.length > 0 ? reasons.join(' → ') : `${oldAda}/${oldParsel} parseli işlem görmüştür (Pasif Parsel)`;
+
+            const box = document.getElementById('passive-parcel-box');
+            const titleEl = document.getElementById('passive-parcel-title');
+            const reasonEl = document.getElementById('passive-parcel-reason');
+            const listEl = document.getElementById('passive-parcel-list');
+            const drawAllBtn = document.getElementById('btn-draw-all-passive');
+
+            titleEl.innerText = `Ada: ${oldAda} / Parsel: ${oldParsel} Pasif (İşlem Görmüş)!`;
+            reasonEl.innerHTML = `<b>İşlem Nedeni:</b> ${lastPassiveReasonText}<br><span style="color:var(--accent); font-size:0.71rem;">Bu parsel toplam <b>${activeFeatures.length}</b> yeni aktif parsele gitmiştir. Gitmek istediğiniz parseli aşağıdan seçin:</span>`;
+
+            let html = '';
+            activeFeatures.forEach((f, idx) => {
+                const p = f.properties || {};
+                const adaNo = (p.adaNo !== undefined && p.adaNo !== null && String(p.adaNo) !== '') ? p.adaNo : '0';
+                const parselNo = p.parselNo || '-';
+                const alan = p.alan ? `${p.alan} m²` : '-';
+                const nitelik = p.nitelik || '-';
+                const mahAd = p.mahalleAd ? `${p.mahalleAd} • ` : '';
+
+                html += `
+                    <div class="passive-parcel-item" onclick="selectSuccessorParcel(${idx})">
+                        <div class="passive-parcel-item-info">
+                            <div class="passive-parcel-item-title"><i class="fas fa-arrow-right"></i> Ada: ${adaNo} / Parsel: ${parselNo}</div>
+                            <div class="passive-parcel-item-sub">${mahAd}Alan: <b>${alan}</b> • ${nitelik}</div>
+                        </div>
+                        <button class="passive-parcel-go-btn" onclick="event.stopPropagation(); selectSuccessorParcel(${idx});">
+                            <i class="fas fa-location-arrow"></i> Seç ve Git
+                        </button>
+                    </div>`;
+            });
+
+            listEl.innerHTML = html;
+            if (drawAllBtn) {
+                drawAllBtn.style.display = activeFeatures.length > 1 ? 'flex' : 'none';
+            }
+            box.classList.add('show');
+            box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Ortak Parsel Yanıt Analizcisi (Senaryo A, B ve C)
+        async function processParcelApiResponse(data, queriedAda, queriedParsel) {
+            hidePassiveParcelUI();
+
+            const feat = data?.type === 'FeatureCollection'
+                ? data?.features?.[0]
+                : ((data?.type === 'Feature' || data?.properties) ? data : null);
+
+            if (!feat) {
+                showToast("Parsel bulunamadı (Ada/Parsel numarasını kontrol edin)", "fa-exclamation-triangle");
+                return;
+            }
+
+            const props = feat.properties || {};
+            const hasGeometry = Boolean(feat.geometry && Array.isArray(feat.geometry.coordinates) && feat.geometry.coordinates.length > 0);
+
+            // SENARYO B: Aktif Parsel (HTTP 200 + Geometry Dolu)
+            if (hasGeometry && String(props.durum ?? '1') !== '0') {
+                renderActiveParcelFeatureOnMap(feat, queriedAda, queriedParsel);
+                return;
+            }
+
+            // SENARYO C: Pasif / İşlem Görmüş Parsel (HTTP 200 + Geometry NULL veya durum === "0")
+            const { activeFeatures, reasons } = await resolvePassiveSuccessorsRecursive(feat, 0);
+
+            if (activeFeatures.length > 0) {
+                const sebepMsg = reasons[0] || props.gittigiParselSebep || "Tevhid / İfraz / İmar İşlemi";
+                showToast(`Pasif Parsel! (${sebepMsg}) -> ${activeFeatures.length} yeni parsele gitti`, "fa-exchange-alt");
+                // Önce hangi parsellere gittiğini ve sebebini ekranda listele, kullanıcı seçtiğine gitsin
+                showPassiveParcelSelectionUI(
+                    props.adaNo || queriedAda || '0',
+                    props.parselNo || queriedParsel || '',
+                    reasons,
+                    activeFeatures
+                );
+                return;
+            }
+
+            // Eğer durum 0 olmasına rağmen kendi geometrisi varsa yine de çiz
+            if (hasGeometry) {
+                renderActiveParcelFeatureOnMap(feat, queriedAda, queriedParsel, props.gittigiParselSebep || 'Pasif Parsel');
+                return;
+            }
+
+            showToast("Parsel pasif durumda ancak gittiği aktif parsel verisi bulunamadı", "fa-exclamation-triangle");
+        }
+
+        async function executeParcelQuery() {
+            const mahalleId = document.getElementById('p-select-mahalle').value;
+            let ada = (document.getElementById('p-input-ada').value || '').trim();
+            let parsel = (document.getElementById('p-input-parsel').value || '').trim();
+
+            if (!mahalleId) {
+                showToast("Lütfen İl, İlçe ve Mahalle seçin", "fa-exclamation-circle");
+                return;
+            }
+            if (!ada) ada = "0";
+            if (!parsel) {
+                showToast("Lütfen Parsel numarasını girin", "fa-exclamation-circle");
+                return;
+            }
+
+            const btn = document.getElementById('btn-execute-parcel-query');
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Parsel Sorgulanıyor...`;
+            hidePassiveParcelUI();
+
+            try {
+                const url = `${PARSEL_QUERY_API_BASE}/${encodeURIComponent(mahalleId)}/${encodeURIComponent(ada)}/${encodeURIComponent(parsel)}`;
+                const data = await fetchTkgmJson(url);
+                await processParcelApiResponse(data, ada, parsel);
+            } catch (e) {
+                // SENARYO A: Gerçekten Olmayan Parsel (HTTP 404)
+                if (e && e.status === 404) {
+                    showToast("Parsel bulunamadı (Ada/Parsel numarasını kontrol edin)", "fa-exclamation-triangle");
+                } else {
+                    showToast("Parsel bulunamadı veya TKGM servisi yanıt vermedi", "fa-exclamation-triangle");
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+            }
+        }
+
+        // Koordinattan Parsel Sorgusu: /parsel/{lat}/{lon}
+        async function queryParcelByCurrentCoord(sourceType = 'CROSSHAIR') {
+            let lat, lon;
+            if (sourceType === 'GPS') {
+                if (currentLat === null || currentLon === null) {
+                    showToast("Canlı GPS konumu henüz hazır değil!", "fa-satellite-dish");
+                    return;
+                }
+                lat = currentLat;
+                lon = currentLon;
+            } else {
+                const c = getExactCrosshairLatLng();
+                lat = c.lat;
+                lon = c.lng;
+            }
+
+            showToast("Koordinattan parsel sorgulanıyor...", "fa-spinner");
+            try {
+                const url = `${PARSEL_QUERY_API_BASE}/${encodeURIComponent(lat.toFixed(7))}/${encodeURIComponent(lon.toFixed(7))}`;
+                const data = await fetchTkgmJson(url);
+                await processParcelApiResponse(data, '0', '');
+            } catch (e) {
+                if (e && e.status === 404) {
+                    showToast("Bu koordinatta kayıtlı parsel bulunamadı (Yol/Tescil Harici olabilir)", "fa-exclamation-triangle");
+                } else {
+                    showToast("Koordinattan parsel sorgulanamadı", "fa-exclamation-triangle");
+                }
+            }
+        }
+
+        // Sayfa yüklendiğinde İl listelerini otomatik hazırla
+        window.addEventListener('DOMContentLoaded', () => {
+            loadParcelIller();
+            loadMaksIller();
+        });
 
         async function onQueryIlChange(ilId) {
             const selIlce = document.getElementById('q-select-ilce');
@@ -3151,6 +3983,7 @@
                 tempQueryLayerGroup = null;
             }
             lastTempQueryPoint = null;
+            lastQueriedParcelVertices = [];
             const badge = document.getElementById('temp-query-badge');
             if (badge) badge.classList.remove('show');
             if (notify) showToast("Geçici sorgu çizimi haritadan kaldırıldı", "fa-eraser");
