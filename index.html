@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | GeoITRF PRO v4.0 -->
+<!-- CREAT BY TONOZ | GeoITRF PRO v5.0 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -210,69 +210,82 @@
         @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
-        /* HUD Bar (Üst Panel) */
+        /* HUD Bar (Üst Panel - v5 Kompakt & Düzenli Tasarım) */
         .hud-container { 
             position: fixed; 
-            top: calc(env(safe-area-inset-top) + 8px); 
+            top: calc(env(safe-area-inset-top) + 6px); 
             left: 10px; right: 10px; z-index: 1000; 
-            display: flex; flex-direction: column; gap: 5px; pointer-events: none; 
+            display: flex; flex-direction: column; gap: 4px; pointer-events: none; 
         }
         .hud-top { 
             display: flex; justify-content: space-between; align-items: center; pointer-events: all; 
-            background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light); 
-            border-radius: 14px; padding: 7px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.35); 
+            background: var(--surface); backdrop-filter: blur(16px); border: 1px solid var(--border-light); 
+            border-radius: 14px 14px 8px 8px; padding: 6px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.35); 
         }
-        .hud-left-group { display: flex; align-items: center; gap: 10px; min-width: 0; }
-        .menu-btn { font-size: 1.15rem; color: var(--text-main); cursor: pointer; padding: 4px; }
-        .hud-title { font-size: 0.92rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-main); white-space: nowrap;}
-        .hud-title span { color: var(--accent); font-weight: 600; font-size: 0.68rem; letter-spacing: 1px; padding: 2px 5px; border-radius: 5px; background: rgba(0,229,255,0.12);}
+        .hud-left-group { display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .menu-btn { font-size: 1.1rem; color: var(--text-main); cursor: pointer; padding: 3px; }
+        .hud-title { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.4px; color: var(--text-main); white-space: nowrap;}
+        .hud-title span { color: var(--accent); font-weight: 600; font-size: 0.64rem; letter-spacing: 0.8px; padding: 2px 5px; border-radius: 5px; background: rgba(0,229,255,0.12);}
         .hud-right-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-        .gps-indicator { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; color: var(--text-muted); font-weight: 600; font-family: 'JetBrains Mono', monospace; white-space: nowrap;}
+        .gps-indicator { display: flex; align-items: center; gap: 5px; font-size: 0.66rem; color: var(--text-muted); font-weight: 600; font-family: 'JetBrains Mono', monospace; white-space: nowrap; cursor: pointer;}
         .gps-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); flex-shrink: 0;}
         .gps-dot.connected { background: var(--success); box-shadow: 0 0 10px var(--success); }
         .blink { animation: blinker 1.5s infinite; }
 
+        /* Birleşik Kompakt Telemetri ve Koordinat Kartı */
+        .hud-telemetry-card {
+            pointer-events: all;
+            background: var(--surface); backdrop-filter: blur(16px); border: 1px solid var(--border-light);
+            border-radius: 8px 8px 14px 14px; padding: 5px 8px;
+            display: flex; flex-direction: column; gap: 4px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        }
         .hud-coords { display: grid; grid-template-columns: 1fr 1fr; pointer-events: all; gap: 6px; }
         .coord-box { 
-            min-width: 0; background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light); 
-            border-radius: 12px; padding: 7px 10px; display: flex; flex-direction: column; gap: 1px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.28); cursor: pointer; overflow: hidden;
+            min-width: 0; background: var(--card-bg); border: 1px solid var(--border-light); 
+            border-radius: 9px; padding: 4px 8px; display: flex; flex-direction: column; gap: 1px; 
+            cursor: pointer; overflow: hidden; transition: border-color 0.2s;
         }
         .coord-box:active { border-color: var(--accent); }
         .coord-box.right { text-align: right; }
         .c-header { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
         .coord-box.right .c-header { flex-direction: row-reverse; }
-        .c-label { font-size: 0.56rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        .c-copy-icon { font-size: 0.58rem; color: var(--text-muted); opacity: 0.6; flex-shrink: 0; }
-        .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .c-label { font-size: 0.54rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .c-copy-icon { font-size: 0.54rem; color: var(--text-muted); opacity: 0.65; flex-shrink: 0; }
+        .c-vals-inline {
+            display: flex; justify-content: space-between; align-items: baseline; gap: 6px;
+        }
+        .coord-box.right .c-vals-inline { justify-content: flex-end; gap: 8px; }
+        .c-val { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;}
         .c-val.glow { color: var(--accent); font-weight: 700; }
 
-        /* Alt Bilgi Çubuğu (Kot, Hız, Semt) */
+        /* Alt Bilgi Çubuğu (Kot, Hız, Semt - Kompakt Şerit) */
         .hud-subbar {
             display: flex; justify-content: space-between; align-items: center; pointer-events: all;
-            background: var(--surface); backdrop-filter: blur(14px); border: 1px solid var(--border-light);
-            border-radius: 10px; padding: 4px 10px; font-size: 0.65rem; color: var(--text-muted);
-            font-family: 'JetBrains Mono', monospace; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            border-top: 1px solid var(--border-light);
+            padding: 3px 4px 1px; font-size: 0.62rem; color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
         }
-        .hud-subbar-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .hud-subbar-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; cursor: pointer; }
         .hud-subbar-item b { color: var(--text-main); font-weight: 600; }
-        .hud-subbar-item i { color: var(--accent); font-size: 0.62rem; }
+        .hud-subbar-item i { color: var(--accent); font-size: 0.6rem; }
         .dom-selector-pill {
             background: rgba(0, 229, 255, 0.12); color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.3);
-            padding: 2px 6px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.62rem; white-space: nowrap;
+            padding: 2px 6px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.6rem; white-space: nowrap;
         }
 
         /* Sağ & Sol Harita Kontrolleri */
-        .right-controls { position: fixed; right: 10px; top: 53%; transform: translateY(-50%); z-index: 950; display: flex; flex-direction: column; gap: 8px;}
-        .left-controls { position: fixed; left: 10px; top: 53%; transform: translateY(-50%); z-index: 950; display: flex; flex-direction: column; gap: 8px;}
+        .right-controls { position: fixed; right: 10px; top: 55%; transform: translateY(-50%); z-index: 950; display: flex; flex-direction: column; gap: 7px; transition: opacity 0.25s, transform 0.25s;}
+        .left-controls { position: fixed; left: 10px; top: 55%; transform: translateY(-50%); z-index: 950; display: flex; flex-direction: column; gap: 7px; transition: opacity 0.25s, transform 0.25s;}
         .map-btn { 
-            width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border-light); 
-            background: var(--surface); backdrop-filter: blur(12px); color: var(--text-main); font-size: 0.95rem; 
-            display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.35); cursor:pointer; 
+            width: 38px; height: 38px; border-radius: 11px; border: 1px solid var(--border-light); 
+            background: var(--surface); backdrop-filter: blur(12px); color: var(--text-main); font-size: 0.9rem; 
+            display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 14px rgba(0,0,0,0.35); cursor:pointer; 
         }
         .map-btn:active { transform: scale(0.92); }
         .map-btn.active-tool { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
         .coffee-btn { color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);}
+        .help-btn { color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.45); font-weight: 800; }
 
         /* CANLI NOKTA APLİKASYON (STAKEOUT) PANELİ */
         .stakeout-panel {
@@ -723,16 +736,40 @@
         .install-step { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-light);}
         .install-step i { color: var(--accent); font-size: 1.5rem; margin-bottom: 10px;}
 
-        /* Harita Popup ve Kalıcı Etiketler */
-        .leaflet-popup-content-wrapper { background: var(--surface-solid); color: var(--text-main); border-radius: 14px; border: 1px solid var(--border-light);}
+        /* Harita Popup ve Kalıcı Etiketler (v5 Dar ve Şık Tasarım - Yan Butonlarla Çakışmaz) */
+        .leaflet-popup-content-wrapper {
+            background: var(--surface-solid); color: var(--text-main);
+            border-radius: 16px; border: 1px solid var(--accent);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.75);
+            padding: 2px;
+        }
+        .leaflet-popup-content {
+            margin: 10px 12px !important;
+            width: auto !important;
+            min-width: 210px;
+            max-width: min(246px, calc(100vw - 122px)) !important;
+        }
         .leaflet-popup-tip { background: var(--surface-solid); }
-        .marker-popup h3 { color: var(--accent); margin: 0 0 2px 0; font-size: 0.95rem; font-weight: 700; }
-        .marker-popup p { margin: 0; font-size: 0.72rem; color: var(--text-muted);}
+        .marker-popup h3 { color: var(--accent); margin: 0 0 3px 0; font-size: 0.88rem; font-weight: 800; display: flex; align-items: center; gap: 6px; padding-right: 14px; line-height: 1.25; }
+        .marker-popup p { margin: 0; font-size: 0.69rem; color: var(--text-muted); line-height: 1.35; word-break: break-word; }
         .marker-popup hr { border: 0; border-top: 1px solid var(--border-light); margin: 6px 0; }
-        .marker-popup .coords { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; line-height: 1.5; color: var(--text-main);}
+        .marker-popup .coords {
+            font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; line-height: 1.45;
+            color: var(--text-main); background: var(--input-bg); border: 1px solid var(--border-light);
+            border-radius: 9px; padding: 6px 8px; margin-top: 4px;
+        }
+        .popup-coord-grid {
+            display: grid; grid-template-columns: max-content 1fr; column-gap: 8px; row-gap: 2px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+            background: var(--input-bg); border: 1px solid var(--border-light);
+            border-radius: 9px; padding: 6px 8px; margin-top: 5px;
+        }
+        .popup-coord-grid span.lbl { color: var(--text-muted); font-weight: 700; font-size: 0.64rem; }
+        .popup-coord-grid span.val { color: var(--accent); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+        .popup-coord-grid span.val.sub { color: var(--text-main); font-weight: 500; font-size: 0.68rem; }
         .popup-stake-btn {
-            margin-top: 8px; width: 100%; padding: 6px; border-radius: 8px; border: none;
-            background: var(--success); color: #fff; font-weight: 700; font-size: 0.75rem; cursor: pointer;
+            margin-top: 8px; width: 100%; padding: 7px 6px; border-radius: 9px; border: none;
+            background: var(--success); color: #fff; font-weight: 700; font-size: 0.72rem; cursor: pointer;
         }
         .point-map-label {
             background: rgba(7, 11, 20, 0.88); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.5);
@@ -877,18 +914,106 @@
         }
 
         .temp-query-badge {
-            position: fixed; top: calc(env(safe-area-inset-top) + 142px); left: 50%; transform: translateX(-50%);
-            z-index: 940; background: var(--surface); backdrop-filter: blur(14px);
-            border: 1px solid var(--warning); border-radius: 30px; padding: 6px 12px;
-            display: none; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.55);
-            max-width: 90%; font-size: 0.74rem; font-weight: 700; color: var(--text-main);
+            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 74px); left: 50%; transform: translateX(-50%);
+            z-index: 940; background: var(--surface-solid); backdrop-filter: blur(14px);
+            border: 1px solid var(--warning); border-radius: 30px; padding: 5px 10px;
+            display: none; align-items: center; gap: 7px; box-shadow: 0 6px 20px rgba(0,0,0,0.65);
+            max-width: 88%; font-size: 0.71rem; font-weight: 700; color: var(--text-main);
         }
         .temp-query-badge.show { display: flex; }
-        .temp-query-badge span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; color: var(--warning); }
+        .temp-query-badge span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 175px; color: var(--warning); }
         .temp-query-badge button {
             background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.45); color: var(--danger);
-            border-radius: 20px; padding: 2px 8px; font-size: 0.68rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+            border-radius: 20px; padding: 3px 8px; font-size: 0.66rem; font-weight: 700; cursor: pointer; white-space: nowrap;
         }
+
+        /* ===================== v5 EKLEMELERİ (GÖRSEL REHBER / TUTORIAL & HİZALAMA) ===================== */
+        body.floating-ui-open .temp-query-badge { display: none !important; }
+        @media (max-width: 440px) {
+            body.popup-open .left-controls,
+            body.popup-open .right-controls {
+                opacity: 0.22;
+                pointer-events: none;
+            }
+        }
+
+        /* İNTERAKTİF BAŞLANGIÇ REHBERİ (TUTORIAL MODAL) */
+        .tutorial-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(4, 8, 16, 0.82); backdrop-filter: blur(8px);
+            z-index: 9800; display: none; align-items: center; justify-content: center;
+            padding: 16px;
+        }
+        .tutorial-overlay.show { display: flex; }
+        .tutorial-card {
+            width: 100%; max-width: 410px; max-height: 88vh;
+            background: var(--surface-solid); border: 1.5px solid var(--accent);
+            border-radius: 22px; padding: 18px 16px 16px;
+            display: flex; flex-direction: column; gap: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 25px var(--accent-glow);
+            overflow: hidden;
+        }
+        .tutorial-top {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-light); padding-bottom: 10px;
+        }
+        .tutorial-badge {
+            background: rgba(0, 229, 255, 0.15); color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.35);
+            padding: 3px 9px; border-radius: 20px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px;
+        }
+        .tutorial-skip-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 0.75rem; font-weight: 700; cursor: pointer; padding: 4px 6px;
+        }
+        .tutorial-slide-body {
+            overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px;
+            padding-right: 2px;
+        }
+        .tutorial-hero {
+            background: radial-gradient(circle at center, rgba(0,229,255,0.16) 0%, rgba(15,23,42,0.6) 100%);
+            border: 1px solid var(--border-light); border-radius: 16px;
+            padding: 14px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .tutorial-hero-icon {
+            width: 52px; height: 52px; border-radius: 16px;
+            background: rgba(0, 229, 255, 0.18); border: 1px solid var(--accent);
+            color: var(--accent); font-size: 1.45rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .tutorial-hero h3 { margin: 2px 0 0 0; font-size: 1rem; color: var(--text-main); font-weight: 800; }
+        .tutorial-hero p { margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+        .tutorial-item-list { display: flex; flex-direction: column; gap: 7px; }
+        .tutorial-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 12px; padding: 9px 10px;
+        }
+        .tutorial-item-icon {
+            width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+            background: var(--input-bg); border: 1px solid var(--border-light);
+            color: var(--accent); font-size: 0.88rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .tutorial-item-text { flex: 1; min-width: 0; }
+        .tutorial-item-text b { display: block; font-size: 0.78rem; color: var(--text-main); margin-bottom: 1px; }
+        .tutorial-item-text span { display: block; font-size: 0.7rem; color: var(--text-muted); line-height: 1.35; }
+        .tutorial-footer {
+            display: flex; justify-content: space-between; align-items: center; gap: 10px;
+            border-top: 1px solid var(--border-light); padding-top: 10px;
+        }
+        .tutorial-dots { display: flex; gap: 5px; align-items: center; }
+        .tutorial-dot {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--border-light); transition: 0.25s; cursor: pointer;
+        }
+        .tutorial-dot.active { width: 20px; border-radius: 6px; background: var(--accent); }
+        .tutorial-nav-btns { display: flex; gap: 6px; }
+        .tutorial-btn {
+            padding: 9px 14px; border-radius: 10px; font-size: 0.78rem; font-weight: 700;
+            cursor: pointer; border: 1px solid var(--border-light); background: var(--card-bg); color: var(--text-main);
+            font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 6px;
+        }
+        .tutorial-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); }
         .parcel-vertex-label {
             background: rgba(16, 185, 129, 0.92); color: #000; border: 1px solid #fff; border-radius: 5px;
             padding: 0 5px; font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 800;
@@ -991,7 +1116,7 @@
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
             <h2 class="splash-title">GeoITRF</h2>
-            <div class="splash-subtitle">PRO TERMINAL v4.0</div>
+            <div class="splash-subtitle">PRO TERMINAL v5.0</div>
         </div>
         <div class="globe-container">
             <div class="wireframe-globe">
@@ -1097,7 +1222,7 @@
         </div>
     </div>
 
-    <!-- HUD (ÜST BAR) -->
+    <!-- HUD (ÜST BAR - v5 KOMPAKT TELEMETRİ & KOORDİNAT PANELİ) -->
     <div class="hud-container" id="hud-bar">
         <div class="hud-top">
             <div class="hud-left-group">
@@ -1106,34 +1231,40 @@
             </div>
             <div class="hud-right-group">
                 <span class="dom-selector-pill" id="hud-proj-pill" onclick="toggleDrawer()" title="Projeksiyon Ayarları">ITRF96 • D--</span>
-                <div class="gps-indicator">
+                <div class="gps-indicator" onclick="initSensorsAndGps(true)" title="GPS ve Yön Sensörlerini Yenile">
                     <span id="accuracy">GPS Bekleniyor</span>
                     <div class="gps-dot blink" id="gps-dot"></div>
                 </div>
             </div>
         </div>
-        <div class="hud-coords">
-            <div class="coord-box" onclick="copyCoords('WGS84')" title="WGS84 Koordinatlarını Kopyala">
-                <div class="c-header">
-                    <span class="c-label" id="wgs-box-label">WGS84 (E / B)</span>
-                    <i class="fas fa-copy c-copy-icon"></i>
+        <div class="hud-telemetry-card">
+            <div class="hud-coords">
+                <div class="coord-box" onclick="copyCoords('WGS84')" title="WGS84 Koordinatlarını Kopyala">
+                    <div class="c-header">
+                        <span class="c-label" id="wgs-box-label">WGS84 (E / B)</span>
+                        <i class="fas fa-copy c-copy-icon"></i>
+                    </div>
+                    <div class="c-vals-inline">
+                        <span class="c-val" id="live-lat">--.------</span>
+                        <span class="c-val" id="live-lon">--.------</span>
+                    </div>
                 </div>
-                <span class="c-val" id="live-lat">--.------</span>
-                <span class="c-val" id="live-lon">--.------</span>
-            </div>
-            <div class="coord-box right" onclick="copyCoords('PROJ')" title="Sağa/Yukarı Koordinatlarını Kopyala">
-                <div class="c-header">
-                    <span class="c-label" id="dom-label">ITRF96 (Y / X)</span>
-                    <i class="fas fa-copy c-copy-icon"></i>
+                <div class="coord-box right" onclick="copyCoords('PROJ')" title="Sağa/Yukarı Koordinatlarını Kopyala">
+                    <div class="c-header">
+                        <span class="c-label" id="dom-label">ITRF96 (Y / X)</span>
+                        <i class="fas fa-copy c-copy-icon"></i>
+                    </div>
+                    <div class="c-vals-inline">
+                        <span class="c-val glow" id="live-y">---.---</span>
+                        <span class="c-val glow" id="live-x">---.---</span>
+                    </div>
                 </div>
-                <span class="c-val glow" id="live-y">---.---</span>
-                <span class="c-val glow" id="live-x">---.---</span>
             </div>
-        </div>
-        <div class="hud-subbar">
-            <div class="hud-subbar-item"><i class="fas fa-mountain"></i> Z: <b id="live-alt">--.- m</b></div>
-            <div class="hud-subbar-item"><i class="fas fa-compass"></i> Semt: <b id="live-heading">---°</b></div>
-            <div class="hud-subbar-item"><i class="fas fa-tachometer-alt"></i> Hız: <b id="live-speed">0.0 km/s</b></div>
+            <div class="hud-subbar">
+                <div class="hud-subbar-item" onclick="goToMyLocation()" title="Yükseklik (Kot)"><i class="fas fa-mountain"></i> Z: <b id="live-alt">--.- m</b></div>
+                <div class="hud-subbar-item" onclick="enableCompassPermission(true)" title="Pusula / Yön Sensörünü Kalibre Et"><i class="fas fa-compass"></i> Semt: <b id="live-heading">---°</b></div>
+                <div class="hud-subbar-item" title="Anlık Hız"><i class="fas fa-tachometer-alt"></i> Hız: <b id="live-speed">0.0 km/s</b></div>
+            </div>
         </div>
     </div>
 
@@ -1164,12 +1295,13 @@
         <button onclick="clearTempQueryLayer(true)"><i class="fas fa-times"></i> Kaldır</button>
     </div>
 
-    <!-- SAĞ KONTROLLER & KAHVE BUTONU -->
+    <!-- SAĞ KONTROLLER & KAHVE + REHBER (?) BUTONU -->
     <div class="right-controls" id="right-controls">
         <button class="map-btn" aria-label="Mevcut Konuma Git" title="Konumuma Odakla" onclick="goToMyLocation()"><i class="fas fa-location-arrow" style="color:var(--accent);"></i></button>
         <button class="map-btn" aria-label="Haritayı Yakınlaştır" onclick="map.zoomIn()"><i class="fas fa-plus"></i></button>
         <button class="map-btn" aria-label="Haritayı Uzaklaştır" onclick="map.zoomOut()"><i class="fas fa-minus"></i></button>
-        <button class="map-btn coffee-btn" aria-label="Geliştiriciye Kahve Ismarla" onclick="showCoffeeAnimation()"><i class="fas fa-coffee"></i></button>
+        <button class="map-btn coffee-btn" aria-label="Geliştiriciye Kahve Ismarla" title="Kahve Ismarla" onclick="showCoffeeAnimation()"><i class="fas fa-coffee"></i></button>
+        <button class="map-btn help-btn" id="btn-tutorial-open" aria-label="Kullanım Rehberi" title="Nasıl Kullanılır? (Görsel Rehber)" onclick="openTutorialModal()"><i class="fas fa-question"></i></button>
     </div>
 
     <!-- HARİTA KONTEYNERİ -->
@@ -1753,6 +1885,26 @@
         </div>
     </div>
 
+    <!-- İNTERAKTİF GÖRSEL KULLANIM REHBERİ (TUTORIAL - v5) -->
+    <div class="tutorial-overlay" id="tutorial-overlay" onclick="if(event.target === this) closeTutorialModal()">
+        <div class="tutorial-card">
+            <div class="tutorial-top">
+                <span class="tutorial-badge" id="tutorial-step-badge"><i class="fas fa-graduation-cap"></i> HIZLI REHBER 1/5</span>
+                <button class="tutorial-skip-btn" onclick="closeTutorialModal()">Kapat <i class="fas fa-times"></i></button>
+            </div>
+            <div class="tutorial-slide-body" id="tutorial-slide-body">
+                <!-- JS tarafından dinamik doldurulur -->
+            </div>
+            <div class="tutorial-footer">
+                <div class="tutorial-dots" id="tutorial-dots"></div>
+                <div class="tutorial-nav-btns">
+                    <button class="tutorial-btn" id="btn-tut-prev" onclick="prevTutorialSlide()"><i class="fas fa-chevron-left"></i> Geri</button>
+                    <button class="tutorial-btn primary" id="btn-tut-next" onclick="nextTutorialSlide()">İleri <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
     <!-- ANA UYGULAMA MANTIĞI -->
@@ -1977,6 +2129,8 @@
         // --- HARİTA, 4 KATMANLI ALTLIK SİSTEMİ VE TKGM PARSEL WMS ENTEGRASYONU ---
         function hideSplashScreen() {
             let splash = document.getElementById('splash-screen');
+            // v5: Kullanıcı ekrana dokunduğu anda GPS ve Yön/Pusula sensörlerini anında aktif et (iOS/Android izin tetiklemesi dahil)
+            initSensorsAndGps(false);
             splash.style.opacity = '0';
             setTimeout(() => { 
                 splash.style.display = 'none'; 
@@ -1985,6 +2139,7 @@
                     firstLocationCenteredAfterSplash = true;
                     map.setView([currentLat, currentLon], 18, { animate: false });
                 }
+                checkFirstTimeTutorial();
             }, 600);
         }
 
@@ -1993,7 +2148,38 @@
             document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
-        var map = L.map('map', { zoomControl: false, attributionControl: false, maxZoom: 21 }).setView([39.92077, 32.85411], 14); 
+        // v5: Popup pencerelerinin yan butonlara ve üst/alt barlara çarpmasını önleyen güvenli varsayılan ayarlar
+        L.Popup.prototype.options.maxWidth = 246;
+        L.Popup.prototype.options.minWidth = 190;
+        L.Popup.prototype.options.autoPanPaddingTopLeft = L.point(54, 108);
+        L.Popup.prototype.options.autoPanPaddingBottomRight = L.point(54, 96);
+
+        var map = L.map('map', { zoomControl: false, attributionControl: false, maxZoom: 21 }).setView([39.92077, 32.85411], 14);
+
+        function syncFloatingUiState() {
+            const anyPanelOpen = Boolean(
+                document.getElementById('save-panel')?.classList.contains('show') ||
+                document.getElementById('layers-panel')?.classList.contains('show') ||
+                document.getElementById('measure-bar')?.classList.contains('show') ||
+                document.getElementById('stakeout-panel')?.classList.contains('show')
+            );
+            document.body.classList.toggle('floating-ui-open', anyPanelOpen);
+        }
+
+        map.on('popupopen', function() {
+            document.body.classList.add('popup-open');
+            // Popup açıldığında altta açık kalan kayıt veya katman panelini kapat ki üst üste binmesin
+            const saveP = document.getElementById('save-panel');
+            const layerP = document.getElementById('layers-panel');
+            if (saveP && saveP.classList.contains('show')) saveP.classList.remove('show');
+            if (layerP && layerP.classList.contains('show')) layerP.classList.remove('show');
+            syncFloatingUiState();
+        });
+
+        map.on('popupclose', function() {
+            document.body.classList.remove('popup-open');
+            syncFloatingUiState();
+        }); 
 
         const mapLayers = [
             {
@@ -2329,59 +2515,85 @@
             }
         }
 
-        if ('geolocation' in navigator) {
-            navigator.geolocation.watchPosition(function(position) {
-                currentLat = position.coords.latitude;
-                currentLon = position.coords.longitude;
-                currentAcc = Math.round(position.coords.accuracy);
-                currentAlt = position.coords.altitude !== null ? position.coords.altitude : null;
-                currentSpeed = position.coords.speed !== null ? (position.coords.speed * 3.6) : 0;
-                if (position.coords.heading !== null && !isNaN(position.coords.heading)) {
-                    currentHeading = position.coords.heading;
-                }
+        let gpsWatchId = null;
 
-                document.getElementById('accuracy').innerText = "±" + currentAcc + "m";
-                let dot = document.getElementById('gps-dot');
-                dot.classList.remove('blink'); dot.classList.add('connected');
+        function onGpsPositionSuccess(position) {
+            currentLat = position.coords.latitude;
+            currentLon = position.coords.longitude;
+            currentAcc = Math.round(position.coords.accuracy);
+            currentAlt = position.coords.altitude !== null ? position.coords.altitude : null;
+            currentSpeed = position.coords.speed !== null ? (position.coords.speed * 3.6) : 0;
+            if (position.coords.heading !== null && !isNaN(position.coords.heading)) {
+                currentHeading = position.coords.heading;
+            }
 
-                document.getElementById('live-alt').innerText = currentAlt !== null ? currentAlt.toFixed(1) + " m" : "--.- m";
-                document.getElementById('live-speed').innerText = currentSpeed.toFixed(1) + " km/s";
-                if (currentHeading !== null) {
-                    document.getElementById('live-heading').innerText = Math.round(currentHeading) + "°";
-                }
+            document.getElementById('accuracy').innerText = "±" + currentAcc + "m";
+            let dot = document.getElementById('gps-dot');
+            dot.classList.remove('blink'); dot.classList.add('connected');
 
-                refreshLiveCoordinatesUI();
+            document.getElementById('live-alt').innerText = currentAlt !== null ? currentAlt.toFixed(1) + " m" : "--.- m";
+            document.getElementById('live-speed').innerText = currentSpeed.toFixed(1) + " km/s";
+            if (compassHeading === null && currentHeading !== null) {
+                document.getElementById('live-heading').innerText = Math.round(currentHeading) + "°";
+            }
 
-                if (epochActive) {
-                    collectEpochSample(currentLat, currentLon, currentAlt || 0, currentAcc);
-                }
+            refreshLiveCoordinatesUI();
 
-                if (stakeoutTarget) {
-                    updateStakeoutGuidance();
-                }
+            if (epochActive) {
+                collectEpochSample(currentLat, currentLon, currentAlt || 0, currentAcc);
+            }
 
-                var newLoc = new L.LatLng(currentLat, currentLon);
-                if (userMarker) {
-                    userMarker.setLatLng(newLoc);
-                    accuracyCircle.setLatLng(newLoc).setRadius(Math.min(currentAcc, 80));
-                } else {
-                    accuracyCircle = L.circle(newLoc, { radius: Math.min(currentAcc, 80), color: '#00e5ff', weight: 1, fillOpacity: 0.08 }).addTo(map);
-                    userMarker = L.circleMarker(newLoc, { color: '#ffffff', fillColor: '#00e5ff', fillOpacity: 1, radius: 7, weight: 2 }).addTo(map);
-                }
+            if (stakeoutTarget) {
+                updateStakeoutGuidance();
+            }
 
-                if (!firstLocationFound) {
-                    firstLocationFound = true;
-                    map.invalidateSize({ pan: false });
-                    map.setView(newLoc, 18, { animate: false });
-                }
-            }, function(e) { 
-                document.getElementById('accuracy').innerText = "GPS Bekleniyor"; 
-                document.getElementById('gps-dot').classList.remove('connected'); document.getElementById('gps-dot').classList.add('blink');
-            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 });
+            var newLoc = new L.LatLng(currentLat, currentLon);
+            if (userMarker) {
+                userMarker.setLatLng(newLoc);
+                accuracyCircle.setLatLng(newLoc).setRadius(Math.min(currentAcc, 80));
+            } else {
+                accuracyCircle = L.circle(newLoc, { radius: Math.min(currentAcc, 80), color: '#00e5ff', weight: 1, fillOpacity: 0.08 }).addTo(map);
+                userMarker = L.circleMarker(newLoc, { color: '#ffffff', fillColor: '#00e5ff', fillOpacity: 1, radius: 7, weight: 2 }).addTo(map);
+            }
+
+            if (!firstLocationFound) {
+                firstLocationFound = true;
+                map.invalidateSize({ pan: false });
+                map.setView(newLoc, 18, { animate: false });
+            }
         }
+
+        function onGpsPositionError() {
+            document.getElementById('accuracy').innerText = "GPS Bekleniyor"; 
+            document.getElementById('gps-dot').classList.remove('connected');
+            document.getElementById('gps-dot').classList.add('blink');
+        }
+
+        function startLiveGpsTracking() {
+            if (!('geolocation' in navigator)) return;
+            try {
+                navigator.geolocation.getCurrentPosition(onGpsPositionSuccess, onGpsPositionError, {
+                    enableHighAccuracy: true,
+                    maximumAge: 3000,
+                    timeout: 10000
+                });
+                if (gpsWatchId === null) {
+                    gpsWatchId = navigator.geolocation.watchPosition(onGpsPositionSuccess, onGpsPositionError, {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 10000
+                    });
+                }
+            } catch (e) {}
+        }
+
+        // Uygulama açılır açılmaz GPS takibini başlat
+        startLiveGpsTracking();
 
         function goToMyLocation() {
             lockViewportScroll();
+            startLiveGpsTracking();
+            enableCompassPermission(false);
             if (currentLat !== null && currentLon !== null) {
                 map.invalidateSize({ pan: false });
                 map.setView([currentLat, currentLon], 19, { animate: true });
@@ -2416,6 +2628,7 @@
         let stakeSoundEnabled = true;
         let stakeVibrateEnabled = true;
         let compassHeading = null;
+        let compassListenersAttached = false;
         let audioCtx = null;
         let stakeBeepTimer = null;
         let lastStakeDistance = null;
@@ -2434,27 +2647,38 @@
             }
         }
 
-        if (window.DeviceOrientationEvent) {
+        function attachOrientationListeners() {
+            if (compassListenersAttached || !window.DeviceOrientationEvent) return;
             window.addEventListener('deviceorientationabsolute', handleOrientation, true);
             window.addEventListener('deviceorientation', handleOrientation, true);
+            compassListenersAttached = true;
         }
 
-        async function enableCompassPermission() {
+        // İlk açılışta yön sensörü dinleyicilerini bağla
+        attachOrientationListeners();
+
+        async function enableCompassPermission(showFeedback = true) {
+            attachOrientationListeners();
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 try {
                     const response = await DeviceOrientationEvent.requestPermission();
                     if (response === 'granted') {
                         window.addEventListener('deviceorientation', handleOrientation, true);
-                        showToast("Pusula sensörü aktif edildi!", "fa-compass");
-                    } else {
+                        if (showFeedback) showToast("Pusula ve yön sensörü aktif!", "fa-compass");
+                    } else if (showFeedback) {
                         showToast("Pusula izni reddedildi", "fa-exclamation-triangle");
                     }
                 } catch (e) {
-                    showToast("Pusula sensörü başlatıldı", "fa-compass");
+                    if (showFeedback) showToast("Pusula sensörü başlatıldı", "fa-compass");
                 }
-            } else {
+            } else if (showFeedback) {
                 showToast("Pusula aktif (Kalibrasyon için telefonu 8 çizecek şekilde hareket ettirin)", "fa-compass");
             }
+        }
+
+        function initSensorsAndGps(showFeedback = false) {
+            startLiveGpsTracking();
+            enableCompassPermission(showFeedback);
         }
 
         function playProximityBeep(freq = 880, durationMs = 90) {
@@ -2515,10 +2739,12 @@
 
         function startStakeoutPoint(pt) {
             stakeoutTarget = pt;
+            map.closePopup();
             closeModals();
             document.getElementById('stake-target-name').innerText = pt.name;
             document.getElementById('stakeout-panel').classList.add('show');
-            enableCompassPermission();
+            syncFloatingUiState();
+            enableCompassPermission(false);
             map.invalidateSize({ pan: false });
             map.setView([pt.lat, pt.lon], 19);
             updateStakeoutGuidance();
@@ -2532,6 +2758,7 @@
             if (stakeBeepTimer) { clearTimeout(stakeBeepTimer); stakeBeepTimer = null; }
             if (stakeoutLine) { map.removeLayer(stakeoutLine); stakeoutLine = null; }
             document.getElementById('stakeout-panel').classList.remove('show', 'arrived');
+            syncFloatingUiState();
             showToast("Aplikasyon modu sonlandırıldı", "fa-check");
         }
 
@@ -2721,13 +2948,17 @@
 
         function toggleMeasureTool() {
             measureModeActive = !measureModeActive;
-            document.getElementById('measure-bar').classList.toggle('show', measureModeActive);
-            document.getElementById('btn-measure-toggle').classList.toggle('active-tool', measureModeActive);
             if (measureModeActive) {
+                map.closePopup();
                 closeModals();
-                showToast("Alan/Mesafe: Haritaya veya kayıtlı noktalara dokunun (alan için en az 3 nokta)", "fa-ruler-combined");
             } else {
                 clearMeasurePoints();
+            }
+            document.getElementById('measure-bar').classList.toggle('show', measureModeActive);
+            document.getElementById('btn-measure-toggle').classList.toggle('active-tool', measureModeActive);
+            syncFloatingUiState();
+            if (measureModeActive) {
+                showToast("Alan/Mesafe: Haritaya veya kayıtlı noktalara dokunun (alan için en az 3 nokta)", "fa-ruler-combined");
             }
         }
 
@@ -2929,8 +3160,10 @@
             closeModals();
 
             measureModeActive = true;
+            map.closePopup();
             document.getElementById('measure-bar').classList.add('show');
             document.getElementById('btn-measure-toggle').classList.add('active-tool');
+            syncFloatingUiState();
             if (!append) clearMeasurePoints();
             selected.forEach(p => addMeasureVertex(p.lat, p.lon, p.name));
 
@@ -3020,7 +3253,21 @@
             map.setView([lastConvertedPoint.lat, lastConvertedPoint.lon], 19);
             L.popup()
                 .setLatLng([lastConvertedPoint.lat, lastConvertedPoint.lon])
-                .setContent(`<div class="marker-popup"><h3>${lastConvertedPoint.name}</h3><div class="coords">Y: ${lastConvertedPoint.y_saga.toFixed(3)}<br>X: ${lastConvertedPoint.x_yukari.toFixed(3)}</div><div class="popup-btn-row"><button class="popup-stake-btn" onclick="convStartStakeout()"><i class="fas fa-bullseye"></i> Aplikasyon Yap</button><button class="popup-nav-btn" onclick="openNavSheet(${lastConvertedPoint.lat}, ${lastConvertedPoint.lon}, lastConvertedPoint.name)"><i class="fas fa-route"></i> Yol Tarifi Al</button></div></div>`)
+                .setContent(`
+                    <div class="marker-popup">
+                        <h3><i class="fas fa-exchange-alt"></i> ${lastConvertedPoint.name}</h3>
+                        <hr>
+                        <div class="popup-coord-grid">
+                            <span class="k">Y (Sağa)</span><span class="v">${lastConvertedPoint.y_saga.toFixed(3)}</span>
+                            <span class="k">X (Yukarı)</span><span class="v">${lastConvertedPoint.x_yukari.toFixed(3)}</span>
+                            <span class="k">Enlem (E)</span><span class="v sub">${lastConvertedPoint.lat.toFixed(6)}</span>
+                            <span class="k">Boylam (B)</span><span class="v sub">${lastConvertedPoint.lon.toFixed(6)}</span>
+                        </div>
+                        <div class="popup-btn-row">
+                            <button class="popup-stake-btn" onclick="convStartStakeout()"><i class="fas fa-bullseye"></i> Aplikasyon</button>
+                            <button class="popup-nav-btn" onclick="openNavSheet(${lastConvertedPoint.lat}, ${lastConvertedPoint.lon}, lastConvertedPoint.name)"><i class="fas fa-route"></i> Yol Tarifi</button>
+                        </div>
+                    </div>`)
                 .openOn(map);
         }
 
@@ -3470,23 +3717,22 @@
                     <p><b>${[ilAd, ilceAd, mahAd].filter(Boolean).join(' • ')}</b></p>
                     ${passiveBannerHtml}
                     <hr>
-                    <div class="coords" style="font-size:0.72rem;">
-                        <b>Tapu Alanı:</b> ${alanText}<br>
-                        <b>Nitelik:</b> ${nitelik}<br>
-                        <b>Mevkii / Pafta:</b> ${mevkii} / ${pafta}<br>
-                        <b>Köşe Sayısı:</b> ${lastQueriedParcelVertices.length} adet (K1..K${lastQueriedParcelVertices.length})<br>
-                        <b>Merkez Y:</b> ${centerProj.y.toFixed(3)}<br>
-                        <b>Merkez X:</b> ${centerProj.x.toFixed(3)}
+                    <div class="popup-coord-grid">
+                        <span class="k">Tapu Alanı</span><span class="v">${alanText}</span>
+                        <span class="k">Nitelik</span><span class="v sub">${nitelik}</span>
+                        <span class="k">Köşe Sayısı</span><span class="v sub">${lastQueriedParcelVertices.length} (K1..K${lastQueriedParcelVertices.length})</span>
+                        <span class="k">Merkez Y</span><span class="v">${centerProj.y.toFixed(3)}</span>
+                        <span class="k">Merkez X</span><span class="v">${centerProj.x.toFixed(3)}</span>
                     </div>
                     <div class="popup-btn-row">
                         <button class="popup-stake-btn" onclick="startTempQueryStakeout()">
-                            <i class="fas fa-bullseye"></i> Merkeze Aplikasyon
+                            <i class="fas fa-bullseye"></i> Aplikasyon
                         </button>
                         <button class="popup-nav-btn" onclick="openNavSheet(${center.lat}, ${center.lng}, 'Ada ${adaNo} Parsel ${parselNo}')">
-                            <i class="fas fa-route"></i> Yol Tarifi Al
+                            <i class="fas fa-route"></i> Yol Tarifi
                         </button>
                     </div>
-                    <button onclick="saveAllParcelVerticesToProject()" style="margin-top:6px; width:100%; padding:7px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.16); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                    <button onclick="saveAllParcelVerticesToProject()" style="margin-top:5px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.16); color:var(--accent); font-weight:700; font-size:0.7rem; cursor:pointer;">
                         <i class="fas fa-layer-group"></i> Tüm Köşeleri (${lastQueriedParcelVertices.length} Nokta) Klasöre Ekle
                     </button>
                 </div>`;
@@ -3505,28 +3751,28 @@
 
                 const vPopupHtml = `
                     <div class="marker-popup">
-                        <h3><i class="fas fa-map-pin"></i> ${v.shortName} Köşe Noktası (${adaNo}/${parselNo})</h3>
+                        <h3><i class="fas fa-map-pin"></i> ${v.shortName} Köşesi (${adaNo}/${parselNo})</h3>
                         <p>${[ilAd, ilceAd, mahAd].filter(Boolean).join(' / ')}</p>
                         <hr>
-                        <div class="coords">
-                            Y (Sağa): ${v.y_saga.toFixed(3)}<br>
-                            X (Yukarı): ${v.x_yukari.toFixed(3)}<br>
-                            E: ${v.lat.toFixed(7)}<br>
-                            B: ${v.lon.toFixed(7)}
+                        <div class="popup-coord-grid">
+                            <span class="k">Y (Sağa)</span><span class="v">${v.y_saga.toFixed(3)}</span>
+                            <span class="k">X (Yukarı)</span><span class="v">${v.x_yukari.toFixed(3)}</span>
+                            <span class="k">Enlem (E)</span><span class="v sub">${v.lat.toFixed(7)}</span>
+                            <span class="k">Boylam (B)</span><span class="v sub">${v.lon.toFixed(7)}</span>
                         </div>
                         <div class="popup-btn-row">
                             <button class="popup-stake-btn" onclick="startParcelVertexStakeout(${v.index})">
-                                <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                                <i class="fas fa-bullseye"></i> Aplikasyon
                             </button>
                             <button class="popup-nav-btn" onclick="openNavSheet(${v.lat}, ${v.lon}, '${v.name.replace(/'/g, "\\'")}')">
-                                <i class="fas fa-route"></i> Yol Tarifi Al
+                                <i class="fas fa-route"></i> Yol Tarifi
                             </button>
                         </div>
-                        <button onclick="saveParcelVertexToProject(${v.index})" style="margin-top:6px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                        <button onclick="saveParcelVertexToProject(${v.index})" style="margin-top:5px; width:100%; padding:5px; border-radius:7px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.69rem; cursor:pointer;">
                             <i class="fas fa-plus-circle"></i> Bu Köşeyi (${v.shortName}) Klasöre Kaydet
                         </button>
-                        <button onclick="saveAllParcelVerticesToProject()" style="margin-top:5px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--warning); background:rgba(245,158,11,0.14); color:var(--warning); font-weight:700; font-size:0.71rem; cursor:pointer;">
-                            <i class="fas fa-layer-group"></i> Tüm Parsel Köşelerini (${lastQueriedParcelVertices.length}) Kaydet
+                        <button onclick="saveAllParcelVerticesToProject()" style="margin-top:4px; width:100%; padding:5px; border-radius:7px; border:1px solid var(--warning); background:rgba(245,158,11,0.14); color:var(--warning); font-weight:700; font-size:0.68rem; cursor:pointer;">
+                            <i class="fas fa-layer-group"></i> Tüm Köşeleri (${lastQueriedParcelVertices.length}) Kaydet
                         </button>
                     </div>`;
 
@@ -3622,12 +3868,12 @@
 
                 layer.bindPopup(`
                     <div class="marker-popup">
-                        <h3><i class="fas fa-vector-square"></i> Yeni Aktif Parsel: ${adaNo}/${parselNo}</h3>
+                        <h3><i class="fas fa-vector-square"></i> Yeni Parsel: ${adaNo}/${parselNo}</h3>
                         <p>${lastPassiveReasonText}</p>
                         <hr>
-                        <div class="coords">
-                            <b>Alan:</b> ${alanText}<br>
-                            <b>Nitelik:</b> ${nitelik}
+                        <div class="popup-coord-grid">
+                            <span class="k">Tapu Alanı</span><span class="v">${alanText}</span>
+                            <span class="k">Nitelik</span><span class="v sub">${nitelik}</span>
                         </div>
                         <button class="popup-stake-btn" onclick="selectSuccessorParcel(${idx})">
                             <i class="fas fa-map-pin"></i> Bu Parseli Seç ve Köşelerini Göster
@@ -4104,21 +4350,21 @@
                         <h3><i class="fas fa-door-open"></i> ${ptName}</h3>
                         <p>${fullAddressTitle}</p>
                         <hr>
-                        <div class="coords">
-                            Y: ${proj.y.toFixed(3)}<br>
-                            X: ${proj.x.toFixed(3)}<br>
-                            E: ${centerLat.toFixed(6)}<br>
-                            B: ${centerLon.toFixed(6)}
+                        <div class="popup-coord-grid">
+                            <span class="k">Y (Sağa)</span><span class="v">${proj.y.toFixed(3)}</span>
+                            <span class="k">X (Yukarı)</span><span class="v">${proj.x.toFixed(3)}</span>
+                            <span class="k">Enlem (E)</span><span class="v sub">${centerLat.toFixed(6)}</span>
+                            <span class="k">Boylam (B)</span><span class="v sub">${centerLon.toFixed(6)}</span>
                         </div>
                         <div class="popup-btn-row">
                             <button class="popup-stake-btn" onclick="startTempQueryStakeout()">
-                                <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                                <i class="fas fa-bullseye"></i> Aplikasyon
                             </button>
                             <button class="popup-nav-btn" onclick="openNavSheet(${centerLat}, ${centerLon}, '${ptName.replace(/'/g, "\\'")}')">
-                                <i class="fas fa-route"></i> Yol Tarifi Al
+                                <i class="fas fa-route"></i> Yol Tarifi
                             </button>
                         </div>
-                        <button onclick="saveTempQueryPointToProject()" style="margin-top:6px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                        <button onclick="saveTempQueryPointToProject()" style="margin-top:5px; width:100%; padding:5px; border-radius:7px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.69rem; cursor:pointer;">
                             <i class="fas fa-plus-circle"></i> Aktif Klasöre Nokta Olarak Kaydet
                         </button>
                     </div>`;
@@ -4168,21 +4414,21 @@
                             <h3><i class="fas ${isRoad ? 'fa-road' : 'fa-draw-polygon'}"></i> ${titleText}</h3>
                             <p>${fullAddressTitle}</p>
                             <hr>
-                            <div class="coords">
-                                Merkez Y: ${proj.y.toFixed(3)}<br>
-                                Merkez X: ${proj.x.toFixed(3)}<br>
-                                E: ${centerLat.toFixed(6)}<br>
-                                B: ${centerLon.toFixed(6)}
+                            <div class="popup-coord-grid">
+                                <span class="k">Merkez Y</span><span class="v">${proj.y.toFixed(3)}</span>
+                                <span class="k">Merkez X</span><span class="v">${proj.x.toFixed(3)}</span>
+                                <span class="k">Enlem (E)</span><span class="v sub">${centerLat.toFixed(6)}</span>
+                                <span class="k">Boylam (B)</span><span class="v sub">${centerLon.toFixed(6)}</span>
                             </div>
                             <div class="popup-btn-row">
                                 <button class="popup-stake-btn" onclick="startTempQueryStakeout()">
-                                    <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                                    <i class="fas fa-bullseye"></i> Aplikasyon
                                 </button>
                                 <button class="popup-nav-btn" onclick="openNavSheet(${centerLat}, ${centerLon}, '${titleText.replace(/'/g, "\\'")}')">
-                                    <i class="fas fa-route"></i> Yol Tarifi Al
+                                    <i class="fas fa-route"></i> Yol Tarifi
                                 </button>
                             </div>
-                            <button onclick="saveTempQueryPointToProject()" style="margin-top:6px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                            <button onclick="saveTempQueryPointToProject()" style="margin-top:5px; width:100%; padding:5px; border-radius:7px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.69rem; cursor:pointer;">
                                 <i class="fas fa-plus-circle"></i> Merkez Noktayı Klasöre Kaydet
                             </button>
                         </div>`;
@@ -4224,6 +4470,7 @@
             document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-map').classList.add('active'); 
             closeCoffeeToast();
+            syncFloatingUiState();
             lockViewportScroll();
         }
 
@@ -4248,10 +4495,12 @@
             closeNavSheet();
 
             if (tabId === 'tab-layer') {
+                map.closePopup();
                 updateLayersModalUI();
                 layersPanelEl.classList.add('show');
             }
             else if (tabId === 'tab-add') {
+                map.closePopup();
                 document.getElementById('tab-map').classList.add('active'); 
                 // Nişangah açıksa otomatik NİŞANGAH sekmesini seç ve o anki tam merkez koordinatını kilitle
                 if (crosshairActive) {
@@ -4277,6 +4526,7 @@
             else if (tabId === 'tab-install') {
                 document.getElementById('modal-install').classList.add('show');
             }
+            syncFloatingUiState();
         }
 
         function saveCurrentLocation() {
@@ -4382,27 +4632,28 @@
                 p.dom = proj.dom;
 
                 const catBadge = p.category ? ` • ${p.category}` : '';
-                const altText = p.alt ? `<br>Z (Kot): ${Number(p.alt).toFixed(2)} m` : '';
-                const descHtml = p.desc ? `<p style="margin-top:4px; color:var(--accent);">${p.desc}</p>` : '';
+                const altRow = p.alt ? `<span class="k">Z (Kot)</span><span class="v sub">${Number(p.alt).toFixed(2)} m</span>` : '';
+                const descHtml = p.desc ? `<p style="margin-top:2px; color:var(--accent);">${p.desc}</p>` : '';
 
                 let popupContent = `
                     <div class="marker-popup">
-                        <h3>${p.name}</h3>
+                        <h3><i class="fas fa-map-marker-alt"></i> ${p.name}</h3>
                         <p><i class="fas fa-folder-open"></i> ${activeProject}${catBadge}</p>
                         ${descHtml}
                         <hr>
-                        <div class="coords">
-                            Y: ${p.y_saga.toFixed(3)}<br>
-                            X: ${p.x_yukari.toFixed(3)}${altText}<br>
-                            E: ${p.lat.toFixed(6)}<br>
-                            B: ${p.lon.toFixed(6)}
+                        <div class="popup-coord-grid">
+                            <span class="k">Y (Sağa)</span><span class="v">${p.y_saga.toFixed(3)}</span>
+                            <span class="k">X (Yukarı)</span><span class="v">${p.x_yukari.toFixed(3)}</span>
+                            ${altRow}
+                            <span class="k">Enlem (E)</span><span class="v sub">${p.lat.toFixed(6)}</span>
+                            <span class="k">Boylam (B)</span><span class="v sub">${p.lon.toFixed(6)}</span>
                         </div>
                         <div class="popup-btn-row">
                             <button class="popup-stake-btn" onclick="startStakeoutById(${p.id})">
-                                <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                                <i class="fas fa-bullseye"></i> Aplikasyon
                             </button>
                             <button class="popup-nav-btn" onclick="openNavSheetById(${p.id})">
-                                <i class="fas fa-route"></i> Yol Tarifi Al
+                                <i class="fas fa-route"></i> Yol Tarifi
                             </button>
                         </div>
                     </div>`;
@@ -4964,6 +5215,268 @@
                 }
             };
             reader.readAsText(file);
+        }
+
+        // --- v5: GÖRSEL İNTERAKTİF KULLANIM REHBERİ (TUTORIAL SİSTEMİ) ---
+        const TUTORIAL_STORAGE_KEY = 'geoitrf_pro_tutorial_seen_v5';
+        let currentTutorialSlide = 0;
+
+        const TUTORIAL_SLIDES = [
+            {
+                badge: "ADIM 1/5 • ÜST TELEMETRİ PANELİ",
+                icon: "fa-satellite-dish",
+                title: "Anlık Koordinat, Rakım ve Pusula Barı",
+                sub: "Üstteki kompakt telemetri kartı, harita alanını daraltmadan tüm jeodezik verileri tek bakışta sunar.",
+                chips: [
+                    { icon: "fa-globe", text: "WGS84 (E / B)" },
+                    { icon: "fa-compass", text: "ITRF96 / ED50 / UTM" },
+                    { icon: "fa-mountain", text: "Z (Rakım) • Semt • Hız" }
+                ],
+                items: [
+                    {
+                        icon: "fa-copy",
+                        cls: "",
+                        title: "Tek Dokunuşla Koordinat Kopyalama",
+                        desc: "Sol kutuya dokunarak WGS84 (Enlem/Boylam), sağ kutuya dokunarak aktif ITRF96/ED50 Y (Sağa) ve X (Yukarı) koordinatlarını panoya kopyalayabilirsiniz."
+                    },
+                    {
+                        icon: "fa-mountain",
+                        cls: "amber",
+                        title: "Canlı Z (Rakım), Semt Açısı ve Hız",
+                        desc: "Koordinatların hemen altındaki ince şeritte anlık GPS yüksekliği (Z), telefonun pusula yön açısı (Semt) ve hareket hızı canlı güncellenir."
+                    },
+                    {
+                        icon: "fa-sliders-h",
+                        cls: "green",
+                        title: "Projeksiyon ve Dilim (DOM) Ayarı",
+                        desc: "Üstteki ITRF96 etiketine veya sol üst menüye (☰) dokunarak ITRF96 3°, ED50 3°/6° veya UTM 6° sistemleri arasında anında geçiş yapabilirsiniz."
+                    }
+                ]
+            },
+            {
+                badge: "ADIM 2/5 • SOL ARAÇ ÇUBUĞU",
+                icon: "fa-tools",
+                title: "Sol Taraftaki Harita Kısayol Butonları",
+                sub: "Arazide en çok kullanılan mühendislik ve sorgulama araçları sol kenarda yukarıdan aşağıya sıralanmıştır:",
+                chips: [
+                    { icon: "fa-sun", text: "Güneş Modu" },
+                    { icon: "fa-border-all", text: "TKGM Parsel" },
+                    { icon: "fa-crosshairs", text: "Nişangah" },
+                    { icon: "fa-ruler-combined", text: "Alan Ölçer" },
+                    { icon: "fa-search-location", text: "Sorgu" }
+                ],
+                items: [
+                    {
+                        icon: "fa-border-all",
+                        cls: "amber",
+                        title: "TKGM Kadastro Parselleri & Güneş Modu",
+                        desc: "☀️ ikonu ile güneş altında parlak Arazi Modunu açabilir, 🟩 tablo ikonu ile TKGM kadastro parsel sınırlarını harita üzerinde tek tuşla açıp kapatabilirsiniz."
+                    },
+                    {
+                        icon: "fa-crosshairs",
+                        cls: "",
+                        title: "Hassas Nişangah & Alan/Mesafe Ölçümü",
+                        desc: "🎯 Nişangah ile harita merkezindeki koordinatı okuyup kaydedebilir; 📐 Cetvel aracıyla haritadan veya kayıtlı noktalardan en az 3 köşe seçerek m² / dekar alan hesaplayabilirsiniz."
+                    },
+                    {
+                        icon: "fa-search-location",
+                        cls: "green",
+                        title: "TKGM Parsel & MAKS Adres Sorgulama",
+                        desc: "🔍 Büyüteç butonuyla İl/İlçe/Mahalle/Ada/Parsel veya Sokak/Kapı No sorgulayabilir, pasif parsellerin gittiği yeni parselleri ve K1..Kn köşe koordinatlarını haritada görebilirsiniz."
+                    }
+                ]
+            },
+            {
+                badge: "ADIM 3/5 • SAĞ KONTROLLER & SENSÖRLER",
+                icon: "fa-location-arrow",
+                title: "Sağ Kontroller, Konum ve Yardım",
+                sub: "Harita yakınlaştırma, canlı GPS odaklama ve rehber butonları sağ kenarda yer alır.",
+                chips: [
+                    { icon: "fa-plus", text: "Zoom +" },
+                    { icon: "fa-minus", text: "Zoom -" },
+                    { icon: "fa-location-arrow", text: "Konumuma Git" },
+                    { icon: "fa-question", text: "Yardım (?)" }
+                ],
+                items: [
+                    {
+                        icon: "fa-location-arrow",
+                        cls: "",
+                        title: "Otomatik GPS & Yön Sensörü Aktivasyonu",
+                        desc: "Uygulama açıldığında GPS ve pusula sensörleri otomatik başlar. Sağdaki ok butonuna dokunarak haritayı anında canlı konumunuza odaklayabilirsiniz."
+                    },
+                    {
+                        icon: "fa-mug-hot",
+                        cls: "amber",
+                        title: "Destek & İnteraktif Rehber (?)",
+                        desc: "Kahve ikonunun hemen altındaki ❓ soru işareti butonuna istediğiniz zaman basarak bu görsel kullanım kılavuzunu tekrar açabilirsiniz."
+                    }
+                ]
+            },
+            {
+                badge: "ADIM 4/5 • NOKTA KAYDI & CAD AKTARIM",
+                icon: "fa-folder-open",
+                title: "Nokta Ekleme, Epok Ortalaması ve Klasörler",
+                sub: "Alt menü barından nokta kaydedebilir, proje klasörlerinizi ve CAD çıktılarınızı yönetebilirsiniz.",
+                chips: [
+                    { icon: "fa-plus", text: "Nokta Ekle (+)" },
+                    { icon: "fa-satellite", text: "Hassas Epok" },
+                    { icon: "fa-file-export", text: "NCN • DXF • KML" }
+                ],
+                items: [
+                    {
+                        icon: "fa-plus-circle",
+                        cls: "",
+                        title: "3 Farklı Yöntemle Nokta Kaydı (+ Butonu)",
+                        desc: "Alt ortadaki (+) butonuna basarak Canlı GPS konumunuzu, Nişangah merkezini veya elinizdeki Y/X ya da Enlem/Boylam değerlerini proje klasörünüze kaydedebilirsiniz."
+                    },
+                    {
+                        icon: "fa-satellite",
+                        cls: "green",
+                        title: "Hassas Epok Ortalamalı Ölçüm",
+                        desc: "Canlı GPS sekmesinde 5, 10, 20 veya 30 epok seçerek ağırlıklı ortalama ve RMS hata hesabı ile yüksek hassasiyetli nokta alımı yapabilirsiniz."
+                    },
+                    {
+                        icon: "fa-file-code",
+                        cls: "purple",
+                        title: "Netcad (NCN), AutoCAD (DXF), KML ve Excel",
+                        desc: "Kayıtlar sekmesinden tüm noktalarınızı NCN, DXF, KML, CSV, TXT veya GeoJSON olarak dışa aktarabilir veya mevcut dosyalarınızı içe aktarabilirsiniz."
+                    }
+                ]
+            },
+            {
+                badge: "ADIM 5/5 • APLİKASYON & YOL TARİFİ",
+                icon: "fa-bullseye",
+                title: "Canlı Aplikasyon (Stakeout) ve Navigasyon",
+                sub: "Haritadaki herhangi bir noktaya, kapı numarasına veya parsel köşesine dokunduğunuzda açılan kompakt bilgi kartı ile sahada hedefi kolayca bulun.",
+                chips: [
+                    { icon: "fa-bullseye", text: "Aplikasyon Radarı" },
+                    { icon: "fa-route", text: "Yol Tarifi Al" },
+                    { icon: "fa-volume-up", text: "Sesli & Titreşimli Uyarı" }
+                ],
+                items: [
+                    {
+                        icon: "fa-bullseye",
+                        cls: "",
+                        title: "Canlı Pusula Radarı ile Nokta Aplikasyonu",
+                        desc: "Noktaya tıklayıp 'Aplikasyon' butonuna bastığınızda telefonunuzun yön sensörü ile hedefe kalan mesafeyi (cm/m), Doğu/Kuzey farklarını ve sesli/titreşimli yönlendirmeyi görürsünüz."
+                    },
+                    {
+                        icon: "fa-route",
+                        cls: "green",
+                        title: "Harita Uygulamalarıyla Yol Tarifi",
+                        desc: "'Yol Tarifi' butonuna basarak noktayı doğrudan telefonunuzda yüklü Google Haritalar, Yandex Navigasyon, Apple Haritalar veya Waze üzerinde açabilirsiniz."
+                    }
+                ]
+            }
+        ];
+
+        function renderTutorialSlide() {
+            const slide = TUTORIAL_SLIDES[currentTutorialSlide];
+            if (!slide) return;
+
+            const badgeEl = document.getElementById('tutorial-step-badge');
+            const bodyEl = document.getElementById('tutorial-slide-body');
+            const dotsEl = document.getElementById('tutorial-dots');
+            const prevBtn = document.getElementById('btn-tut-prev');
+            const nextBtn = document.getElementById('btn-tut-next');
+
+            if (badgeEl) badgeEl.innerHTML = `<i class="fas fa-graduation-cap"></i> ${slide.badge}`;
+
+            const chipsHtml = (slide.chips || []).map(c =>
+                `<span class="tutorial-chip"><i class="fas ${c.icon}"></i> ${c.text}</span>`
+            ).join('');
+
+            const itemsHtml = (slide.items || []).map(it => `
+                <div class="tutorial-item">
+                    <div class="tutorial-item-icon ${it.cls || ''}"><i class="fas ${it.icon}"></i></div>
+                    <div class="tutorial-item-text">
+                        <h4>${it.title}</h4>
+                        <p>${it.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            if (bodyEl) {
+                bodyEl.innerHTML = `
+                    <div class="tutorial-hero">
+                        <div class="tutorial-hero-icon"><i class="fas ${slide.icon}"></i></div>
+                        <div class="tutorial-hero-title">${slide.title}</div>
+                        <div class="tutorial-hero-sub">${slide.sub}</div>
+                        <div class="tutorial-mock-bar">${chipsHtml}</div>
+                    </div>
+                    <div class="tutorial-list">${itemsHtml}</div>
+                `;
+                bodyEl.scrollTop = 0;
+            }
+
+            if (dotsEl) {
+                dotsEl.innerHTML = TUTORIAL_SLIDES.map((_, idx) =>
+                    `<div class="tutorial-dot ${idx === currentTutorialSlide ? 'active' : ''}" onclick="goToTutorialSlide(${idx})"></div>`
+                ).join('');
+            }
+
+            if (prevBtn) {
+                prevBtn.style.visibility = currentTutorialSlide === 0 ? 'hidden' : 'visible';
+            }
+            if (nextBtn) {
+                if (currentTutorialSlide === TUTORIAL_SLIDES.length - 1) {
+                    nextBtn.innerHTML = `Başla <i class="fas fa-check"></i>`;
+                } else {
+                    nextBtn.innerHTML = `İleri <i class="fas fa-chevron-right"></i>`;
+                }
+            }
+        }
+
+        function openTutorialModal(startIndex = 0) {
+            map.closePopup();
+            currentTutorialSlide = startIndex;
+            renderTutorialSlide();
+            const overlay = document.getElementById('tutorial-overlay');
+            if (overlay) overlay.classList.add('show');
+        }
+
+        function closeTutorialModal() {
+            const overlay = document.getElementById('tutorial-overlay');
+            if (overlay) overlay.classList.remove('show');
+            try {
+                localStorage.setItem(TUTORIAL_STORAGE_KEY, '1');
+            } catch (e) {}
+            lockViewportScroll();
+        }
+
+        function nextTutorialSlide() {
+            if (currentTutorialSlide < TUTORIAL_SLIDES.length - 1) {
+                currentTutorialSlide++;
+                renderTutorialSlide();
+            } else {
+                closeTutorialModal();
+                showToast("GeoITRF Pro v5 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
+            }
+        }
+
+        function prevTutorialSlide() {
+            if (currentTutorialSlide > 0) {
+                currentTutorialSlide--;
+                renderTutorialSlide();
+            }
+        }
+
+        function goToTutorialSlide(idx) {
+            if (idx >= 0 && idx < TUTORIAL_SLIDES.length) {
+                currentTutorialSlide = idx;
+                renderTutorialSlide();
+            }
+        }
+
+        function checkFirstTimeTutorial() {
+            try {
+                const seen = localStorage.getItem(TUTORIAL_STORAGE_KEY);
+                if (!seen) {
+                    openTutorialModal(0);
+                }
+            } catch (e) {
+                openTutorialModal(0);
+            }
         }
 
         // İlk açılışta verileri ve harita işaretçilerini yükle
