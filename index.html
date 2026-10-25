@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | GeoITRF PRO v3.0 -->
+<!-- CREAT BY TONOZ | GeoITRF PRO v4.0 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -841,6 +841,53 @@
         .nav-opt i { width: 22px; text-align: center; font-size: 1.1rem; flex-shrink: 0; }
         .nav-opt small { display: block; font-size: 0.66rem; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
         .nav-opt.primary { border-color: rgba(66, 133, 244, 0.6); background: rgba(66, 133, 244, 0.14); }
+
+        /* ===================== v4 EKLEMELERİ (ADRES & PARSEL SORGULAMA) ===================== */
+        .query-tabs {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+            background: var(--input-bg); padding: 5px; border-radius: 12px; border: 1px solid var(--border-light);
+        }
+        .query-tab-btn {
+            padding: 10px 8px; border-radius: 9px; border: none; background: transparent;
+            color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;
+        }
+        .query-tab-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 12px var(--accent-glow); }
+
+        .query-field-group { display: flex; flex-direction: column; gap: 4px; }
+        .query-field-label {
+            font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 0.4px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .query-field-label span.status-tag { font-size: 0.65rem; color: var(--accent); font-weight: 600; text-transform: none; }
+        .query-select {
+            width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--border-light);
+            background: var(--input-bg); color: var(--text-main); font-family: 'Inter', sans-serif;
+            font-size: 0.86rem; font-weight: 600; outline: none; transition: 0.2s;
+        }
+        .query-select:focus { border-color: var(--accent); }
+        .query-select:disabled { opacity: 0.48; cursor: not-allowed; }
+
+        .query-actions-grid { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 4px; }
+        .btn-query-clear {
+            padding: 11px 14px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.14); color: var(--danger); font-weight: 700; font-size: 0.82rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Inter', sans-serif;
+        }
+
+        .temp-query-badge {
+            position: fixed; top: calc(env(safe-area-inset-top) + 142px); left: 50%; transform: translateX(-50%);
+            z-index: 940; background: var(--surface); backdrop-filter: blur(14px);
+            border: 1px solid var(--warning); border-radius: 30px; padding: 6px 12px;
+            display: none; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.55);
+            max-width: 90%; font-size: 0.74rem; font-weight: 700; color: var(--text-main);
+        }
+        .temp-query-badge.show { display: flex; }
+        .temp-query-badge span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; color: var(--warning); }
+        .temp-query-badge button {
+            background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.45); color: var(--danger);
+            border-radius: 20px; padding: 2px 8px; font-size: 0.68rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -884,7 +931,7 @@
     <div id="splash-screen" onclick="hideSplashScreen()">
         <div class="splash-header">
             <h2 class="splash-title">GeoITRF</h2>
-            <div class="splash-subtitle">PRO TERMINAL v3.0</div>
+            <div class="splash-subtitle">PRO TERMINAL v4.0</div>
         </div>
         <div class="globe-container">
             <div class="wireframe-globe">
@@ -1041,11 +1088,20 @@
 
     <!-- SOL KONTROLLER (HIZLI ARAÇLAR) -->
     <div class="left-controls">
+        <button class="map-btn" id="btn-query-open" aria-label="Adres ve Parsel Sorgula" title="Adres / Parsel Sorgulama Ekranı" onclick="openQueryModal()"><i class="fas fa-search-location" style="color:var(--accent);"></i></button>
         <button class="map-btn" id="btn-crosshair-toggle" aria-label="Nişangah Modu" title="Harita Merkez Nişangahı" onclick="toggleCrosshairMode()"><i class="fas fa-crosshairs"></i></button>
         <button class="map-btn" id="btn-measure-toggle" aria-label="Alan ve Mesafe Ölç" title="Alan ve Mesafe Ölçümü" onclick="toggleMeasureTool()"><i class="fas fa-ruler-combined"></i></button>
         <button class="map-btn" id="btn-tkgm-quick" aria-label="TKGM Parselleri Göster/Kapat" title="TKGM Kadastro Parselleri Göster / Kapat" onclick="toggleTkgmParsels()"><i class="fas fa-border-all"></i></button>
         <button class="map-btn" id="btn-converter-open" aria-label="Koordinat Dönüştürücü" title="Manuel Koordinat Dönüştürücü" onclick="openConverterModal()"><i class="fas fa-calculator"></i></button>
         <button class="map-btn" id="btn-theme-quick" aria-label="Arazi Modu" title="Güneş Işığı / Gece Modu" onclick="toggleDaylightMode()"><i class="fas fa-sun"></i></button>
+    </div>
+
+    <!-- HARİTADAKİ GEÇİCİ SORGU ÇİZİMİ BİLGİ & TEMİZLEME ROZETİ (v4) -->
+    <div class="temp-query-badge" id="temp-query-badge">
+        <i class="fas fa-map-marked-alt" style="color:var(--warning);"></i>
+        <span id="temp-query-badge-text">Sorgu Sonucu</span>
+        <button onclick="openQueryModal()" style="background:rgba(0,229,255,0.18); border-color:rgba(0,229,255,0.45); color:var(--accent);"><i class="fas fa-search"></i> Sorgu</button>
+        <button onclick="clearTempQueryLayer(true)"><i class="fas fa-times"></i> Kaldır</button>
     </div>
 
     <!-- SAĞ KONTROLLER & KAHVE BUTONU -->
@@ -1323,6 +1379,112 @@
                     <button class="format-btn" onclick="convShowOnMap()"><i class="fas fa-map-marked-alt"></i> Haritada Gör</button>
                     <button class="format-btn" onclick="convSaveToProject()"><i class="fas fa-plus-circle"></i> Klasöre Ekle</button>
                     <button class="format-btn" style="border-color:var(--success); color:var(--success);" onclick="convStartStakeout()"><i class="fas fa-bullseye"></i> Aplikasyon</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADRES VE PARSEL SORGULAMA MODALI (v4 - TKGM MAKS API ENTEGRASYONU) -->
+    <div class="app-modal" id="modal-query">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fas fa-search-location" style="color:var(--accent); margin-right:8px;"></i> Adres & Parsel Sorgulama</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
+        </div>
+        <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+            <!-- 2'li Sekme: Adres Sorgula / Parsel Sorgula -->
+            <div class="query-tabs">
+                <button class="query-tab-btn active" id="qtab-btn-address" onclick="switchQueryMode('ADDRESS')">
+                    <i class="fas fa-map-signs"></i> Adres Sorgula
+                </button>
+                <button class="query-tab-btn" id="qtab-btn-parcel" onclick="switchQueryMode('PARCEL')">
+                    <i class="fas fa-vector-square"></i> Parsel Sorgula
+                </button>
+            </div>
+
+            <!-- ADRES SORGULAMA BÖLÜMÜ -->
+            <div id="query-pane-address" style="display:flex; flex-direction:column; gap:12px;">
+                <div class="drawer-card" style="gap:11px;">
+                    <div style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
+                        <i class="fas fa-info-circle" style="color:var(--accent);"></i> <b>Mahalle</b> seçerseniz mahalle sınırını, <b>Sokak/Yol</b> seçerseniz sokağı, <b>Kapı No</b> seçerseniz tam bina noktasını harita üzerinde geçici olarak çizer ve oraya gider.
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>1. İl Seçin</span>
+                            <span class="status-tag" id="q-status-il"></span>
+                        </div>
+                        <select class="query-select" id="q-select-il" onchange="onQueryIlChange(this.value)">
+                            <option value="">-- İl Seçiniz --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>2. İlçe Seçin</span>
+                            <span class="status-tag" id="q-status-ilce"></span>
+                        </div>
+                        <select class="query-select" id="q-select-ilce" onchange="onQueryIlceChange(this.value)" disabled>
+                            <option value="">-- Önce İl Seçiniz --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>3. Mahalle / Köy Seçin</span>
+                            <span class="status-tag" id="q-status-mahalle"></span>
+                        </div>
+                        <select class="query-select" id="q-select-mahalle" onchange="onQueryMahalleChange(this.value)" disabled>
+                            <option value="">-- Önce İlçe Seçiniz --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>4. Cadde / Sokak / Yol (İsteğe Bağlı)</span>
+                            <span class="status-tag" id="q-status-yol"></span>
+                        </div>
+                        <select class="query-select" id="q-select-yol" onchange="onQueryYolChange(this.value)" disabled>
+                            <option value="">-- Tüm Mahalle (Sokak Seçilmedi) --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-field-group">
+                        <div class="query-field-label">
+                            <span>5. Kapı Numarası / Numarataj (İsteğe Bağlı)</span>
+                            <span class="status-tag" id="q-status-kapi"></span>
+                        </div>
+                        <select class="query-select" id="q-select-kapi" onchange="onQueryKapiChange(this.value)" disabled>
+                            <option value="">-- Tüm Sokak / Mahalle (Kapı No Seçilmedi) --</option>
+                        </select>
+                    </div>
+
+                    <div class="query-actions-grid">
+                        <button class="pwa-install-btn" id="btn-execute-address-query" onclick="executeAddressQuery()">
+                            <i class="fas fa-location-arrow"></i> Haritada Göster ve Git
+                        </button>
+                        <button class="btn-query-clear" onclick="clearTempQueryLayer(true)" title="Haritadaki Geçici Çizimi Temizle">
+                            <i class="fas fa-eraser"></i> Temizle
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARSEL SORGULAMA BÖLÜMÜ (İLERİDE EKLENECEK UYARISI) -->
+            <div id="query-pane-parcel" style="display:none; flex-direction:column; gap:12px;">
+                <div class="drawer-card" style="text-align:center; padding:30px 18px; align-items:center; gap:12px;">
+                    <div style="width:64px; height:64px; border-radius:50%; background:rgba(245, 158, 11, 0.15); border:1px solid rgba(245, 158, 11, 0.4); display:flex; align-items:center; justify-content:center; color:var(--warning); font-size:1.8rem;">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 style="margin:0; font-size:1.05rem; color:var(--text-main);">TKGM Ada / Parsel Sorgulama</h3>
+                    <p style="margin:0; font-size:0.84rem; color:var(--text-muted); line-height:1.5;">
+                        TKGM Ada / Parsel numarasına göre doğrudan parsel sorgulama özelliği <b>ileride eklenecektir</b>.
+                    </p>
+                    <p style="margin:0; font-size:0.76rem; color:var(--accent); line-height:1.4;">
+                        Şimdilik <b>Adres Sorgula</b> sekmesinden konum bulabilir ve sol menüdeki <b>TKGM Parsel</b> butonuyla harita üzerinde kadastro parsel sınırlarını görüntüleyebilirsiniz.
+                    </p>
+                    <button class="pwa-install-btn" style="margin-top:6px; max-width:240px;" onclick="switchQueryMode('ADDRESS')">
+                        <i class="fas fa-map-signs"></i> Adres Sorgulamaya Dön
+                    </button>
                 </div>
             </div>
         </div>
@@ -2740,6 +2902,477 @@
         function convStartStakeout() {
             if (!lastConvertedPoint) return;
             startStakeoutPoint(lastConvertedPoint);
+        }
+
+        // --- v4: ADRES VE PARSEL SORGULAMA MOTORU (TKGM MAKS API) ---
+        const MAKS_API_BASE = 'https://cbsapi.tkgm.gov.tr/megsiswebapi.v3.1/api/maksIdariYapi';
+        let maksCache = {
+            il: [],
+            ilce: [],
+            mahalle: [],
+            yol: [],
+            kapi: []
+        };
+        let tempQueryLayerGroup = null;
+        let lastTempQueryPoint = null;
+
+        function openQueryModal() {
+            closeModals();
+            document.getElementById('modal-query').classList.add('show');
+            if (maksCache.il.length === 0) {
+                loadMaksIller();
+            }
+        }
+
+        function switchQueryMode(mode) {
+            const addrBtn = document.getElementById('qtab-btn-address');
+            const parcelBtn = document.getElementById('qtab-btn-parcel');
+            const addrPane = document.getElementById('query-pane-address');
+            const parcelPane = document.getElementById('query-pane-parcel');
+
+            if (mode === 'PARCEL') {
+                addrBtn.classList.remove('active');
+                parcelBtn.classList.add('active');
+                addrPane.style.display = 'none';
+                parcelPane.style.display = 'flex';
+                showToast("Parsel sorgulama özelliği ileride eklenecektir", "fa-info-circle");
+            } else {
+                parcelBtn.classList.remove('active');
+                addrBtn.classList.add('active');
+                parcelPane.style.display = 'none';
+                addrPane.style.display = 'flex';
+                if (maksCache.il.length === 0) loadMaksIller();
+            }
+        }
+
+        function sortMaksFeatures(features) {
+            if (!Array.isArray(features)) return [];
+            return [...features].sort((a, b) => {
+                const ta = (a?.properties?.text || '').toString().trim();
+                const tb = (b?.properties?.text || '').toString().trim();
+                return ta.localeCompare(tb, 'tr', { numeric: true, sensitivity: 'base' });
+            });
+        }
+
+        async function fetchMaksGeoJSON(endpoint) {
+            const res = await fetch(`${MAKS_API_BASE}/${endpoint}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            return Array.isArray(data?.features) ? data.features : [];
+        }
+
+        async function loadMaksIller() {
+            const sel = document.getElementById('q-select-il');
+            const st = document.getElementById('q-status-il');
+            st.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            sel.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchMaksGeoJSON('illiste'));
+                maksCache.il = features;
+                let html = `<option value="">-- İl Seçiniz (${features.length}) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                sel.innerHTML = html;
+                sel.disabled = false;
+                st.innerText = `${features.length} il`;
+            } catch (e) {
+                st.innerText = `Bağlantı hatası`;
+                sel.innerHTML = `<option value="">-- İller yüklenemedi (Tekrar deneyin) --</option>`;
+                sel.disabled = false;
+                showToast("İl listesi alınamadı, internet bağlantınızı kontrol edin", "fa-exclamation-triangle");
+            }
+        }
+
+        async function onQueryIlChange(ilId) {
+            const selIlce = document.getElementById('q-select-ilce');
+            const selMah = document.getElementById('q-select-mahalle');
+            const selYol = document.getElementById('q-select-yol');
+            const selKapi = document.getElementById('q-select-kapi');
+            const stIlce = document.getElementById('q-status-ilce');
+
+            maksCache.ilce = []; maksCache.mahalle = []; maksCache.yol = []; maksCache.kapi = [];
+            selMah.innerHTML = `<option value="">-- Önce İlçe Seçiniz --</option>`; selMah.disabled = true;
+            selYol.innerHTML = `<option value="">-- Tüm Mahalle (Sokak Seçilmedi) --</option>`; selYol.disabled = true;
+            selKapi.innerHTML = `<option value="">-- Tüm Sokak / Mahalle (Kapı No Seçilmedi) --</option>`; selKapi.disabled = true;
+            document.getElementById('q-status-mahalle').innerText = '';
+            document.getElementById('q-status-yol').innerText = '';
+            document.getElementById('q-status-kapi').innerText = '';
+
+            if (!ilId) {
+                selIlce.innerHTML = `<option value="">-- Önce İl Seçiniz --</option>`;
+                selIlce.disabled = true;
+                stIlce.innerText = '';
+                return;
+            }
+
+            stIlce.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            selIlce.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchMaksGeoJSON(`ilceliste/${encodeURIComponent(ilId)}`));
+                maksCache.ilce = features;
+                let html = `<option value="">-- İlçe Seçiniz (${features.length}) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                selIlce.innerHTML = html;
+                selIlce.disabled = false;
+                stIlce.innerText = `${features.length} ilçe`;
+            } catch (e) {
+                stIlce.innerText = `Hata`;
+                selIlce.innerHTML = `<option value="">-- İlçeler yüklenemedi --</option>`;
+                showToast("İlçe listesi alınamadı", "fa-exclamation-triangle");
+            }
+        }
+
+        async function onQueryIlceChange(ilceId) {
+            const selMah = document.getElementById('q-select-mahalle');
+            const selYol = document.getElementById('q-select-yol');
+            const selKapi = document.getElementById('q-select-kapi');
+            const stMah = document.getElementById('q-status-mahalle');
+
+            maksCache.mahalle = []; maksCache.yol = []; maksCache.kapi = [];
+            selYol.innerHTML = `<option value="">-- Tüm Mahalle (Sokak Seçilmedi) --</option>`; selYol.disabled = true;
+            selKapi.innerHTML = `<option value="">-- Tüm Sokak / Mahalle (Kapı No Seçilmedi) --</option>`; selKapi.disabled = true;
+            document.getElementById('q-status-yol').innerText = '';
+            document.getElementById('q-status-kapi').innerText = '';
+
+            if (!ilceId) {
+                selMah.innerHTML = `<option value="">-- Önce İlçe Seçiniz --</option>`;
+                selMah.disabled = true;
+                stMah.innerText = '';
+                return;
+            }
+
+            stMah.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            selMah.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchMaksGeoJSON(`mahalleliste/${encodeURIComponent(ilceId)}`));
+                maksCache.mahalle = features;
+                let html = `<option value="">-- Mahalle / Köy Seçiniz (${features.length}) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                selMah.innerHTML = html;
+                selMah.disabled = false;
+                stMah.innerText = `${features.length} mahalle`;
+            } catch (e) {
+                stMah.innerText = `Hata`;
+                selMah.innerHTML = `<option value="">-- Mahalleler yüklenemedi --</option>`;
+                showToast("Mahalle listesi alınamadı", "fa-exclamation-triangle");
+            }
+        }
+
+        async function onQueryMahalleChange(mahalleId) {
+            const selYol = document.getElementById('q-select-yol');
+            const selKapi = document.getElementById('q-select-kapi');
+            const stYol = document.getElementById('q-status-yol');
+            const stKapi = document.getElementById('q-status-kapi');
+
+            maksCache.yol = []; maksCache.kapi = [];
+            selKapi.innerHTML = `<option value="">-- Tüm Sokak / Mahalle (Kapı No Seçilmedi) --</option>`;
+            selKapi.disabled = true;
+            stKapi.innerText = '';
+
+            if (!mahalleId) {
+                selYol.innerHTML = `<option value="">-- Tüm Mahalle (Sokak Seçilmedi) --</option>`;
+                selYol.disabled = true;
+                stYol.innerText = '';
+                return;
+            }
+
+            stYol.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            selYol.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchMaksGeoJSON(`yolliste/${encodeURIComponent(mahalleId)}`));
+                maksCache.yol = features;
+                let html = `<option value="">-- Tüm Mahalle (Sokak Seçilmedi - ${features.length} Sokak) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                selYol.innerHTML = html;
+                selYol.disabled = false;
+                stYol.innerText = `${features.length} sokak/yol`;
+
+                // Eğer mahallede yol/sokak yoksa doğrudan mahalle_id ile numarataj dene
+                if (features.length === 0) {
+                    loadMaksNumarataj(mahalleId);
+                }
+            } catch (e) {
+                stYol.innerText = `Hata`;
+                selYol.innerHTML = `<option value="">-- Sokaklar yüklenemedi --</option>`;
+                selYol.disabled = false;
+            }
+        }
+
+        async function onQueryYolChange(yolId) {
+            const selKapi = document.getElementById('q-select-kapi');
+            const stKapi = document.getElementById('q-status-kapi');
+            maksCache.kapi = [];
+
+            if (!yolId) {
+                selKapi.innerHTML = `<option value="">-- Tüm Sokak / Mahalle (Kapı No Seçilmedi) --</option>`;
+                selKapi.disabled = true;
+                stKapi.innerText = '';
+                return;
+            }
+            await loadMaksNumarataj(yolId);
+        }
+
+        async function loadMaksNumarataj(parentId) {
+            const selKapi = document.getElementById('q-select-kapi');
+            const stKapi = document.getElementById('q-status-kapi');
+            stKapi.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Yükleniyor...`;
+            selKapi.disabled = true;
+            try {
+                const features = sortMaksFeatures(await fetchMaksGeoJSON(`numaratajliste/${encodeURIComponent(parentId)}`));
+                maksCache.kapi = features;
+                let html = `<option value="">-- Tüm Sokak (Kapı No Seçilmedi - ${features.length} Kapı) --</option>`;
+                features.forEach(f => {
+                    html += `<option value="${f.properties.id}">${f.properties.text}</option>`;
+                });
+                selKapi.innerHTML = html;
+                selKapi.disabled = features.length === 0;
+                stKapi.innerText = `${features.length} kapı no`;
+            } catch (e) {
+                stKapi.innerText = `Hata`;
+                selKapi.innerHTML = `<option value="">-- Kapı numaraları alınamadı --</option>`;
+                selKapi.disabled = false;
+            }
+        }
+
+        function onQueryKapiChange(kapiId) {
+            // Kapı numarası seçildiğinde kullanıcı doğrudan butona basabilir
+        }
+
+        function clearTempQueryLayer(notify = false) {
+            if (tempQueryLayerGroup) {
+                map.removeLayer(tempQueryLayerGroup);
+                tempQueryLayerGroup = null;
+            }
+            lastTempQueryPoint = null;
+            const badge = document.getElementById('temp-query-badge');
+            if (badge) badge.classList.remove('show');
+            if (notify) showToast("Geçici sorgu çizimi haritadan kaldırıldı", "fa-eraser");
+        }
+
+        function saveTempQueryPointToProject() {
+            if (!lastTempQueryPoint) return;
+            projectsData[activeProject].points.push({
+                ...lastTempQueryPoint,
+                id: Date.now()
+            });
+            renderActiveProjectMarkers();
+            syncData();
+            showToast(`"${lastTempQueryPoint.name}" aktif klasöre kaydedildi!`, "fa-check-circle");
+        }
+
+        function startTempQueryStakeout() {
+            if (!lastTempQueryPoint) return;
+            startStakeoutPoint(lastTempQueryPoint);
+        }
+
+        function executeAddressQuery() {
+            const ilId = document.getElementById('q-select-il').value;
+            const ilceId = document.getElementById('q-select-ilce').value;
+            const mahId = document.getElementById('q-select-mahalle').value;
+            const yolId = document.getElementById('q-select-yol').value;
+            const kapiId = document.getElementById('q-select-kapi').value;
+
+            const ilFeat = maksCache.il.find(f => String(f.properties.id) === String(ilId));
+            const ilceFeat = maksCache.ilce.find(f => String(f.properties.id) === String(ilceId));
+            const mahFeat = maksCache.mahalle.find(f => String(f.properties.id) === String(mahId));
+            const yolFeat = maksCache.yol.find(f => String(f.properties.id) === String(yolId));
+            const kapiFeat = maksCache.kapi.find(f => String(f.properties.id) === String(kapiId));
+
+            // En spesifik seçimi belirle (Kapı No -> Sokak -> Mahalle -> İlçe -> İl)
+            let targetFeat = kapiFeat || yolFeat || mahFeat || ilceFeat || ilFeat;
+            let targetLevel = kapiFeat ? 'KAPI' : (yolFeat ? 'YOL' : (mahFeat ? 'MAHALLE' : (ilceFeat ? 'ILCE' : (ilFeat ? 'IL' : null))));
+
+            if (!targetFeat || !targetFeat.geometry) {
+                showToast("Lütfen en azından İl, İlçe veya Mahalle seçin", "fa-exclamation-circle");
+                return;
+            }
+
+            clearTempQueryLayer(false);
+            tempQueryLayerGroup = L.featureGroup().addTo(map);
+
+            const parts = [
+                ilFeat?.properties?.text,
+                ilceFeat?.properties?.text,
+                mahFeat?.properties?.text,
+                yolFeat?.properties?.text,
+                kapiFeat ? `No: ${kapiFeat.properties.text}` : null
+            ].filter(Boolean);
+            const fullAddressTitle = parts.join(' / ');
+            const shortBadgeTitle = kapiFeat
+                ? `${yolFeat ? yolFeat.properties.text : (mahFeat ? mahFeat.properties.text : '')} No:${kapiFeat.properties.text}`
+                : (yolFeat ? yolFeat.properties.text : (mahFeat ? mahFeat.properties.text : (ilceFeat ? ilceFeat.properties.text : ilFeat.properties.text)));
+
+            // Eğer mahalle ve sokak birlikte seçildiyse mahalle sınırını da hafif referans olarak çiz
+            if ((targetLevel === 'YOL' || targetLevel === 'KAPI') && mahFeat && mahFeat.geometry) {
+                L.geoJSON(mahFeat, {
+                    style: {
+                        color: '#00e5ff',
+                        weight: 1.5,
+                        dashArray: '6, 6',
+                        fillColor: '#00e5ff',
+                        fillOpacity: 0.04
+                    },
+                    interactive: false
+                }).addTo(tempQueryLayerGroup);
+            }
+
+            // Eğer kapı seçildiyse sokağı da belirgin çiz
+            if (targetLevel === 'KAPI' && yolFeat && yolFeat.geometry) {
+                L.geoJSON(yolFeat, {
+                    style: {
+                        color: '#f59e0b',
+                        weight: 4,
+                        opacity: 0.85
+                    },
+                    interactive: false
+                }).addTo(tempQueryLayerGroup);
+            }
+
+            let centerLat = null, centerLon = null;
+
+            if (targetFeat.geometry.type === 'Point') {
+                // Koordinatlar [Boylam, Enlem] (EPSG:4326) sırasıyla gelir
+                const coords = targetFeat.geometry.coordinates;
+                centerLon = Number(coords[0]);
+                centerLat = Number(coords[1]);
+
+                const proj = calculateProjected(centerLat, centerLon);
+                const ptName = kapiFeat ? `Kapı ${kapiFeat.properties.text}` : targetFeat.properties.text;
+                lastTempQueryPoint = {
+                    id: Date.now(),
+                    name: ptName,
+                    category: 'Bina',
+                    desc: fullAddressTitle,
+                    lat: centerLat,
+                    lon: centerLon,
+                    alt: 0,
+                    y_saga: proj.y,
+                    x_yukari: proj.x,
+                    dom: proj.dom
+                };
+
+                const pinMarker = L.circleMarker([centerLat, centerLon], {
+                    radius: 10,
+                    color: '#fff',
+                    weight: 3,
+                    fillColor: '#ff2d55',
+                    fillOpacity: 1
+                }).addTo(tempQueryLayerGroup);
+
+                const popupHtml = `
+                    <div class="marker-popup">
+                        <h3><i class="fas fa-door-open"></i> ${ptName}</h3>
+                        <p>${fullAddressTitle}</p>
+                        <hr>
+                        <div class="coords">
+                            Y: ${proj.y.toFixed(3)}<br>
+                            X: ${proj.x.toFixed(3)}<br>
+                            E: ${centerLat.toFixed(6)}<br>
+                            B: ${centerLon.toFixed(6)}
+                        </div>
+                        <div class="popup-btn-row">
+                            <button class="popup-stake-btn" onclick="startTempQueryStakeout()">
+                                <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                            </button>
+                            <button class="popup-nav-btn" onclick="openNavSheet(${centerLat}, ${centerLon}, '${ptName.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-route"></i> Yol Tarifi Al
+                            </button>
+                        </div>
+                        <button onclick="saveTempQueryPointToProject()" style="margin-top:6px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                            <i class="fas fa-plus-circle"></i> Aktif Klasöre Nokta Olarak Kaydet
+                        </button>
+                    </div>`;
+
+                pinMarker.bindPopup(popupHtml);
+                pinMarker.bindTooltip(ptName, { permanent: true, direction: 'top', offset: [0, -12], className: 'point-map-label' });
+
+                closeModals();
+                map.invalidateSize({ pan: false });
+                map.setView([centerLat, centerLon], 19);
+                pinMarker.openPopup();
+            } else {
+                // LineString, MultiLineString (Sokak) veya Polygon/MultiPolygon (Mahalle/İlçe/İl)
+                const isRoad = targetLevel === 'YOL';
+                const geoLayer = L.geoJSON(targetFeat, {
+                    style: {
+                        color: isRoad ? '#f59e0b' : '#00e5ff',
+                        weight: isRoad ? 5 : 3,
+                        opacity: 0.95,
+                        fillColor: isRoad ? '#f59e0b' : '#00e5ff',
+                        fillOpacity: isRoad ? 0.2 : 0.15
+                    }
+                }).addTo(tempQueryLayerGroup);
+
+                const bounds = geoLayer.getBounds();
+                if (bounds.isValid()) {
+                    const c = bounds.getCenter();
+                    centerLat = c.lat;
+                    centerLon = c.lng;
+                    const proj = calculateProjected(centerLat, centerLon);
+                    const titleText = targetFeat.properties.text || 'Sorgu Alanı';
+                    lastTempQueryPoint = {
+                        id: Date.now(),
+                        name: titleText,
+                        category: isRoad ? 'Sinir' : 'Poligon',
+                        desc: fullAddressTitle,
+                        lat: centerLat,
+                        lon: centerLon,
+                        alt: 0,
+                        y_saga: proj.y,
+                        x_yukari: proj.x,
+                        dom: proj.dom
+                    };
+
+                    const popupHtml = `
+                        <div class="marker-popup">
+                            <h3><i class="fas ${isRoad ? 'fa-road' : 'fa-draw-polygon'}"></i> ${titleText}</h3>
+                            <p>${fullAddressTitle}</p>
+                            <hr>
+                            <div class="coords">
+                                Merkez Y: ${proj.y.toFixed(3)}<br>
+                                Merkez X: ${proj.x.toFixed(3)}<br>
+                                E: ${centerLat.toFixed(6)}<br>
+                                B: ${centerLon.toFixed(6)}
+                            </div>
+                            <div class="popup-btn-row">
+                                <button class="popup-stake-btn" onclick="startTempQueryStakeout()">
+                                    <i class="fas fa-bullseye"></i> Aplikasyon Yap
+                                </button>
+                                <button class="popup-nav-btn" onclick="openNavSheet(${centerLat}, ${centerLon}, '${titleText.replace(/'/g, "\\'")}')">
+                                    <i class="fas fa-route"></i> Yol Tarifi Al
+                                </button>
+                            </div>
+                            <button onclick="saveTempQueryPointToProject()" style="margin-top:6px; width:100%; padding:6px; border-radius:8px; border:1px solid var(--accent); background:rgba(0,229,255,0.15); color:var(--accent); font-weight:700; font-size:0.73rem; cursor:pointer;">
+                                <i class="fas fa-plus-circle"></i> Merkez Noktayı Klasöre Kaydet
+                            </button>
+                        </div>`;
+
+                    geoLayer.bindPopup(popupHtml);
+
+                    closeModals();
+                    map.invalidateSize({ pan: false });
+                    map.fitBounds(bounds, { padding: [45, 45], maxZoom: 19 });
+                    L.popup()
+                        .setLatLng([centerLat, centerLon])
+                        .setContent(popupHtml)
+                        .openOn(map);
+                }
+            }
+
+            const badge = document.getElementById('temp-query-badge');
+            const badgeText = document.getElementById('temp-query-badge-text');
+            if (badge && badgeText) {
+                badgeText.innerText = shortBadgeTitle;
+                badge.classList.add('show');
+            }
+            showToast(`${shortBadgeTitle} haritada gösterildi`, "fa-search-location");
         }
 
         // --- SEKME GEÇİŞLERİ VE KAYIT YÖNETİMİ (CANLI GPS / NİŞANGAH / ELLE GİRME) ---
