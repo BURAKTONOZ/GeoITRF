@@ -1,5 +1,5 @@
-const CACHE_NAME = 'azimut-pro-v7.0';
-const TILE_CACHE_NAME = 'azimut-tiles-v7.0';
+const CACHE_NAME = 'azimut-pro-v8.0';
+const TILE_CACHE_NAME = 'azimut-tiles-v8.0';
 
 const APP_ASSETS = [
     './',
@@ -39,11 +39,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const reqUrl = event.request.url;
 
-    // Video / Range isteklerini doğrudan tarayıcı akışına bırak (iOS Safari ve Chrome MP4 uyumluluğu)
-    if (event.request.headers.get('range') || reqUrl.endsWith('.mp4')) {
-        return;
-    }
-
     // Harita karoları (Map Tiles) ve TKGM WMS için önbellekleme (Offline Arazi Desteği)
     if (
         reqUrl.includes('arcgisonline.com') ||
@@ -73,7 +68,8 @@ self.addEventListener('fetch', (event) => {
     // Firebase ve TKGM MAKS sorgulama API isteklerini doğrudan ağa yönlendir
     if (
         reqUrl.includes('firestore.googleapis.com') ||
-        reqUrl.includes('googleapis.com/identitytoolkit') ||
+        reqUrl.includes('googleapis.com') ||
+        reqUrl.includes('firebase') ||
         reqUrl.includes('cbsapi.tkgm.gov.tr')
     ) {
         return;

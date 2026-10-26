@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | AZİMUT PRO v7.0 -->
+<!-- CREAT BY TONOZ | AZİMUT PRO v8.0 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -189,83 +189,145 @@
             font-weight: 700;
         }
 
-        /* Splash Screen (v7: Tam Ekran Sinematik Intro Video Karşılama Ekranı) */
+        /* Splash / Auth Gate Screen (v8: logo.jpeg ile Birebir Kenar Uyumlu & Zorunlu Gmail Kurumsal Giriş Ekranı) */
         #splash-screen {
-            position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh;
-            background: radial-gradient(ellipse 90% 60% at 50% 15%, #162840 0%, #070d19 52%, #02030a 100%);
-            background-color: #02030a;
-            z-index: 9999; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; user-select: none;
-            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+            position: fixed; inset: 0; width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse 92% 52% at 50% 14%, #243348 0%, rgba(15, 21, 35, 0.88) 48%, rgba(7, 11, 23, 0) 100%),
+                linear-gradient(180deg, #1b2638 0%, #0f1523 28%, #070b17 64%, #02020c 100%);
+            background-color: #070b17;
+            z-index: 9999;
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            overflow-y: auto; overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 16px);
+            transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
         }
         #splash-screen.closing {
             opacity: 0;
-            transform: scale(1.04);
+            transform: scale(1.03);
             pointer-events: none;
         }
-        .splash-video-stage {
-            position: relative; width: 100%; height: 100%;
+        #splash-screen::before {
+            content: ''; position: fixed; top: 26%; left: 50%; transform: translate(-50%, -50%);
+            width: min(420px, 92vw); height: min(420px, 92vw);
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.16) 0%, rgba(16, 185, 129, 0.06) 44%, rgba(0,0,0,0) 72%);
+            z-index: 0; pointer-events: none;
+        }
+        .auth-gate-wrap {
+            position: relative; z-index: 1;
+            width: 100%; max-width: 385px;
+            margin: auto 0;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .splash-logo-stage {
+            position: relative;
+            width: min(210px, 54vw); height: min(210px, 54vw);
+            max-height: 28vh; max-width: 28vh;
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            flex-shrink: 0;
         }
-        .splash-fullscreen-video {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            object-position: center center;
-            display: block;
-            pointer-events: none;
+        .splash-logo-img {
+            width: 100%; height: 100%; object-fit: contain;
+            /* logo.jpeg kenarlarını arka planla sıfır iz bırakacak şekilde yumuşakça erit */
+            -webkit-mask-image: radial-gradient(ellipse 84% 84% at 50% 48%, #000 66%, rgba(0,0,0,0.6) 83%, transparent 100%);
+            mask-image: radial-gradient(ellipse 84% 84% at 50% 48%, #000 66%, rgba(0,0,0,0.6) 83%, transparent 100%);
+            filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.78));
+            animation: floatSplashLogo 4.5s ease-in-out infinite;
+            user-select: none; -webkit-user-drag: none;
         }
-        /* Geniş ekranlı masaüstü monitörlerde dikey (9:16) videonun yazılarının kesilmemesi ve tam boy sinematik görünmesi için */
-        @media (min-aspect-ratio: 10/11) {
-            .splash-fullscreen-video {
-                width: auto;
-                height: 100%;
-                max-width: 100%;
-                object-fit: contain;
-                filter: drop-shadow(0 0 60px rgba(0, 229, 255, 0.18));
-            }
+        @keyframes floatSplashLogo { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.015); } }
+        .splash-badge-pill {
+            background: rgba(0, 229, 255, 0.10); border: 1px solid rgba(0, 229, 255, 0.34);
+            color: #d8ecff; font-size: 0.62rem; font-weight: 700; letter-spacing: 2px;
+            padding: 5px 14px; border-radius: 30px; text-transform: uppercase;
+            box-shadow: 0 4px 18px rgba(0, 229, 255, 0.12);
+            text-align: center;
         }
-        /* İnce Sinematik Kontroller (Ses & Atla) */
-        .splash-video-controls {
-            position: absolute;
-            bottom: calc(env(safe-area-inset-bottom) + 22px);
-            right: 18px;
-            z-index: 5;
-            display: flex; align-items: center; gap: 10px;
+        .splash-badge-pill span { color: var(--accent); font-weight: 800; }
+
+        .auth-gate-card {
+            width: 100%;
+            background: rgba(11, 17, 32, 0.78);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(0, 229, 255, 0.28);
+            border-radius: 22px;
+            padding: 18px 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            display: flex; flex-direction: column; gap: 12px;
         }
-        .splash-ctrl-btn {
-            background: rgba(7, 13, 25, 0.48);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: rgba(255, 255, 255, 0.88);
-            border-radius: 30px;
-            padding: 8px 15px;
+        .auth-gate-title {
+            margin: 0; font-size: 1.04rem; font-weight: 800; color: #ffffff;
+            text-align: center; letter-spacing: 0.3px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .auth-gate-sub {
+            margin: 0; font-size: 0.76rem; color: #94a3b8;
+            text-align: center; line-height: 1.45;
+        }
+        .auth-google-hero-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            color: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
+            padding: 13px 16px;
             font-family: 'Inter', sans-serif;
-            font-size: 0.74rem; font-weight: 700; letter-spacing: 0.8px;
-            display: inline-flex; align-items: center; gap: 7px;
+            font-size: 0.9rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             cursor: pointer; transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 8px 24px rgba(0, 229, 255, 0.2);
         }
-        .splash-ctrl-btn:hover, .splash-ctrl-btn:active {
-            background: rgba(0, 229, 255, 0.2);
-            border-color: rgba(0, 229, 255, 0.55);
-            color: #ffffff;
-            transform: translateY(-1px);
+        .auth-google-hero-btn:active { transform: scale(0.98); }
+        .auth-google-hero-btn:disabled { opacity: 0.65; cursor: wait; }
+        .auth-gate-features {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+            padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .splash-ctrl-btn.icon-only {
-            width: 36px; height: 36px; padding: 0; justify-content: center; border-radius: 50%;
+        .auth-gate-feat-item {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.66rem; color: #cbd5e1; font-weight: 600;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 6px 8px; border-radius: 9px;
         }
-        .splash-progress-track {
-            position: absolute; left: 0; right: 0; bottom: 0;
-            height: 3px; background: rgba(255, 255, 255, 0.08);
-            z-index: 6; overflow: hidden;
+        .auth-gate-feat-item i { color: var(--accent); font-size: 0.72rem; width: 14px; text-align: center; flex-shrink: 0; }
+        .auth-lock-notice {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-size: 0.66rem; color: #f59e0b; font-weight: 700;
+            background: rgba(245, 158, 11, 0.10); border: 1px solid rgba(245, 158, 11, 0.28);
+            padding: 6px 10px; border-radius: 10px; text-align: center;
         }
-        .splash-progress-fill {
-            height: 100%; width: 0%;
-            background: linear-gradient(90deg, #3b82f6, #00e5ff);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
-            transition: width 0.12s linear;
+        .auth-onboard-user-bar {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(0, 229, 255, 0.08); border: 1px solid rgba(0, 229, 255, 0.25);
+            padding: 8px 10px; border-radius: 12px;
         }
+        .auth-onboard-user-bar img {
+            width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent); flex-shrink: 0;
+        }
+        .auth-onboard-field {
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .auth-onboard-field label {
+            font-size: 0.68rem; font-weight: 700; color: #94a3b8;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .auth-onboard-input {
+            width: 100%; padding: 10px 12px; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(0, 0, 0, 0.45); color: #ffffff;
+            font-family: 'Inter', sans-serif; font-size: 0.84rem; font-weight: 600;
+            outline: none;
+        }
+        .auth-onboard-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,229,255,0.18); }
+        .splash-footer {
+            position: relative; z-index: 1; width: 100%; max-width: 385px;
+            display: flex; justify-content: space-between; align-items: center;
+            opacity: 0.55; padding-top: 8px; flex-shrink: 0;
+        }
+        .splash-footer h3 { margin: 0; color: #cbd5e1; font-size: 0.6rem; letter-spacing: 1.5px; font-weight: 600;}
         @keyframes blinker { 50% { opacity: 0.35; } }
 
         /* HUD Bar (Üst Panel - v7 AZİMUT Pro Kompakt Tasarım) */
@@ -877,13 +939,179 @@
         .epoch-bar-fill { width: 0%; height: 100%; background: var(--success); transition: width 0.2s; }
         .epoch-status-text { font-size: 0.68rem; color: var(--success); font-family: 'JetBrains Mono', monospace; text-align: center; }
 
-        /* KOMPAKT 5'Lİ DOCK */
-        .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 12px); left: 50%; transform: translateX(-50%); z-index: 1100; }
-        .ig-dock { display: flex; align-items: center; gap: 5px; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); border-radius: 40px; padding: 6px 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
-        .dock-item { width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; border-radius: 22px; color: var(--text-muted); font-size: 1.05rem; transition: 0.2s; cursor: pointer; }
+        /* KOMPAKT 6'LI DOCK (v8: Profil Yanında AZİMUT Ağı Sekmesi Eklendi) */
+        .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 12px); left: 50%; transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 16px); }
+        .ig-dock { display: flex; align-items: center; gap: 4px; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); border-radius: 40px; padding: 6px 9px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
+        .dock-item { position: relative; width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 21px; color: var(--text-muted); font-size: 1.02rem; transition: 0.2s; cursor: pointer; flex-shrink: 0; }
         .dock-item.active { background: rgba(0, 229, 255, 0.18); color: var(--accent); }
-        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.3rem; width: 48px; height: 48px; margin: 0 4px; box-shadow: 0 0 15px var(--accent-glow); }
+        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.25rem; width: 46px; height: 46px; margin: 0 2px; box-shadow: 0 0 15px var(--accent-glow); }
         .dock-item.main-add:active { transform: scale(0.92); }
+        .dock-badge {
+            position: absolute; top: 3px; right: 2px;
+            min-width: 15px; height: 15px; padding: 0 4px;
+            border-radius: 10px; background: var(--success); color: #fff;
+            font-size: 0.54rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            display: flex; align-items: center; justify-content: center;
+            border: 1.5px solid var(--surface-solid);
+        }
+
+        /* v8: SOL YAN PANEL PERSONEL KİMLİK KARTI, PROFİL DÜZENLEME VE AZİMUT AĞI */
+        .drawer-personnel-card {
+            background: linear-gradient(145deg, rgba(0, 229, 255, 0.10), rgba(59, 130, 246, 0.06));
+            border: 1px solid rgba(0, 229, 255, 0.32);
+            border-radius: 16px;
+            padding: 12px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .drawer-personnel-top {
+            display: flex; align-items: center; gap: 11px;
+        }
+        .drawer-avatar-wrap {
+            position: relative; width: 50px; height: 50px; flex-shrink: 0;
+        }
+        .drawer-avatar-wrap img {
+            width: 50px; height: 50px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent); background: var(--surface-solid);
+        }
+        .drawer-online-dot {
+            position: absolute; bottom: 1px; right: 1px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--success); border: 2px solid var(--surface-solid);
+            box-shadow: 0 0 8px var(--success);
+        }
+        .drawer-personnel-info {
+            flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+        }
+        .drawer-personnel-name {
+            font-size: 0.9rem; font-weight: 800; color: var(--text-main);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .drawer-personnel-title {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 0.68rem; font-weight: 700; color: var(--accent);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .drawer-personnel-company {
+            font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+            display: flex; align-items: center; gap: 5px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .drawer-personnel-email {
+            font-size: 0.64rem; color: var(--text-muted); opacity: 0.85;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .drawer-personnel-actions {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+        }
+        .drawer-mini-btn {
+            padding: 7px 8px; border-radius: 9px;
+            border: 1px solid var(--border-light);
+            background: var(--card-bg); color: var(--text-main);
+            font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+            transition: 0.2s;
+        }
+        .drawer-mini-btn.accent {
+            background: rgba(0, 229, 255, 0.15);
+            border-color: rgba(0, 229, 255, 0.4);
+            color: var(--accent);
+        }
+        .drawer-edit-box {
+            display: none; flex-direction: column; gap: 8px;
+            padding-top: 8px; border-top: 1px dashed var(--border-light);
+        }
+        .drawer-edit-box.show { display: flex; }
+        .profile-field-group {
+            display: flex; flex-direction: column; gap: 3px;
+        }
+        .profile-field-group label {
+            font-size: 0.64rem; font-weight: 700; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .profile-field-input {
+            width: 100%; padding: 8px 10px; border-radius: 9px;
+            border: 1px solid var(--border-light); background: var(--input-bg);
+            color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
+            outline: none;
+        }
+        .profile-field-input:focus { border-color: var(--accent); }
+
+        /* AZİMUT AĞI KULLANICI KARTLARI */
+        .network-stats-banner {
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+            padding: 10px 16px; background: rgba(0, 229, 255, 0.07);
+            border-bottom: 1px solid var(--border-light); flex-shrink: 0;
+            font-size: 0.74rem; color: var(--text-muted); font-weight: 600;
+        }
+        .network-live-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(16, 185, 129, 0.16); border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--success); padding: 3px 9px; border-radius: 20px;
+            font-size: 0.68rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+        }
+        .network-user-card {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 16px; padding: 12px; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between; gap: 11px;
+            transition: border-color 0.2s;
+        }
+        .network-user-card.is-me {
+            border-color: rgba(0, 229, 255, 0.45);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(59, 130, 246, 0.04));
+        }
+        .network-user-left {
+            display: flex; align-items: center; gap: 11px; flex: 1; min-width: 0;
+        }
+        .network-avatar {
+            width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent); flex-shrink: 0; background: var(--surface-solid);
+        }
+        .network-user-meta {
+            flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+        }
+        .network-user-name {
+            font-size: 0.9rem; font-weight: 800; color: var(--text-main);
+            display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+        }
+        .network-me-tag {
+            font-size: 0.58rem; font-weight: 800; padding: 1px 6px; border-radius: 6px;
+            background: rgba(0, 229, 255, 0.18); color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.35);
+        }
+        .network-user-role {
+            font-size: 0.74rem; font-weight: 700; color: var(--accent);
+            display: flex; align-items: center; gap: 5px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .network-user-org {
+            font-size: 0.72rem; font-weight: 600; color: var(--text-muted);
+            display: flex; align-items: center; gap: 5px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .network-user-mail {
+            font-size: 0.65rem; color: var(--text-muted); opacity: 0.85;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .network-user-actions {
+            display: flex; flex-direction: column; gap: 5px; flex-shrink: 0;
+        }
+        .btn-send-mail {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: #000; border: none; border-radius: 10px;
+            padding: 8px 11px; font-family: 'Inter', sans-serif;
+            font-size: 0.74rem; font-weight: 800; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            text-decoration: none; white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 229, 255, 0.22);
+        }
+        .btn-send-mail:active { transform: scale(0.95); }
+        .btn-copy-mail {
+            background: var(--input-bg); color: var(--text-muted);
+            border: 1px solid var(--border-light); border-radius: 8px;
+            padding: 5px 8px; font-size: 0.65rem; font-weight: 600;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+        }
 
         /* Profil & Araçlar Sayfası Özel */
         .stat-box { background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; flex: 1; min-width: 0;}
@@ -1306,32 +1534,134 @@
         </a>
     </div>
 
-    <!-- GİRİŞ EKRANI (v7: Tam Ekran Intro Video - Bitince Otomatik Giriş Yapar) -->
-    <div id="splash-screen" onclick="handleSplashScreenTap(event)">
-        <div class="splash-video-stage">
-            <video id="intro-video" class="splash-fullscreen-video" src="intro.mp4" poster="logo.jpeg" autoplay muted playsinline webkit-playsinline preload="auto"></video>
+    <!-- ZORUNLU GMAIL KURUMSAL GİRİŞ VE PERSONEL KİMLİK EKRANI (v8: Sadece logo.jpeg + Gmail Giriş Kilit Ekranı) -->
+    <div id="splash-screen">
+        <div class="auth-gate-wrap">
+            <div class="splash-logo-stage">
+                <img src="logo.jpeg" alt="AZİMUT Pro Logo" class="splash-logo-img">
+            </div>
+            <div class="splash-badge-pill"><span>PRO</span> • JEODEZİK ARAZİ & KURUMSAL AĞ SİSTEMİ v8.0</div>
+
+            <!-- ADIM 1: GMAIL İLE ZORUNLU GİRİŞ KARTI -->
+            <div class="auth-gate-card" id="auth-gate-step-login">
+                <h2 class="auth-gate-title"><i class="fas fa-shield-alt" style="color:var(--accent);"></i> Kurumsal Personel Girişi</h2>
+                <p class="auth-gate-sub">AZİMUT Pro ölçüm terminalini kullanabilmek ve <b>AZİMUT Ağı</b> üzerindeki meslektaşlarınızla etkileşime geçebilmek için Gmail hesabınızla giriş yapmalısınız.</p>
+
+                <button type="button" class="auth-google-hero-btn" id="btn-gate-google-login" onclick="loginWithGoogle()">
+                    <i class="fab fa-google" style="color:#ea4335; font-size:1.15rem;"></i>
+                    <span id="gate-login-btn-text">Gmail / Google Hesabı ile Giriş Yap</span>
+                </button>
+
+                <div class="auth-lock-notice" id="auth-gate-status-msg">
+                    <i class="fas fa-lock"></i> Giriş yapılmadan sistem kullanıma kapalıdır
+                </div>
+
+                <div class="auth-gate-features">
+                    <div class="auth-gate-feat-item"><i class="fas fa-satellite-dish"></i> <span>ITRF96 / ED50 / UTM</span></div>
+                    <div class="auth-gate-feat-item"><i class="fas fa-compass"></i> <span>Pusula Aplikasyon</span></div>
+                    <div class="auth-gate-feat-item"><i class="fas fa-search-location"></i> <span>TKGM Parsel & Adres</span></div>
+                    <div class="auth-gate-feat-item"><i class="fas fa-users"></i> <span>Canlı AZİMUT Ağı</span></div>
+                </div>
+            </div>
+
+            <!-- ADIM 2: İLK GİRİŞTE PERSONEL ÜNVAN & KURUM BİLGİSİ TAMAMLAMA KARTI -->
+            <div class="auth-gate-card" id="auth-gate-step-onboarding" style="display:none;">
+                <h2 class="auth-gate-title"><i class="fas fa-id-badge" style="color:var(--accent);"></i> Personel Kimlik Bilgileri</h2>
+                <p class="auth-gate-sub">Sol menüde ve <b>AZİMUT Ağı</b> rehberinde görünecek mesleki bilgilerinizi girin (daha sonra istediğiniz zaman düzenleyebilirsiniz):</p>
+
+                <div class="auth-onboard-user-bar">
+                    <img id="onboard-user-photo" src="icon.png" alt="Profil" referrerpolicy="no-referrer">
+                    <div style="min-width:0; flex:1;">
+                        <div id="onboard-user-email" style="font-size:0.74rem; color:var(--accent); font-weight:700; font-family:'JetBrains Mono',monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
+                        <div style="font-size:0.66rem; color:#94a3b8;">Gmail hesabı doğrulandı</div>
+                    </div>
+                </div>
+
+                <div class="auth-onboard-field">
+                    <label>Ad Soyad</label>
+                    <input type="text" class="auth-onboard-input" id="onboard-input-name" placeholder="Örn: Burak Tonoz">
+                </div>
+                <div class="auth-onboard-field">
+                    <label>Ünvan / Görev</label>
+                    <input type="text" class="auth-onboard-input" id="onboard-input-title" placeholder="Örn: Harita Mühendisi / Tekniker">
+                </div>
+                <div class="auth-onboard-field">
+                    <label>Çalıştığı Kurum / Şirket</label>
+                    <input type="text" class="auth-onboard-input" id="onboard-input-company" placeholder="Örn: TKGM / Belediye / Özel Sektör">
+                </div>
+
+                <button type="button" class="pwa-install-btn" style="padding:12px; font-size:0.88rem;" onclick="completeOnboardingAndEnter()">
+                    <i class="fas fa-check-circle"></i> Kaydet ve AZİMUT Pro'yu Başlat
+                </button>
+            </div>
         </div>
-        <div class="splash-video-controls">
-            <button type="button" class="splash-ctrl-btn icon-only" id="btn-intro-sound" onclick="toggleIntroSound(event)" aria-label="Sesi Aç veya Kapat" title="Sesi Aç / Kapat">
-                <i class="fas fa-volume-mute" id="intro-sound-icon"></i>
-            </button>
-            <button type="button" class="splash-ctrl-btn" id="btn-intro-skip" onclick="hideSplashScreen(event)" aria-label="İntroyu Geç">
-                Atla <i class="fas fa-chevron-right" style="font-size:0.65rem;"></i>
-            </button>
-        </div>
-        <div class="splash-progress-track">
-            <div class="splash-progress-fill" id="intro-progress-fill"></div>
+
+        <div class="splash-footer">
+            <h3>CREATED BY BURAK TONOZ</h3>
+            <h3>AZİMUT PRO v8.0 • KURUMSAL</h3>
         </div>
     </div>
 
-    <!-- YAN ÇEKMECE (AYARLAR, PROJEKSİYON, TEMA, HAKKINDA) -->
+    <!-- YAN ÇEKMECE (PERSONEL KİMLİK KARTI, AYARLAR, PROJEKSİYON, TEMA, HAKKINDA) -->
     <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
     <div class="side-drawer" id="side-drawer">
         <div class="drawer-header">
-            <h2 style="display:flex; align-items:center; gap:8px;"><img src="icon.png" alt="AZİMUT" style="width:28px; height:28px; object-fit:contain; filter:drop-shadow(0 0 6px rgba(0,229,255,0.45));"> AZİMUT Pro Ayarları</h2>
+            <h2 style="display:flex; align-items:center; gap:8px;"><img src="icon.png" alt="AZİMUT" style="width:28px; height:28px; object-fit:contain; filter:drop-shadow(0 0 6px rgba(0,229,255,0.45));"> AZİMUT Pro Menü</h2>
             <i class="fas fa-times drawer-close" onclick="toggleDrawer()"></i>
         </div>
         <div class="drawer-body">
+
+            <!-- v8: GİRİŞ YAPAN PERSONEL KİMLİK KARTI VE HIZLI DÜZENLEME -->
+            <div class="drawer-section">
+                <h3>Giriş Yapan Personel</h3>
+                <div class="drawer-personnel-card">
+                    <div class="drawer-personnel-top">
+                        <div class="drawer-avatar-wrap">
+                            <img id="drawer-user-photo" src="icon.png" alt="Personel" referrerpolicy="no-referrer">
+                            <div class="drawer-online-dot" title="Çevrimiçi"></div>
+                        </div>
+                        <div class="drawer-personnel-info">
+                            <div class="drawer-personnel-name" id="drawer-user-name">Giriş Bekleniyor</div>
+                            <div class="drawer-personnel-title"><i class="fas fa-user-tie"></i> <span id="drawer-user-title">Ünvan Belirtilmedi</span></div>
+                            <div class="drawer-personnel-company"><i class="fas fa-building"></i> <span id="drawer-user-company">Kurum / Şirket Belirtilmedi</span></div>
+                            <div class="drawer-personnel-email" id="drawer-user-email">-</div>
+                        </div>
+                    </div>
+
+                    <div class="drawer-personnel-actions">
+                        <button type="button" class="drawer-mini-btn accent" onclick="toggleDrawerProfileEdit()">
+                            <i class="fas fa-user-edit"></i> Bilgileri Düzenle
+                        </button>
+                        <button type="button" class="drawer-mini-btn" onclick="toggleDrawer(); switchTab('tab-network');">
+                            <i class="fas fa-users" style="color:var(--accent);"></i> AZİMUT Ağı
+                        </button>
+                    </div>
+
+                    <!-- Yan Panel İçi Hızlı Profil Düzenleme Formu -->
+                    <div class="drawer-edit-box" id="drawer-profile-edit-box">
+                        <div class="profile-field-group">
+                            <label>Ad Soyad</label>
+                            <input type="text" class="profile-field-input" id="drawer-input-name" placeholder="Adınız Soyadınız">
+                        </div>
+                        <div class="profile-field-group">
+                            <label>Ünvan / Meslek</label>
+                            <input type="text" class="profile-field-input" id="drawer-input-title" placeholder="Örn: Harita Mühendisi">
+                        </div>
+                        <div class="profile-field-group">
+                            <label>Çalıştığı Kurum / Şirket</label>
+                            <input type="text" class="profile-field-input" id="drawer-input-company" placeholder="Örn: TKGM / Özel Şirket">
+                        </div>
+                        <div style="display:flex; gap:6px; margin-top:2px;">
+                            <button type="button" class="pwa-install-btn" style="padding:8px; font-size:0.76rem; flex:1;" onclick="saveUserProfileFrom('drawer')">
+                                <i class="fas fa-save"></i> Kaydet
+                            </button>
+                            <button type="button" class="drawer-mini-btn" style="padding:8px 12px;" onclick="toggleDrawerProfileEdit()">
+                                İptal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class="drawer-section">
                 <h3>Jeodezik Sistem & Projeksiyon</h3>
@@ -1968,15 +2298,15 @@
         </div>
     </div>
 
-    <!-- GELİŞMİŞ PROFİL MODALI -->
+    <!-- GELİŞMİŞ PROFİL & PERSONEL BİLGİLERİ MODALI (v8) -->
     <div class="app-modal" id="modal-profile">
         <div class="modal-header">
-            <span class="modal-title"><i class="fas fa-user-circle" style="color:var(--accent); margin-right:8px;"></i> Profil & Yedekleme</span>
+            <span class="modal-title"><i class="fas fa-user-circle" style="color:var(--accent); margin-right:8px;"></i> Personel Profili & Yedekleme</span>
             <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="modal-body">
             
-            <div style="display:flex; gap:10px; margin-bottom:16px;">
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
                 <div class="stat-box">
                     <h4 id="stat-total-points">0</h4>
                     <p>Toplam Kayıt</p>
@@ -1987,25 +2317,51 @@
                 </div>
                 <div class="stat-box">
                     <h4 id="stat-storage-mode" style="color:var(--success); font-size:0.95rem;">AKTİF</h4>
-                    <p>Offline Hafıza</p>
+                    <p>Bulut & Offline</p>
                 </div>
             </div>
 
-            <div class="drawer-card" id="auth-logged-out" style="margin-bottom:16px;">
+            <div class="drawer-card" id="auth-logged-out" style="display:none; margin-bottom:14px;">
                 <button class="google-login-btn" onclick="loginWithGoogle()">
-                    <i class="fab fa-google" style="color: #ea4335;"></i> Google Bulut ile Senkronize Et
+                    <i class="fab fa-google" style="color: #ea4335;"></i> Gmail / Google ile Giriş Yap
                 </button>
-                <p style="font-size:0.74rem; color:var(--text-muted); text-align:center; margin:4px 0 0 0;">Giriş yapmasanız bile verileriniz telefon hafızasında saklanır. Cihazlar arası eşitleme için Google ile bağlanın.</p>
             </div>
             
-            <div class="drawer-card" id="auth-logged-in" style="display: none; align-items:center; flex-direction:column; gap:8px; margin-bottom:16px;">
-                <img id="user-photo" src="" alt="Profil" style="width:56px; height:56px; border-radius:50%; border:2px solid var(--accent);">
-                <div style="text-align:center;">
-                    <div id="user-name" style="font-weight:700; font-size:0.95rem;"></div>
-                    <div id="user-email" style="font-size:0.78rem; color:var(--text-muted);"></div>
+            <!-- GİRİŞ YAPAN PERSONEL KİMLİK VE DÜZENLEME KARTI -->
+            <div class="drawer-card" id="auth-logged-in" style="display: flex; flex-direction:column; gap:10px; margin-bottom:14px; border-color:rgba(0,229,255,0.35);">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <img id="user-photo" src="icon.png" alt="Profil" referrerpolicy="no-referrer" style="width:58px; height:58px; border-radius:50%; border:2px solid var(--accent); object-fit:cover; flex-shrink:0;">
+                    <div style="min-width:0; flex:1;">
+                        <div id="user-name" style="font-weight:800; font-size:1rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                        <div id="user-role-summary" style="font-size:0.76rem; color:var(--accent); font-weight:700; margin-top:1px;"></div>
+                        <div id="user-email" style="font-size:0.72rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                        <div style="font-size:0.66rem; color:var(--success); margin-top:2px;"><i class="fas fa-cloud-upload-alt"></i> Son Senkronizasyon: <span id="last-sync-time">Şimdi</span></div>
+                    </div>
                 </div>
-                <p style="font-size:0.7rem; color:var(--accent); margin:2px 0;">Son Bulut Senkronizasyonu: <span id="last-sync-time">Şimdi</span></p>
-                <button class="logout-btn" onclick="logout()">Bulut Hesabından Çıkış Yap</button>
+
+                <div style="border-top:1px solid var(--border-light); padding-top:10px; display:flex; flex-direction:column; gap:8px;">
+                    <div style="font-size:0.74rem; font-weight:800; color:var(--accent); display:flex; align-items:center; justify-content:space-between;">
+                        <span><i class="fas fa-id-card"></i> Personel & Kurum Bilgilerini Düzenle</span>
+                        <span style="font-size:0.64rem; color:var(--text-muted); font-weight:600;">AZİMUT Ağı'nda görünür</span>
+                    </div>
+                    <div class="profile-field-group">
+                        <label>Ad Soyad</label>
+                        <input type="text" class="profile-field-input" id="profile-input-name" placeholder="Adınız Soyadınız">
+                    </div>
+                    <div class="profile-field-group">
+                        <label>Ünvan / Görev</label>
+                        <input type="text" class="profile-field-input" id="profile-input-title" placeholder="Örn: Harita Mühendisi / Kontrol Mühendisi">
+                    </div>
+                    <div class="profile-field-group">
+                        <label>Çalıştığı Kurum / Şirket</label>
+                        <input type="text" class="profile-field-input" id="profile-input-company" placeholder="Örn: TKGM / Belediye / Özel Şirket">
+                    </div>
+                    <button type="button" class="pwa-install-btn" onclick="saveUserProfileFrom('modal')">
+                        <i class="fas fa-save"></i> Profil Bilgilerini Veritabanına Kaydet
+                    </button>
+                </div>
+
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Oturumu Kapat (Çıkış Yap)</button>
             </div>
 
             <div class="drawer-card" style="gap:10px;">
@@ -2017,6 +2373,27 @@
                     <i class="fas fa-database"></i> Tam Sistem Yedeği Al (.json)
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- v8: AZİMUT AĞI (CANLI KULLANICI & PERSONEL REHBERİ VE MAİL İLETİŞİM MODALI) -->
+    <div class="app-modal" id="modal-network">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fas fa-users" style="color:var(--accent); margin-right:8px;"></i> AZİMUT Ağı</span>
+            <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
+        </div>
+        <div class="network-stats-banner">
+            <span><i class="fas fa-satellite-dish" style="color:var(--accent); margin-right:5px;"></i> Kayıtlı Mühendis & Personel Ağı</span>
+            <span class="network-live-pill"><span class="gps-dot connected" style="width:6px; height:6px;"></span> <span id="network-count-badge">0 Üye</span></span>
+        </div>
+        <div class="search-filter-bar">
+            <input type="text" id="network-search-input" placeholder="Ad, ünvan, kurum/şirket veya e-posta ara..." oninput="renderAzimutNetworkList()">
+            <button type="button" onclick="switchTab('tab-profile')" style="background:rgba(0,229,255,0.14); color:var(--accent); border:1px solid rgba(0,229,255,0.35); border-radius:10px; padding:0 11px; font-size:0.74rem; font-weight:700; cursor:pointer; white-space:nowrap;">
+                <i class="fas fa-user-edit"></i> Profilim
+            </button>
+        </div>
+        <div class="modal-body" id="network-users-list">
+            <!-- JS ile anlık (real-time) doldurulur -->
         </div>
     </div>
 
@@ -2055,14 +2432,18 @@
         </div>
     </div>
 
-    <!-- 5 BUTONLU DOCK MENÜ -->
+    <!-- 6 BUTONLU DOCK MENÜ (v8: Profil Yanına AZİMUT Ağı Eklendi) -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
             <div class="dock-item active" id="tab-map" aria-label="Harita Sekmesi" onclick="switchTab('tab-map')" title="Harita"><i class="fas fa-map"></i></div>
             <div class="dock-item" id="tab-layer" aria-label="Harita Katmanları ve TKGM Parsel" onclick="switchTab('tab-layer')" title="Harita Katmanları & TKGM Parsel"><i class="fas fa-layer-group"></i></div>
             <div class="dock-item main-add" id="tab-add" aria-label="Nokta Kaydet Sekmesi" onclick="switchTab('tab-add')" title="Nokta Ekle"><i class="fas fa-plus"></i></div>
             <div class="dock-item" id="tab-records" aria-label="Kayıtlar Sekmesi" onclick="switchTab('tab-records')" title="Projeler & Kayıtlar"><i class="fas fa-folder-open"></i></div>
-            <div class="dock-item" id="tab-profile" aria-label="Profil Sekmesi" onclick="switchTab('tab-profile')" title="Profil & Bulut"><i class="fas fa-user"></i></div>
+            <div class="dock-item" id="tab-network" aria-label="AZİMUT Ağı Sekmesi" onclick="switchTab('tab-network')" title="AZİMUT Ağı (Canlı Meslektaş Rehberi)">
+                <i class="fas fa-users"></i>
+                <span class="dock-badge" id="dock-network-badge" style="display:none;">0</span>
+            </div>
+            <div class="dock-item" id="tab-profile" aria-label="Profil Sekmesi" onclick="switchTab('tab-profile')" title="Personel Profili & Bulut"><i class="fas fa-user"></i></div>
         </div>
     </div>
 
@@ -2286,85 +2667,308 @@
         function closeCoffeeToast() { document.getElementById('coffee-toast').classList.remove('show'); }
 
         // --- FIREBASE VE YEREL SENKRONİZASYON ---
+        // --- v8: FIREBASE ZORUNLU GMAIL GİRİŞİ, PERSONEL KİMLİK VERİTABANI VE CANLI AZİMUT AĞI ---
+        const PROFILE_CACHE_KEY = 'azimut_pro_user_profile_v8';
+        const NETWORK_CACHE_KEY = 'azimut_pro_network_cache_v8';
+
+        let currentUserProfile = {
+            uid: '',
+            fullName: '',
+            email: '',
+            photoURL: '',
+            title: '',
+            company: '',
+            updatedAt: 0
+        };
+        let azimutNetworkUsersMap = {};
+        let networkUnsubUsers = null;
+        let networkUnsubDir = null;
+        let splashDismissed = false;
+
+        function getInitialsAvatarDataUri(name) {
+            const clean = String(name || 'AZ').trim();
+            const parts = clean.split(/\s+/).filter(Boolean);
+            const initials = (parts.length >= 2
+                ? (parts[0][0] + parts[parts.length - 1][0])
+                : clean.slice(0, 2)
+            ).toUpperCase();
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+                <defs>
+                    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#0284c7"/>
+                        <stop offset="100%" stop-color="#0f172a"/>
+                    </linearGradient>
+                </defs>
+                <rect width="96" height="96" rx="48" fill="url(#g)"/>
+                <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#00e5ff" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="34">${initials}</text>
+            </svg>`;
+            return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+        }
+
+        function setAvatarWithFallback(imgEl, photoURL, fullName) {
+            if (!imgEl) return;
+            const fallback = getInitialsAvatarDataUri(fullName);
+            imgEl.onerror = function() {
+                this.onerror = null;
+                this.src = fallback;
+            };
+            imgEl.src = photoURL || fallback;
+        }
+
+        function loadCachedProfile(uid) {
+            try {
+                const raw = localStorage.getItem(PROFILE_CACHE_KEY + '_' + uid);
+                if (raw) return JSON.parse(raw);
+            } catch (e) {}
+            return null;
+        }
+
+        function saveCachedProfile(profile) {
+            if (!profile || !profile.uid) return;
+            try {
+                localStorage.setItem(PROFILE_CACHE_KEY + '_' + profile.uid, JSON.stringify(profile));
+            } catch (e) {}
+        }
+
+        function loadCachedNetworkMap() {
+            try {
+                const raw = localStorage.getItem(NETWORK_CACHE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && typeof parsed === 'object') azimutNetworkUsersMap = parsed;
+                }
+            } catch (e) {}
+        }
+
+        function saveCachedNetworkMap() {
+            try {
+                localStorage.setItem(NETWORK_CACHE_KEY, JSON.stringify(azimutNetworkUsersMap));
+            } catch (e) {}
+        }
+        loadCachedNetworkMap();
+
         function syncData() {
             saveLocalProjects();
             updateStats();
             if (auth.currentUser) {
-                db.collection('users').doc(auth.currentUser.uid).set({ projectsData: projectsData })
+                const payload = {
+                    projectsData: projectsData,
+                    uid: auth.currentUser.uid,
+                    email: currentUserProfile.email || auth.currentUser.email || '',
+                    fullName: currentUserProfile.fullName || auth.currentUser.displayName || '',
+                    photoURL: currentUserProfile.photoURL || auth.currentUser.photoURL || '',
+                    title: currentUserProfile.title || '',
+                    company: currentUserProfile.company || '',
+                    updatedAt: Date.now(),
+                    profile: {
+                        uid: auth.currentUser.uid,
+                        fullName: currentUserProfile.fullName || auth.currentUser.displayName || '',
+                        email: currentUserProfile.email || auth.currentUser.email || '',
+                        photoURL: currentUserProfile.photoURL || auth.currentUser.photoURL || '',
+                        title: currentUserProfile.title || '',
+                        company: currentUserProfile.company || '',
+                        updatedAt: Date.now()
+                    }
+                };
+                db.collection('users').doc(auth.currentUser.uid).set(payload, { merge: true })
                 .then(() => {
                     let date = new Date();
-                    document.getElementById('last-sync-time').innerText = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
+                    const syncEl = document.getElementById('last-sync-time');
+                    if (syncEl) syncEl.innerText = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
                 })
                 .catch(err => console.error("Firebase kayıt hatası: ", err));
             }
         }
 
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                document.getElementById('auth-logged-out').style.display = 'none';
-                document.getElementById('auth-logged-in').style.display = 'flex';
-                document.getElementById('user-photo').src = user.photoURL || '';
-                document.getElementById('user-name').innerText = user.displayName;
-                document.getElementById('user-email').innerText = user.email;
+        function refreshUserProfileUI() {
+            const p = currentUserProfile;
+            const displayName = p.fullName || 'İsimsiz Personel';
+            const displayTitle = p.title || 'Ünvan Belirtilmedi';
+            const displayCompany = p.company || 'Kurum / Şirket Belirtilmedi';
+            const displayEmail = p.email || '-';
 
-                db.collection('users').doc(user.uid).get().then((doc) => {
-                    if (doc.exists && doc.data().projectsData) {
-                        const cloudData = doc.data().projectsData;
-                        for (let proj in cloudData) {
-                            if (!projectsData[proj]) {
-                                projectsData[proj] = cloudData[proj];
-                            } else {
-                                const existingIds = new Set(projectsData[proj].points.map(p => p.id));
-                                cloudData[proj].points.forEach(cp => {
-                                    if (!existingIds.has(cp.id)) projectsData[proj].points.push(cp);
-                                });
-                                projectsData[proj].autoCounter = Math.max(projectsData[proj].autoCounter || 1, cloudData[proj].autoCounter || 1);
-                            }
-                        }
-                        if (!projectsData[activeProject]) activeProject = "Varsayılan";
-                        saveLocalProjects();
-                        updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
-                        showToast("Bulut senkronizasyonu tamamlandı", "fa-cloud-download-alt");
-                    } else {
-                        syncData();
-                    }
-                });
-            } else {
-                document.getElementById('auth-logged-in').style.display = 'none';
-                document.getElementById('auth-logged-out').style.display = 'block';
-                projectsData = loadLocalProjects();
-                if (!projectsData[activeProject]) activeProject = "Varsayılan";
-                updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
+            // 1. Sol Açılır Yan Panel (Side Drawer)
+            setAvatarWithFallback(document.getElementById('drawer-user-photo'), p.photoURL, displayName);
+            const dName = document.getElementById('drawer-user-name');
+            const dTitle = document.getElementById('drawer-user-title');
+            const dComp = document.getElementById('drawer-user-company');
+            const dEmail = document.getElementById('drawer-user-email');
+            if (dName) dName.innerText = displayName;
+            if (dTitle) dTitle.innerText = displayTitle;
+            if (dComp) dComp.innerText = displayCompany;
+            if (dEmail) dEmail.innerText = displayEmail;
+
+            const dInName = document.getElementById('drawer-input-name');
+            const dInTitle = document.getElementById('drawer-input-title');
+            const dInComp = document.getElementById('drawer-input-company');
+            if (dInName) dInName.value = p.fullName || '';
+            if (dInTitle) dInTitle.value = p.title || '';
+            if (dInComp) dInComp.value = p.company || '';
+
+            // 2. Alt Menüdeki Profil Sayfası (Modal Profile)
+            setAvatarWithFallback(document.getElementById('user-photo'), p.photoURL, displayName);
+            const mName = document.getElementById('user-name');
+            const mRole = document.getElementById('user-role-summary');
+            const mEmail = document.getElementById('user-email');
+            if (mName) mName.innerText = displayName;
+            if (mRole) mRole.innerText = `${displayTitle} • ${displayCompany}`;
+            if (mEmail) mEmail.innerText = displayEmail;
+
+            const pInName = document.getElementById('profile-input-name');
+            const pInTitle = document.getElementById('profile-input-title');
+            const pInComp = document.getElementById('profile-input-company');
+            if (pInName) pInName.value = p.fullName || '';
+            if (pInTitle) pInTitle.value = p.title || '';
+            if (pInComp) pInComp.value = p.company || '';
+
+            // 3. Canlı AZİMUT Ağı haritasında kendi kartımızı da anında güncelle
+            if (p.uid && p.email) {
+                azimutNetworkUsersMap[p.uid] = {
+                    uid: p.uid,
+                    fullName: displayName,
+                    email: p.email,
+                    photoURL: p.photoURL || '',
+                    title: p.title || 'Harita / Saha Personeli',
+                    company: p.company || 'Kurum Belirtilmedi',
+                    updatedAt: p.updatedAt || Date.now()
+                };
+                saveCachedNetworkMap();
+                renderAzimutNetworkList();
             }
-        });
-
-        function loginWithGoogle() { auth.signInWithPopup(provider).catch(err => showToast("Giriş hatası: " + err.message, "fa-exclamation-triangle")); }
-        function logout() { auth.signOut(); closeModals(); showToast("Bulut hesabından çıkış yapıldı", "fa-info-circle"); }
-
-        function updateStats() {
-            let total = Object.values(projectsData).reduce((sum, proj) => sum + (proj.points ? proj.points.length : 0), 0);
-            let folders = Object.keys(projectsData).length;
-            document.getElementById('stat-total-points').innerText = total;
-            document.getElementById('stat-total-folders').innerText = folders;
         }
 
-        // --- HARİTA, 4 KATMANLI ALTLIK SİSTEMİ VE TKGM PARSEL WMS ENTEGRASYONU ---
-        let splashDismissed = false;
+        function toggleDrawerProfileEdit() {
+            const box = document.getElementById('drawer-profile-edit-box');
+            if (!box) return;
+            box.classList.toggle('show');
+            if (box.classList.contains('show')) {
+                document.getElementById('drawer-input-name').value = currentUserProfile.fullName || '';
+                document.getElementById('drawer-input-title').value = currentUserProfile.title || '';
+                document.getElementById('drawer-input-company').value = currentUserProfile.company || '';
+            }
+        }
 
-        function hideSplashScreen(evt) {
-            if (evt && evt.stopPropagation) evt.stopPropagation();
+        async function persistProfileToDatabase(profileObj) {
+            if (!auth.currentUser) return;
+            const uid = auth.currentUser.uid;
+            const cleanProfile = {
+                uid: uid,
+                fullName: (profileObj.fullName || auth.currentUser.displayName || 'Personel').trim(),
+                email: (profileObj.email || auth.currentUser.email || '').trim(),
+                photoURL: profileObj.photoURL || auth.currentUser.photoURL || '',
+                title: (profileObj.title || '').trim(),
+                company: (profileObj.company || '').trim(),
+                updatedAt: Date.now()
+            };
+            currentUserProfile = cleanProfile;
+            saveCachedProfile(cleanProfile);
+            refreshUserProfileUI();
+
+            try {
+                await db.collection('users').doc(uid).set({
+                    uid: cleanProfile.uid,
+                    fullName: cleanProfile.fullName,
+                    email: cleanProfile.email,
+                    photoURL: cleanProfile.photoURL,
+                    title: cleanProfile.title,
+                    company: cleanProfile.company,
+                    updatedAt: cleanProfile.updatedAt,
+                    profile: cleanProfile
+                }, { merge: true });
+            } catch (e) {
+                console.warn("users profil kaydı uyarısı:", e);
+            }
+
+            try {
+                await db.collection('azimut_network').doc(uid).set(cleanProfile, { merge: true });
+            } catch (e) {}
+        }
+
+        async function saveUserProfileFrom(source) {
+            if (!auth.currentUser) {
+                showToast("Lütfen önce Gmail hesabınızla giriş yapın", "fa-lock");
+                return;
+            }
+            const nameVal = (document.getElementById(source === 'drawer' ? 'drawer-input-name' : 'profile-input-name')?.value || '').trim();
+            const titleVal = (document.getElementById(source === 'drawer' ? 'drawer-input-title' : 'profile-input-title')?.value || '').trim();
+            const compVal = (document.getElementById(source === 'drawer' ? 'drawer-input-company' : 'profile-input-company')?.value || '').trim();
+
+            if (!nameVal) {
+                showToast("Lütfen Ad Soyad bilgisini girin", "fa-exclamation-circle");
+                return;
+            }
+
+            await persistProfileToDatabase({
+                ...currentUserProfile,
+                fullName: nameVal,
+                title: titleVal || 'Harita Mühendisi / Personel',
+                company: compVal || 'Kurum Belirtilmedi'
+            });
+
+            if (source === 'drawer') {
+                const box = document.getElementById('drawer-profile-edit-box');
+                if (box) box.classList.remove('show');
+            }
+            showToast("Personel ve kurum bilgileriniz güncellendi!", "fa-check-circle");
+        }
+
+        async function completeOnboardingAndEnter() {
+            if (!auth.currentUser) return;
+            const nameVal = (document.getElementById('onboard-input-name')?.value || '').trim();
+            const titleVal = (document.getElementById('onboard-input-title')?.value || '').trim();
+            const compVal = (document.getElementById('onboard-input-company')?.value || '').trim();
+
+            if (!nameVal) {
+                showToast("Lütfen Adınız ve Soyadınızı girin", "fa-exclamation-circle");
+                return;
+            }
+            if (!titleVal) {
+                showToast("Lütfen Ünvan / Görev bilginizi girin", "fa-user-tie");
+                return;
+            }
+            if (!compVal) {
+                showToast("Lütfen Çalıştığınız Kurum veya Şirketi girin", "fa-building");
+                return;
+            }
+
+            await persistProfileToDatabase({
+                uid: auth.currentUser.uid,
+                email: auth.currentUser.email || '',
+                photoURL: auth.currentUser.photoURL || '',
+                fullName: nameVal,
+                title: titleVal,
+                company: compVal
+            });
+
+            unlockAuthGateAndEnter();
+        }
+
+        function lockAuthGateScreen() {
+            splashDismissed = false;
+            const splash = document.getElementById('splash-screen');
+            const loginCard = document.getElementById('auth-gate-step-login');
+            const onboardCard = document.getElementById('auth-gate-step-onboarding');
+            const btnText = document.getElementById('gate-login-btn-text');
+            const btnEl = document.getElementById('btn-gate-google-login');
+
+            if (loginCard) loginCard.style.display = 'flex';
+            if (onboardCard) onboardCard.style.display = 'none';
+            if (btnText) btnText.innerText = 'Gmail / Google Hesabı ile Giriş Yap';
+            if (btnEl) btnEl.disabled = false;
+
+            if (splash) {
+                splash.style.display = 'flex';
+                splash.classList.remove('closing');
+                splash.style.opacity = '1';
+            }
+        }
+
+        function unlockAuthGateAndEnter() {
+            if (!auth.currentUser) return; // Giriş yapılmadan kesinlikle açılamaz
             if (splashDismissed) return;
             splashDismissed = true;
 
             const splash = document.getElementById('splash-screen');
-            const video = document.getElementById('intro-video');
-            const prog = document.getElementById('intro-progress-fill');
-            if (prog) prog.style.width = '100%';
-            if (video) {
-                try { video.pause(); } catch (e) {}
-            }
-
-            // GPS ve Yön/Pusula sensörlerini aktif et
             initSensorsAndGps(false);
 
             if (splash) {
@@ -2377,83 +2981,279 @@
                         map.setView([currentLat, currentLon], 18, { animate: false });
                     }
                     checkFirstTimeTutorial();
-                }, 650);
+                }, 550);
             }
         }
 
-        function toggleIntroSound(evt) {
-            if (evt && evt.stopPropagation) evt.stopPropagation();
-            const video = document.getElementById('intro-video');
-            const icon = document.getElementById('intro-sound-icon');
-            if (!video) return;
-            video.muted = !video.muted;
-            if (!video.muted && video.paused) {
-                video.play().catch(() => {});
-            }
-            if (icon) {
-                icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-            }
+        function ingestNetworkDoc(docId, data) {
+            if (!data || typeof data !== 'object') return;
+            const prof = data.profile || data;
+            const email = prof.email || data.email || '';
+            const fullName = prof.fullName || data.fullName || data.displayName || (email ? email.split('@')[0] : '');
+            if (!email && !fullName) return;
+            const uid = prof.uid || data.uid || docId;
+            const existing = azimutNetworkUsersMap[uid] || {};
+
+            azimutNetworkUsersMap[uid] = {
+                uid: uid,
+                fullName: fullName || existing.fullName || 'AZİMUT Kullanıcısı',
+                email: email || existing.email || '',
+                photoURL: prof.photoURL || data.photoURL || existing.photoURL || '',
+                title: prof.title || data.title || existing.title || 'Harita / Saha Mühendisi',
+                company: prof.company || data.company || existing.company || 'Kurum Belirtilmedi',
+                updatedAt: prof.updatedAt || data.updatedAt || existing.updatedAt || 0
+            };
         }
 
-        function handleSplashScreenTap(evt) {
-            // Kullanıcı video ekranına dokunduğunda sensör izinlerini tetikle ve ses kapalıysa aç
-            initSensorsAndGps(false);
-            const video = document.getElementById('intro-video');
-            const icon = document.getElementById('intro-sound-icon');
-            if (!video) {
-                hideSplashScreen(evt);
-                return;
-            }
-            if (video.ended) {
-                hideSplashScreen(evt);
-                return;
-            }
-            if (video.paused) {
-                video.play().catch(() => hideSplashScreen(evt));
-            } else if (video.muted) {
-                video.muted = false;
-                if (icon) icon.className = 'fas fa-volume-up';
-            }
-        }
+        function startAzimutNetworkRealtime() {
+            if (networkUnsubUsers) { try { networkUnsubUsers(); } catch (e) {} networkUnsubUsers = null; }
+            if (networkUnsubDir) { try { networkUnsubDir(); } catch (e) {} networkUnsubDir = null; }
 
-        function initIntroVideo() {
-            const video = document.getElementById('intro-video');
-            const prog = document.getElementById('intro-progress-fill');
-            const icon = document.getElementById('intro-sound-icon');
-            if (!video) return;
-
-            video.addEventListener('timeupdate', () => {
-                if (video.duration && isFinite(video.duration) && prog) {
-                    const pct = Math.min(100, (video.currentTime / video.duration) * 100);
-                    prog.style.width = pct.toFixed(1) + '%';
-                }
-            });
-
-            // Video bittiği anda otomatik olarak programa giriş yap
-            video.addEventListener('ended', () => {
-                hideSplashScreen();
-            });
-
-            // Video yüklenemezse kullanıcıyı bekletmeden programa al
-            video.addEventListener('error', () => {
-                setTimeout(() => hideSplashScreen(), 400);
-            });
-
-            // Otomatik oynatmayı başlat (Tarayıcı izin verirse sesli, aksi halde sessiz otomatik oynat)
-            video.muted = true;
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    if (icon) icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-                }).catch(() => {
-                    video.muted = true;
-                    if (icon) icon.className = 'fas fa-volume-mute';
-                    video.play().catch(() => {});
+            // 1. users koleksiyonunu anlık dinle (sisteme giriş yapan tüm kullanıcılar)
+            try {
+                networkUnsubUsers = db.collection('users').onSnapshot((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        ingestNetworkDoc(doc.id, doc.data());
+                    });
+                    saveCachedNetworkMap();
+                    renderAzimutNetworkList();
+                }, (err) => {
+                    console.warn("users anlık ağ dinleme uyarısı:", err);
                 });
-            }
+            } catch (e) {}
+
+            // 2. azimut_network koleksiyonunu da anlık dinle
+            try {
+                networkUnsubDir = db.collection('azimut_network').onSnapshot((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        ingestNetworkDoc(doc.id, doc.data());
+                    });
+                    saveCachedNetworkMap();
+                    renderAzimutNetworkList();
+                }, () => {});
+            } catch (e) {}
         }
 
-        initIntroVideo();
+        function escapeHtmlSafe(str) {
+            return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+        }
+
+        function renderAzimutNetworkList() {
+            const listEl = document.getElementById('network-users-list');
+            const countBadge = document.getElementById('network-count-badge');
+            const dockBadge = document.getElementById('dock-network-badge');
+            const q = (document.getElementById('network-search-input')?.value || '').toLowerCase().trim();
+
+            const allUsers = Object.values(azimutNetworkUsersMap).filter(u => u && (u.email || u.fullName));
+            allUsers.sort((a, b) => {
+                if (auth.currentUser) {
+                    if (a.uid === auth.currentUser.uid) return -1;
+                    if (b.uid === auth.currentUser.uid) return 1;
+                }
+                return (b.updatedAt || 0) - (a.updatedAt || 0);
+            });
+
+            if (countBadge) countBadge.innerText = `${allUsers.length} Üye`;
+            if (dockBadge) {
+                dockBadge.innerText = allUsers.length;
+                dockBadge.style.display = allUsers.length > 0 ? 'flex' : 'none';
+            }
+
+            if (!listEl) return;
+
+            const filtered = q
+                ? allUsers.filter(u =>
+                    (u.fullName && u.fullName.toLowerCase().includes(q)) ||
+                    (u.title && u.title.toLowerCase().includes(q)) ||
+                    (u.company && u.company.toLowerCase().includes(q)) ||
+                    (u.email && u.email.toLowerCase().includes(q))
+                )
+                : allUsers;
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div style="text-align:center; padding:45px 14px; color:var(--text-muted);">
+                    <i class="fas fa-users" style="font-size:2.4rem; opacity:0.35; margin-bottom:10px;"></i>
+                    <p style="font-size:0.84rem; margin:0;">Aramaya uygun personel bulunamadı.</p>
+                </div>`;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(u => {
+                const isMe = auth.currentUser && u.uid === auth.currentUser.uid;
+                const safeName = escapeHtmlSafe(u.fullName || 'İsimsiz Personel');
+                const safeTitle = escapeHtmlSafe(u.title || 'Ünvan Belirtilmedi');
+                const safeComp = escapeHtmlSafe(u.company || 'Kurum / Şirket Belirtilmedi');
+                const safeEmail = escapeHtmlSafe(u.email || '');
+                const fallbackAvatar = getInitialsAvatarDataUri(u.fullName || 'AZ');
+                const avatarSrc = u.photoURL ? escapeHtmlSafe(u.photoURL) : fallbackAvatar;
+
+                const subject = encodeURIComponent(`AZİMUT Pro Ağı İletişim - ${currentUserProfile.fullName || ''}`);
+                const body = encodeURIComponent(`Merhaba ${u.fullName || ''},\n\nAZİMUT Pro Kurumsal Ağı üzerinden sizinle iletişime geçiyorum.\n\nSaygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`);
+                const mailtoHref = safeEmail ? `mailto:${safeEmail}?subject=${subject}&body=${body}` : '#';
+
+                return `
+                <div class="network-user-card ${isMe ? 'is-me' : ''}">
+                    <div class="network-user-left">
+                        <img class="network-avatar" src="${avatarSrc}" alt="${safeName}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${fallbackAvatar}';">
+                        <div class="network-user-meta">
+                            <div class="network-user-name">
+                                ${safeName}
+                                ${isMe ? '<span class="network-me-tag">SİZ</span>' : ''}
+                            </div>
+                            <div class="network-user-role"><i class="fas fa-user-tie"></i> ${safeTitle}</div>
+                            <div class="network-user-org"><i class="fas fa-building"></i> ${safeComp}</div>
+                            <div class="network-user-mail"><i class="fas fa-envelope"></i> ${safeEmail || '-'}</div>
+                        </div>
+                    </div>
+                    <div class="network-user-actions">
+                        ${safeEmail ? `
+                        <a class="btn-send-mail" href="${mailtoHref}" onclick="showToast('${safeName} için mail uygulaması açılıyor...', 'fa-paper-plane')">
+                            <i class="fas fa-envelope"></i> Mail Gönder
+                        </a>
+                        <button type="button" class="btn-copy-mail" onclick="copyTextToClipboard('${safeEmail}', 'E-posta adresi kopyalandı')">
+                            <i class="fas fa-copy"></i> Kopyala
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('auth-logged-out').style.display = 'none';
+                document.getElementById('auth-logged-in').style.display = 'flex';
+
+                const cachedProf = loadCachedProfile(user.uid) || {};
+                currentUserProfile = {
+                    uid: user.uid,
+                    fullName: cachedProf.fullName || user.displayName || (user.email ? user.email.split('@')[0] : 'Personel'),
+                    email: user.email || cachedProf.email || '',
+                    photoURL: user.photoURL || cachedProf.photoURL || '',
+                    title: cachedProf.title || '',
+                    company: cachedProf.company || '',
+                    updatedAt: cachedProf.updatedAt || Date.now()
+                };
+                refreshUserProfileUI();
+                startAzimutNetworkRealtime();
+
+                db.collection('users').doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        const docData = doc.data() || {};
+                        const cloudProf = docData.profile || {};
+                        currentUserProfile = {
+                            uid: user.uid,
+                            fullName: cloudProf.fullName || docData.fullName || currentUserProfile.fullName || user.displayName || 'Personel',
+                            email: user.email || cloudProf.email || docData.email || '',
+                            photoURL: user.photoURL || cloudProf.photoURL || docData.photoURL || '',
+                            title: cloudProf.title || docData.title || currentUserProfile.title || '',
+                            company: cloudProf.company || docData.company || currentUserProfile.company || '',
+                            updatedAt: Date.now()
+                        };
+                        saveCachedProfile(currentUserProfile);
+                        refreshUserProfileUI();
+
+                        if (docData.projectsData) {
+                            const cloudData = docData.projectsData;
+                            for (let proj in cloudData) {
+                                if (!projectsData[proj]) {
+                                    projectsData[proj] = cloudData[proj];
+                                } else {
+                                    const existingIds = new Set(projectsData[proj].points.map(p => p.id));
+                                    cloudData[proj].points.forEach(cp => {
+                                        if (!existingIds.has(cp.id)) projectsData[proj].points.push(cp);
+                                    });
+                                    projectsData[proj].autoCounter = Math.max(projectsData[proj].autoCounter || 1, cloudData[proj].autoCounter || 1);
+                                }
+                            }
+                            if (!projectsData[activeProject]) activeProject = "Varsayılan";
+                            saveLocalProjects();
+                            updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
+                        }
+                    }
+
+                    // Eğer personelin Ünvan veya Kurum/Şirket bilgisi henüz girilmemişse ilk giriş tamamlama adımını göster
+                    if (!currentUserProfile.title || !currentUserProfile.company) {
+                        const loginCard = document.getElementById('auth-gate-step-login');
+                        const onboardCard = document.getElementById('auth-gate-step-onboarding');
+                        if (loginCard) loginCard.style.display = 'none';
+                        if (onboardCard) onboardCard.style.display = 'flex';
+                        setAvatarWithFallback(document.getElementById('onboard-user-photo'), currentUserProfile.photoURL, currentUserProfile.fullName);
+                        const obEmail = document.getElementById('onboard-user-email');
+                        if (obEmail) obEmail.innerText = currentUserProfile.email;
+                        document.getElementById('onboard-input-name').value = currentUserProfile.fullName || '';
+                        document.getElementById('onboard-input-title').value = currentUserProfile.title || '';
+                        document.getElementById('onboard-input-company').value = currentUserProfile.company || '';
+                    } else {
+                        persistProfileToDatabase(currentUserProfile);
+                        unlockAuthGateAndEnter();
+                    }
+                }).catch((err) => {
+                    console.warn("Kullanıcı verisi okunurken çevrimdışı mod:", err);
+                    if (!currentUserProfile.title || !currentUserProfile.company) {
+                        const loginCard = document.getElementById('auth-gate-step-login');
+                        const onboardCard = document.getElementById('auth-gate-step-onboarding');
+                        if (loginCard) loginCard.style.display = 'none';
+                        if (onboardCard) onboardCard.style.display = 'flex';
+                        setAvatarWithFallback(document.getElementById('onboard-user-photo'), currentUserProfile.photoURL, currentUserProfile.fullName);
+                        const obEmail = document.getElementById('onboard-user-email');
+                        if (obEmail) obEmail.innerText = currentUserProfile.email;
+                        document.getElementById('onboard-input-name').value = currentUserProfile.fullName || '';
+                    } else {
+                        unlockAuthGateAndEnter();
+                    }
+                });
+            } else {
+                // Giriş yapılmamışsa veya çıkış yapıldıysa sistemi kilitle ve giriş ekranını göster
+                if (networkUnsubUsers) { try { networkUnsubUsers(); } catch (e) {} networkUnsubUsers = null; }
+                if (networkUnsubDir) { try { networkUnsubDir(); } catch (e) {} networkUnsubDir = null; }
+                document.getElementById('auth-logged-in').style.display = 'none';
+                document.getElementById('auth-logged-out').style.display = 'block';
+                lockAuthGateScreen();
+                projectsData = loadLocalProjects();
+                if (!projectsData[activeProject]) activeProject = "Varsayılan";
+                updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
+            }
+        });
+
+        function loginWithGoogle() {
+            const btnText = document.getElementById('gate-login-btn-text');
+            const btnEl = document.getElementById('btn-gate-google-login');
+            if (btnText) btnText.innerText = 'Google Hesabına Bağlanılıyor...';
+            if (btnEl) btnEl.disabled = true;
+
+            auth.signInWithPopup(provider).catch(err => {
+                if (btnText) btnText.innerText = 'Gmail / Google Hesabı ile Giriş Yap';
+                if (btnEl) btnEl.disabled = false;
+                if (err && (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment')) {
+                    auth.signInWithRedirect(provider);
+                    return;
+                }
+                showToast("Giriş hatası: " + (err.message || "Lütfen tekrar deneyin"), "fa-exclamation-triangle");
+            });
+        }
+
+        function logout() {
+            if (stakeoutTarget) stopStakeout();
+            closeModals();
+            const drawer = document.getElementById('side-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            if (drawer) drawer.classList.remove('show');
+            if (overlay) overlay.classList.remove('show');
+            auth.signOut().then(() => {
+                lockAuthGateScreen();
+                showToast("Oturum kapatıldı. Sistemi kullanmak için tekrar giriş yapın.", "fa-lock");
+            });
+        }
+
+        function updateStats() {
+            let total = Object.values(projectsData).reduce((sum, proj) => sum + (proj.points ? proj.points.length : 0), 0);
+            let folders = Object.keys(projectsData).length;
+            document.getElementById('stat-total-points').innerText = total;
+            document.getElementById('stat-total-folders').innerText = folders;
+        }
+
+        // --- HARİTA, 4 KATMANLI ALTLIK SİSTEMİ VE TKGM PARSEL WMS ENTEGRASYONU ---
 
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('show');
@@ -4936,8 +5736,13 @@
                 document.getElementById('modal-records').classList.add('show');
                 updateDropdownUI(); updateListUI();
             }
+            else if (tabId === 'tab-network') {
+                document.getElementById('modal-network').classList.add('show');
+                renderAzimutNetworkList();
+            }
             else if (tabId === 'tab-profile') {
                 document.getElementById('modal-profile').classList.add('show');
+                refreshUserProfileUI();
                 updateStats();
             }
             else if (tabId === 'tab-install') {
@@ -5783,6 +6588,12 @@
                         cls: "green",
                         title: "Harita Uygulamalarıyla Yol Tarifi",
                         desc: "'Yol Tarifi' butonuna basarak noktayı doğrudan telefonunuzda yüklü Google Haritalar, Yandex Navigasyon, Apple Haritalar veya Waze üzerinde açabilirsiniz."
+                    },
+                    {
+                        icon: "fa-users",
+                        cls: "amber",
+                        title: "Canlı AZİMUT Ağı ve Personel Kimliği",
+                        desc: "Alt menüde Profil'in yanındaki 'AZİMUT Ağı' sekmesinden sisteme giriş yapan tüm meslektaşlarınızın ünvan ve kurumlarını anlık görebilir, tek tuşla mail gönderebilirsiniz."
                     }
                 ]
             }
@@ -5868,7 +6679,7 @@
                 renderTutorialSlide();
             } else {
                 closeTutorialModal();
-                showToast("AZİMUT Pro v7 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
+                showToast("AZİMUT Pro v8 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
             }
         }
 
