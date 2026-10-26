@@ -1,2 +1,2 @@
-# GeoITRF
+# AZİMUT PRO
 ITRF Veri Giriş Modülü
