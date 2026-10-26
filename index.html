@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | GeoITRF PRO v5.0 -->
+<!-- CREAT BY TONOZ | AZİMUT PRO v7.0 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -7,18 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     
     <!-- SEO BAŞLIĞI VE AÇIKLAMALARI -->
-    <title>GeoITRF Pro | ITRF96, ED50, UTM Koordinat Ölçüm ve Nokta Aplikasyon Uygulaması</title>
-    <meta name="description" content="Arazide WGS84 enlem boylam verilerini anında ITRF96, ED50 ve UTM sistemine dönüştüren, sesli/titreşimli nokta aplikasyonu, hassas epok ortalaması, alan hesabı ve NCN/DXF/KML/CSV aktarımı sunan ücretsiz mühendislik terminali.">
-    <meta name="keywords" content="ITRF96 dönüştürücü, ITRF çevirici, nokta aplikasyonu, stakeout, ED50 koordinat, NetCAD NCN, DXF, KML, arazide gps koordinat alma, topoğraf, orman kadastrosu, harita mühendisi, Burak Tonoz, ücretsiz koordinat programı">
+    <title>AZİMUT Pro | ITRF96, ED50, UTM Koordinat Ölçüm, Parsel Sorgu ve Aplikasyon Sistemi</title>
+    <meta name="description" content="AZİMUT Pro: Arazide WGS84 enlem boylam verilerini anında ITRF96, ED50 ve UTM sistemine dönüştüren, pusula sensörlü canlı nokta aplikasyonu, TKGM parsel/adres sorgulama, alan hesabı ve NCN/DXF/KML/CSV aktarımı sunan profesyonel mühendislik sistemi.">
+    <meta name="keywords" content="AZİMUT Pro, Azimut koordinat, ITRF96 dönüştürücü, nokta aplikasyonu, stakeout, TKGM parsel sorgulama, ED50 koordinat, NetCAD NCN, DXF, KML, arazide gps koordinat alma, harita mühendisi, Burak Tonoz">
     <meta name="author" content="Burak Tonoz">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://buraktonoz.com/GeoITRF/">
+    <link rel="canonical" href="https://buraktonoz.com/Azimut/">
     
     <!-- SOSYAL MEDYA (Open Graph) -->
-    <meta property="og:title" content="GeoITRF Pro | Jeodezik Koordinat Ölçüm ve Aplikasyon Terminali">
-    <meta property="og:description" content="Sahada cep telefonuyla hassas ITRF96/ED50/WGS84 koordinatları alın, canlı yönlendirmeyle nokta aplikasyonu yapın, alan ölçün ve NCN/DXF/KML olarak indirin.">
-    <meta property="og:image" content="https://buraktonoz.com/GeoITRF/logo.png">
-    <meta property="og:url" content="https://buraktonoz.com/GeoITRF/">
+    <meta property="og:title" content="AZİMUT Pro | Jeodezik Koordinat Ölçüm, Parsel ve Aplikasyon Sistemi">
+    <meta property="og:description" content="Sahada cep telefonuyla hassas ITRF96/ED50/WGS84 koordinatları alın, pusula sensörüyle canlı nokta aplikasyonu yapın, parsel sorgulayın ve NCN/DXF/KML olarak indirin.">
+    <meta property="og:image" content="icon.png">
+    <meta property="og:url" content="https://buraktonoz.com/Azimut/">
     <meta property="og:type" content="website">
 
     <!-- JSON-LD (GOOGLE MÜHENDİSLİK YAZILIMI ŞEMASI) -->
@@ -26,7 +26,7 @@
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "GeoITRF Pro",
+      "name": "AZİMUT Pro",
       "operatingSystem": "Web, Android, iOS",
       "applicationCategory": "UtilitiesApplication",
       "offers": {
@@ -38,14 +38,22 @@
         "@type": "Person",
         "name": "Burak Tonoz"
       },
-      "description": "Arazide WGS84 enlem boylam verilerini ITRF96, ED50 ve UTM sistemine dönüştüren, canlı nokta aplikasyonu ve CAD aktarımı yapan profesyonel ölçüm uygulaması."
+      "description": "Arazide WGS84 enlem boylam verilerini ITRF96, ED50 ve UTM sistemine dönüştüren, pusula sensörlü canlı nokta aplikasyonu, parsel sorgulama ve CAD aktarımı yapan profesyonel ölçüm uygulaması."
     }
     </script>
 
-    <!-- PWA AYARLARI -->
+    <!-- PWA, MASAÜSTÜ KISAYOLU VE MOBİL UYGULAMA İKON AYARLARI (icon.png) -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#070b14">
-    <link rel="apple-touch-icon" href="logo.png">
+    <meta name="theme-color" content="#040812">
+    <meta name="application-name" content="AZİMUT Pro">
+    <meta name="apple-mobile-web-app-title" content="AZİMUT Pro">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="shortcut icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="msapplication-TileImage" content="icon.png">
+    <meta name="msapplication-TileColor" content="#040812">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -181,41 +189,92 @@
             font-weight: 700;
         }
 
-        /* Splash Screen */
+        /* Splash Screen (v7: Tam Ekran Sinematik Intro Video Karşılama Ekranı) */
         #splash-screen {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #0a1326 0%, #000000 100%);
-            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            cursor: pointer; transition: opacity 0.6s ease; overflow: hidden;
+            position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh;
+            background: radial-gradient(ellipse 90% 60% at 50% 15%, #162840 0%, #070d19 52%, #02030a 100%);
+            background-color: #02030a;
+            z-index: 9999; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; user-select: none;
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        #splash-screen::before {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; background: radial-gradient(circle, rgba(0, 229, 255, 0.4) 0%, rgba(0,0,0,0) 70%); z-index: 0;
+        #splash-screen.closing {
+            opacity: 0;
+            transform: scale(1.04);
+            pointer-events: none;
         }
-        .splash-header { position: absolute; top: calc(env(safe-area-inset-top) + 55px); text-align: center; z-index: 1;}
-        .splash-title { color: #00e5ff; font-size: 2.6rem; font-weight: 700; margin: 0; letter-spacing: 3px; text-shadow: 0 0 20px rgba(0, 229, 255, 0.4); }
-        .splash-subtitle { color: #fff; font-size: 0.78rem; opacity: 0.7; letter-spacing: 7px; margin-top: 8px; font-weight: 400;}
-        .globe-container { position: relative; z-index: 1; width: 210px; height: 210px; perspective: 1000px; display: flex; justify-content: center; align-items: center; margin-top: 20px;}
-        .wireframe-globe { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spinGlobe 15s linear infinite; }
-        .globe-core { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: #00e5ff; border-radius: 50%; filter: blur(35px); opacity: 0.4; }
-        .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 50%; box-shadow: 0 0 15px rgba(0, 229, 255, 0.05) inset; }
-        .ring:nth-child(1) { transform: rotateY(0deg); } .ring:nth-child(2) { transform: rotateY(36deg); } .ring:nth-child(3) { transform: rotateY(72deg); } .ring:nth-child(4) { transform: rotateY(108deg); } .ring:nth-child(5) { transform: rotateY(144deg); }
-        .ring.latitude { border: 1px solid rgba(0, 229, 255, 0.4); }
-        .ring:nth-child(6) { transform: rotateX(90deg) translateZ(0); } .ring:nth-child(7) { transform: rotateX(90deg) translateZ(55px) scale(0.866); } .ring:nth-child(8) { transform: rotateX(90deg) translateZ(-55px) scale(0.866); }
-        .ring:nth-child(9) { transform: rotateX(90deg) translateZ(88px) scale(0.6); } .ring:nth-child(10) { transform: rotateX(90deg) translateZ(-88px) scale(0.6); }
-        .splash-tap-hint { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 80px); color: #00e5ff; font-size: 0.76rem; letter-spacing: 2px; opacity: 0.85; animation: blinker 2s infinite; z-index: 1; }
-        .splash-footer { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 30px); left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 1; opacity: 0.55;}
-        .splash-footer h3 { margin: 0; color: #fff; font-size: 0.68rem; letter-spacing: 2px; font-weight: 500;}
+        .splash-video-stage {
+            position: relative; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        .splash-fullscreen-video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            pointer-events: none;
+        }
+        /* Geniş ekranlı masaüstü monitörlerde dikey (9:16) videonun yazılarının kesilmemesi ve tam boy sinematik görünmesi için */
+        @media (min-aspect-ratio: 10/11) {
+            .splash-fullscreen-video {
+                width: auto;
+                height: 100%;
+                max-width: 100%;
+                object-fit: contain;
+                filter: drop-shadow(0 0 60px rgba(0, 229, 255, 0.18));
+            }
+        }
+        /* İnce Sinematik Kontroller (Ses & Atla) */
+        .splash-video-controls {
+            position: absolute;
+            bottom: calc(env(safe-area-inset-bottom) + 22px);
+            right: 18px;
+            z-index: 5;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .splash-ctrl-btn {
+            background: rgba(7, 13, 25, 0.48);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: rgba(255, 255, 255, 0.88);
+            border-radius: 30px;
+            padding: 8px 15px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.74rem; font-weight: 700; letter-spacing: 0.8px;
+            display: inline-flex; align-items: center; gap: 7px;
+            cursor: pointer; transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        }
+        .splash-ctrl-btn:hover, .splash-ctrl-btn:active {
+            background: rgba(0, 229, 255, 0.2);
+            border-color: rgba(0, 229, 255, 0.55);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .splash-ctrl-btn.icon-only {
+            width: 36px; height: 36px; padding: 0; justify-content: center; border-radius: 50%;
+        }
+        .splash-progress-track {
+            position: absolute; left: 0; right: 0; bottom: 0;
+            height: 3px; background: rgba(255, 255, 255, 0.08);
+            z-index: 6; overflow: hidden;
+        }
+        .splash-progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #00e5ff);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
+            transition: width 0.12s linear;
+        }
+        @keyframes blinker { 50% { opacity: 0.35; } }
 
-        @keyframes spinGlobe { 0% { transform: rotateX(-15deg) rotateY(0deg); } 100% { transform: rotateX(-15deg) rotateY(360deg); } }
-        @keyframes blinker { 50% { opacity: 0.3; } }
-
-        /* HUD Bar (Üst Panel - v5 Kompakt & Düzenli Tasarım) */
+        /* HUD Bar (Üst Panel - v7 AZİMUT Pro Kompakt Tasarım) */
         .hud-container { 
             position: fixed; 
             top: calc(env(safe-area-inset-top) + 6px); 
             left: 10px; right: 10px; z-index: 1000; 
-            display: flex; flex-direction: column; gap: 4px; pointer-events: none; 
+            display: flex; flex-direction: column; gap: 4px; pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
         .hud-top { 
             display: flex; justify-content: space-between; align-items: center; pointer-events: all; 
@@ -224,8 +283,9 @@
         }
         .hud-left-group { display: flex; align-items: center; gap: 8px; min-width: 0; }
         .menu-btn { font-size: 1.1rem; color: var(--text-main); cursor: pointer; padding: 3px; }
-        .hud-title { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.4px; color: var(--text-main); white-space: nowrap;}
-        .hud-title span { color: var(--accent); font-weight: 600; font-size: 0.64rem; letter-spacing: 0.8px; padding: 2px 5px; border-radius: 5px; background: rgba(0,229,255,0.12);}
+        .hud-brand-logo { width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(0,229,255,0.45)); flex-shrink: 0; cursor: pointer; }
+        .hud-title { font-size: 0.9rem; font-weight: 800; letter-spacing: 0.8px; color: var(--text-main); white-space: nowrap; display: flex; align-items: center; gap: 5px;}
+        .hud-title span { color: var(--accent); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.8px; padding: 2px 5px; border-radius: 5px; background: rgba(0,229,255,0.14);}
         .hud-right-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
         .gps-indicator { display: flex; align-items: center; gap: 5px; font-size: 0.66rem; color: var(--text-muted); font-weight: 600; font-family: 'JetBrains Mono', monospace; white-space: nowrap; cursor: pointer;}
         .gps-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); flex-shrink: 0;}
@@ -287,63 +347,163 @@
         .coffee-btn { color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);}
         .help-btn { color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.45); font-weight: 800; }
 
-        /* CANLI NOKTA APLİKASYON (STAKEOUT) PANELİ */
+        /* ===================== v6: ŞEFFAF, TERTEMİZ VE PUSULA SENSÖRLÜ APLİKASYON (STAKEOUT) EKRANI ===================== */
+        /* Aplikasyon modunda harita üzerindeki tüm gereksiz buton ve barları gizle */
+        body.stakeout-mode-active .hud-container,
+        body.stakeout-mode-active .left-controls,
+        body.stakeout-mode-active .right-controls,
+        body.stakeout-mode-active .ig-dock-wrapper,
+        body.stakeout-mode-active .temp-query-badge {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0.96);
+        }
+
         .stakeout-panel {
-            position: fixed; bottom: calc(env(safe-area-inset-bottom) + 82px); left: 10px; right: 10px;
-            z-index: 1060; background: var(--surface); backdrop-filter: blur(18px);
-            border: 2px solid var(--accent); border-radius: 18px; padding: 11px 12px;
-            display: none; flex-direction: column; gap: 8px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px var(--accent-glow);
+            position: fixed; inset: 0;
+            z-index: 1090; pointer-events: none;
+            display: none; flex-direction: column; justify-content: space-between;
+            padding: calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 12px);
         }
         .stakeout-panel.show { display: flex; }
-        .stakeout-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 6px; }
-        .stakeout-target-title { font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-        .stakeout-target-title span { color: var(--accent); font-family: 'JetBrains Mono', monospace; }
-        .stakeout-controls { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
-        .stakeout-icon-btn {
-            background: var(--card-bg); border: 1px solid var(--border-light); color: var(--text-main);
-            width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.8rem;
-        }
-        .stakeout-icon-btn.active { background: rgba(0,229,255,0.2); color: var(--accent); border-color: var(--accent); }
 
-        .stakeout-body { display: flex; align-items: center; gap: 12px; }
+        /* Üst Şeffaf Hedef & Kontrol Kapsülü */
+        .stake-top-pill {
+            pointer-events: all;
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+            background: rgba(7, 11, 23, 0.48);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 229, 255, 0.38);
+            border-radius: 30px; padding: 6px 8px 6px 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+        }
+        body.daylight-mode .stake-top-pill {
+            background: rgba(255, 255, 255, 0.68);
+            border-color: rgba(2, 132, 199, 0.45);
+        }
+        .stakeout-target-title {
+            font-size: 0.82rem; font-weight: 800; color: var(--text-main);
+            display: flex; align-items: center; gap: 7px;
+            min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .stakeout-target-title span { color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+        .stake-acc-tag {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 700;
+            color: var(--success); background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.35); padding: 2px 7px; border-radius: 12px;
+            flex-shrink: 0;
+        }
+        .stakeout-controls { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+        .stakeout-icon-btn {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-light); color: var(--text-main);
+            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.78rem; transition: 0.2s;
+        }
+        .stakeout-icon-btn.active { background: rgba(0,229,255,0.22); color: var(--accent); border-color: var(--accent); }
+        .stake-exit-btn {
+            background: rgba(239, 68, 68, 0.22); border: 1px solid rgba(239, 68, 68, 0.55);
+            color: #ff6b6b; height: 32px; padding: 0 12px; border-radius: 20px;
+            font-size: 0.74rem; font-weight: 800; cursor: pointer;
+            display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif;
+        }
+
+        /* Alt Şeffaf Pusula Sensörlü Tam Yönlendirme HUD Kartı */
+        .stake-bottom-hud {
+            pointer-events: all;
+            background: rgba(7, 11, 23, 0.44);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(0, 229, 255, 0.42);
+            border-radius: 24px; padding: 12px 14px;
+            display: flex; flex-direction: column; gap: 10px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.45);
+            max-width: 440px; width: 100%; margin: 0 auto;
+            transition: border-color 0.25s, background 0.25s;
+        }
+        body.daylight-mode .stake-bottom-hud {
+            background: rgba(255, 255, 255, 0.68);
+            border-color: rgba(2, 132, 199, 0.5);
+        }
+        .stakeout-panel.arrived .stake-bottom-hud,
+        .stakeout-panel.arrived .stake-top-pill {
+            border-color: var(--success);
+            box-shadow: 0 0 28px rgba(16, 185, 129, 0.35);
+        }
+
+        .stakeout-body { display: flex; align-items: center; gap: 14px; }
+
+        /* 360° Canlı Pusula Kadranı */
         .stakeout-radar {
-            width: 84px; height: 84px; border-radius: 50%; border: 2px solid var(--border-light);
-            background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, rgba(0,0,0,0.4) 80%);
+            width: 104px; height: 104px; border-radius: 50%;
+            border: 2px solid rgba(0, 229, 255, 0.45);
+            background: radial-gradient(circle, rgba(0,229,255,0.14) 0%, rgba(7,11,23,0.35) 75%);
             position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            box-shadow: inset 0 0 18px rgba(0,229,255,0.15);
+            cursor: pointer;
         }
         .stakeout-radar::before {
-            content: ''; position: absolute; width: 46px; height: 46px; border-radius: 50%;
-            border: 1px dashed rgba(0,229,255,0.35);
+            content: ''; position: absolute; width: 58px; height: 58px; border-radius: 50%;
+            border: 1px dashed rgba(0,229,255,0.35); pointer-events: none;
         }
-        .stakeout-radar-cross-h { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.12); }
-        .stakeout-radar-cross-v { position: absolute; height: 100%; width: 1px; background: rgba(255,255,255,0.12); }
-        .stakeout-north-badge { position: absolute; top: 2px; font-size: 0.52rem; font-weight: 800; color: var(--danger); }
+        .stake-compass-ring {
+            position: absolute; inset: 3px; border-radius: 50%;
+            transition: transform 0.16s linear; pointer-events: none;
+        }
+        .compass-cardinal {
+            position: absolute; font-size: 0.58rem; font-weight: 800;
+            font-family: 'JetBrains Mono', monospace; line-height: 1;
+        }
+        .compass-cardinal.n { top: 2px; left: 50%; transform: translateX(-50%); color: #ff3b5c; font-size: 0.65rem; }
+        .compass-cardinal.e { right: 4px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .compass-cardinal.s { bottom: 2px; left: 50%; transform: translateX(-50%); color: var(--text-muted); }
+        .compass-cardinal.w { left: 4px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+        .stakeout-radar-cross-h { position: absolute; width: 76%; height: 1px; background: rgba(255,255,255,0.12); pointer-events: none; }
+        .stakeout-radar-cross-v { position: absolute; height: 76%; width: 1px; background: rgba(255,255,255,0.12); pointer-events: none; }
+        .stakeout-north-badge {
+            position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            background: rgba(7, 11, 23, 0.88); border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 8px; padding: 1px 6px; font-size: 0.5rem; font-weight: 800;
+            color: var(--accent); white-space: nowrap; letter-spacing: 0.5px;
+        }
         .stakeout-arrow {
-            font-size: 2rem; color: var(--accent); transition: transform 0.2s ease-out;
-            filter: drop-shadow(0 0 8px var(--accent-glow)); z-index: 2;
+            font-size: 2.35rem; color: var(--accent); transition: transform 0.16s ease-out;
+            filter: drop-shadow(0 0 12px var(--accent-glow)); z-index: 2;
         }
-        .stakeout-panel.arrived { border-color: var(--success); }
-        .stakeout-panel.arrived .stakeout-arrow { color: var(--success); }
+        .stakeout-panel.arrived .stakeout-radar { border-color: var(--success); }
+        .stakeout-panel.arrived .stakeout-arrow { color: var(--success); filter: drop-shadow(0 0 14px rgba(16,185,129,0.7)); }
 
         .stakeout-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+        .stake-dist-hero {
+            display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+        }
+        .stake-dist-big {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.55rem; font-weight: 800;
+            color: var(--text-main); letter-spacing: -0.5px; line-height: 1.05;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .stakeout-panel.arrived .stake-dist-big { color: var(--success); }
+        .stake-angle-sub {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); font-weight: 700;
+            white-space: nowrap;
+        }
+        .stake-angle-sub b { color: var(--accent); }
+
         .stakeout-command-banner {
-            background: rgba(0, 229, 255, 0.14); border: 1px solid rgba(0, 229, 255, 0.35);
-            border-radius: 10px; padding: 6px 8px; font-weight: 800; font-size: 0.82rem;
+            background: rgba(0, 229, 255, 0.16); border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 12px; padding: 7px 10px; font-weight: 800; font-size: 0.8rem;
             color: var(--accent); text-align: center; letter-spacing: 0.3px;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .stakeout-panel.arrived .stakeout-command-banner {
-            background: rgba(16, 185, 129, 0.2); border-color: var(--success); color: var(--success);
+            background: rgba(16, 185, 129, 0.24); border-color: var(--success); color: var(--success);
         }
-        .stakeout-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+        .stakeout-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .stakeout-metric-box {
-            background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 8px;
-            padding: 4px 6px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-light); border-radius: 10px;
+            padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;
             font-size: 0.66rem; min-width: 0;
         }
-        .stakeout-metric-box span { color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+        .stakeout-metric-box span { color: var(--text-muted); font-weight: 700; white-space: nowrap; }
         .stakeout-metric-box b { font-family: 'JetBrains Mono', monospace; color: var(--text-main); font-size: 0.72rem; white-space: nowrap; }
 
         /* ALAN & MESAFE ÖLÇÜM PANELİ */
@@ -764,9 +924,9 @@
             background: var(--input-bg); border: 1px solid var(--border-light);
             border-radius: 9px; padding: 6px 8px; margin-top: 5px;
         }
-        .popup-coord-grid span.lbl { color: var(--text-muted); font-weight: 700; font-size: 0.64rem; }
-        .popup-coord-grid span.val { color: var(--accent); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
-        .popup-coord-grid span.val.sub { color: var(--text-main); font-weight: 500; font-size: 0.68rem; }
+        .popup-coord-grid span.lbl, .popup-coord-grid span.k { color: var(--text-muted); font-weight: 700; font-size: 0.64rem; }
+        .popup-coord-grid span.val, .popup-coord-grid span.v { color: var(--accent); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+        .popup-coord-grid span.val.sub, .popup-coord-grid span.v.sub { color: var(--text-main); font-weight: 500; font-size: 0.68rem; }
         .popup-stake-btn {
             margin-top: 8px; width: 100%; padding: 7px 6px; border-radius: 9px; border: none;
             background: var(--success); color: #fff; font-weight: 700; font-size: 0.72rem; cursor: pointer;
@@ -937,81 +1097,115 @@
             }
         }
 
-        /* İNTERAKTİF BAŞLANGIÇ REHBERİ (TUTORIAL MODAL) */
+        /* İNTERAKTİF BAŞLANGIÇ REHBERİ (TUTORIAL MODAL - v6 EKRAN TAŞMA HATASI TAMAMEN DÜZELTİLDİ) */
         .tutorial-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(4, 8, 16, 0.82); backdrop-filter: blur(8px);
+            position: fixed; inset: 0; width: 100%; height: 100%;
+            background: rgba(4, 8, 16, 0.84); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 9800; display: none; align-items: center; justify-content: center;
-            padding: 16px;
+            padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+            box-sizing: border-box;
         }
         .tutorial-overlay.show { display: flex; }
         .tutorial-card {
-            width: 100%; max-width: 410px; max-height: 88vh;
+            width: 100%;
+            max-width: min(400px, calc(100vw - 24px));
+            max-height: min(85vh, calc(100dvh - 28px));
             background: var(--surface-solid); border: 1.5px solid var(--accent);
-            border-radius: 22px; padding: 18px 16px 16px;
-            display: flex; flex-direction: column; gap: 12px;
+            border-radius: 20px; padding: 14px 14px 12px;
+            display: flex; flex-direction: column; gap: 10px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 25px var(--accent-glow);
-            overflow: hidden;
+            overflow: hidden; box-sizing: border-box;
         }
         .tutorial-top {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border-light); padding-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+            border-bottom: 1px solid var(--border-light); padding-bottom: 8px; flex-shrink: 0;
         }
         .tutorial-badge {
             background: rgba(0, 229, 255, 0.15); color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.35);
-            padding: 3px 9px; border-radius: 20px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px;
+            padding: 3px 9px; border-radius: 20px; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.4px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .tutorial-skip-btn {
-            background: transparent; border: none; color: var(--text-muted);
-            font-size: 0.75rem; font-weight: 700; cursor: pointer; padding: 4px 6px;
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border-light); border-radius: 8px;
+            color: var(--text-muted); font-size: 0.72rem; font-weight: 700; cursor: pointer; padding: 4px 8px; flex-shrink: 0;
         }
         .tutorial-slide-body {
-            overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px;
-            padding-right: 2px;
+            overflow-y: auto; overflow-x: hidden; flex: 1 1 auto; min-height: 0;
+            display: flex; flex-direction: column; gap: 8px;
+            padding-right: 2px; -webkit-overflow-scrolling: touch;
         }
         .tutorial-hero {
             background: radial-gradient(circle at center, rgba(0,229,255,0.16) 0%, rgba(15,23,42,0.6) 100%);
-            border: 1px solid var(--border-light); border-radius: 16px;
-            padding: 14px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;
+            border: 1px solid var(--border-light); border-radius: 14px;
+            padding: 11px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            flex-shrink: 0; max-width: 100%; box-sizing: border-box;
         }
         .tutorial-hero-icon {
-            width: 52px; height: 52px; border-radius: 16px;
+            width: 44px; height: 44px; border-radius: 13px;
             background: rgba(0, 229, 255, 0.18); border: 1px solid var(--accent);
-            color: var(--accent); font-size: 1.45rem;
+            color: var(--accent); font-size: 1.25rem;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 15px var(--accent-glow);
+            box-shadow: 0 0 15px var(--accent-glow); flex-shrink: 0;
         }
-        .tutorial-hero h3 { margin: 2px 0 0 0; font-size: 1rem; color: var(--text-main); font-weight: 800; }
-        .tutorial-hero p { margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-        .tutorial-item-list { display: flex; flex-direction: column; gap: 7px; }
+        .tutorial-hero h3, .tutorial-hero-title {
+            margin: 2px 0 0 0; font-size: 0.92rem; color: var(--text-main); font-weight: 800; line-height: 1.25;
+            word-break: break-word;
+        }
+        .tutorial-hero p, .tutorial-hero-sub {
+            margin: 0; font-size: 0.72rem; color: var(--text-muted); line-height: 1.35;
+            word-break: break-word;
+        }
+        .tutorial-mock-bar {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;
+            margin-top: 3px; width: 100%;
+        }
+        .tutorial-chip {
+            background: rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.3);
+            color: var(--text-main); border-radius: 8px; padding: 3px 7px;
+            font-size: 0.64rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;
+            max-width: 100%; white-space: nowrap;
+        }
+        .tutorial-chip i { color: var(--accent); font-size: 0.64rem; }
+        .tutorial-item-list, .tutorial-list {
+            display: flex; flex-direction: column; gap: 6px; width: 100%;
+        }
         .tutorial-item {
-            display: flex; align-items: flex-start; gap: 10px;
+            display: flex; align-items: flex-start; gap: 9px;
             background: var(--card-bg); border: 1px solid var(--border-light);
-            border-radius: 12px; padding: 9px 10px;
+            border-radius: 12px; padding: 8px 10px; width: 100%; box-sizing: border-box;
         }
         .tutorial-item-icon {
-            width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+            width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
             background: var(--input-bg); border: 1px solid var(--border-light);
-            color: var(--accent); font-size: 0.88rem;
+            color: var(--accent); font-size: 0.82rem;
             display: flex; align-items: center; justify-content: center;
         }
-        .tutorial-item-text { flex: 1; min-width: 0; }
-        .tutorial-item-text b { display: block; font-size: 0.78rem; color: var(--text-main); margin-bottom: 1px; }
-        .tutorial-item-text span { display: block; font-size: 0.7rem; color: var(--text-muted); line-height: 1.35; }
-        .tutorial-footer {
-            display: flex; justify-content: space-between; align-items: center; gap: 10px;
-            border-top: 1px solid var(--border-light); padding-top: 10px;
+        .tutorial-item-icon.amber { color: var(--warning); border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.12); }
+        .tutorial-item-icon.green { color: var(--success); border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.12); }
+        .tutorial-item-icon.purple { color: #a855f7; border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.12); }
+        .tutorial-item-text { flex: 1; min-width: 0; overflow: hidden; }
+        .tutorial-item-text b, .tutorial-item-text h4 {
+            display: block; margin: 0 0 2px 0; font-size: 0.76rem; font-weight: 700; color: var(--text-main); line-height: 1.25;
+            word-break: break-word;
         }
-        .tutorial-dots { display: flex; gap: 5px; align-items: center; }
+        .tutorial-item-text span, .tutorial-item-text p {
+            display: block; margin: 0; font-size: 0.68rem; color: var(--text-muted); line-height: 1.35;
+            word-break: break-word;
+        }
+        .tutorial-footer {
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+            border-top: 1px solid var(--border-light); padding-top: 8px; flex-shrink: 0;
+        }
+        .tutorial-dots { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
         .tutorial-dot {
             width: 7px; height: 7px; border-radius: 50%; background: var(--border-light); transition: 0.25s; cursor: pointer;
         }
-        .tutorial-dot.active { width: 20px; border-radius: 6px; background: var(--accent); }
-        .tutorial-nav-btns { display: flex; gap: 6px; }
+        .tutorial-dot.active { width: 18px; border-radius: 6px; background: var(--accent); }
+        .tutorial-nav-btns { display: flex; gap: 6px; flex-shrink: 0; }
         .tutorial-btn {
-            padding: 9px 14px; border-radius: 10px; font-size: 0.78rem; font-weight: 700;
+            padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: 700;
             cursor: pointer; border: 1px solid var(--border-light); background: var(--card-bg); color: var(--text-main);
-            font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 6px;
+            font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 5px; white-space: nowrap;
         }
         .tutorial-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); }
         .parcel-vertex-label {
@@ -1079,8 +1273,8 @@
 
     <!-- GİZLİ SEO METİNLERİ -->
     <div class="sr-only">
-        <h1>GeoITRF Pro - Ücretsiz ITRF96, ED50, UTM Koordinat Ölçüm ve Nokta Aplikasyon Uygulaması</h1>
-        <p>Harita, orman, inşaat ve elektrik mühendisleri için arazide WGS84 enlem boylam dönüşümü, canlı nokta aplikasyonu (stakeout), alan hesabı ve NCN, DXF, KML, CSV veri aktarımı yapan profesyonel el terminali.</p>
+        <h1>AZİMUT Pro - Ücretsiz ITRF96, ED50, UTM Koordinat Ölçüm, Parsel Sorgu ve Nokta Aplikasyon Uygulaması</h1>
+        <p>Harita, orman, inşaat ve elektrik mühendisleri için arazide WGS84 enlem boylam dönüşümü, pusula sensörlü canlı nokta aplikasyonu (stakeout), TKGM parsel/adres sorgulama, alan hesabı ve NCN, DXF, KML, CSV veri aktarımı yapan profesyonel el terminali.</p>
     </div>
 
     <!-- BİLDİRİM TOAST -->
@@ -1112,23 +1306,21 @@
         </a>
     </div>
 
-    <!-- GİRİŞ EKRANI -->
-    <div id="splash-screen" onclick="hideSplashScreen()">
-        <div class="splash-header">
-            <h2 class="splash-title">GeoITRF</h2>
-            <div class="splash-subtitle">PRO TERMINAL v5.0</div>
+    <!-- GİRİŞ EKRANI (v7: Tam Ekran Intro Video - Bitince Otomatik Giriş Yapar) -->
+    <div id="splash-screen" onclick="handleSplashScreenTap(event)">
+        <div class="splash-video-stage">
+            <video id="intro-video" class="splash-fullscreen-video" src="intro.mp4" poster="logo.jpeg" autoplay muted playsinline webkit-playsinline preload="auto"></video>
         </div>
-        <div class="globe-container">
-            <div class="wireframe-globe">
-                <div class="globe-core"></div>
-                <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
-                <div class="ring latitude"></div><div class="ring latitude"></div><div class="ring latitude"></div><div class="ring latitude"></div><div class="ring latitude"></div>
-            </div>
+        <div class="splash-video-controls">
+            <button type="button" class="splash-ctrl-btn icon-only" id="btn-intro-sound" onclick="toggleIntroSound(event)" aria-label="Sesi Aç veya Kapat" title="Sesi Aç / Kapat">
+                <i class="fas fa-volume-mute" id="intro-sound-icon"></i>
+            </button>
+            <button type="button" class="splash-ctrl-btn" id="btn-intro-skip" onclick="hideSplashScreen(event)" aria-label="İntroyu Geç">
+                Atla <i class="fas fa-chevron-right" style="font-size:0.65rem;"></i>
+            </button>
         </div>
-        <div class="splash-tap-hint"><i class="fas fa-fingerprint"></i> BAŞLATMAK İÇİN DOKUNUN</div>
-        <div class="splash-footer">
-            <h3>CREAT BY TONOZ</h3>
-            <h3>ITRF96 • ED50 • STAKEOUT</h3>
+        <div class="splash-progress-track">
+            <div class="splash-progress-fill" id="intro-progress-fill"></div>
         </div>
     </div>
 
@@ -1136,7 +1328,7 @@
     <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
     <div class="side-drawer" id="side-drawer">
         <div class="drawer-header">
-            <h2><i class="fas fa-sliders-h" style="color:var(--accent); margin-right:8px;"></i> Terminal Ayarları</h2>
+            <h2 style="display:flex; align-items:center; gap:8px;"><img src="icon.png" alt="AZİMUT" style="width:28px; height:28px; object-fit:contain; filter:drop-shadow(0 0 6px rgba(0,229,255,0.45));"> AZİMUT Pro Ayarları</h2>
             <i class="fas fa-times drawer-close" onclick="toggleDrawer()"></i>
         </div>
         <div class="drawer-body">
@@ -1206,7 +1398,7 @@
                         <i class="fas fa-exchange-alt"></i> Koordinat Dönüştürücü & Hesaplama
                     </button>
                     <button class="pwa-install-btn" onclick="openInstallModal()">
-                        <i class="fas fa-mobile-alt"></i> Uygulamayı Ana Ekrana Ekle
+                        <i class="fas fa-mobile-alt"></i> AZİMUT Pro'yu Ana Ekrana Ekle
                     </button>
                 </div>
             </div>
@@ -1214,7 +1406,7 @@
             <div class="drawer-section">
                 <h3>Hakkında</h3>
                 <div class="drawer-card">
-                    <p class="info-text"><b>GeoITRF Pro;</b> arazide çalışan harita, orman, inşaat ve elektrik mühendislerinin koordinat dönüşümü, nokta aplikasyonu ve CAD veri aktarımı ihtiyacını karşılamak için Harita Mühendisi <b>Burak Tonoz</b> tarafından geliştirilmiştir.</p>
+                    <p class="info-text"><b>AZİMUT Pro;</b> arazide çalışan harita, orman, inşaat ve elektrik mühendislerinin koordinat dönüşümü, pusula sensörlü canlı nokta aplikasyonu, TKGM parsel/adres sorgulama ve CAD veri aktarımı ihtiyacını karşılamak için Harita Mühendisi <b>Burak Tonoz</b> tarafından geliştirilmiştir.</p>
                     <p class="info-text" style="margin-top:6px;">Çevrimdışı (Offline) önbellek koruması aktif: İnternet olmasa bile tüm ölçümleriniz cihaz hafızasında güvendedir.</p>
                 </div>
             </div>
@@ -1222,12 +1414,13 @@
         </div>
     </div>
 
-    <!-- HUD (ÜST BAR - v5 KOMPAKT TELEMETRİ & KOORDİNAT PANELİ) -->
+    <!-- HUD (ÜST BAR - v7 AZİMUT PRO KOMPAKT TELEMETRİ & KOORDİNAT PANELİ) -->
     <div class="hud-container" id="hud-bar">
         <div class="hud-top">
             <div class="hud-left-group">
                 <i class="fas fa-bars menu-btn" aria-label="Menüyü Aç" onclick="toggleDrawer()"></i>
-                <div class="hud-title">GeoITRF <span>PRO</span></div>
+                <img src="icon.png" alt="AZİMUT" class="hud-brand-logo" onclick="toggleDrawer()">
+                <div class="hud-title">AZİMUT <span>PRO</span></div>
             </div>
             <div class="hud-right-group">
                 <span class="dom-selector-pill" id="hud-proj-pill" onclick="toggleDrawer()" title="Projeksiyon Ayarları">ITRF96 • D--</span>
@@ -1307,34 +1500,51 @@
     <!-- HARİTA KONTEYNERİ -->
     <div id="map"></div>
 
-    <!-- CANLI NOKTA APLİKASYON (STAKEOUT) PANELİ -->
+    <!-- v6: ŞEFFAF, TERTEMİZ VE PUSULA SENSÖRLÜ CANLI APLİKASYON (STAKEOUT) EKRANI -->
     <div class="stakeout-panel" id="stakeout-panel">
-        <div class="stakeout-header">
+        <!-- Üst Şeffaf Hedef & Çıkış Kapsülü -->
+        <div class="stake-top-pill">
             <div class="stakeout-target-title">
                 <i class="fas fa-bullseye" style="color:var(--accent);"></i>
-                Hedef: <span id="stake-target-name">P1</span>
+                <span id="stake-target-name">P1</span>
+                <span class="stake-acc-tag" id="stake-gps-acc">GPS ±--m</span>
             </div>
             <div class="stakeout-controls">
+                <button class="stakeout-icon-btn" onclick="focusStakeoutPair()" title="Konumumu ve Hedefi Haritada Ortala"><i class="fas fa-compress-arrows-alt"></i></button>
                 <button class="stakeout-icon-btn active" id="btn-stake-sound" onclick="toggleStakeSound()" title="Sesli Bip Uyarısı"><i class="fas fa-volume-up"></i></button>
                 <button class="stakeout-icon-btn active" id="btn-stake-vibrate" onclick="toggleStakeVibrate()" title="Titreşim Uyarısı"><i class="fas fa-mobile-alt"></i></button>
-                <button class="stakeout-icon-btn" onclick="enableCompassPermission()" title="Pusulayı Kalibre Et / Başlat"><i class="fas fa-compass"></i></button>
-                <button class="stakeout-icon-btn" style="color:var(--danger);" onclick="stopStakeout()" title="Aplikasyonu Bitir"><i class="fas fa-times"></i></button>
+                <button class="stake-exit-btn" onclick="stopStakeout()" title="Aplikasyonu Bitir"><i class="fas fa-times"></i> Çıkış</button>
             </div>
         </div>
-        <div class="stakeout-body">
-            <div class="stakeout-radar" id="stakeout-radar">
-                <div class="stakeout-radar-cross-h"></div>
-                <div class="stakeout-radar-cross-v"></div>
-                <span class="stakeout-north-badge" id="radar-top-label">İLERİ</span>
-                <i class="fas fa-location-arrow stakeout-arrow" id="stakeout-arrow" style="transform: rotate(-45deg);"></i>
-            </div>
-            <div class="stakeout-info">
-                <div class="stakeout-command-banner" id="stake-command-text">YÖNLENDİRME HESAPLANIYOR...</div>
-                <div class="stakeout-metrics">
-                    <div class="stakeout-metric-box"><span>Mesafe:</span><b id="stake-dist">--.-- m</b></div>
-                    <div class="stakeout-metric-box"><span>Azimut:</span><b id="stake-bearing">---°</b></div>
-                    <div class="stakeout-metric-box"><span id="stake-dy-label">Doğu (+Y):</span><b id="stake-dy">--.-- m</b></div>
-                    <div class="stakeout-metric-box"><span id="stake-dx-label">Kuzey (+X):</span><b id="stake-dx">--.-- m</b></div>
+
+        <!-- Alt Şeffaf Pusula Kadranı ve Tam Yönlendirme Kartı -->
+        <div class="stake-bottom-hud">
+            <div class="stakeout-body">
+                <!-- Canlı Pusula Sensörlü 360° Kadran (Dokununca Kalibre Eder / İki Noktayı Odaklar) -->
+                <div class="stakeout-radar" id="stakeout-radar" onclick="enableCompassPermission(true); focusStakeoutPair();" title="Pusulayı Kalibre Et ve Haritayı Ortala">
+                    <div class="stake-compass-ring" id="stake-compass-ring">
+                        <span class="compass-cardinal n">K</span>
+                        <span class="compass-cardinal e">D</span>
+                        <span class="compass-cardinal s">G</span>
+                        <span class="compass-cardinal w">B</span>
+                    </div>
+                    <div class="stakeout-radar-cross-h"></div>
+                    <div class="stakeout-radar-cross-v"></div>
+                    <i class="fas fa-location-arrow stakeout-arrow" id="stakeout-arrow" style="transform: rotate(-45deg);"></i>
+                    <span class="stakeout-north-badge" id="radar-top-label">PUSULA AKTİF</span>
+                </div>
+
+                <!-- Sağ Taraf: Büyük Mesafe, Yön Komutu ve Farklar -->
+                <div class="stakeout-info">
+                    <div class="stake-dist-hero">
+                        <div class="stake-dist-big" id="stake-dist">--.-- m</div>
+                        <div class="stake-angle-sub">Azimut: <b id="stake-bearing">---°</b> • Yön: <b id="stake-heading-val">---°</b></div>
+                    </div>
+                    <div class="stakeout-command-banner" id="stake-command-text">PUSULA YÖNLENDİRMESİ HAZIR...</div>
+                    <div class="stakeout-metrics">
+                        <div class="stakeout-metric-box"><span id="stake-dx-label">İleri / Kuzey:</span><b id="stake-dx">--.-- m</b></div>
+                        <div class="stakeout-metric-box"><span id="stake-dy-label">Sağ / Doğu:</span><b id="stake-dy">--.-- m</b></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1810,13 +2020,28 @@
         </div>
     </div>
 
-    <!-- PWA (ANA EKRANA EKLE) BİLGİ MODALI -->
+    <!-- PWA (MASAÜSTÜ VE ANA EKRANA EKLE) BİLGİ MODALI -->
     <div class="app-modal" id="modal-install">
         <div class="modal-header">
-            <span class="modal-title"><i class="fas fa-mobile-alt" style="color:var(--accent); margin-right:8px;"></i> Ana Ekrana Ekle</span>
+            <span class="modal-title"><i class="fas fa-laptop-medical" style="color:var(--accent); margin-right:8px;"></i> Masaüstü & Ana Ekrana Ekle</span>
             <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="modal-body">
+            <div style="display:flex; align-items:center; gap:14px; background:var(--card-bg); border:1px solid var(--border-light); border-radius:14px; padding:12px 14px; margin-bottom:14px;">
+                <img src="icon.png" alt="AZİMUT Pro İkon" style="width:54px; height:54px; object-fit:contain; filter:drop-shadow(0 4px 12px rgba(0,229,255,0.35));">
+                <div>
+                    <div style="font-weight:800; font-size:0.95rem; color:var(--text-main);">AZİMUT Pro Uygulaması</div>
+                    <div style="font-size:0.76rem; color:var(--text-muted); margin-top:2px;">Masaüstüne veya telefon ana ekranına özel ikonuyla bağımsız program olarak kaydedin.</div>
+                </div>
+            </div>
+            <button id="pwa-auto-btn" class="pwa-install-btn" style="display:none; margin-bottom:14px;" onclick="triggerAutoInstall()">
+                <i class="fas fa-download"></i> Tek Tıkla Masaüstüne / Cihaza Kur
+            </button>
+            <div class="install-step">
+                <i class="fas fa-desktop" style="color:var(--accent);"></i>
+                <h3 style="margin:0 0 5px 0; font-size:1rem;">Masaüstü Bilgisayar (Chrome / Edge)</h3>
+                <p style="margin:0; font-size:0.85rem; color:var(--text-muted);">Adres çubuğunun sağındaki <b>Uygulamayı Yükle (Bilgisayar/İndir)</b> simgesine tıklayın veya menüden <b>"Kaydet ve Paylaş -> Kısayol Oluştur / AZİMUT Pro Uygulamasını Yükle"</b> seçeneğini seçin.</p>
+            </div>
             <div class="install-step">
                 <i class="fab fa-apple"></i>
                 <h3 style="margin:0 0 5px 0; font-size:1rem;">iPhone / iPad (iOS)</h3>
@@ -1827,9 +2052,6 @@
                 <h3 style="margin:0 0 5px 0; font-size:1rem;">Android (Chrome)</h3>
                 <p style="margin:0; font-size:0.85rem; color:var(--text-muted);">Tarayıcının sağ üst köşesindeki <b>Üç Nokta</b> menüsüne dokunun ve <b>"Ana ekrana ekle"</b> veya "Uygulamayı Yükle" seçeneğini seçin.</p>
             </div>
-            <button id="pwa-auto-btn" class="pwa-install-btn" style="display:none; margin-top:20px;" onclick="triggerAutoInstall()">
-                Tek Tıkla Otomatik Yükle
-            </button>
         </div>
     </div>
 
@@ -2127,21 +2349,111 @@
         }
 
         // --- HARİTA, 4 KATMANLI ALTLIK SİSTEMİ VE TKGM PARSEL WMS ENTEGRASYONU ---
-        function hideSplashScreen() {
-            let splash = document.getElementById('splash-screen');
-            // v5: Kullanıcı ekrana dokunduğu anda GPS ve Yön/Pusula sensörlerini anında aktif et (iOS/Android izin tetiklemesi dahil)
+        let splashDismissed = false;
+
+        function hideSplashScreen(evt) {
+            if (evt && evt.stopPropagation) evt.stopPropagation();
+            if (splashDismissed) return;
+            splashDismissed = true;
+
+            const splash = document.getElementById('splash-screen');
+            const video = document.getElementById('intro-video');
+            const prog = document.getElementById('intro-progress-fill');
+            if (prog) prog.style.width = '100%';
+            if (video) {
+                try { video.pause(); } catch (e) {}
+            }
+
+            // GPS ve Yön/Pusula sensörlerini aktif et
             initSensorsAndGps(false);
-            splash.style.opacity = '0';
-            setTimeout(() => { 
-                splash.style.display = 'none'; 
-                lockViewportScroll();
-                if (currentLat !== null && !firstLocationCenteredAfterSplash) {
-                    firstLocationCenteredAfterSplash = true;
-                    map.setView([currentLat, currentLon], 18, { animate: false });
-                }
-                checkFirstTimeTutorial();
-            }, 600);
+
+            if (splash) {
+                splash.classList.add('closing');
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    lockViewportScroll();
+                    if (currentLat !== null && !firstLocationCenteredAfterSplash) {
+                        firstLocationCenteredAfterSplash = true;
+                        map.setView([currentLat, currentLon], 18, { animate: false });
+                    }
+                    checkFirstTimeTutorial();
+                }, 650);
+            }
         }
+
+        function toggleIntroSound(evt) {
+            if (evt && evt.stopPropagation) evt.stopPropagation();
+            const video = document.getElementById('intro-video');
+            const icon = document.getElementById('intro-sound-icon');
+            if (!video) return;
+            video.muted = !video.muted;
+            if (!video.muted && video.paused) {
+                video.play().catch(() => {});
+            }
+            if (icon) {
+                icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            }
+        }
+
+        function handleSplashScreenTap(evt) {
+            // Kullanıcı video ekranına dokunduğunda sensör izinlerini tetikle ve ses kapalıysa aç
+            initSensorsAndGps(false);
+            const video = document.getElementById('intro-video');
+            const icon = document.getElementById('intro-sound-icon');
+            if (!video) {
+                hideSplashScreen(evt);
+                return;
+            }
+            if (video.ended) {
+                hideSplashScreen(evt);
+                return;
+            }
+            if (video.paused) {
+                video.play().catch(() => hideSplashScreen(evt));
+            } else if (video.muted) {
+                video.muted = false;
+                if (icon) icon.className = 'fas fa-volume-up';
+            }
+        }
+
+        function initIntroVideo() {
+            const video = document.getElementById('intro-video');
+            const prog = document.getElementById('intro-progress-fill');
+            const icon = document.getElementById('intro-sound-icon');
+            if (!video) return;
+
+            video.addEventListener('timeupdate', () => {
+                if (video.duration && isFinite(video.duration) && prog) {
+                    const pct = Math.min(100, (video.currentTime / video.duration) * 100);
+                    prog.style.width = pct.toFixed(1) + '%';
+                }
+            });
+
+            // Video bittiği anda otomatik olarak programa giriş yap
+            video.addEventListener('ended', () => {
+                hideSplashScreen();
+            });
+
+            // Video yüklenemezse kullanıcıyı bekletmeden programa al
+            video.addEventListener('error', () => {
+                setTimeout(() => hideSplashScreen(), 400);
+            });
+
+            // Otomatik oynatmayı başlat (Tarayıcı izin verirse sesli, aksi halde sessiz otomatik oynat)
+            video.muted = true;
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    if (icon) icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+                }).catch(() => {
+                    video.muted = true;
+                    if (icon) icon.className = 'fas fa-volume-mute';
+                    video.play().catch(() => {});
+                });
+            }
+        }
+
+        initIntroVideo();
 
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('show');
@@ -2625,6 +2937,8 @@
         // --- PUSULA SENSÖRÜ VE CANLI NOKTA APLİKASYON (STAKEOUT) SİSTEMİ ---
         let stakeoutTarget = null;
         let stakeoutLine = null;
+        let stakeoutTargetMarker = null;
+        let stakeoutTargetRing = null;
         let stakeSoundEnabled = true;
         let stakeVibrateEnabled = true;
         let compassHeading = null;
@@ -2739,17 +3053,86 @@
 
         function startStakeoutPoint(pt) {
             stakeoutTarget = pt;
+            switchTab('tab-map');
             map.closePopup();
             closeModals();
+            if (crosshairActive) {
+                crosshairActive = false;
+                document.getElementById('crosshair-overlay').classList.remove('active');
+                document.getElementById('btn-crosshair').classList.remove('active');
+            }
+            document.body.classList.add('stakeout-mode-active');
+
+            // Harita üzerindeki diğer tüm işaretçi ve geçici katmanları gizle; sadece konumumuz ve hedef nokta kalsın
+            for (let id in pointMarkers) {
+                if (map.hasLayer(pointMarkers[id])) map.removeLayer(pointMarkers[id]);
+            }
+            if (typeof tempQueryGroup !== 'undefined' && tempQueryGroup && map.hasLayer(tempQueryGroup)) {
+                map.removeLayer(tempQueryGroup);
+            }
+
+            if (stakeoutTargetMarker) { map.removeLayer(stakeoutTargetMarker); stakeoutTargetMarker = null; }
+            if (stakeoutTargetRing) { map.removeLayer(stakeoutTargetRing); stakeoutTargetRing = null; }
+
+            const targetIcon = L.divIcon({
+                className: 'stake-target-pin',
+                html: `<div style="position:relative; width:30px; height:30px; display:flex; align-items:center; justify-content:center;">
+                    <div style="position:absolute; inset:0; border-radius:50%; border:2px solid #00e5ff; background:rgba(0,229,255,0.18); box-shadow:0 0 16px rgba(0,229,255,0.75); animation:pulseGlow 1.6s infinite;"></div>
+                    <div style="width:10px; height:10px; border-radius:50%; background:#ffffff; border:2.5px solid #00e5ff; box-shadow:0 0 8px #00e5ff; z-index:2;"></div>
+                </div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            stakeoutTargetRing = L.circle([pt.lat, pt.lon], {
+                radius: 0.5,
+                color: '#10b981',
+                weight: 1.5,
+                dashArray: '4,4',
+                fillColor: '#10b981',
+                fillOpacity: 0.12
+            }).addTo(map);
+
+            stakeoutTargetMarker = L.marker([pt.lat, pt.lon], { icon: targetIcon })
+                .addTo(map)
+                .bindTooltip(`🎯 ${pt.name}`, {
+                    permanent: true,
+                    direction: 'top',
+                    offset: [0, -16],
+                    className: 'point-map-label'
+                });
+
             document.getElementById('stake-target-name').innerText = pt.name;
             document.getElementById('stakeout-panel').classList.add('show');
             syncFloatingUiState();
+            startLiveGpsTracking();
             enableCompassPermission(false);
             map.invalidateSize({ pan: false });
-            map.setView([pt.lat, pt.lon], 19);
+            focusStakeoutPair();
             updateStakeoutGuidance();
             if (lastStakeDistance !== null) triggerProximityFeedback(lastStakeDistance);
-            showToast(`"${pt.name}" noktası için aplikasyon başlatıldı`, "fa-bullseye");
+            showToast(`"${pt.name}" için canlı aplikasyon başlatıldı`, "fa-bullseye");
+        }
+
+        function focusStakeoutPair() {
+            if (!stakeoutTarget) return;
+            map.invalidateSize({ pan: false });
+            if (currentLat !== null && currentLon !== null) {
+                const bounds = L.latLngBounds(
+                    [currentLat, currentLon],
+                    [stakeoutTarget.lat, stakeoutTarget.lon]
+                );
+                if (bounds.isValid() && map.distance([currentLat, currentLon], [stakeoutTarget.lat, stakeoutTarget.lon]) > 2.5) {
+                    map.fitBounds(bounds, {
+                        paddingTopLeft: [50, 90],
+                        paddingBottomRight: [50, 260],
+                        maxZoom: 20,
+                        animate: true
+                    });
+                    return;
+                }
+            }
+            map.setView([stakeoutTarget.lat, stakeoutTarget.lon], 19, { animate: true });
         }
 
         function stopStakeout() {
@@ -2757,7 +3140,16 @@
             lastStakeDistance = null;
             if (stakeBeepTimer) { clearTimeout(stakeBeepTimer); stakeBeepTimer = null; }
             if (stakeoutLine) { map.removeLayer(stakeoutLine); stakeoutLine = null; }
+            if (stakeoutTargetMarker) { map.removeLayer(stakeoutTargetMarker); stakeoutTargetMarker = null; }
+            if (stakeoutTargetRing) { map.removeLayer(stakeoutTargetRing); stakeoutTargetRing = null; }
+            document.body.classList.remove('stakeout-mode-active');
             document.getElementById('stakeout-panel').classList.remove('show', 'arrived');
+
+            // Proje noktalarını ve varsa geçici sorgu katmanını geri yükle
+            renderActiveProjectMarkers();
+            if (typeof tempQueryGroup !== 'undefined' && tempQueryGroup && typeof tempQueryLayerCount !== 'undefined' && tempQueryLayerCount > 0 && !map.hasLayer(tempQueryGroup)) {
+                tempQueryGroup.addTo(map);
+            }
             syncFloatingUiState();
             showToast("Aplikasyon modu sonlandırıldı", "fa-check");
         }
@@ -2791,6 +3183,11 @@
             let refLat = currentLat !== null ? currentLat : getExactCrosshairLatLng().lat;
             let refLon = currentLon !== null ? currentLon : getExactCrosshairLatLng().lng;
 
+            const accEl = document.getElementById('stake-gps-acc');
+            if (accEl) {
+                accEl.innerText = currentAcc !== null ? `GPS ±${currentAcc}m` : `GPS Bekleniyor`;
+            }
+
             const userProj = calculateProjected(refLat, refLon);
             const targetProj = calculateProjected(stakeoutTarget.lat, stakeoutTarget.lon);
 
@@ -2806,15 +3203,38 @@
             if (stakeoutLine) {
                 stakeoutLine.setLatLngs(lineCoords);
             } else {
-                stakeoutLine = L.polyline(lineCoords, { color: '#00e5ff', weight: 3, dashArray: '8, 8' }).addTo(map);
+                stakeoutLine = L.polyline(lineCoords, { color: '#00e5ff', weight: 3.5, opacity: 0.92, dashArray: '8, 8' }).addTo(map);
             }
 
-            document.getElementById('stake-dist').innerText = dist < 10 ? `${dist.toFixed(2)}m (${Math.round(dist*100)}cm)` : `${dist.toFixed(2)} m`;
+            document.getElementById('stake-dist').innerText = dist < 10 ? `${dist.toFixed(2)}m (${Math.round(dist * 100)}cm)` : `${dist.toFixed(2)} m`;
             document.getElementById('stake-bearing').innerText = `${Math.round(bearing)}°`;
-            document.getElementById('stake-dy-label').innerText = dY >= 0 ? "Doğu (+Y):" : "Batı (-Y):";
-            document.getElementById('stake-dy').innerText = `${Math.abs(dY).toFixed(2)} m`;
-            document.getElementById('stake-dx-label').innerText = dX >= 0 ? "Kuzey (+X):" : "Güney (-X):";
-            document.getElementById('stake-dx').innerText = `${Math.abs(dX).toFixed(2)} m`;
+
+            let activeHeading = compassHeading !== null ? compassHeading : currentHeading;
+            const compassRingEl = document.getElementById('stake-compass-ring');
+            const headingValEl = document.getElementById('stake-heading-val');
+
+            if (activeHeading !== null && !isNaN(activeHeading)) {
+                if (compassRingEl) compassRingEl.style.transform = `rotate(${-activeHeading}deg)`;
+                if (headingValEl) headingValEl.innerText = `${Math.round(activeHeading)}°`;
+
+                let diffDeg = (bearing - activeHeading + 540) % 360 - 180;
+                let diffRad = diffDeg * (Math.PI / 180);
+                let forwardDist = dist * Math.cos(diffRad);
+                let rightDist = dist * Math.sin(diffRad);
+
+                document.getElementById('stake-dx-label').innerText = forwardDist >= 0 ? "İleri:" : "Geri:";
+                document.getElementById('stake-dx').innerText = `${Math.abs(forwardDist).toFixed(2)} m`;
+                document.getElementById('stake-dy-label').innerText = rightDist >= 0 ? "Sağ:" : "Sol:";
+                document.getElementById('stake-dy').innerText = `${Math.abs(rightDist).toFixed(2)} m`;
+            } else {
+                if (compassRingEl) compassRingEl.style.transform = `rotate(0deg)`;
+                if (headingValEl) headingValEl.innerText = `---°`;
+
+                document.getElementById('stake-dx-label').innerText = dX >= 0 ? "Kuzey (+X):" : "Güney (-X):";
+                document.getElementById('stake-dx').innerText = `${Math.abs(dX).toFixed(2)} m`;
+                document.getElementById('stake-dy-label').innerText = dY >= 0 ? "Doğu (+Y):" : "Batı (-Y):";
+                document.getElementById('stake-dy').innerText = `${Math.abs(dY).toFixed(2)} m`;
+            }
 
             const panelEl = document.getElementById('stakeout-panel');
             const cmdEl = document.getElementById('stake-command-text');
@@ -2830,31 +3250,28 @@
                 panelEl.classList.remove('arrived');
             }
 
-            let activeHeading = compassHeading !== null ? compassHeading : currentHeading;
             if (activeHeading !== null && !isNaN(activeHeading)) {
-                document.getElementById('radar-top-label').innerText = "İLERİ";
                 let diff = (bearing - activeHeading + 540) % 360 - 180;
                 arrowEl.style.transform = `rotate(${diff - 45}deg)`;
 
                 let stepDistText = dist < 5 ? `${(dist * 100).toFixed(0)} cm` : `${dist.toFixed(1)} m`;
-                if (Math.abs(diff) <= 15) {
-                    cmdEl.innerText = `⬆️ DÜZ İLERİ GİT (${stepDistText})`;
-                } else if (diff > 15 && diff <= 55) {
-                    cmdEl.innerText = `↗️ HAFİF SAĞA İLERLE (${stepDistText})`;
-                } else if (diff > 55 && diff <= 125) {
-                    cmdEl.innerText = `➡️ SAĞA DÖN VE GİT (${Math.round(diff)}°)`;
-                } else if (diff < -15 && diff >= -55) {
-                    cmdEl.innerText = `↖️ HAFİF SOLA İLERLE (${stepDistText})`;
-                } else if (diff < -55 && diff >= -125) {
-                    cmdEl.innerText = `⬅️ SOLA DÖN VE GİT (${Math.round(Math.abs(diff))}°)`;
+                if (Math.abs(diff) <= 12) {
+                    cmdEl.innerText = `⬆️ DÜZ İLERİ YÜRÜ (${stepDistText})`;
+                } else if (diff > 12 && diff <= 55) {
+                    cmdEl.innerText = `↗️ ${Math.round(diff)}° SAĞA DÖN • ${stepDistText}`;
+                } else if (diff > 55 && diff <= 130) {
+                    cmdEl.innerText = `➡️ SAĞA DÖN (${Math.round(diff)}°) • ${stepDistText}`;
+                } else if (diff < -12 && diff >= -55) {
+                    cmdEl.innerText = `↖️ ${Math.round(Math.abs(diff))}° SOLA DÖN • ${stepDistText}`;
+                } else if (diff < -55 && diff >= -130) {
+                    cmdEl.innerText = `⬅️ SOLA DÖN (${Math.round(Math.abs(diff))}°) • ${stepDistText}`;
                 } else {
-                    cmdEl.innerText = `↩️ GERİ DÖN (HEDEF ARKANIZDA)`;
+                    cmdEl.innerText = `↩️ ARKANA DÖN (${Math.round(Math.abs(diff))}°) • ${stepDistText}`;
                 }
             } else {
-                document.getElementById('radar-top-label').innerText = "KUZEY";
                 arrowEl.style.transform = `rotate(${bearing - 45}deg)`;
-                let nsDir = dX >= 0 ? `KUZEYE ${Math.abs(dX).toFixed(1)}m` : `GÜNEYE ${Math.abs(dX).toFixed(1)}m`;
-                let ewDir = dY >= 0 ? `DOĞUYA ${Math.abs(dY).toFixed(1)}m` : `BATIYA ${Math.abs(dY).toFixed(1)}m`;
+                let nsDir = dX >= 0 ? `Kuzey ${Math.abs(dX).toFixed(1)}m` : `Güney ${Math.abs(dX).toFixed(1)}m`;
+                let ewDir = dY >= 0 ? `Doğu ${Math.abs(dY).toFixed(1)}m` : `Batı ${Math.abs(dY).toFixed(1)}m`;
                 cmdEl.innerText = `🧭 ${nsDir} • ${ewDir}`;
             }
 
@@ -4624,6 +5041,7 @@
             for (let id in pointMarkers) { map.removeLayer(pointMarkers[id]); }
             pointMarkers = {};
             if (!projectsData[activeProject]) return;
+            if (stakeoutTarget) return; // Aplikasyon modundayken haritada sadece hedef nokta ve konumumuz gösterilir
 
             projectsData[activeProject].points.forEach(p => {
                 const proj = calculateProjected(p.lat, p.lon);
@@ -4955,7 +5373,7 @@
                 navigator.share({
                     files: [file],
                     title: fileName,
-                    text: 'GeoITRF Pro Jeodezik Ölçüm Verileri'
+                    text: 'AZİMUT Pro Jeodezik Ölçüm Verileri'
                 }).catch(() => {});
             } else {
                 let blob = new Blob([content], { type: mimeType });
@@ -5010,7 +5428,7 @@
                 let kml = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
     <Document>
-        <name>${activeProject} - GeoITRF Pro</name>${placemarks}
+        <name>${activeProject} - AZİMUT Pro</name>${placemarks}
     </Document>
 </kml>`;
                 downloadOrShareFile(kml, `${safeProj}.kml`, "application/vnd.google-earth.kml+xml");
@@ -5022,8 +5440,8 @@
                     const y = proj.y.toFixed(3);
                     const x = proj.x.toFixed(3);
                     const z = (p.alt || 0).toFixed(3);
-                    entities += `0\r\nPOINT\r\n8\r\nGEOITRF_NOKTA\r\n10\r\n${y}\r\n20\r\n${x}\r\n30\r\n${z}\r\n`;
-                    entities += `0\r\nTEXT\r\n8\r\nGEOITRF_YAZI\r\n10\r\n${(proj.y + 0.5).toFixed(3)}\r\n20\r\n${(proj.x + 0.5).toFixed(3)}\r\n30\r\n${z}\r\n40\r\n1.5\r\n1\r\n${p.name}\r\n`;
+                    entities += `0\r\nPOINT\r\n8\r\nAZIMUT_NOKTA\r\n10\r\n${y}\r\n20\r\n${x}\r\n30\r\n${z}\r\n`;
+                    entities += `0\r\nTEXT\r\n8\r\nAZIMUT_YAZI\r\n10\r\n${(proj.y + 0.5).toFixed(3)}\r\n20\r\n${(proj.x + 0.5).toFixed(3)}\r\n30\r\n${z}\r\n40\r\n1.5\r\n1\r\n${p.name}\r\n`;
                 });
                 let dxf = `0\r\nSECTION\r\n2\r\nENTITIES\r\n${entities}0\r\nENDSEC\r\n0\r\nEOF\r\n`;
                 downloadOrShareFile(dxf, `${safeProj}.dxf`);
@@ -5065,7 +5483,7 @@
         }
 
         function exportAllData() {
-            let txtContent = "GEOITRF PRO - TUM PROJELER YEDEGI\n=================================\n";
+            let txtContent = "AZIMUT PRO - TUM PROJELER YEDEGI\n=================================\n";
             for (let projName in projectsData) {
                 txtContent += `\nKLASOR: ${projName}\n`;
                 projectsData[projName].points.forEach(p => {
@@ -5073,12 +5491,12 @@
                     txtContent += `${p.name}\tY:${proj.y.toFixed(3)}\tX:${proj.x.toFixed(3)}\tZ:${(p.alt||0).toFixed(2)}\tE:${p.lat.toFixed(6)}\tB:${p.lon.toFixed(6)}\tKod:${p.category||'Nokta'}\n`;
                 });
             }
-            downloadOrShareFile(txtContent, "GeoITRF_Pro_TamYedek.txt");
+            downloadOrShareFile(txtContent, "Azimut_Pro_TamYedek.txt");
         }
 
         function exportJSONBackup() {
             const jsonStr = JSON.stringify(projectsData, null, 2);
-            downloadOrShareFile(jsonStr, "GeoITRF_Pro_SistemYedegi.json", "application/json");
+            downloadOrShareFile(jsonStr, "Azimut_Pro_SistemYedegi.json", "application/json");
         }
 
         // --- DOSYA İÇE AKTARMA (IMPORT: NCN, TXT, CSV, KML, GEOJSON) ---
@@ -5217,8 +5635,8 @@
             reader.readAsText(file);
         }
 
-        // --- v5: GÖRSEL İNTERAKTİF KULLANIM REHBERİ (TUTORIAL SİSTEMİ) ---
-        const TUTORIAL_STORAGE_KEY = 'geoitrf_pro_tutorial_seen_v5';
+        // --- v6: GÖRSEL İNTERAKTİF KULLANIM REHBERİ (TUTORIAL SİSTEMİ) ---
+        const TUTORIAL_STORAGE_KEY = 'azimut_pro_tutorial_seen_v6';
         let currentTutorialSlide = 0;
 
         const TUTORIAL_SLIDES = [
@@ -5357,8 +5775,8 @@
                     {
                         icon: "fa-bullseye",
                         cls: "",
-                        title: "Canlı Pusula Radarı ile Nokta Aplikasyonu",
-                        desc: "Noktaya tıklayıp 'Aplikasyon' butonuna bastığınızda telefonunuzun yön sensörü ile hedefe kalan mesafeyi (cm/m), Doğu/Kuzey farklarını ve sesli/titreşimli yönlendirmeyi görürsünüz."
+                        title: "Şeffaf Tam Ekran Pusula Radarı ile Aplikasyon",
+                        desc: "Noktaya tıklayıp 'Aplikasyon' butonuna bastığınızda tüm gereksiz butonlar gizlenir; haritada sadece konumunuz ve hedef nokta kalır. Canlı pusula sensörü ile İleri/Sağ yönlendirmesini ve kalan mesafeyi (cm/m) anlık takip edebilirsiniz."
                     },
                     {
                         icon: "fa-route",
@@ -5450,7 +5868,7 @@
                 renderTutorialSlide();
             } else {
                 closeTutorialModal();
-                showToast("GeoITRF Pro v5 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
+                showToast("AZİMUT Pro v7 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
             }
         }
 

@@ -1,11 +1,12 @@
-const CACHE_NAME = 'geoitrf-pro-v5.0';
-const TILE_CACHE_NAME = 'geoitrf-tiles-v2.1';
+const CACHE_NAME = 'azimut-pro-v7.0';
+const TILE_CACHE_NAME = 'azimut-tiles-v7.0';
 
 const APP_ASSETS = [
     './',
     './index.html',
     './manifest.json',
-    './logo.png',
+    './icon.png',
+    './logo.jpeg',
     'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
@@ -37,6 +38,11 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
     const reqUrl = event.request.url;
+
+    // Video / Range isteklerini doğrudan tarayıcı akışına bırak (iOS Safari ve Chrome MP4 uyumluluğu)
+    if (event.request.headers.get('range') || reqUrl.endsWith('.mp4')) {
+        return;
+    }
 
     // Harita karoları (Map Tiles) ve TKGM WMS için önbellekleme (Offline Arazi Desteği)
     if (
