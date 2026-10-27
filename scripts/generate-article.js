@@ -15,12 +15,81 @@ const db = admin.firestore();
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // ============================================================================
+// GERÇEK HD STOK FOTOĞRAF HAVUZU (UNSPLASH CDN - %100 ÇALIŞIR, LİMİTSİZDİR)
+// Konuya göre otomatik eşleşen yüksek çözünürlüklü mühendislik fotoğrafları
+// ============================================================================
+const REAL_STOCK_PHOTOS = {
+    // Harita, Ölçüm, Jeodezi ve Aplikasyon
+    surveying: [
+        "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80"
+    ],
+    // Şantiye, İnşaat, Yol ve Altyapı
+    construction: [
+        "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    // Kadastro, Arsa, Tarla, Uydu ve Harita
+    land: [
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80"
+    ],
+    // Orman, Tarım, Çevre ve Dağlık Arazi
+    forestry: [
+        "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    // GES (Güneş Enerjisi), Elektrik, RES ve Enerji Hatları
+    energy: [
+        "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80"
+    ],
+    // CAD, Yazılım, Dijital Harita ve Mühendislik Ofisi
+    cad_gis: [
+        "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80"
+    ]
+};
+
+// ============================================================================
 // BÖLÜM 1: 300 ADET ÖZEL NİŞ HARİTA, MÜHENDİSLİK, CBS VE ARAZİ KONU HAVUZU
 // ============================================================================
 const STATIC_TOPICS = [
     // --- 1. JEODEZİ, KOORDİNAT SİSTEMLERİ VE PROJEKSİYON (1-50) ---
     "Harita mühendisliğinde ITRF96 ve ED50 koordinat dönüşümlerinde DOM (Dilim Orta Meridyeni) seçimi",
-    "3 derecelik Гаuss-Krüger (TM) ile 6 derecelik UTM projeksiyon sistemleri arasındaki farklar ve saha uygulamaları",
+    "3 derecelik Gauss-Krüger (TM) ile 6 derecelik UTM projeksiyon sistemleri arasındaki farklar ve saha uygulamaları",
     "TUREF (Türkiye Ulusal Referans Çerçevesi) nedir ve mobil GPS ölçümlerinde nasıl kullanılır?",
     "WGS84 coğrafi (Enlem-Boylam) koordinatlarını ITRF96 Sağa ve Yukarı (Y, X) değerlerine dönüştürme",
     "Eski ED50 kadastro paftalarındaki koordinatları güncel ITRF96 sistemine hatasız çevirme yöntemleri",
@@ -49,7 +118,7 @@ const STATIC_TOPICS = [
     "Nivelman ağı ve RS (Röper Seviye) noktalarının sahada tespiti ve kot kontrolü",
     "Harita ölçekleri (1/1000, 1/5000, 1/25000) ve pafta bölümleme (indeks) sisteminin saha karşılığı",
     "1/1000 ölçekli uygulama imar planı paftalarının koordinat özet cetvellerini arazide okuma",
-    "Haritacılıkta গ্র (Grad) ve Derece açı birimleri arasındaki dönüşüm ve aplikasyon hesapları",
+    "Haritacılıkta Grad (Gon) ve Derece açı birimleri arasındaki dönüşüm ve aplikasyon hesapları",
     "Kutup koordinatlarıyla (açı ve mesafe) alınan detay noktalarının dik koordinatlara (Y, X) çevrilmesi",
     "Arazide görünmeyen noktalara dolaylı aplikasyon: İleriden ve geriden kestirme yöntemleri",
     "Yan nokta hesabı (Dik ayak ve dik boy) ile güzergah üzerindeki yapıların koordinatlandırılması",
@@ -70,10 +139,10 @@ const STATIC_TOPICS = [
     "Kuzey yarımkürede X (Yukarı) koordinatlarının ekvatora olan gerçek mesafeyi gösterme prensibi",
     "Mobil el terminalleriyle saha ön etüdü yapmanın şantiye zaman ve maliyet yönetimine katkısı",
 
-    // --- 2. SAHA APLİKASYONU (STAKEOUT) VE ŞANTİYE UYGULAMALARI (51-110) ---
+    // --- 2. SAHA APLİKASYONU (STAKEOUT) VE ŞANTİYE UYGULAMALARI (51-100) ---
     "Saha aplikasyonu (Stakeout) nedir? Cep telefonuyla adım adım nokta aplikasyonu rehberi",
     "İnşaat şantiyelerinde temel kazısı öncesi bina köşe kazıklarının (aplikasyon) çakılması",
-    "Harfiyat ve kazı sınırlarının (şev üstü ve şev altı) arazide kireç ve kazıkla işaretlenmesi",
+    "Hafriyat ve kazı sınırlarının (şev üstü ve şev altı) arazide kireç ve kazıkla işaretlenmesi",
     "Bina aks (kolon) noktalarının sahada kontrolü ve temel aplikasyon krokisi okuma",
     "İstinat duvarı projelerinde duvar eksen ve kırık noktalarının araziye aplike edilmesi",
     "Çelik konstrüksiyon ve prefabrik fabrika inşaatlarında ankraj (bulon) noktalarının saha kontrolü",
@@ -83,7 +152,7 @@ const STATIC_TOPICS = [
     "İçmesuyu isale hattı boru güzergahı kırık noktalarının ve vantuz/tahliye odalarının sahada bulunması",
     "Doğalgaz boru hattı projelerinde güzergah şeridi ve vana odası noktalarının araziye taşınması",
     "Zemin etüdü (jeoteknik) projelerinde sondaj kuyusu koordinatlarının sahada doğru yere aplike edilmesi",
-    "Geofizik (sismik ve elektrik özdirenç) ölçüm serim hatlarının arazide koordinatlı olarak belirlenmesi",
+    "Jeofizik (sismik ve elektrik özdirenç) ölçüm serim hatlarının arazide koordinatlı olarak belirlenmesi",
     "Şantiye sahasında geçici tesislerin (şantiye binası, beton santrali, stok alanı) vaziyet planından aplikasyonu",
     "Peyzaj mimarlığı projelerinde ağaç dikim noktaları, yürüyüş yolları ve süs havuzlarının aplikasyonu",
     "Spor kompleksi, futbol sahası ve atletizm pisti köşe/merkez koordinatlarının araziye uygulanması",
@@ -122,7 +191,7 @@ const STATIC_TOPICS = [
     "Boru hattı yatay sondaj (HDD) geçişlerinde giriş ve çıkış noktalarının arazide karşılıklı tespiti",
     "Saha aplikasyonunda yapılan en yaygın 10 mühendislik hatası ve bunlardan korunma yolları",
 
-    // --- 3. KADASTRO, TKGM PARSEL SORGULAMA VE GAYRİMENKUL (101-160) ---
+    // --- 3. KADASTRO, TKGM PARSEL SORGULAMA VE GAYRİMENKUL (101-150) ---
     "TKGM (Tapu ve Kadastro Genel Müdürlüğü) parsel sorgulama verileriyle arazide sınır tespiti nasıl yapılır?",
     "Yeni satın alınan arsa, tarla veya bahçenin sınır köşelerini cep telefonuyla arazide bulma rehberi",
     "Hisseli tarlalarda fiili kullanım (rızai taksim) sınırlarının uydu haritası üzerinde ölçülmesi ve paylaşımı",
@@ -174,7 +243,7 @@ const STATIC_TOPICS = [
     "Büyükşehir belediyeleri imar sorgulama ekranlarındaki koordinatların sahada telefonla bulunması",
     "Parsel köşe koordinatlarını bilmeyen vatandaşların uydu haritasından köşe yakalama (snap) yöntemiyle sınır bulması",
 
-    // --- 4. ORMAN, TARIM, ÇEVRE VE DOĞAL KAYNAKLAR MÜHENDİSLİĞİ (161-210) ---
+    // --- 4. ORMAN, TARIM, ÇEVRE VE DOĞAL KAYNAKLAR MÜHENDİSLİĞİ (151-200) ---
     "Orman mühendisliğinde ORÜS (Orman Sınır) taşlarının koordinatla dağlık arazide bulunması",
     "Orman kadastrosu 2/B ve 6831 sayılı kanun kapsamındaki sınır kırık noktalarının sahada aplikasyonu",
     "Ağaçlandırma ve erozyon kontrolü projelerinde teraslama ve fidan dikim aralıklarının aplikasyonu",
@@ -205,211 +274,19 @@ const STATIC_TOPICS = [
     "Arıcılık (gezginci arıcılık) konaklama noktalarının orman ve mera haritaları üzerinde planlanması",
     "Tıbbi ve aromatik bitki (lavanta, kekik, salep) toplama ve ekim alanlarının koordinatlı takibi",
     "Doğa yürüyüşü (trekking), dağcılık ve arama-kurtarma (AFAD/UMKE) operasyonlarında UTM koordinat okuma",
-
-    // --- 5. ELEKTRİK, ENERJİ, GES, RES VE TELEKOMÜNİKASYON (211-260) ---
-    "Güneş Enerjisi Santrali (GES) projelerinde panel sehpalarının (konstrüksiyon) sahada aplikasyonu",
-    "GES yatırımlarında marjinal tarım arazisi sınırlarının ve güney bakı yönünün sahada haritayla tespiti",
-    "GES şantiyelerinde inverter odaları, trafo merkezi ve kablo kanalı güzergahlarının araziye işaretlenmesi",
-    "Enerji Nakil Hattı (ENH) projelerinde direk merkez noktalarının (some ve durdurucu direkler) aplikasyonu",
-    "Yüksek gerilim (YG) ve orta gerilim (OG) hatlarında kamulaştırma (emniyet) şeridi genişliğinin sahada kontrolü",
-    "Elektrik dağıtım şebekelerinde aydınlatma direkleri ve saha dağıtım panolarının (box) koordinatlı alımı",
-    "Yeraltı enerji kablosu güzergahlarının kazı öncesi aplikasyonu ve kapatılmadan önce as-built kaydı",
-    "Rüzgar Enerjisi Santrali (RES) projelerinde türbin temel merkezlerinin ve vinç platform alanlarının aplikasyonu",
-    "RES şantiyelerinde geniş kanat taşıma yollarının kurp yarıçaplarının ve yol genişliklerinin saha kontrolü",
-    "Hidroelektrik Santral (HES) projelerinde regülatör yeri, iletim kanalı ve cebri boru ekseni aplikasyonu",
-    "Biyokütle ve biyogaz enerji tesislerinde hammadde depolama ve tesis sınırlarının vaziyet planından uygulanması",
-    "Fiber optik iletişim hatlarında güzergah etüdü, ek odası (menhol) noktalarının aplikasyonu ve CBS kaydı",
-    "Telekomünikasyon altyapısında abone bağlantı noktalarının ve saha dolaplarının koordinatlı envanteri",
-    "Elektrik direklerinde açı (some) sapmalarının pusula ve koordinat yardımıyla sahada kontrol edilmesi",
-    "Tarımsal sulama GES projelerinde güneş panelleri ile su kuyusu arasındaki kablo mesafesinin haritadan ölçümü",
-    "Katodik koruma tesislerinde anot yatağı ve ölçü kutusu noktalarının boru hattı boyunca aplikasyonu",
-    "Şehir içi trafo köşklerinin imar planındaki ayrılmış (trafo alanı) parsellerine tam oturtulması",
-    "Otoyol ve cadde aydınlatma projelerinde direkler arası eşit mesafe (30m - 40m) aplikasyonu",
-    "Enerji projelerinde orman geçiş izin sınırlarının ve kesilecek koridor genişliğinin sahada işaretlenmesi",
-    "Kaçak yapılaşmanın yüksek gerilim hatları altına (yaklaşma mesafesi içine) girip girmediğinin saha tespiti",
-
-    // --- 6. CAD, CBS (GIS), VERİ FORMATLARI VE DİJİTAL İŞ AKIŞI (261-300) ---
-    "NetCAD (.NCN) nokta dosyaları cep telefonunda nasıl açılır ve arazide aplikasyon için nasıl kullanılır?",
-    "AutoCAD (.DXF) çizim dosyalarındaki nokta ve poligonları mobil harita ekranına aktarma rehberi",
-    "Google Earth (.KML ve .KMZ) dosyalarını arazide canlı GPS konumuyla üst üste bindirerek gezme",
-    "GeoJSON formatı nedir? Web tabanlı CBS projelerini mobil saha terminallerinde görüntüleme",
-    "Excel (.CSV ve .TXT) formatındaki binlerce koordinat noktasını tek tıkla haritaya yükleme teknikleri",
-    "Arazide ölçülen noktaları ofisteki NetCAD ve AutoCAD yazılımlarına hatasız aktarma (Dışa Aktar)",
-    "Sahada yapılan ölçümlerden anında A4 boyutunda resmi PDF Koordinat ve Aplikasyon Raporu üretme",
-    "WhatsApp veya e-posta ile gelen konum/koordinat mesajlarını doğrudan harita aplikasyonuna dönüştürme",
-    "QR Kod ile şantiyede iki mühendis arasında internet olmadan proje ve koordinat dosyası paylaşımı",
-    "Bulut tabanlı (Cloud) proje senkronizasyonu: Arazide alınan noktanın aynı anda merkez ofiste görünmesi",
-    "Kurumsal harita ve inşaat firmalarında saha ekiplerinin görev ve nokta takibini tek merkezden yönetme",
-    "CAD programlarında farklı katmanlarda (Layer) bulunan verilerin sahada filtrelenerek kullanılması",
-    "Koordinat dosyalarında Türkçe karakter ve ondalık ayırıcı (nokta/virgül) hatalarının pratik çözümü",
-    "Harita üzerinde mesafe cetveli ve poligon alan ölçümü araçlarıyla sahada anlık metraj çıkarma",
-    "Uydu haritası altlıkları: Google Hybrid, Esri World Imagery ve OpenStreetMap katmanlarının saha farkları",
-    "Mobil tarayıcı (PWA) tabanlı jeodezik yazılımların uygulama marketi gerektirmeden her cihazda çalışma avantajı",
-    "Saha fotoğraflarının koordinatlı ve tarih damgalı olarak teknik raporlara entegre edilmesi",
-    "Büyük ölçekli altyapı projelerinde binlerce nokta arasından ada/isim aramasıyla hedef noktayı bulma",
-    "Geleneksel el GPS cihazları (Garmin, Magellan vb.) ile modern akıllı telefon tabanlı terminallerin karşılaştırması",
-    "AZİMUT Pro Jeodezik El Terminali ile saha mühendisliğinde dijital dönüşüm ve hız kazanımı"
-];
-
-// ============================================================================
-// BÖLÜM 2: 200 ADET DİNAMİK SEKTÖREL MATRİS KONUSU (20 Meslek x 10 Operasyon)
-// (300 Statik + 200 Matris = Tam 500 Eşsiz Konu Başlığı Oluşturur)
-// ============================================================================
-const ROLES = [
-    "Harita ve Kadastro Mühendisleri",
-    "İnşaat Mühendisleri ve Şantiye Şefleri",
-    "Orman Mühendisleri ve Muhafaza Memurları",
-    "Elektrik Mühendisleri ve GES Yatırımcıları",
-    "Mimarlar ve Peyzaj Mimarları",
-    "Şehir ve Bölge Plancıları",
-    "Ziraat Mühendisleri ve Büyük Çiftçiler",
-    "Jeoloji ve Jeofizik Mühendisleri",
-    "Maden Mühendisleri ve Ocak Yöneticileri",
-    "Çevre Mühendisleri ve ÇED Uzmanları",
-    "Gayrimenkul Değerleme (Ekspertiz) Uzmanları",
-    "Profesyonel Arsa ve Arazi Emlakçıları",
-    "Belediye Fen İşleri ve İmar Müdürlüğü Ekipleri",
-    "Belediye Numarataj ve Adres Tespiti Personeli",
-    "Karayolları, DSİ ve Altyapı Kontrol Mühendisleri",
-    "LİHKAB ve Serbest Harita Bürosu Teknikerleri",
-    "CBS (Coğrafi Bilgi Sistemleri) Uzmanları",
-    "Telekomünikasyon ve Fiber Altyapı Ekipleri",
-    "Arsa, Tarla ve Bahçe Satın Alan Yatırımcılar",
-    "Arkeologlar ve Saha Araştırma Ekipleri"
-];
-
-const OPERATIONS = [
-    "için cep telefonuyla ITRF96 ve ED50 koordinat dönüşümü ve sahada nokta bulma",
-    "için TKGM kadastro parsel sınırlarını uydu haritası üzerinde canlı görüntüleme ve gezme",
-    "için sesli ve pusulalı Stakeout (Canlı Aplikasyon) radarıyla arazide hedef noktaya sıfırlama",
-    "için NetCAD (.NCN), KML ve Excel koordinat dosyalarını sahada telefonda açma ve yönetme",
-    "için arazide Hassas Epok Ortalaması (RMS) alarak GPS ölçüm doğruluğunu maksimuma çıkarma",
-    "için sahada yürüyerek veya harita üzerinden anlık alan (m² / dekar) ve mesafe metrajı hesaplama",
-    "için arazi çalışmalarını tek tıkla resmi A4 PDF Koordinat Raporuna dönüştürme",
-    "için dilim orta meridyeni (DOM) hatalarını önleyerek doğru projeksiyonda saha ölçümü yapma",
-    "için internetin zayıf olduğu kırsal sahalarda mobil el terminaliyle kesintisiz koordinat aplikasyonu",
-    "için ofis ile saha arasında bulut senkronizasyonu ve QR kodla hızlı proje/nokta paylaşımı"
-];
-
-// Matrisi birleştirerek 200 ek konu üret ve toplam 500 konuluk dev havuzu oluştur
-const DYNAMIC_TOPICS = [];
-for (const role of ROLES) {
-    for (const op of OPERATIONS) {
-        DYNAMIC_TOPICS.push(`${role} ${op}`);
-    }
-}
-
-// TOPLAM 500 KONULUK ANA HAVUZ
-const TOPIC_POOL = [...STATIC_TOPICS, ...DYNAMIC_TOPICS];
-
-async function runAutoBlogger() {
-    try {
-        console.log(`📚 Toplam Konu Havuzu Kapasitesi: ${TOPIC_POOL.length} benzersiz konu.`);
-
-        // 1. Daha önce yazılmış makalelerin konuları ile çakışmaması için Firestore'u kontrol et
-        const snapshot = await db.collection('azimut_articles').select('sourceTopic', 'title').get();
-        const usedTopics = new Set();
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.sourceTopic) usedTopics.add(data.sourceTopic);
-        });
-
-        // Henüz hiç yazılmamış konuları filtrele
-        let availableTopics = TOPIC_POOL.filter(t => !usedTopics.has(t));
-        
-        // Eğer 500 konunun tamamı bittiyse havuzu sıfırla ve baştan başla
-        if (availableTopics.length === 0) {
-            console.log("♻️ 500 konunun tamamı yazıldı! Havuz yeni açılarla sıfırlanıyor...");
-            availableTopics = TOPIC_POOL;
-        }
-
-        // Havuzdan rastgele bir konu seç
-        const selectedTopic = availableTopics[Math.floor(Math.random() * availableTopics.length)];
-        console.log(`🎯 Seçilen Konu (${availableTopics.length} kalan içinden):`, selectedTopic);
-
-        // 2. Gemini API Komutu
-        const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve Saha Mühendisisin. Aynı zamanda AZİMUT Pro (https://buraktonoz.com/azimut/) jeodezik mobil el terminalinin baş teknik yazarısın.
-
-GÖREVİN: Sadece aşağıda verilen "SEÇİLEN KONU" üzerine Google aramalarında 1. sıraya çıkacak, son derece kapsamlı (en az 700-900 kelime), teknik açıdan doyurucu, akıcı ve tamamen özgün bir Türkçe SEO makalesi yazmak.
-
-SEÇİLEN KONU: "${selectedTopic}"
-
-YAZIM KURALLARI:
-1. Başlık (title): Seçilen konuyu tam yansıtan, Google'da tıklanma oranı yüksek, çarpıcı ve özgün bir başlık olsun. Asla daha önceki genel başlıkları tekrar etme.
-2. İçerik Yapısı (content): 
-   - Doğrudan konunun sahadaki gerçek problemini anlatan güçlü bir giriş paragrafı (<p>) ile başla.
-   - En az 4 adet <h2> alt başlığı ve gerekli yerlerde <h3> alt başlıkları kullan.
-   - Madde işaretli listeler (<ul><li>), numaralı adımlar (<ol><li>) ve önemli terimlerde kalın (<b>) etiketler kullan.
-   - Konunun teknik detaylarını (koordinat sistemleri, saha zorlukları, dikkat edilmesi gereken mühendislik kuralları vb.) derinlemesine açıkla.
-   - Makalenin bir bölümünde, bu işlemin <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> kullanılarak cep telefonundan sahada adım adım nasıl pratik, hızlı ve ücretsiz çözüldüğünü doğal bir dille anlat.
-3. Kategori (category): Sadece şu 4 değerden en uygun olan BİRİNİ seç: "Jeodezi & Projeksiyon", "Saha Aplikasyonu", "Kadastro & TKGM", "CAD & Yazılım".
-4. Yanıtı SADECE geçerli bir JSON objesi olarak ver. Markdown kod bloğu dışına hiçbir açıklama yazma.
-
-İSTENEN JSON FORMATI:
-{
-  "title": "Özgün ve Çarpıcı Makale Başlığı",
-  "category": "Saha Aplikasyonu",
-  "summary": "Google arama sonuçlarında görünecek 150-160 karakterlik merak uyandırıcı SEO meta açıklaması.",
-  "keywords": "konuyla ilgili 8-10 adet virgülle ayrılmış SEO anahtar kelimesi, Azimut Pro",
-  "content": "<p>Giriş...</p><h2>1. Alt Başlık</h2><p>Detaylar...</p>"
-}`;
-
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: prompt,
-            config: {
-                temperature: 0.85,
-                responseMimeType: "application/json"
-            }
-        });
-
-        let rawText = response.text.trim();
-        rawText = rawText.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
-        const articleData = JSON.parse(rawText);
-
-        // SEO uyumlu URL (Slug) oluşturma + Benzersiz kısa kod (aynı başlık gelse bile üzerine yazmaz)
-        const baseSlug = articleData.title
-            .toLowerCase()
-            .replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u')
-            .replace(/[^a-z0-9\s-]/g, '')
-            .trim()
-            .replace(/\s+/g, '-')
-            .substring(0, 75);
-
-        const uniqueSuffix = Date.now().toString(36).slice(-4);
-        const slug = `${baseSlug}-${uniqueSuffix}`;
-
-        // Okuma süresi hesabı
-        const wordCount = articleData.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
-        const readMins = Math.max(3, Math.ceil(wordCount / 180));
-
-        // Kendi gerçek uygulama ekran görüntülerinden (ek1.png - ek7.png) rastgele seç
-        const randomRealImage = `ek${Math.floor(Math.random() * 7) + 1}.png`;
-
-        const newArticle = {
-            id: slug,
-            slug: slug,
-            sourceTopic: selectedTopic, // Bir daha aynı konuyu seçmemesi için kaydediyoruz
-            title: articleData.title,
-            category: articleData.category || "Saha Aplikasyonu",
-            image: randomRealImage,
-            date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
-            readTime: `${readMins} dk okuma`,
-            author: "Burak Tonoz",
-            authorEmail: "buraktonoz@gmail.com",
-            summary: articleData.summary,
-            keywords: articleData.keywords,
-            content: articleData.content,
-            timestamp: Date.now()
-        };
-
-        await db.collection('azimut_articles').doc(slug).set(newArticle);
-        console.log(`✅ Yepyeni Makale Başarıyla Kaydedildi: [${articleData.category}] ${articleData.title}`);
-
-    } catch (error) {
-        console.error("❌ Makale üretilirken hata oluştu:", error);
-        process.exit(1);
-    }
-}
-
-runAutoBlogger();
+    "Milli parklar ve korunan alanlarda yürüyüş rotalarının (iz) GPS ile kaydedilmesi ve tabela aplikasyonu",
+    "Toprak koruma projelerinde taş kordon ve canlı çit hatlarının eğime paralel aplikasyonu",
+    "Kavakçılık ve endüstriyel ağaçlandırma sahalarında karelaj (grid) yöntemiyle fidan yeri belirleme",
+    "Orman depoları (tomruk ve emval istif alanları) sınırlarının ve ulaşım yollarının koordinatlandırılması",
+    "Mera ıslahında hayvan içmesuyu sıvat (çeşme) yerlerinin ve gölgeliklerin koordinatla aplikasyonu",
+    "Tarımsal arazi toplulaştırma projelerinde yeni tarla içi yolların ve tahliye kanallarının saha kontrolü",
+    "Bağcılıkta (üzüm bağları) güneye bakı ve sıra yönü açısının pusula ve GPS ile araziye uygulanması",
+    "Zeytinlik alanlarda ağaç başı koordinat envanteri (CBS tabanlı ağaç kayıt sistemi) oluşturma",
+    "Jeolojik saha haritalamasında tabaka doğrultu ve eğim (strike and dip) ölçüm noktalarının GPS kaydı",
+    "Maden arama (mostra ve yarma) noktalarının saha haritasına işlenmesi ve numune lokasyon takibi",
+    "Kıyı erozyonu ve plaj değişimlerinin farklı tarihlerdeki GPS kıyı çizgisi ölçümleriyle izlenmesi",
+    "Sulak alanlar ve sazlık bölgelerde tampon koruma bölgesi sınırlarının arazide tespiti",
+    "Rüzgar erozyonu sahalarında rüzgar kıran (ağaç perdesi) şeritlerinin hakim rüzgar yönüne dik aplikasyonu",
+    "Organik tarım sertifikasyonu için komşu konvansiyonel tarlalardan bırakılacak izolasyon mesafesi kontrolü",
+    "Tohumluk üretim parsellerinde yabancı tozlaşmayı önlemek için tarlalar arası mesafe (izolasyon) ölçümü",
+    "Kırsal kalkınma (
