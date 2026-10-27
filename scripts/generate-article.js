@@ -16,9 +16,8 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function runAutoBlogger() {
     try {
-        console.log("🤖 Gemini API ile hedef kitleye özel makale üretimi başlıyor...");
+        console.log("🤖 Gemini API ile hedefe özel ve GÖRSELLİ makale üretimi başlıyor...");
 
-        // Yapay zekaya her seferinde farklı bir sektör seçmesi için havuz veriyoruz
         const prompt = `Sen 20 yıllık kıdemli bir mühendissin ve AZİMUT Pro (buraktonoz.com/azimut) jeodezik uygulamasının teknik yazarısın. 
         Aşağıdaki hedef kitlelerden ve konulardan RASTGELE BİRİNİ seç ve Google'da 1 numaraya çıkacak, SEO uyumlu, H2/H3 başlıkları içeren, güncel ve son derece faydalı bir makale yaz:
         
@@ -29,9 +28,8 @@ async function runAutoBlogger() {
         4. Topoğraflar ve Saha Teknikerleri (Konu: KML dosyalarını sahada açma, telefondan stakeout radarı kullanımı)
         5. Arsa/Tarla Sahipleri & Vatandaşlar (Konu: "Aldığım arsanın sınırlarını tapu kadastro verisiyle telefondan nasıl bulurum?", TKGM parsel sorgulama)
 
-        Kural 1: Seçtiğin kitleye uygun teknik veya anlaşılır bir dil kullan.
-        Kural 2: İçerikte mutlaka AZİMUT Pro'nun bu sorunu telefondan ücretsiz ve kolayca nasıl çözdüğünü anlat.
-        Kural 3: Her makale bir öncekinden tamamen farklı, özgün ve ilgi çekici bir başlığa sahip olsun.
+        Kural 1: Seçtiğin kitleye uygun teknik veya anlaşılır bir dil kullan ve AZİMUT Pro'nun çözümünü anlat.
+        Kural 2: Kapak görseli oluşturulması için "imagePrompt" alanına, makalenin konusunu anlatan İNGİLİZCE, detaylı ve gerçekçi bir fotoğraf tasviri yaz (Örn: "Professional land surveyor engineer using a GPS rover in a sunny field, realistic photography, 4k resolution").
         
         Cevabı SADECE saf JSON formatında ver:
         {
@@ -39,6 +37,7 @@ async function runAutoBlogger() {
           "category": "Jeodezi & Projeksiyon VEYA Saha Aplikasyonu VEYA Kadastro & TKGM VEYA CAD & Yazılım",
           "summary": "150 karakterlik çarpıcı SEO özeti",
           "keywords": "anahtar, kelimeler, virgülle, ayrılmış",
+          "imagePrompt": "İngilizce gerçekçi fotoğraf tasviri (prompt)",
           "content": "<p>Giriş paragrafı...</p><h2>1. Başlık</h2><p>İçerik...</p>"
         }`;
 
@@ -58,14 +57,19 @@ async function runAutoBlogger() {
 
         const wordCount = articleData.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
         const readMins = Math.max(2, Math.ceil(wordCount / 180));
-        const randomImg = `ek${Math.floor(Math.random() * 7) + 1}.png`;
+        
+        // YAPAY ZEKANIN TASVİRİYLE DİNAMİK RESİM LİNKİ OLUŞTURMA
+        const fallbackPrompt = "professional topographic land surveyor engineer with modern gps equipment, realistic, 4k";
+        const promptForImage = articleData.imagePrompt ? articleData.imagePrompt : fallbackPrompt;
+        const encodedImagePrompt = encodeURIComponent(promptForImage);
+        const dynamicImageUrl = `https://image.pollinations.ai/prompt/${encodedImagePrompt}?width=800&height=450&nologo=true`;
 
         const newArticle = {
             id: slug,
             slug: slug,
             title: articleData.title,
             category: articleData.category || "Saha Aplikasyonu",
-            image: randomImg,
+            image: dynamicImageUrl, // Artık ek1.png yerine bu özel görsel linki kaydedilecek!
             date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
             readTime: `${readMins} dk okuma`,
             author: "Azimut AI Asistanı",
@@ -77,7 +81,7 @@ async function runAutoBlogger() {
         };
 
         await db.collection('azimut_articles').doc(slug).set(newArticle);
-        console.log(`✅ Makale başarıyla Firebase'e kaydedildi: ${articleData.title}`);
+        console.log(`✅ Makale ve özel kapak görseli başarıyla Firebase'e kaydedildi: ${articleData.title}`);
 
     } catch (error) {
         console.error("❌ Makale üretilirken hata oluştu:", error);
