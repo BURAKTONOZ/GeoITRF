@@ -1,5 +1,5 @@
-const CACHE_NAME = 'azimut-pro-v9.0';
-const TILE_CACHE_NAME = 'azimut-tiles-v9.0';
+const CACHE_NAME = 'azimut-pro-v10.0';
+const TILE_CACHE_NAME = 'azimut-tiles-v10.0';
 
 const APP_ASSETS = [
     './',
@@ -75,19 +75,16 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Uygulama dosyaları: Önce Ağ, hata durumunda Önbellek (Stale-While-Revalidate)
+    // Uygulama dosyaları: Önce Ağ (Network-First), çevrimdışı durumunda Önbellek
     event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            const networkFetch = fetch(event.request)
-                .then((response) => {
-                    if (response && response.status === 200 && event.request.method === 'GET') {
-                        const clone = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-                    }
-                    return response;
-                })
-                .catch(() => cachedResponse);
-            return cachedResponse || networkFetch;
-        })
+        fetch(event.request)
+            .then((response) => {
+                if (response && response.status === 200 && event.request.method === 'GET') {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+                }
+                return response;
+            })
+            .catch(() => caches.match(event.request))
     );
 });
