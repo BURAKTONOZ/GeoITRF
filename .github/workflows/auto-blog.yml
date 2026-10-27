@@ -1,0 +1,29 @@
+name: Günlük Otomatik SEO Makale Üretici
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # Her gün UTC saatiyle 06:00'da (Türkiye saatiyle sabah 09:00'da) çalışır
+  workflow_dispatch: # İstersen GitHub panelinden tek tıkla manuel de tetikleyebilirsin
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repoyu Kopyala (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Node.js Ortamını Kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Bağımlılıkları Yükle
+        run: npm install @google/genai firebase-admin
+
+      - name: Gemini ile Makaleyi Üret ve Yayınla
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+        run: node scripts/generate-article.js
