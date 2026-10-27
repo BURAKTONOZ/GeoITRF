@@ -1,4 +1,4 @@
-<!-- CREAT BY TONOZ | AZİMUT PRO v8.0 -->
+<!-- CREAT BY TONOZ | AZİMUT PRO v9.0 -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -939,20 +939,188 @@
         .epoch-bar-fill { width: 0%; height: 100%; background: var(--success); transition: width 0.2s; }
         .epoch-status-text { font-size: 0.68rem; color: var(--success); font-family: 'JetBrains Mono', monospace; text-align: center; }
 
-        /* KOMPAKT 6'LI DOCK (v8: Profil Yanında AZİMUT Ağı Sekmesi Eklendi) */
-        .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 12px); left: 50%; transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 16px); }
-        .ig-dock { display: flex; align-items: center; gap: 4px; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); border-radius: 40px; padding: 6px 9px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
-        .dock-item { position: relative; width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 21px; color: var(--text-muted); font-size: 1.02rem; transition: 0.2s; cursor: pointer; flex-shrink: 0; }
+        /* KOMPAKT 7'Lİ DOCK (v9: Sol Tarafa Sorgu Taşındı, Sağda AZİMUT Ağı ve Profil) */
+        .ig-dock-wrapper { position: fixed; bottom: calc(env(safe-area-inset-bottom) + 10px); left: 50%; transform: translateX(-50%); z-index: 1100; width: min(412px, calc(100vw - 14px)); }
+        .ig-dock { display: flex; align-items: center; justify-content: space-between; gap: 2px; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-light); border-radius: 40px; padding: 5px 8px; box-shadow: 0 15px 30px rgba(0,0,0,0.65); }
+        .dock-item { position: relative; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 20px; color: var(--text-muted); font-size: 0.98rem; transition: 0.2s; cursor: pointer; flex-shrink: 0; }
         .dock-item.active { background: rgba(0, 229, 255, 0.18); color: var(--accent); }
-        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.25rem; width: 46px; height: 46px; margin: 0 2px; box-shadow: 0 0 15px var(--accent-glow); }
+        .dock-item.main-add { background: var(--accent); color: #000; font-size: 1.2rem; width: 44px; height: 44px; margin: 0 2px; box-shadow: 0 0 15px var(--accent-glow); }
         .dock-item.main-add:active { transform: scale(0.92); }
         .dock-badge {
-            position: absolute; top: 3px; right: 2px;
-            min-width: 15px; height: 15px; padding: 0 4px;
+            position: absolute; top: 2px; right: 1px;
+            min-width: 15px; height: 15px; padding: 0 3.5px;
             border-radius: 10px; background: var(--success); color: #fff;
-            font-size: 0.54rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.52rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
             display: flex; align-items: center; justify-content: center;
             border: 1.5px solid var(--surface-solid);
+        }
+
+        /* v9: AKTİF / PASİF KULLANICI ROZETLERİ VE REFERANS SİSTEMİ */
+        .membership-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 9px; border-radius: 20px;
+            font-size: 0.62rem; font-weight: 800; letter-spacing: 0.5px;
+            text-transform: uppercase; font-family: 'JetBrains Mono', monospace;
+        }
+        .membership-badge.active-member {
+            background: rgba(16, 185, 129, 0.16);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.42);
+        }
+        .membership-badge.passive-member {
+            background: rgba(245, 158, 11, 0.18);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            animation: blinker 2.2s infinite;
+        }
+
+        /* Profildeki Referans Hakları ve Mail Kutuları */
+        .referral-box-card {
+            background: linear-gradient(145deg, rgba(0, 229, 255, 0.07), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(0, 229, 255, 0.32);
+            border-radius: 16px; padding: 14px;
+            display: flex; flex-direction: column; gap: 10px;
+            margin-bottom: 14px;
+        }
+        .referral-header-row {
+            display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+        .referral-quota-pill {
+            background: rgba(0, 229, 255, 0.16); border: 1px solid rgba(0, 229, 255, 0.4);
+            color: var(--accent); padding: 4px 10px; border-radius: 20px;
+            font-size: 0.68rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+        }
+        .referral-slots-list {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .referral-slot-row {
+            display: flex; align-items: center; gap: 7px;
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: 11px; padding: 7px 9px;
+        }
+        .referral-slot-row.locked {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+        .referral-slot-num {
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(0, 229, 255, 0.15); color: var(--accent);
+            font-size: 0.68rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .referral-slot-row.locked .referral-slot-num {
+            background: rgba(16, 185, 129, 0.22); color: var(--success);
+        }
+        .referral-slot-input {
+            flex: 1; min-width: 0;
+            background: var(--input-bg); color: var(--text-main);
+            border: 1px solid var(--border-light); border-radius: 8px;
+            padding: 8px 10px; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace;
+            outline: none;
+        }
+        .referral-slot-input:focus { border-color: var(--accent); }
+        .referral-slot-input:disabled {
+            background: transparent; border-color: transparent;
+            color: var(--success); font-weight: 700; opacity: 0.95;
+            cursor: not-allowed;
+        }
+        .btn-ref-save {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: #000; border: none; border-radius: 8px;
+            padding: 8px 11px; font-size: 0.72rem; font-weight: 800;
+            cursor: pointer; white-space: nowrap; flex-shrink: 0;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .ref-locked-tag {
+            font-size: 0.64rem; font-weight: 800; color: var(--success);
+            background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 5px 8px; border-radius: 8px; white-space: nowrap; flex-shrink: 0;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+
+        /* AZİMUT AĞI 3'LÜ SEKME ÇUBUĞU (AKTİFLER / REFERANS HAKKI OLANLAR / PASİFLER) */
+        .network-tabs-bar {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+            padding: 9px 14px; background: var(--surface-solid);
+            border-bottom: 1px solid var(--border-light); flex-shrink: 0;
+        }
+        .network-tab-btn {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            color: var(--text-muted); border-radius: 10px;
+            padding: 8px 5px; font-family: 'Inter', sans-serif;
+            font-size: 0.68rem; font-weight: 700; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+            transition: all 0.2s; text-align: center;
+        }
+        .network-tab-btn b {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--text-main);
+        }
+        .network-tab-btn.active {
+            background: rgba(0, 229, 255, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.18);
+        }
+        .network-tab-btn.active b { color: var(--accent); }
+        .network-tab-btn.passive-tab.active {
+            background: rgba(245, 158, 11, 0.16);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        .network-tab-btn.passive-tab.active b { color: var(--warning); }
+
+        .network-quota-tag {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 0.62rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            padding: 2px 7px; border-radius: 6px; margin-top: 2px; width: fit-content;
+        }
+        .network-quota-tag.has-rights {
+            background: rgba(16, 185, 129, 0.16); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.38);
+        }
+        .network-quota-tag.no-rights {
+            background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+        .network-quota-tag.passive-tag {
+            background: rgba(245, 158, 11, 0.16); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .network-section-divider {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 12px; margin: 12px 0 8px 0;
+            background: rgba(245, 158, 11, 0.10); border: 1px solid rgba(245, 158, 11, 0.32);
+            border-radius: 10px; font-size: 0.72rem; font-weight: 800; color: var(--warning);
+        }
+        .btn-grant-ref {
+            background: rgba(16, 185, 129, 0.18); color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 8px;
+            padding: 6px 9px; font-size: 0.68rem; font-weight: 800;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+            white-space: nowrap;
+        }
+        .btn-grant-ref:active { transform: scale(0.95); }
+
+        /* PASİF KULLANICI KISITLAMA / AKTİVASYON UYARI MODALI */
+        .passive-wall-overlay {
+            position: fixed; inset: 0; z-index: 9700;
+            background: rgba(2, 6, 16, 0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center;
+            padding: 18px;
+        }
+        .passive-wall-overlay.show { display: flex; }
+        .passive-wall-card {
+            width: 100%; max-width: 380px;
+            background: var(--surface-solid);
+            border: 1px solid rgba(245, 158, 11, 0.55);
+            border-radius: 22px; padding: 20px 18px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+            display: flex; flex-direction: column; gap: 12px;
+            text-align: center;
+        }
+        .passive-wall-icon {
+            width: 56px; height: 56px; border-radius: 50%; margin: 0 auto;
+            background: rgba(245, 158, 11, 0.16); border: 1.5px solid var(--warning);
+            color: var(--warning); font-size: 1.5rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
         }
 
         /* v8: SOL YAN PANEL PERSONEL KİMLİK KARTI, PROFİL DÜZENLEME VE AZİMUT AĞI */
@@ -1611,14 +1779,19 @@
         </div>
         <div class="drawer-body">
 
-            <!-- v8: GİRİŞ YAPAN PERSONEL KİMLİK KARTI VE HIZLI DÜZENLEME -->
+            <!-- v9: GİRİŞ YAPAN PERSONEL KİMLİK KARTI, ÜYELİK STATÜSÜ VE HIZLI DÜZENLEME -->
             <div class="drawer-section">
-                <h3>Giriş Yapan Personel</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h3 style="margin:0;">Giriş Yapan Personel</h3>
+                    <span class="membership-badge passive-member" id="drawer-membership-badge" onclick="handleMembershipBadgeClick()" style="cursor:pointer;">
+                        <i class="fas fa-clock"></i> PASİF
+                    </span>
+                </div>
                 <div class="drawer-personnel-card">
                     <div class="drawer-personnel-top">
                         <div class="drawer-avatar-wrap">
                             <img id="drawer-user-photo" src="icon.png" alt="Personel" referrerpolicy="no-referrer">
-                            <div class="drawer-online-dot" title="Çevrimiçi"></div>
+                            <div class="drawer-online-dot" id="drawer-online-dot" title="Çevrimiçi"></div>
                         </div>
                         <div class="drawer-personnel-info">
                             <div class="drawer-personnel-name" id="drawer-user-name">Giriş Bekleniyor</div>
@@ -1628,12 +1801,17 @@
                         </div>
                     </div>
 
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.32); border:1px solid var(--border-light); border-radius:10px; padding:6px 10px; font-size:0.7rem;">
+                        <span style="color:var(--text-muted); font-weight:600;"><i class="fas fa-user-check" style="color:var(--accent); margin-right:4px;"></i> Kalan Referans Hakkı:</span>
+                        <b id="drawer-referral-summary" style="color:var(--accent); font-family:'JetBrains Mono',monospace;">0 / 3</b>
+                    </div>
+
                     <div class="drawer-personnel-actions">
                         <button type="button" class="drawer-mini-btn accent" onclick="toggleDrawerProfileEdit()">
                             <i class="fas fa-user-edit"></i> Bilgileri Düzenle
                         </button>
-                        <button type="button" class="drawer-mini-btn" onclick="toggleDrawer(); switchTab('tab-network');">
-                            <i class="fas fa-users" style="color:var(--accent);"></i> AZİMUT Ağı
+                        <button type="button" class="drawer-mini-btn" onclick="toggleDrawer(); switchTab('tab-profile');">
+                            <i class="fas fa-user-plus" style="color:var(--success);"></i> Referans Ol
                         </button>
                     </div>
 
@@ -1800,9 +1978,8 @@
         <div class="crosshair-badge" id="crosshair-coords-badge">Nişangah Aktif</div>
     </div>
 
-    <!-- SOL KONTROLLER (HIZLI ARAÇLAR) -->
+    <!-- SOL KONTROLLER (HIZLI ARAÇLAR - v9: Sorgu Alt Menüye Taşındı) -->
     <div class="left-controls">
-        <button class="map-btn" id="btn-query-open" aria-label="Adres ve Parsel Sorgula" title="Adres / Parsel Sorgulama Ekranı" onclick="openQueryModal()"><i class="fas fa-search-location" style="color:var(--accent);"></i></button>
         <button class="map-btn" id="btn-crosshair-toggle" aria-label="Nişangah Modu" title="Harita Merkez Nişangahı" onclick="toggleCrosshairMode()"><i class="fas fa-crosshairs"></i></button>
         <button class="map-btn" id="btn-measure-toggle" aria-label="Alan ve Mesafe Ölç" title="Alan ve Mesafe Ölçümü" onclick="toggleMeasureTool()"><i class="fas fa-ruler-combined"></i></button>
         <button class="map-btn" id="btn-tkgm-quick" aria-label="TKGM Parselleri Göster/Kapat" title="TKGM Kadastro Parselleri Göster / Kapat" onclick="toggleTkgmParsels()"><i class="fas fa-border-all"></i></button>
@@ -2329,12 +2506,19 @@
             
             <!-- GİRİŞ YAPAN PERSONEL KİMLİK VE DÜZENLEME KARTI -->
             <div class="drawer-card" id="auth-logged-in" style="display: flex; flex-direction:column; gap:10px; margin-bottom:14px; border-color:rgba(0,229,255,0.35);">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                    <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Üyelik Durumu:</span>
+                    <span class="membership-badge passive-member" id="profile-membership-badge" onclick="handleMembershipBadgeClick()" style="cursor:pointer;">
+                        <i class="fas fa-clock"></i> PASİF KULLANICI
+                    </span>
+                </div>
                 <div style="display:flex; align-items:center; gap:12px;">
                     <img id="user-photo" src="icon.png" alt="Profil" referrerpolicy="no-referrer" style="width:58px; height:58px; border-radius:50%; border:2px solid var(--accent); object-fit:cover; flex-shrink:0;">
                     <div style="min-width:0; flex:1;">
                         <div id="user-name" style="font-weight:800; font-size:1rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
                         <div id="user-role-summary" style="font-size:0.76rem; color:var(--accent); font-weight:700; margin-top:1px;"></div>
                         <div id="user-email" style="font-size:0.72rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                        <div id="user-referred-by-info" style="font-size:0.65rem; color:var(--text-muted); margin-top:2px;"></div>
                         <div style="font-size:0.66rem; color:var(--success); margin-top:2px;"><i class="fas fa-cloud-upload-alt"></i> Son Senkronizasyon: <span id="last-sync-time">Şimdi</span></div>
                     </div>
                 </div>
@@ -2364,6 +2548,25 @@
                 <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Oturumu Kapat (Çıkış Yap)</button>
             </div>
 
+            <!-- v9: REFERANS HAKLARIM VE MESLEKTAŞ AKTİVASYON SÜTUNU (Dinamik Kotalı & Kaydedince Kilitlenen Yapı) -->
+            <div class="referral-box-card" id="profile-referral-card">
+                <div class="referral-header-row">
+                    <div>
+                        <h4 style="margin:0; font-size:0.88rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+                            <i class="fas fa-user-shield" style="color:var(--accent);"></i> Referans Haklarım
+                        </h4>
+                        <p style="margin:2px 0 0 0; font-size:0.7rem; color:var(--text-muted); line-height:1.35;">
+                            Referans olduğunuz Gmail adresleri sisteme <b>Aktif Kullanıcı</b> olarak dahil olur. Kaydedilen mail adresi kilitlenir ve değiştirilemez.
+                        </p>
+                    </div>
+                    <span class="referral-quota-pill" id="profile-referral-quota-pill">Kalan Hak: 0 / 3</span>
+                </div>
+
+                <div class="referral-slots-list" id="profile-referral-slots-list">
+                    <!-- JS ile kullanıcının referralQuota değerine göre (varsayılan 3, Firebase'den artırılırsa dinamik) oluşturulur -->
+                </div>
+            </div>
+
             <div class="drawer-card" style="gap:10px;">
                 <h4 style="margin:0; font-size:0.85rem; color:var(--text-main);">Veri Yedekleme & Geri Yükleme</h4>
                 <button class="pwa-install-btn" style="background:rgba(0, 229, 255, 0.14); color:var(--accent); border:1px solid rgba(0, 229, 255, 0.35);" onclick="exportAllData()">
@@ -2376,20 +2579,37 @@
         </div>
     </div>
 
-    <!-- v8: AZİMUT AĞI (CANLI KULLANICI & PERSONEL REHBERİ VE MAİL İLETİŞİM MODALI) -->
+    <!-- v9: AZİMUT AĞI (3 SEKMELİ CANLI KULLANICI, REFERANS HAKKI OLANLAR & PASİFLER REHBERİ) -->
     <div class="app-modal" id="modal-network">
         <div class="modal-header">
             <span class="modal-title"><i class="fas fa-users" style="color:var(--accent); margin-right:8px;"></i> AZİMUT Ağı</span>
             <i class="fas fa-times" style="color:var(--text-muted); font-size:1.35rem; cursor:pointer; padding:4px;" onclick="closeModals()"></i>
         </div>
         <div class="network-stats-banner">
-            <span><i class="fas fa-satellite-dish" style="color:var(--accent); margin-right:5px;"></i> Kayıtlı Mühendis & Personel Ağı</span>
+            <span><i class="fas fa-shield-alt" style="color:var(--accent); margin-right:5px;"></i> Referanslı Mühendis & Personel Ağı</span>
             <span class="network-live-pill"><span class="gps-dot connected" style="width:6px; height:6px;"></span> <span id="network-count-badge">0 Üye</span></span>
         </div>
+
+        <!-- 3 SEKMELİ AZİMUT AĞI FİLTRESİ -->
+        <div class="network-tabs-bar">
+            <button type="button" class="network-tab-btn active" id="net-tab-active" onclick="switchAzimutNetworkTab('ACTIVE')">
+                <span><i class="fas fa-check-circle"></i> Aktifler</span>
+                <b id="net-count-active">0</b>
+            </button>
+            <button type="button" class="network-tab-btn" id="net-tab-quota" onclick="switchAzimutNetworkTab('HAS_QUOTA')">
+                <span><i class="fas fa-gift"></i> Referans Hakkı Olanlar</span>
+                <b id="net-count-quota">0</b>
+            </button>
+            <button type="button" class="network-tab-btn passive-tab" id="net-tab-passive" onclick="switchAzimutNetworkTab('PASSIVE')">
+                <span><i class="fas fa-user-clock"></i> Pasifler</span>
+                <b id="net-count-passive">0</b>
+            </button>
+        </div>
+
         <div class="search-filter-bar">
             <input type="text" id="network-search-input" placeholder="Ad, ünvan, kurum/şirket veya e-posta ara..." oninput="renderAzimutNetworkList()">
             <button type="button" onclick="switchTab('tab-profile')" style="background:rgba(0,229,255,0.14); color:var(--accent); border:1px solid rgba(0,229,255,0.35); border-radius:10px; padding:0 11px; font-size:0.74rem; font-weight:700; cursor:pointer; white-space:nowrap;">
-                <i class="fas fa-user-edit"></i> Profilim
+                <i class="fas fa-user-plus"></i> Haklarım
             </button>
         </div>
         <div class="modal-body" id="network-users-list">
@@ -2432,9 +2652,10 @@
         </div>
     </div>
 
-    <!-- 6 BUTONLU DOCK MENÜ (v8: Profil Yanına AZİMUT Ağı Eklendi) -->
+    <!-- 7 BUTONLU DOCK MENÜ (v9: Sol Tarafa Sorgu Taşındı, Sağda AZİMUT Ağı ve Profil) -->
     <div class="ig-dock-wrapper">
         <div class="ig-dock">
+            <div class="dock-item" id="tab-query" aria-label="Sorgu Sekmesi" onclick="switchTab('tab-query')" title="TKGM Parsel & Adres Sorgulama"><i class="fas fa-search-location"></i></div>
             <div class="dock-item active" id="tab-map" aria-label="Harita Sekmesi" onclick="switchTab('tab-map')" title="Harita"><i class="fas fa-map"></i></div>
             <div class="dock-item" id="tab-layer" aria-label="Harita Katmanları ve TKGM Parsel" onclick="switchTab('tab-layer')" title="Harita Katmanları & TKGM Parsel"><i class="fas fa-layer-group"></i></div>
             <div class="dock-item main-add" id="tab-add" aria-label="Nokta Kaydet Sekmesi" onclick="switchTab('tab-add')" title="Nokta Ekle"><i class="fas fa-plus"></i></div>
@@ -2443,7 +2664,34 @@
                 <i class="fas fa-users"></i>
                 <span class="dock-badge" id="dock-network-badge" style="display:none;">0</span>
             </div>
-            <div class="dock-item" id="tab-profile" aria-label="Profil Sekmesi" onclick="switchTab('tab-profile')" title="Personel Profili & Bulut"><i class="fas fa-user"></i></div>
+            <div class="dock-item" id="tab-profile" aria-label="Profil Sekmesi" onclick="switchTab('tab-profile')" title="Personel Profili & Referans Hakları"><i class="fas fa-user"></i></div>
+        </div>
+    </div>
+
+    <!-- v9: PASİF KULLANICI UYARI & AKTİVASYON MODALI -->
+    <div class="passive-wall-overlay" id="passive-wall-overlay" onclick="if(event.target === this) closePassiveWallModal()">
+        <div class="passive-wall-card">
+            <div class="passive-wall-icon"><i class="fas fa-user-lock"></i></div>
+            <div style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:rgba(245,158,11,0.14); border:1px solid rgba(245,158,11,0.4); color:var(--warning); border-radius:20px; padding:4px 12px; font-size:0.68rem; font-weight:800; margin:0 auto;">
+                <i class="fas fa-exclamation-triangle"></i> PASİF KULLANICI HESABI
+            </div>
+            <h3 style="margin:0; font-size:1.04rem; font-weight:800; color:var(--text-main);" id="passive-wall-title">Bu Özellik Aktif Üyelik Gerektirir</h3>
+            <p style="margin:0; font-size:0.8rem; color:var(--text-muted); line-height:1.5;" id="passive-wall-desc">
+                Hesabınız şu anda <b>Pasif Kullanıcı</b> statüsündedir. <b>Parsel/Adres Sorgulama, TKGM Kadastro Parselleri, Nokta Kaydetme ve Mühendislik Araçlarını</b> kullanabilmek için lütfen <b>AZİMUT Ağı'ndan kendinize bir referans bulun</b> veya <b>aktivasyon ödemesi</b> yapın.
+            </p>
+            <div style="background:var(--input-bg); border:1px solid var(--border-light); border-radius:11px; padding:8px 10px; font-size:0.72rem; color:var(--text-muted); display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Gmail: <b id="passive-wall-email" style="color:var(--accent); font-family:'JetBrains Mono',monospace;">-</b></span>
+                <button type="button" class="btn-copy-mail" onclick="copyTextToClipboard(currentUserProfile.email || '', 'Gmail adresiniz kopyalandı')"><i class="fas fa-copy"></i> Kopyala</button>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:2px;">
+                <button type="button" class="pwa-install-btn" onclick="closePassiveWallModal(); switchTab('tab-network'); switchAzimutNetworkTab('HAS_QUOTA');">
+                    <i class="fas fa-gift"></i> Referans Hakkı Olanları Gör (AZİMUT Ağı)
+                </button>
+                <a id="passive-wall-pay-mail" href="mailto:buraktonoz@gmail.com?subject=AZ%C4%B0MUT%20Pro%20Hesap%20Aktivasyonu%20%2F%20%C3%96deme%20Talebi" class="pwa-install-btn" style="background:rgba(245,158,11,0.18); color:var(--warning); border:1px solid rgba(245,158,11,0.45); text-decoration:none;">
+                    <i class="fas fa-credit-card"></i> Ödeme / Aktivasyon İçin İletişime Geç
+                </a>
+                <button type="button" class="dialog-btn" onclick="closePassiveWallModal()">Kapat</button>
+            </div>
         </div>
     </div>
 
@@ -2667,9 +2915,11 @@
         function closeCoffeeToast() { document.getElementById('coffee-toast').classList.remove('show'); }
 
         // --- FIREBASE VE YEREL SENKRONİZASYON ---
-        // --- v8: FIREBASE ZORUNLU GMAIL GİRİŞİ, PERSONEL KİMLİK VERİTABANI VE CANLI AZİMUT AĞI ---
-        const PROFILE_CACHE_KEY = 'azimut_pro_user_profile_v8';
-        const NETWORK_CACHE_KEY = 'azimut_pro_network_cache_v8';
+        // --- v9: ZORUNLU GMAIL GİRİŞİ, REFERANS (3 HAK) AKTİF/PASİF ÜYELİK SİSTEMİ VE 3 SEKMELİ CANLI AZİMUT AĞI ---
+        const PROFILE_CACHE_KEY = 'azimut_pro_user_profile_v9';
+        const NETWORK_CACHE_KEY = 'azimut_pro_network_cache_v9';
+        const REFERRALS_CACHE_KEY = 'azimut_pro_referrals_cache_v9';
+        const DEFAULT_REFERRAL_QUOTA = 3;
 
         let currentUserProfile = {
             uid: '',
@@ -2678,12 +2928,75 @@
             photoURL: '',
             title: '',
             company: '',
+            isActive: false,
+            referralQuota: DEFAULT_REFERRAL_QUOTA,
+            referrals: [],
+            referredByEmail: '',
+            referredByName: '',
             updatedAt: 0
         };
         let azimutNetworkUsersMap = {};
+        let globalReferredEmailsMap = {}; // emailLower -> { referredByEmail, referredByName, referredByUid }
+        let currentNetworkTab = 'ACTIVE'; // 'ACTIVE' | 'HAS_QUOTA' | 'PASSIVE'
         let networkUnsubUsers = null;
         let networkUnsubDir = null;
+        let networkUnsubRefs = null;
+        let currentUserDocUnsub = null;
         let splashDismissed = false;
+
+        function normalizeEmail(email) {
+            return String(email || '').trim().toLowerCase();
+        }
+
+        function isFounderOrAdminEmail(email) {
+            const norm = normalizeEmail(email);
+            return norm.startsWith('buraktonoz');
+        }
+
+        function extractQuotaValue(docData, profData, fallbackQuota = DEFAULT_REFERRAL_QUOTA) {
+            const d = docData || {};
+            const p = profData || {};
+            // Yöneticinin Firebase konsolundan (ister ana dizinde ister profile altında) manuel olarak artırdığı tüm alan adlarını kontrol et
+            const candidates = [
+                d.referralQuota,
+                d.referansHakki,
+                d.referralRights,
+                d.hakSayisi,
+                p.referralQuota,
+                p.referansHakki,
+                p.referralRights,
+                p.hakSayisi
+            ];
+            const validNums = [];
+            for (const val of candidates) {
+                if (val !== undefined && val !== null && val !== '' && !isNaN(Number(val))) {
+                    validNums.push(Math.max(0, parseInt(Number(val), 10)));
+                }
+            }
+            if (validNums.length > 0) {
+                return Math.max(...validNums);
+            }
+            return fallbackQuota;
+        }
+
+        function sanitizeEmailArray(arr) {
+            if (!Array.isArray(arr)) return [];
+            const seen = new Set();
+            const out = [];
+            arr.forEach(item => {
+                const e = normalizeEmail(typeof item === 'string' ? item : (item?.email || ''));
+                if (e && e.includes('@') && !seen.has(e)) {
+                    seen.add(e);
+                    out.push(e);
+                }
+            });
+            return out;
+        }
+
+        function isCurrentUserActive() {
+            if (!auth.currentUser) return false;
+            return Boolean(currentUserProfile.isActive);
+        }
 
         function getInitialsAvatarDataUri(name) {
             const clean = String(name || 'AZ').trim();
@@ -2717,7 +3030,7 @@
 
         function loadCachedProfile(uid) {
             try {
-                const raw = localStorage.getItem(PROFILE_CACHE_KEY + '_' + uid);
+                const raw = localStorage.getItem(PROFILE_CACHE_KEY + '_' + uid) || localStorage.getItem('azimut_pro_user_profile_v8_' + uid);
                 if (raw) return JSON.parse(raw);
             } catch (e) {}
             return null;
@@ -2732,10 +3045,17 @@
 
         function loadCachedNetworkMap() {
             try {
-                const raw = localStorage.getItem(NETWORK_CACHE_KEY);
+                const raw = localStorage.getItem(NETWORK_CACHE_KEY) || localStorage.getItem('azimut_pro_network_cache_v8');
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (parsed && typeof parsed === 'object') azimutNetworkUsersMap = parsed;
+                }
+            } catch (e) {}
+            try {
+                const rawRef = localStorage.getItem(REFERRALS_CACHE_KEY);
+                if (rawRef) {
+                    const parsedRef = JSON.parse(rawRef);
+                    if (parsedRef && typeof parsedRef === 'object') globalReferredEmailsMap = parsedRef;
                 }
             } catch (e) {}
         }
@@ -2743,9 +3063,110 @@
         function saveCachedNetworkMap() {
             try {
                 localStorage.setItem(NETWORK_CACHE_KEY, JSON.stringify(azimutNetworkUsersMap));
+                localStorage.setItem(REFERRALS_CACHE_KEY, JSON.stringify(globalReferredEmailsMap));
             } catch (e) {}
         }
         loadCachedNetworkMap();
+
+        // Tüm ağdaki kullanıcıların referans listelerini tarayarak kimin aktif kimin pasif olduğunu canlı hesaplar
+        function recomputeGlobalReferralActivation() {
+            const refLookup = { ...globalReferredEmailsMap };
+
+            // Ağdaki tüm kullanıcıların referrals dizilerini tara
+            Object.values(azimutNetworkUsersMap).forEach(u => {
+                if (!u) return;
+                const refs = sanitizeEmailArray(u.referrals);
+                refs.forEach(refMail => {
+                    if (!refLookup[refMail]) {
+                        refLookup[refMail] = {
+                            referredByUid: u.uid || '',
+                            referredByEmail: u.email || '',
+                            referredByName: u.fullName || u.email || 'AZİMUT Üyesi'
+                        };
+                    }
+                });
+            });
+
+            // Kendi profilimizdeki referansları da dahil et
+            if (currentUserProfile && currentUserProfile.email) {
+                sanitizeEmailArray(currentUserProfile.referrals).forEach(refMail => {
+                    if (!refLookup[refMail]) {
+                        refLookup[refMail] = {
+                            referredByUid: currentUserProfile.uid || '',
+                            referredByEmail: currentUserProfile.email || '',
+                            referredByName: currentUserProfile.fullName || currentUserProfile.email || 'AZİMUT Üyesi'
+                        };
+                    }
+                });
+            }
+
+            // Her bir ağ kullanıcısının aktiflik ve kalan referans hakkı durumunu güncelle
+            Object.keys(azimutNetworkUsersMap).forEach(uid => {
+                const u = azimutNetworkUsersMap[uid];
+                if (!u) return;
+                const mailLower = normalizeEmail(u.email);
+                const refInfo = mailLower ? refLookup[mailLower] : null;
+                const isActiveNow = Boolean(
+                    u.explicitActive === true ||
+                    u.isActive === true ||
+                    isFounderOrAdminEmail(mailLower) ||
+                    refInfo
+                );
+                u.isActive = isActiveNow;
+                if (refInfo) {
+                    u.referredByEmail = u.referredByEmail || refInfo.referredByEmail || '';
+                    u.referredByName = u.referredByName || refInfo.referredByName || '';
+                }
+                u.referrals = sanitizeEmailArray(u.referrals);
+                const quota = Math.max(Number(u.referralQuota ?? DEFAULT_REFERRAL_QUOTA), u.referrals.length);
+                u.referralQuota = quota;
+                u.usedReferrals = u.referrals.length;
+                u.remainingReferrals = isActiveNow ? Math.max(0, quota - u.referrals.length) : 0;
+            });
+
+            // Giriş yapmış kullanıcının kendi aktiflik durumunu kontrol et
+            if (auth.currentUser && currentUserProfile.email) {
+                const myMail = normalizeEmail(currentUserProfile.email);
+                const myRef = refLookup[myMail];
+                const wasActive = Boolean(currentUserProfile.isActive);
+                const nowActive = Boolean(
+                    currentUserProfile.explicitActive === true ||
+                    wasActive ||
+                    isFounderOrAdminEmail(myMail) ||
+                    myRef
+                );
+                currentUserProfile.isActive = nowActive;
+                if (myRef) {
+                    currentUserProfile.referredByEmail = currentUserProfile.referredByEmail || myRef.referredByEmail || '';
+                    currentUserProfile.referredByName = currentUserProfile.referredByName || myRef.referredByName || '';
+                }
+
+                // Eğer kullanıcı pasifken birisi ona referans olduysa otomatik olarak Firebase'de de aktif olarak işaretle
+                if (!wasActive && nowActive) {
+                    const uid = auth.currentUser.uid;
+                    const updateObj = {
+                        isActive: true,
+                        referredByEmail: currentUserProfile.referredByEmail || '',
+                        referredByName: currentUserProfile.referredByName || ''
+                    };
+                    db.collection('users').doc(uid).set(updateObj, { merge: true }).catch(() => {});
+                    db.collection('azimut_network').doc(uid).set(updateObj, { merge: true }).catch(() => {});
+                    closePassiveWallModal();
+                    showToast("🎉 Hesabınız referans ile AKTİF KULLANICI statüsüne yükseltildi!", "fa-check-circle");
+                }
+
+                // Pasif kullanıcı ise açık kalmış TKGM kadastro katmanını kapat
+                if (!nowActive && typeof tkgmParselsActive !== 'undefined' && tkgmParselsActive) {
+                    tkgmParselsActive = false;
+                    if (typeof map !== 'undefined' && typeof tkgmParselsLayer !== 'undefined' && map.hasLayer(tkgmParselsLayer)) {
+                        map.removeLayer(tkgmParselsLayer);
+                    }
+                    appSettings.tkgmParsels = false;
+                    saveLocalSettings();
+                    if (typeof updateLayersModalUI === 'function') updateLayersModalUI();
+                }
+            }
+        }
 
         function syncData() {
             saveLocalProjects();
@@ -2759,16 +3180,7 @@
                     photoURL: currentUserProfile.photoURL || auth.currentUser.photoURL || '',
                     title: currentUserProfile.title || '',
                     company: currentUserProfile.company || '',
-                    updatedAt: Date.now(),
-                    profile: {
-                        uid: auth.currentUser.uid,
-                        fullName: currentUserProfile.fullName || auth.currentUser.displayName || '',
-                        email: currentUserProfile.email || auth.currentUser.email || '',
-                        photoURL: currentUserProfile.photoURL || auth.currentUser.photoURL || '',
-                        title: currentUserProfile.title || '',
-                        company: currentUserProfile.company || '',
-                        updatedAt: Date.now()
-                    }
+                    updatedAt: Date.now()
                 };
                 db.collection('users').doc(auth.currentUser.uid).set(payload, { merge: true })
                 .then(() => {
@@ -2781,11 +3193,17 @@
         }
 
         function refreshUserProfileUI() {
+            recomputeGlobalReferralActivation();
+
             const p = currentUserProfile;
             const displayName = p.fullName || 'İsimsiz Personel';
             const displayTitle = p.title || 'Ünvan Belirtilmedi';
             const displayCompany = p.company || 'Kurum / Şirket Belirtilmedi';
             const displayEmail = p.email || '-';
+            const isActive = Boolean(p.isActive);
+            const refs = sanitizeEmailArray(p.referrals);
+            const totalQuota = Math.max(Number(p.referralQuota ?? DEFAULT_REFERRAL_QUOTA), refs.length);
+            const remainingQuota = isActive ? Math.max(0, totalQuota - refs.length) : 0;
 
             // 1. Sol Açılır Yan Panel (Side Drawer)
             setAvatarWithFallback(document.getElementById('drawer-user-photo'), p.photoURL, displayName);
@@ -2798,12 +3216,26 @@
             if (dComp) dComp.innerText = displayCompany;
             if (dEmail) dEmail.innerText = displayEmail;
 
+            const dBadge = document.getElementById('drawer-membership-badge');
+            const dRefSum = document.getElementById('drawer-referral-summary');
+            if (dBadge) {
+                dBadge.className = 'membership-status-badge ' + (isActive ? 'active-member' : 'passive-member');
+                dBadge.innerHTML = isActive
+                    ? `<i class="fas fa-check-circle"></i> AKTİF KULLANICI`
+                    : `<i class="fas fa-user-clock"></i> PASİF KULLANICI (Referans Bekliyor)`;
+            }
+            if (dRefSum) {
+                dRefSum.innerHTML = isActive
+                    ? `<i class="fas fa-user-check"></i> Referans Hakkı: <b>${remainingQuota} / ${totalQuota}</b> Kaldı`
+                    : `<i class="fas fa-exclamation-circle" style="color:var(--warning);"></i> Tam erişim için <b>AZİMUT Ağı</b>'ndan referans bulun`;
+            }
+
             const dInName = document.getElementById('drawer-input-name');
             const dInTitle = document.getElementById('drawer-input-title');
             const dInComp = document.getElementById('drawer-input-company');
-            if (dInName) dInName.value = p.fullName || '';
-            if (dInTitle) dInTitle.value = p.title || '';
-            if (dInComp) dInComp.value = p.company || '';
+            if (dInName && document.activeElement !== dInName) dInName.value = p.fullName || '';
+            if (dInTitle && document.activeElement !== dInTitle) dInTitle.value = p.title || '';
+            if (dInComp && document.activeElement !== dInComp) dInComp.value = p.company || '';
 
             // 2. Alt Menüdeki Profil Sayfası (Modal Profile)
             setAvatarWithFallback(document.getElementById('user-photo'), p.photoURL, displayName);
@@ -2814,27 +3246,309 @@
             if (mRole) mRole.innerText = `${displayTitle} • ${displayCompany}`;
             if (mEmail) mEmail.innerText = displayEmail;
 
+            const pBadge = document.getElementById('profile-membership-badge');
+            if (pBadge) {
+                pBadge.className = 'membership-status-badge ' + (isActive ? 'active-member' : 'passive-member');
+                pBadge.innerHTML = isActive
+                    ? `<i class="fas fa-check-circle"></i> AKTİF KULLANICI`
+                    : `<i class="fas fa-user-clock"></i> PASİF KULLANICI`;
+            }
+
+            const refByEl = document.getElementById('user-referred-by-info');
+            if (refByEl) {
+                if (p.referredByName || p.referredByEmail) {
+                    refByEl.style.display = 'block';
+                    refByEl.style.color = '#34d399';
+                    refByEl.innerHTML = `<i class="fas fa-handshake"></i> Referans Olan: <b>${escapeHtmlSafe(p.referredByName || p.referredByEmail)}</b>`;
+                } else if (isActive) {
+                    refByEl.style.display = 'block';
+                    refByEl.style.color = '#34d399';
+                    refByEl.innerHTML = `<i class="fas fa-shield-alt"></i> Yetkili Aktif Üyelik Onaylı`;
+                } else {
+                    refByEl.style.display = 'block';
+                    refByEl.style.color = 'var(--warning)';
+                    refByEl.innerHTML = `<i class="fas fa-info-circle"></i> Henüz referansınız yok. Aktif olmak için referans bulun veya ödeme yapın.`;
+                }
+            }
+
             const pInName = document.getElementById('profile-input-name');
             const pInTitle = document.getElementById('profile-input-title');
             const pInComp = document.getElementById('profile-input-company');
-            if (pInName) pInName.value = p.fullName || '';
-            if (pInTitle) pInTitle.value = p.title || '';
-            if (pInComp) pInComp.value = p.company || '';
+            if (pInName && document.activeElement !== pInName) pInName.value = p.fullName || '';
+            if (pInTitle && document.activeElement !== pInTitle) pInTitle.value = p.title || '';
+            if (pInComp && document.activeElement !== pInComp) pInComp.value = p.company || '';
 
-            // 3. Canlı AZİMUT Ağı haritasında kendi kartımızı da anında güncelle
+            // 3. Profildeki Referans Hakları ve Mail Kutularını Oluştur
+            renderProfileReferralSlots();
+
+            // 4. Canlı AZİMUT Ağı haritasında kendi kartımızı da anında güncelle
             if (p.uid && p.email) {
                 azimutNetworkUsersMap[p.uid] = {
+                    ...(azimutNetworkUsersMap[p.uid] || {}),
                     uid: p.uid,
                     fullName: displayName,
                     email: p.email,
                     photoURL: p.photoURL || '',
                     title: p.title || 'Harita / Saha Personeli',
                     company: p.company || 'Kurum Belirtilmedi',
+                    isActive: isActive,
+                    explicitActive: isActive,
+                    referralQuota: totalQuota,
+                    referrals: refs,
+                    usedReferrals: refs.length,
+                    remainingReferrals: remainingQuota,
+                    referredByEmail: p.referredByEmail || '',
+                    referredByName: p.referredByName || '',
                     updatedAt: p.updatedAt || Date.now()
                 };
                 saveCachedNetworkMap();
                 renderAzimutNetworkList();
             }
+        }
+
+        function renderProfileReferralSlots() {
+            const listContainer = document.getElementById('profile-referral-slots-list');
+            const quotaPill = document.getElementById('profile-referral-quota-pill');
+            if (!listContainer) return;
+
+            const isActive = Boolean(currentUserProfile.isActive);
+            const refs = sanitizeEmailArray(currentUserProfile.referrals);
+            const totalSlots = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), refs.length);
+            const usedCount = refs.length;
+            const remainingCount = isActive ? Math.max(0, totalSlots - usedCount) : 0;
+
+            if (quotaPill) {
+                if (isActive) {
+                    quotaPill.innerText = `Kalan Hak: ${remainingCount} / ${totalSlots}`;
+                    quotaPill.style.background = remainingCount > 0 ? 'rgba(245, 158, 11, 0.16)' : 'rgba(148, 163, 184, 0.16)';
+                    quotaPill.style.color = remainingCount > 0 ? 'var(--warning)' : 'var(--text-muted)';
+                } else {
+                    quotaPill.innerText = `Pasif Üye (0 / ${totalSlots})`;
+                    quotaPill.style.background = 'rgba(239, 68, 68, 0.15)';
+                    quotaPill.style.color = '#fca5a5';
+                }
+            }
+
+            let html = '';
+            if (!isActive) {
+                html += `<div style="padding:8px 10px; border-radius:9px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.35); color:#fde68a; font-size:0.71rem; line-height:1.4;">
+                    <i class="fas fa-lock"></i> <b>Pasif Kullanıcı</b> durumundasınız. Hesabınız bir referans veya ödeme ile aktifleştiğinde aşağıdaki <b>${totalSlots} referans hakkınız</b> kullanıma açılacaktır.
+                </div>`;
+            }
+
+            for (let i = 0; i < totalSlots; i++) {
+                const savedEmail = refs[i] || '';
+                const isLocked = Boolean(savedEmail);
+
+                if (isLocked) {
+                    html += `
+                    <div class="referral-slot-row locked">
+                        <span class="referral-slot-num">${i + 1}</span>
+                        <input type="email" class="referral-slot-input" value="${escapeHtmlSafe(savedEmail)}" disabled readonly>
+                        <span class="referral-locked-tag"><i class="fas fa-lock"></i> Onaylandı</span>
+                    </div>`;
+                } else {
+                    html += `
+                    <div class="referral-slot-row">
+                        <span class="referral-slot-num">${i + 1}</span>
+                        <input type="email" id="referral-slot-input-${i}" class="referral-slot-input" placeholder="${isActive ? (i + 1) + '. Referans Gmail adresi yazın...' : 'Aktif üyelik sonrası açılır'}" ${isActive ? '' : 'disabled'}>
+                        <button type="button" class="btn-save-referral" onclick="saveReferralSlot(${i})" ${isActive ? '' : 'disabled'}>
+                            <i class="fas fa-check"></i> Kaydet
+                        </button>
+                    </div>`;
+                }
+            }
+
+            listContainer.innerHTML = html;
+        }
+
+        async function saveReferralSlot(slotIndex, prefilledEmail = null) {
+            if (!auth.currentUser) {
+                showToast("Lütfen önce Gmail hesabınızla giriş yapın", "fa-lock");
+                return;
+            }
+            if (!isCurrentUserActive()) {
+                showPassiveWallModal("Referans Verme Sistemi");
+                return;
+            }
+
+            const inputEl = document.getElementById(`referral-slot-input-${slotIndex}`);
+            const rawEmail = prefilledEmail !== null ? prefilledEmail : (inputEl ? inputEl.value : '');
+            const targetEmail = normalizeEmail(rawEmail);
+
+            if (!targetEmail || !targetEmail.includes('@') || !targetEmail.includes('.')) {
+                showToast("Lütfen geçerli bir Gmail / e-posta adresi girin!", "fa-exclamation-circle");
+                return;
+            }
+
+            if (targetEmail === normalizeEmail(currentUserProfile.email)) {
+                showToast("Kendi e-posta adresinize referans olamazsınız!", "fa-ban");
+                return;
+            }
+
+            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals);
+            const totalQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), currentRefs.length);
+
+            if (currentRefs.length >= totalQuota) {
+                showToast("Tüm referans haklarınızı kullandınız!", "fa-info-circle");
+                return;
+            }
+
+            if (currentRefs.includes(targetEmail)) {
+                showToast("Bu e-posta adresine zaten referans oldunuz!", "fa-info-circle");
+                return;
+            }
+
+            const confirmed = await showCustomDialog({
+                title: `${currentRefs.length + 1}. Referans Hakkı Onayı`,
+                message: `"${targetEmail}" adresine referans olmak üzeresiniz.\n\nKaydettiğinizde bu sütun kalıcı olarak kilitlenecek (değiştirilemez) ve kullanıcı sisteme Aktif Kullanıcı olarak giriş yapabilecektir. Onaylıyor musunuz?`,
+                confirmText: "Evet, Kaydet ve Kilitle",
+                danger: false
+            });
+
+            if (!confirmed) return;
+
+            const updatedRefs = [...currentRefs, targetEmail];
+            currentUserProfile.referrals = updatedRefs;
+
+            // Global referans haritasına hemen ekle
+            globalReferredEmailsMap[targetEmail] = {
+                referredByUid: auth.currentUser.uid,
+                referredByEmail: currentUserProfile.email,
+                referredByName: currentUserProfile.fullName
+            };
+
+            saveCachedProfile(currentUserProfile);
+            refreshUserProfileUI();
+
+            const uid = auth.currentUser.uid;
+            const remaining = Math.max(0, totalQuota - updatedRefs.length);
+
+            try {
+                await db.collection('users').doc(uid).set({
+                    referrals: updatedRefs,
+                    usedReferrals: updatedRefs.length,
+                    remainingReferrals: remaining,
+                    updatedAt: Date.now(),
+                    profile: {
+                        ...currentUserProfile,
+                        referrals: updatedRefs,
+                        referralQuota: totalQuota,
+                        updatedAt: Date.now()
+                    }
+                }, { merge: true });
+            } catch (e) {
+                console.warn("users referans kaydı uyarısı:", e);
+            }
+
+            try {
+                await db.collection('azimut_network').doc(uid).set({
+                    referrals: updatedRefs,
+                    referralQuota: totalQuota,
+                    usedReferrals: updatedRefs.length,
+                    remainingReferrals: remaining,
+                    updatedAt: Date.now()
+                }, { merge: true });
+            } catch (e) {}
+
+            // azimut_referrals koleksiyonuna da yaz ki referans olunan kişi giriş yaptığında anında aktifleşsin
+            const emailDocKey = targetEmail.replace(/[^a-z0-9@._-]/gi, '_');
+            try {
+                await db.collection('azimut_referrals').doc(emailDocKey).set({
+                    email: targetEmail,
+                    referredByUid: uid,
+                    referredByEmail: currentUserProfile.email || '',
+                    referredByName: currentUserProfile.fullName || '',
+                    createdAt: Date.now()
+                }, { merge: true });
+            } catch (e) {}
+
+            // Eğer referans olunan kullanıcı halihazırda sisteme giriş yapmışsa onun kaydını da anında Aktif yap
+            const targetUserEntry = Object.values(azimutNetworkUsersMap).find(u => u && normalizeEmail(u.email) === targetEmail);
+            if (targetUserEntry && targetUserEntry.uid) {
+                const activationPayload = {
+                    isActive: true,
+                    referredByUid: uid,
+                    referredByEmail: currentUserProfile.email || '',
+                    referredByName: currentUserProfile.fullName || '',
+                    activatedAt: Date.now()
+                };
+                db.collection('users').doc(targetUserEntry.uid).set(activationPayload, { merge: true }).catch(() => {});
+                db.collection('azimut_network').doc(targetUserEntry.uid).set(activationPayload, { merge: true }).catch(() => {});
+            }
+
+            showToast(`"${targetEmail}" referans olarak kaydedildi ve kilitlendi! (Kalan Hak: ${remaining})`, "fa-user-check");
+        }
+
+        async function grantReferenceToUser(targetEmail, targetName) {
+            if (!isCurrentUserActive()) {
+                showPassiveWallModal("Referans Verme");
+                return;
+            }
+            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals);
+            const totalQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), currentRefs.length);
+            if (currentRefs.length >= totalQuota) {
+                showToast("Kullanılabilir referans hakkınız kalmadı!", "fa-exclamation-circle");
+                return;
+            }
+            await saveReferralSlot(currentRefs.length, targetEmail);
+        }
+
+        // --- PASİF KULLANICI ENGEL / BİLGİLENDİRME MODALI ---
+        function showPassiveWallModal(featureTitle = '') {
+            const overlay = document.getElementById('passive-wall-overlay');
+            const featBadge = document.getElementById('passive-wall-feature-name');
+            if (featBadge) {
+                featBadge.innerHTML = `<i class="fas fa-ban"></i> Kısıtlı Özellik: ${escapeHtmlSafe(featureTitle || 'Tam Harita ve Mühendislik Araçları')}`;
+            }
+            if (overlay) overlay.classList.add('show');
+        }
+
+        function closePassiveWallModal() {
+            const overlay = document.getElementById('passive-wall-overlay');
+            if (overlay) overlay.classList.remove('show');
+        }
+
+        function openNetworkForReference() {
+            closePassiveWallModal();
+            const drawer = document.getElementById('side-drawer');
+            const drawerOv = document.getElementById('drawer-overlay');
+            if (drawer) drawer.classList.remove('show');
+            if (drawerOv) drawerOv.classList.remove('show');
+            switchTab('tab-network');
+            switchAzimutNetworkTab('HAS_QUOTA');
+            showToast("Referans hakkı olan aktif üyelerden referans talep edebilirsiniz", "fa-user-check");
+        }
+
+        function openPaymentContactForActivation() {
+            closePassiveWallModal();
+            const userMail = currentUserProfile.email || (auth.currentUser ? auth.currentUser.email : '');
+            const userName = currentUserProfile.fullName || 'AZİMUT Kullanıcısı';
+            const subject = encodeURIComponent(`AZİMUT Pro Üyelik Aktivasyon / Ödeme Talebi - ${userName}`);
+            const body = encodeURIComponent(
+                `Merhaba AZİMUT Pro Yönetimi,\n\n` +
+                `Sisteme giriş yaptığım Gmail hesabımın (${userMail}) Aktif Kullanıcı statüsüne yükseltilmesi için ödeme / aktivasyon bilgilerini rica ediyorum.\n\n` +
+                `Ad Soyad: ${userName}\n` +
+                `Ünvan: ${currentUserProfile.title || '-'}\n` +
+                `Kurum/Şirket: ${currentUserProfile.company || '-'}\n` +
+                `Kayıtlı Gmail: ${userMail}`
+            );
+            window.location.href = `mailto:buraktonoz@gmail.com?subject=${subject}&body=${body}`;
+            showToast("Aktivasyon ve ödeme talebi için mail uygulaması açılıyor...", "fa-credit-card");
+        }
+
+        function handleMembershipBadgeClick() {
+            if (isCurrentUserActive()) {
+                showToast("Hesabınız AKTİF KULLANICI statüsündedir. Tüm özellikleri kullanabilirsiniz.", "fa-check-circle");
+            } else {
+                showPassiveWallModal("Üyelik Aktivasyonu Gerekli");
+            }
+        }
+
+        function requireActiveMembership(featureTitle) {
+            if (isCurrentUserActive()) return true;
+            showPassiveWallModal(featureTitle);
+            return false;
         }
 
         function toggleDrawerProfileEdit() {
@@ -2848,9 +3562,19 @@
             }
         }
 
-        async function persistProfileToDatabase(profileObj) {
+        async function persistProfileToDatabase(profileObj, isInitialCreate = false) {
             if (!auth.currentUser) return;
             const uid = auth.currentUser.uid;
+            const refs = sanitizeEmailArray(profileObj.referrals !== undefined ? profileObj.referrals : currentUserProfile.referrals);
+            const quota = Math.max(
+                Number(profileObj.referralQuota ?? currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA),
+                refs.length
+            );
+            const activeFlag = Boolean(
+                profileObj.isActive !== undefined ? profileObj.isActive : currentUserProfile.isActive
+            );
+            const remaining = activeFlag ? Math.max(0, quota - refs.length) : 0;
+
             const cleanProfile = {
                 uid: uid,
                 fullName: (profileObj.fullName || auth.currentUser.displayName || 'Personel').trim(),
@@ -2858,23 +3582,43 @@
                 photoURL: profileObj.photoURL || auth.currentUser.photoURL || '',
                 title: (profileObj.title || '').trim(),
                 company: (profileObj.company || '').trim(),
+                isActive: activeFlag,
+                referralQuota: quota,
+                referrals: refs,
+                usedReferrals: refs.length,
+                remainingReferrals: remaining,
+                referredByEmail: profileObj.referredByEmail || currentUserProfile.referredByEmail || '',
+                referredByName: profileObj.referredByName || currentUserProfile.referredByName || '',
                 updatedAt: Date.now()
             };
             currentUserProfile = cleanProfile;
             saveCachedProfile(cleanProfile);
             refreshUserProfileUI();
 
+            const userDocPayload = {
+                uid: cleanProfile.uid,
+                fullName: cleanProfile.fullName,
+                email: cleanProfile.email,
+                photoURL: cleanProfile.photoURL,
+                title: cleanProfile.title,
+                company: cleanProfile.company,
+                isActive: cleanProfile.isActive,
+                referrals: cleanProfile.referrals,
+                usedReferrals: cleanProfile.usedReferrals,
+                remainingReferrals: cleanProfile.remainingReferrals,
+                referredByEmail: cleanProfile.referredByEmail,
+                referredByName: cleanProfile.referredByName,
+                updatedAt: cleanProfile.updatedAt,
+                profile: cleanProfile
+            };
+
+            // İlk kayıtta varsayılan 3 referans hakkını yaz; sonrasında yöneticinin Firebase'den manuel artırdığı referralQuota'yı asla ezme
+            if (isInitialCreate) {
+                userDocPayload.referralQuota = cleanProfile.referralQuota;
+            }
+
             try {
-                await db.collection('users').doc(uid).set({
-                    uid: cleanProfile.uid,
-                    fullName: cleanProfile.fullName,
-                    email: cleanProfile.email,
-                    photoURL: cleanProfile.photoURL,
-                    title: cleanProfile.title,
-                    company: cleanProfile.company,
-                    updatedAt: cleanProfile.updatedAt,
-                    profile: cleanProfile
-                }, { merge: true });
+                await db.collection('users').doc(uid).set(userDocPayload, { merge: true });
             } catch (e) {
                 console.warn("users profil kaydı uyarısı:", e);
             }
@@ -2932,13 +3676,14 @@
             }
 
             await persistProfileToDatabase({
+                ...currentUserProfile,
                 uid: auth.currentUser.uid,
                 email: auth.currentUser.email || '',
                 photoURL: auth.currentUser.photoURL || '',
                 fullName: nameVal,
                 title: titleVal,
                 company: compVal
-            });
+            }, true);
 
             unlockAuthGateAndEnter();
         }
@@ -2994,6 +3739,16 @@
             const uid = prof.uid || data.uid || docId;
             const existing = azimutNetworkUsersMap[uid] || {};
 
+            const refs = sanitizeEmailArray(data.referrals || prof.referrals || existing.referrals || []);
+            const quota = extractQuotaValue(data, prof, existing.referralQuota ?? DEFAULT_REFERRAL_QUOTA);
+            const explicitActive = Boolean(
+                data.isActive === true ||
+                data.aktif === true ||
+                prof.isActive === true ||
+                prof.aktif === true ||
+                isFounderOrAdminEmail(email)
+            );
+
             azimutNetworkUsersMap[uid] = {
                 uid: uid,
                 fullName: fullName || existing.fullName || 'AZİMUT Kullanıcısı',
@@ -3001,6 +3756,12 @@
                 photoURL: prof.photoURL || data.photoURL || existing.photoURL || '',
                 title: prof.title || data.title || existing.title || 'Harita / Saha Mühendisi',
                 company: prof.company || data.company || existing.company || 'Kurum Belirtilmedi',
+                explicitActive: explicitActive,
+                isActive: explicitActive || Boolean(existing.isActive),
+                referralQuota: Math.max(quota, refs.length),
+                referrals: refs,
+                referredByEmail: data.referredByEmail || prof.referredByEmail || existing.referredByEmail || '',
+                referredByName: data.referredByName || prof.referredByName || existing.referredByName || '',
                 updatedAt: prof.updatedAt || data.updatedAt || existing.updatedAt || 0
             };
         }
@@ -3008,13 +3769,15 @@
         function startAzimutNetworkRealtime() {
             if (networkUnsubUsers) { try { networkUnsubUsers(); } catch (e) {} networkUnsubUsers = null; }
             if (networkUnsubDir) { try { networkUnsubDir(); } catch (e) {} networkUnsubDir = null; }
+            if (networkUnsubRefs) { try { networkUnsubRefs(); } catch (e) {} networkUnsubRefs = null; }
 
-            // 1. users koleksiyonunu anlık dinle (sisteme giriş yapan tüm kullanıcılar)
+            // 1. users koleksiyonunu anlık dinle (sisteme giriş yapan tüm kullanıcılar ve referans hakları)
             try {
                 networkUnsubUsers = db.collection('users').onSnapshot((snapshot) => {
                     snapshot.forEach((doc) => {
                         ingestNetworkDoc(doc.id, doc.data());
                     });
+                    recomputeGlobalReferralActivation();
                     saveCachedNetworkMap();
                     renderAzimutNetworkList();
                 }, (err) => {
@@ -3028,8 +3791,29 @@
                     snapshot.forEach((doc) => {
                         ingestNetworkDoc(doc.id, doc.data());
                     });
+                    recomputeGlobalReferralActivation();
                     saveCachedNetworkMap();
                     renderAzimutNetworkList();
+                }, () => {});
+            } catch (e) {}
+
+            // 3. azimut_referrals koleksiyonunu anlık dinle
+            try {
+                networkUnsubRefs = db.collection('azimut_referrals').onSnapshot((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        const d = doc.data() || {};
+                        const mail = normalizeEmail(d.email);
+                        if (mail) {
+                            globalReferredEmailsMap[mail] = {
+                                referredByUid: d.referredByUid || '',
+                                referredByEmail: d.referredByEmail || '',
+                                referredByName: d.referredByName || ''
+                            };
+                        }
+                    });
+                    recomputeGlobalReferralActivation();
+                    saveCachedNetworkMap();
+                    refreshUserProfileUI();
                 }, () => {});
             } catch (e) {}
         }
@@ -3038,7 +3822,97 @@
             return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
         }
 
+        function switchAzimutNetworkTab(tabMode) {
+            currentNetworkTab = tabMode || 'ACTIVE';
+            document.getElementById('net-tab-active')?.classList.toggle('active', currentNetworkTab === 'ACTIVE');
+            document.getElementById('net-tab-quota')?.classList.toggle('active', currentNetworkTab === 'HAS_QUOTA');
+            document.getElementById('net-tab-passive')?.classList.toggle('active', currentNetworkTab === 'PASSIVE');
+            renderAzimutNetworkList();
+        }
+
+        function buildNetworkUserCardHtml(u) {
+            const isMe = auth.currentUser && u.uid === auth.currentUser.uid;
+            const isActive = Boolean(u.isActive);
+            const safeName = escapeHtmlSafe(u.fullName || 'İsimsiz Personel');
+            const safeTitle = escapeHtmlSafe(u.title || 'Ünvan Belirtilmedi');
+            const safeComp = escapeHtmlSafe(u.company || 'Kurum / Şirket Belirtilmedi');
+            const safeEmail = escapeHtmlSafe(u.email || '');
+            const fallbackAvatar = getInitialsAvatarDataUri(u.fullName || 'AZ');
+            const avatarSrc = u.photoURL ? escapeHtmlSafe(u.photoURL) : fallbackAvatar;
+
+            const refs = sanitizeEmailArray(u.referrals);
+            const totalQuota = Math.max(Number(u.referralQuota ?? DEFAULT_REFERRAL_QUOTA), refs.length);
+            const remaining = isActive ? Math.max(0, totalQuota - refs.length) : 0;
+
+            const myRefs = sanitizeEmailArray(currentUserProfile.referrals);
+            const myTotalQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), myRefs.length);
+            const myRemaining = isCurrentUserActive() ? Math.max(0, myTotalQuota - myRefs.length) : 0;
+            const canGrantRefToThisUser = Boolean(!isMe && !isActive && safeEmail && isCurrentUserActive() && myRemaining > 0);
+
+            // Eğer aktif ve referans hakkı olan biriyse ve ben pasifsem, mail konusunu "Referans Talebi" olarak hazırla
+            const isRequestingRef = Boolean(!isCurrentUserActive() && isActive && remaining > 0);
+            const subject = encodeURIComponent(
+                isRequestingRef
+                    ? `AZİMUT Pro Referans Talebi - ${currentUserProfile.fullName || ''}`
+                    : `AZİMUT Pro Ağı İletişim - ${currentUserProfile.fullName || ''}`
+            );
+            const body = encodeURIComponent(
+                isRequestingRef
+                    ? `Merhaba ${u.fullName || ''},\n\nAZİMUT Pro sistemine Gmail hesabımla (${currentUserProfile.email || ''}) giriş yaptım. AZİMUT Ağı'nda ${remaining} referans hakkınız bulunduğunu gördüm.\n\nUygun görürseniz Gmail adresimi (${currentUserProfile.email || ''}) profilinizdeki referans bölümüne ekleyerek aktif kullanıcı olmama referans olabilir misiniz?\n\nTeşekkürler, saygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`
+                    : `Merhaba ${u.fullName || ''},\n\nAZİMUT Pro Kurumsal Ağı üzerinden sizinle iletişime geçiyorum.\n\nSaygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`
+            );
+            const mailtoHref = safeEmail ? `mailto:${safeEmail}?subject=${subject}&body=${body}` : '#';
+
+            const statusChipHtml = isActive
+                ? `<span class="net-status-chip active-chip"><i class="fas fa-check-circle"></i> AKTİF</span>`
+                : `<span class="net-status-chip passive-chip"><i class="fas fa-user-clock"></i> PASİF</span>`;
+
+            const quotaChipHtml = isActive
+                ? `<span class="net-quota-chip ${remaining === 0 ? 'zero' : ''}"><i class="fas fa-gift"></i> Referans Hakkı: ${remaining} / ${totalQuota}</span>`
+                : `<span class="net-quota-chip zero"><i class="fas fa-hourglass-half"></i> Referans Bekliyor</span>`;
+
+            const referredByLine = u.referredByName || u.referredByEmail
+                ? `<div style="font-size:0.65rem; color:#34d399; font-weight:700; margin-top:2px;"><i class="fas fa-handshake"></i> Referans: ${escapeHtmlSafe(u.referredByName || u.referredByEmail)}</div>`
+                : '';
+
+            return `
+            <div class="network-user-card ${isMe ? 'is-me' : ''} ${!isActive ? 'is-passive-user' : ''}">
+                <div class="network-user-left">
+                    <img class="network-avatar" src="${avatarSrc}" alt="${safeName}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${fallbackAvatar}';">
+                    <div class="network-user-meta">
+                        <div class="network-user-name">
+                            ${safeName}
+                            ${isMe ? '<span class="network-me-tag">SİZ</span>' : ''}
+                            ${statusChipHtml}
+                            ${quotaChipHtml}
+                        </div>
+                        <div class="network-user-role"><i class="fas fa-user-tie"></i> ${safeTitle}</div>
+                        <div class="network-user-org"><i class="fas fa-building"></i> ${safeComp}</div>
+                        <div class="network-user-mail"><i class="fas fa-envelope"></i> ${safeEmail || '-'}</div>
+                        ${referredByLine}
+                    </div>
+                </div>
+                <div class="network-user-actions">
+                    ${canGrantRefToThisUser ? `
+                    <button type="button" class="btn-grant-ref" onclick="grantReferenceToUser('${safeEmail}', '${safeName}')">
+                        <i class="fas fa-user-check"></i> Referans Ol (${myRemaining} Hak)
+                    </button>
+                    ` : ''}
+                    ${safeEmail ? `
+                    <a class="btn-send-mail" href="${mailtoHref}" onclick="showToast('${safeName} için mail uygulaması açılıyor...', 'fa-paper-plane')">
+                        <i class="fas fa-envelope"></i> ${isRequestingRef ? 'Referans İste (Mail)' : 'Mail Gönder'}
+                    </a>
+                    <button type="button" class="btn-copy-mail" onclick="copyTextToClipboard('${safeEmail}', 'E-posta adresi kopyalandı')">
+                        <i class="fas fa-copy"></i> Kopyala
+                    </button>
+                    ` : ''}
+                </div>
+            </div>`;
+        }
+
         function renderAzimutNetworkList() {
+            recomputeGlobalReferralActivation();
+
             const listEl = document.getElementById('network-users-list');
             const countBadge = document.getElementById('network-count-badge');
             const dockBadge = document.getElementById('dock-network-badge');
@@ -3053,6 +3927,18 @@
                 return (b.updatedAt || 0) - (a.updatedAt || 0);
             });
 
+            const activeUsersAll = allUsers.filter(u => u.isActive);
+            const hasQuotaUsersAll = activeUsersAll.filter(u => (u.remainingReferrals || 0) > 0);
+            const passiveUsersAll = allUsers.filter(u => !u.isActive);
+
+            // Sekme sayaçlarını güncelle
+            const cActiveEl = document.getElementById('net-count-active');
+            const cQuotaEl = document.getElementById('net-count-quota');
+            const cPassiveEl = document.getElementById('net-count-passive');
+            if (cActiveEl) cActiveEl.innerText = activeUsersAll.length;
+            if (cQuotaEl) cQuotaEl.innerText = hasQuotaUsersAll.length;
+            if (cPassiveEl) cPassiveEl.innerText = passiveUsersAll.length;
+
             if (countBadge) countBadge.innerText = `${allUsers.length} Üye`;
             if (dockBadge) {
                 dockBadge.innerText = allUsers.length;
@@ -3061,16 +3947,53 @@
 
             if (!listEl) return;
 
-            const filtered = q
-                ? allUsers.filter(u =>
+            const matchesQuery = (u) => {
+                if (!q) return true;
+                return (
                     (u.fullName && u.fullName.toLowerCase().includes(q)) ||
                     (u.title && u.title.toLowerCase().includes(q)) ||
                     (u.company && u.company.toLowerCase().includes(q)) ||
                     (u.email && u.email.toLowerCase().includes(q))
-                )
-                : allUsers;
+                );
+            };
 
-            if (filtered.length === 0) {
+            if (currentNetworkTab === 'HAS_QUOTA') {
+                const quotaFiltered = hasQuotaUsersAll.filter(matchesQuery);
+                if (quotaFiltered.length === 0) {
+                    listEl.innerHTML = `<div style="text-align:center; padding:40px 14px; color:var(--text-muted);">
+                        <i class="fas fa-gift" style="font-size:2.2rem; opacity:0.35; margin-bottom:10px; color:var(--warning);"></i>
+                        <p style="font-size:0.82rem; margin:0;">Şu anda kullanılabilir referans hakkı olan aktif kullanıcı bulunamadı.</p>
+                    </div>`;
+                    return;
+                }
+                listEl.innerHTML = `
+                    <div class="network-section-divider"><i class="fas fa-gift" style="color:var(--warning);"></i> Referans Hakkı Bulunan Aktif Kullanıcılar (${quotaFiltered.length})</div>
+                    ${quotaFiltered.map(buildNetworkUserCardHtml).join('')}
+                `;
+                return;
+            }
+
+            if (currentNetworkTab === 'PASSIVE') {
+                const passiveFiltered = passiveUsersAll.filter(matchesQuery);
+                if (passiveFiltered.length === 0) {
+                    listEl.innerHTML = `<div style="text-align:center; padding:40px 14px; color:var(--text-muted);">
+                        <i class="fas fa-user-check" style="font-size:2.2rem; opacity:0.35; margin-bottom:10px; color:var(--success);"></i>
+                        <p style="font-size:0.82rem; margin:0;">Bekleyen pasif kullanıcı bulunmuyor.</p>
+                    </div>`;
+                    return;
+                }
+                listEl.innerHTML = `
+                    <div class="network-section-divider passive-divider"><i class="fas fa-user-clock"></i> Referans Bekleyen Pasif Kullanıcılar (${passiveFiltered.length})</div>
+                    ${passiveFiltered.map(buildNetworkUserCardHtml).join('')}
+                `;
+                return;
+            }
+
+            // Varsayılan Sekme: 'ACTIVE' -> Üstte Aktif Kullanıcılar ve kalan hakları, listenin altında ise Pasif Kullanıcılar görünür
+            const activeFiltered = activeUsersAll.filter(matchesQuery);
+            const passiveFiltered = passiveUsersAll.filter(matchesQuery);
+
+            if (activeFiltered.length === 0 && passiveFiltered.length === 0) {
                 listEl.innerHTML = `<div style="text-align:center; padding:45px 14px; color:var(--text-muted);">
                     <i class="fas fa-users" style="font-size:2.4rem; opacity:0.35; margin-bottom:10px;"></i>
                     <p style="font-size:0.84rem; margin:0;">Aramaya uygun personel bulunamadı.</p>
@@ -3078,69 +4001,110 @@
                 return;
             }
 
-            listEl.innerHTML = filtered.map(u => {
-                const isMe = auth.currentUser && u.uid === auth.currentUser.uid;
-                const safeName = escapeHtmlSafe(u.fullName || 'İsimsiz Personel');
-                const safeTitle = escapeHtmlSafe(u.title || 'Ünvan Belirtilmedi');
-                const safeComp = escapeHtmlSafe(u.company || 'Kurum / Şirket Belirtilmedi');
-                const safeEmail = escapeHtmlSafe(u.email || '');
-                const fallbackAvatar = getInitialsAvatarDataUri(u.fullName || 'AZ');
-                const avatarSrc = u.photoURL ? escapeHtmlSafe(u.photoURL) : fallbackAvatar;
-
-                const subject = encodeURIComponent(`AZİMUT Pro Ağı İletişim - ${currentUserProfile.fullName || ''}`);
-                const body = encodeURIComponent(`Merhaba ${u.fullName || ''},\n\nAZİMUT Pro Kurumsal Ağı üzerinden sizinle iletişime geçiyorum.\n\nSaygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`);
-                const mailtoHref = safeEmail ? `mailto:${safeEmail}?subject=${subject}&body=${body}` : '#';
-
-                return `
-                <div class="network-user-card ${isMe ? 'is-me' : ''}">
-                    <div class="network-user-left">
-                        <img class="network-avatar" src="${avatarSrc}" alt="${safeName}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${fallbackAvatar}';">
-                        <div class="network-user-meta">
-                            <div class="network-user-name">
-                                ${safeName}
-                                ${isMe ? '<span class="network-me-tag">SİZ</span>' : ''}
-                            </div>
-                            <div class="network-user-role"><i class="fas fa-user-tie"></i> ${safeTitle}</div>
-                            <div class="network-user-org"><i class="fas fa-building"></i> ${safeComp}</div>
-                            <div class="network-user-mail"><i class="fas fa-envelope"></i> ${safeEmail || '-'}</div>
-                        </div>
-                    </div>
-                    <div class="network-user-actions">
-                        ${safeEmail ? `
-                        <a class="btn-send-mail" href="${mailtoHref}" onclick="showToast('${safeName} için mail uygulaması açılıyor...', 'fa-paper-plane')">
-                            <i class="fas fa-envelope"></i> Mail Gönder
-                        </a>
-                        <button type="button" class="btn-copy-mail" onclick="copyTextToClipboard('${safeEmail}', 'E-posta adresi kopyalandı')">
-                            <i class="fas fa-copy"></i> Kopyala
-                        </button>
-                        ` : ''}
-                    </div>
-                </div>`;
-            }).join('');
+            let combinedHtml = '';
+            if (activeFiltered.length > 0) {
+                combinedHtml += `<div class="network-section-divider"><i class="fas fa-check-circle" style="color:var(--success);"></i> Aktif Kullanıcılar (${activeFiltered.length})</div>`;
+                combinedHtml += activeFiltered.map(buildNetworkUserCardHtml).join('');
+            }
+            if (passiveFiltered.length > 0) {
+                combinedHtml += `<div class="network-section-divider passive-divider"><i class="fas fa-user-clock"></i> Pasif Kullanıcılar — Referans Bekleyenler (${passiveFiltered.length})</div>`;
+                combinedHtml += passiveFiltered.map(buildNetworkUserCardHtml).join('');
+            }
+            listEl.innerHTML = combinedHtml;
         }
 
         auth.onAuthStateChanged((user) => {
+            if (currentUserDocUnsub) { try { currentUserDocUnsub(); } catch (e) {} currentUserDocUnsub = null; }
+
             if (user) {
                 document.getElementById('auth-logged-out').style.display = 'none';
                 document.getElementById('auth-logged-in').style.display = 'flex';
 
                 const cachedProf = loadCachedProfile(user.uid) || {};
+                const initialEmail = user.email || cachedProf.email || '';
+                const initialRefs = sanitizeEmailArray(cachedProf.referrals || []);
+                const initialQuota = Math.max(Number(cachedProf.referralQuota ?? DEFAULT_REFERRAL_QUOTA), initialRefs.length);
+                const initialActive = Boolean(
+                    cachedProf.isActive === true ||
+                    isFounderOrAdminEmail(initialEmail) ||
+                    globalReferredEmailsMap[normalizeEmail(initialEmail)]
+                );
+
                 currentUserProfile = {
                     uid: user.uid,
-                    fullName: cachedProf.fullName || user.displayName || (user.email ? user.email.split('@')[0] : 'Personel'),
-                    email: user.email || cachedProf.email || '',
+                    fullName: cachedProf.fullName || user.displayName || (initialEmail ? initialEmail.split('@')[0] : 'Personel'),
+                    email: initialEmail,
                     photoURL: user.photoURL || cachedProf.photoURL || '',
                     title: cachedProf.title || '',
                     company: cachedProf.company || '',
+                    explicitActive: initialActive,
+                    isActive: initialActive,
+                    referralQuota: initialQuota,
+                    referrals: initialRefs,
+                    referredByEmail: cachedProf.referredByEmail || '',
+                    referredByName: cachedProf.referredByName || '',
                     updatedAt: cachedProf.updatedAt || Date.now()
                 };
                 refreshUserProfileUI();
                 startAzimutNetworkRealtime();
 
+                // Yönetici Firebase'den kullanıcının referans hakkını (referralQuota / referansHakki) veya aktifliğini (isActive)
+                // manuel olarak artırdığında anında sayfada kutuların çoğalması için kullanıcının kendi dökümanını canlı dinle!
+                try {
+                    currentUserDocUnsub = db.collection('users').doc(user.uid).onSnapshot((doc) => {
+                        if (!doc.exists) return;
+                        const docData = doc.data() || {};
+                        const cloudProf = docData.profile || {};
+                        const mergedRefs = sanitizeEmailArray(docData.referrals || cloudProf.referrals || currentUserProfile.referrals || []);
+                        const newQuota = extractQuotaValue(docData, cloudProf, currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA);
+                        const explicitActive = Boolean(
+                            docData.isActive === true ||
+                            docData.aktif === true ||
+                            cloudProf.isActive === true ||
+                            cloudProf.aktif === true ||
+                            isFounderOrAdminEmail(user.email || docData.email)
+                        );
+
+                        const prevQuota = currentUserProfile.referralQuota;
+                        currentUserProfile = {
+                            ...currentUserProfile,
+                            uid: user.uid,
+                            fullName: cloudProf.fullName || docData.fullName || currentUserProfile.fullName || user.displayName || 'Personel',
+                            email: user.email || cloudProf.email || docData.email || '',
+                            photoURL: user.photoURL || cloudProf.photoURL || docData.photoURL || '',
+                            title: cloudProf.title || docData.title || currentUserProfile.title || '',
+                            company: cloudProf.company || docData.company || currentUserProfile.company || '',
+                            explicitActive: explicitActive,
+                            isActive: explicitActive || Boolean(currentUserProfile.isActive),
+                            referralQuota: Math.max(newQuota, mergedRefs.length),
+                            referrals: mergedRefs,
+                            referredByEmail: docData.referredByEmail || cloudProf.referredByEmail || currentUserProfile.referredByEmail || '',
+                            referredByName: docData.referredByName || cloudProf.referredByName || currentUserProfile.referredByName || '',
+                            updatedAt: Date.now()
+                        };
+                        saveCachedProfile(currentUserProfile);
+                        refreshUserProfileUI();
+
+                        if (prevQuota && currentUserProfile.referralQuota > prevQuota) {
+                            showToast(`Referans hakkınız yönetici tarafından ${currentUserProfile.referralQuota} adede yükseltildi!`, "fa-gift");
+                        }
+                    }, () => {});
+                } catch (e) {}
+
                 db.collection('users').doc(user.uid).get().then((doc) => {
                     if (doc.exists) {
                         const docData = doc.data() || {};
                         const cloudProf = docData.profile || {};
+                        const mergedRefs = sanitizeEmailArray(docData.referrals || cloudProf.referrals || currentUserProfile.referrals || []);
+                        const quota = extractQuotaValue(docData, cloudProf, currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA);
+                        const explicitActive = Boolean(
+                            docData.isActive === true ||
+                            docData.aktif === true ||
+                            cloudProf.isActive === true ||
+                            cloudProf.aktif === true ||
+                            isFounderOrAdminEmail(user.email || docData.email)
+                        );
+
                         currentUserProfile = {
                             uid: user.uid,
                             fullName: cloudProf.fullName || docData.fullName || currentUserProfile.fullName || user.displayName || 'Personel',
@@ -3148,6 +4112,12 @@
                             photoURL: user.photoURL || cloudProf.photoURL || docData.photoURL || '',
                             title: cloudProf.title || docData.title || currentUserProfile.title || '',
                             company: cloudProf.company || docData.company || currentUserProfile.company || '',
+                            explicitActive: explicitActive,
+                            isActive: explicitActive || Boolean(currentUserProfile.isActive),
+                            referralQuota: Math.max(quota, mergedRefs.length),
+                            referrals: mergedRefs,
+                            referredByEmail: docData.referredByEmail || cloudProf.referredByEmail || '',
+                            referredByName: docData.referredByName || cloudProf.referredByName || '',
                             updatedAt: Date.now()
                         };
                         saveCachedProfile(currentUserProfile);
@@ -3185,7 +4155,7 @@
                         document.getElementById('onboard-input-title').value = currentUserProfile.title || '';
                         document.getElementById('onboard-input-company').value = currentUserProfile.company || '';
                     } else {
-                        persistProfileToDatabase(currentUserProfile);
+                        persistProfileToDatabase(currentUserProfile, !doc.exists);
                         unlockAuthGateAndEnter();
                     }
                 }).catch((err) => {
@@ -3207,8 +4177,11 @@
                 // Giriş yapılmamışsa veya çıkış yapıldıysa sistemi kilitle ve giriş ekranını göster
                 if (networkUnsubUsers) { try { networkUnsubUsers(); } catch (e) {} networkUnsubUsers = null; }
                 if (networkUnsubDir) { try { networkUnsubDir(); } catch (e) {} networkUnsubDir = null; }
+                if (networkUnsubRefs) { try { networkUnsubRefs(); } catch (e) {} networkUnsubRefs = null; }
+                if (currentUserDocUnsub) { try { currentUserDocUnsub(); } catch (e) {} currentUserDocUnsub = null; }
                 document.getElementById('auth-logged-in').style.display = 'none';
                 document.getElementById('auth-logged-out').style.display = 'block';
+                closePassiveWallModal();
                 lockAuthGateScreen();
                 projectsData = loadLocalProjects();
                 if (!projectsData[activeProject]) activeProject = "Varsayılan";
@@ -3363,6 +4336,10 @@
         }
 
         function toggleTkgmParsels() {
+            if (!tkgmParselsActive && !requireActiveMembership('TKGM Kadastro Parselleri Katmanı')) {
+                updateLayersModalUI();
+                return;
+            }
             tkgmParselsActive = !tkgmParselsActive;
             if (tkgmParselsActive) {
                 map.addLayer(tkgmParselsLayer);
@@ -3499,7 +4476,11 @@
         }
 
         function toggleCrosshairMode(forceState = null) {
-            crosshairActive = forceState !== null ? forceState : !crosshairActive;
+            const nextState = forceState !== null ? forceState : !crosshairActive;
+            if (nextState && !requireActiveMembership('Hassas Nişangah ve Nokta Alımı')) {
+                return;
+            }
+            crosshairActive = nextState;
             document.getElementById('map-crosshair').classList.toggle('active', crosshairActive);
             document.getElementById('toggle-crosshair').classList.toggle('active', crosshairActive);
             document.getElementById('btn-crosshair-toggle').classList.toggle('active-tool', crosshairActive);
@@ -3852,6 +4833,7 @@
         }
 
         function startStakeoutPoint(pt) {
+            if (!requireActiveMembership('Canlı Nokta Aplikasyon (Stakeout)')) return;
             stakeoutTarget = pt;
             switchTab('tab-map');
             map.closePopup();
@@ -4085,6 +5067,7 @@
         let epochSimInterval = null;
 
         function startEpochAveraging() {
+            if (!requireActiveMembership('Hassas Epok Ortalamalı Nokta Kaydı')) return;
             if (saveSourceMode !== 'GPS') {
                 saveCurrentLocation();
                 return;
@@ -4164,6 +5147,7 @@
         let measureVertexMarkers = [];
 
         function toggleMeasureTool() {
+            if (!measureModeActive && !requireActiveMembership('Alan ve Mesafe Ölçüm Aracı')) return;
             measureModeActive = !measureModeActive;
             if (measureModeActive) {
                 map.closePopup();
@@ -4289,6 +5273,7 @@
         let areaSelectAppend = false;
 
         function startAreaSelection(appendToMeasure = false) {
+            if (!requireActiveMembership('Poligon Alan Hesabı')) return;
             const pts = projectsData[activeProject] ? projectsData[activeProject].points : [];
             if (pts.length < 3) {
                 showToast("Alan hesabı için klasörde en az 3 nokta olmalı", "fa-info-circle");
@@ -4401,6 +5386,7 @@
         let lastConvertedPoint = null;
 
         function openConverterModal() {
+            if (!requireActiveMembership('Jeodezik Koordinat Dönüştürücü')) return;
             closeModals();
             document.getElementById('modal-converter').classList.add('show');
             if (currentDOM) document.getElementById('conv-dom-select').value = currentDOM.toString();
@@ -4489,6 +5475,7 @@
         }
 
         function convSaveToProject() {
+            if (!requireActiveMembership('Nokta Ekleme ve Kayıt')) return;
             if (!lastConvertedPoint) return;
             projectsData[activeProject].points.push({ ...lastConvertedPoint, id: Date.now() });
             renderActiveProjectMarkers();
@@ -4529,14 +5516,7 @@
         let lastPassiveReasonText = '';
 
         function openQueryModal() {
-            closeModals();
-            document.getElementById('modal-query').classList.add('show');
-            if (maksCache.il.length === 0) {
-                loadMaksIller();
-            }
-            if (parcelCache.il.length === 0) {
-                loadParcelIller();
-            }
+            switchTab('tab-query');
         }
 
         function switchQueryMode(mode) {
@@ -4770,6 +5750,7 @@
         }
 
         function saveParcelVertexToProject(idx) {
+            if (!requireActiveMembership('Nokta Ekleme ve Kayıt')) return;
             const v = lastQueriedParcelVertices.find(item => item.index === idx);
             if (!v) return;
             projectsData[activeProject].points.push({
@@ -4782,6 +5763,7 @@
         }
 
         function saveAllParcelVerticesToProject() {
+            if (!requireActiveMembership('Nokta Ekleme ve Kayıt')) return;
             if (!lastQueriedParcelVertices || lastQueriedParcelVertices.length === 0) return;
             const baseTime = Date.now();
             lastQueriedParcelVertices.forEach((v, i) => {
@@ -5206,6 +6188,7 @@
         }
 
         async function executeParcelQuery() {
+            if (!requireActiveMembership('TKGM Parsel Sorgulama')) return;
             const mahalleId = document.getElementById('p-select-mahalle').value;
             let ada = (document.getElementById('p-input-ada').value || '').trim();
             let parsel = (document.getElementById('p-input-parsel').value || '').trim();
@@ -5245,6 +6228,7 @@
 
         // Koordinattan Parsel Sorgusu: /parsel/{lat}/{lon}
         async function queryParcelByCurrentCoord(sourceType = 'CROSSHAIR') {
+            if (!requireActiveMembership('Koordinattan TKGM Parsel Sorgulama')) return;
             let lat, lon;
             if (sourceType === 'GPS') {
                 if (currentLat === null || currentLon === null) {
@@ -5453,6 +6437,7 @@
         }
 
         function saveTempQueryPointToProject() {
+            if (!requireActiveMembership('Nokta Ekleme ve Kayıt')) return;
             if (!lastTempQueryPoint) return;
             projectsData[activeProject].points.push({
                 ...lastTempQueryPoint,
@@ -5469,6 +6454,7 @@
         }
 
         function executeAddressQuery() {
+            if (!requireActiveMembership('TKGM MAKS Adres Sorgulama')) return;
             const ilId = document.getElementById('q-select-il').value;
             const ilceId = document.getElementById('q-select-ilce').value;
             const mahId = document.getElementById('q-select-mahalle').value;
@@ -5699,9 +6685,17 @@
                 return;
             }
 
+            // Pasif kullanıcı nokta eklemek istediğinde Pasif Kullanıcı uyarısını göster
+            if (tabId === 'tab-add' && !requireActiveMembership('Nokta Ekleme ve Kayıt')) {
+                return;
+            }
+
             if(tabId !== 'tab-install') {
                 document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
-                if(tabId !== 'tab-add') document.getElementById(tabId).classList.add('active');
+                if(tabId !== 'tab-add') {
+                    const tabBtn = document.getElementById(tabId);
+                    if (tabBtn) tabBtn.classList.add('active');
+                }
             }
 
             document.querySelectorAll('.app-modal').forEach(el => el.classList.remove('show'));
@@ -5711,7 +6705,13 @@
             resetAreaSelectionState();
             closeNavSheet();
 
-            if (tabId === 'tab-layer') {
+            if (tabId === 'tab-query') {
+                map.closePopup();
+                document.getElementById('modal-query').classList.add('show');
+                if (maksCache.il.length === 0) loadMaksIller();
+                if (parcelCache.il.length === 0) loadParcelIller();
+            }
+            else if (tabId === 'tab-layer') {
                 map.closePopup();
                 updateLayersModalUI();
                 layersPanelEl.classList.add('show');
@@ -5752,6 +6752,7 @@
         }
 
         function saveCurrentLocation() {
+            if (!requireActiveMembership('Nokta Ekleme ve Kayıt')) return;
             let lat, lon, alt = 0, sourceNote = "";
 
             if (saveSourceMode === 'MANUAL') {
@@ -6306,6 +7307,7 @@
 
         // --- DOSYA İÇE AKTARMA (IMPORT: NCN, TXT, CSV, KML, GEOJSON) ---
         function triggerImportFile() {
+            if (!requireActiveMembership('Dosyadan Nokta İçe Aktarma')) return;
             document.getElementById('import-file-input').value = "";
             document.getElementById('import-file-input').click();
         }
@@ -6477,18 +7479,24 @@
                 ]
             },
             {
-                badge: "ADIM 2/5 • SOL ARAÇ ÇUBUĞU",
+                badge: "ADIM 2/5 • SOL ARAÇ ÇUBUĞU & SORGU",
                 icon: "fa-tools",
-                title: "Sol Taraftaki Harita Kısayol Butonları",
-                sub: "Arazide en çok kullanılan mühendislik ve sorgulama araçları sol kenarda yukarıdan aşağıya sıralanmıştır:",
+                title: "Harita Kısayolları ve Alt Menüde Sorgu",
+                sub: "Arazide en çok kullanılan mühendislik araçları sol kenarda, TKGM Parsel & Adres Sorgu menüsü ise alt menünün en solunda yer alır:",
                 chips: [
+                    { icon: "fa-search-location", text: "Alt Menü: Sorgu" },
                     { icon: "fa-sun", text: "Güneş Modu" },
                     { icon: "fa-border-all", text: "TKGM Parsel" },
                     { icon: "fa-crosshairs", text: "Nişangah" },
-                    { icon: "fa-ruler-combined", text: "Alan Ölçer" },
-                    { icon: "fa-search-location", text: "Sorgu" }
+                    { icon: "fa-ruler-combined", text: "Alan Ölçer" }
                 ],
                 items: [
+                    {
+                        icon: "fa-search-location",
+                        cls: "green",
+                        title: "Alt Menüde Sol Başta: TKGM Parsel & MAKS Adres Sorgu",
+                        desc: "Alt menünün en solundaki 🔍 'Sorgu' tuşuyla İl/İlçe/Mahalle/Ada/Parsel veya Sokak/Kapı No sorgulayabilir, pasif parsellerin gittiği yeni parselleri ve K1..Kn köşe koordinatlarını haritada görebilirsiniz."
+                    },
                     {
                         icon: "fa-border-all",
                         cls: "amber",
@@ -6500,12 +7508,6 @@
                         cls: "",
                         title: "Hassas Nişangah & Alan/Mesafe Ölçümü",
                         desc: "🎯 Nişangah ile harita merkezindeki koordinatı okuyup kaydedebilir; 📐 Cetvel aracıyla haritadan veya kayıtlı noktalardan en az 3 köşe seçerek m² / dekar alan hesaplayabilirsiniz."
-                    },
-                    {
-                        icon: "fa-search-location",
-                        cls: "green",
-                        title: "TKGM Parsel & MAKS Adres Sorgulama",
-                        desc: "🔍 Büyüteç butonuyla İl/İlçe/Mahalle/Ada/Parsel veya Sokak/Kapı No sorgulayabilir, pasif parsellerin gittiği yeni parselleri ve K1..Kn köşe koordinatlarını haritada görebilirsiniz."
                     }
                 ]
             },
@@ -6592,8 +7594,8 @@
                     {
                         icon: "fa-users",
                         cls: "amber",
-                        title: "Canlı AZİMUT Ağı ve Personel Kimliği",
-                        desc: "Alt menüde Profil'in yanındaki 'AZİMUT Ağı' sekmesinden sisteme giriş yapan tüm meslektaşlarınızın ünvan ve kurumlarını anlık görebilir, tek tuşla mail gönderebilirsiniz."
+                        title: "Canlı AZİMUT Ağı ve 3 Kişilik Referans Sistemi",
+                        desc: "Her aktif kullanıcının 3 meslektaşına referans olma hakkı vardır. 'AZİMUT Ağı' sekmesinden Aktifleri, Referans Hakkı Olanları ve Pasif kullanıcıları anlık görebilir, profilinizden referans maili tanımlayabilirsiniz."
                     }
                 ]
             }
@@ -6679,7 +7681,7 @@
                 renderTutorialSlide();
             } else {
                 closeTutorialModal();
-                showToast("AZİMUT Pro v8 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
+                showToast("AZİMUT Pro v9 kullanıma hazır! Sağdaki (?) butonundan rehberi her zaman açabilirsiniz.", "fa-check-circle");
             }
         }
 

@@ -1,5 +1,5 @@
-const CACHE_NAME = 'azimut-pro-v8.0';
-const TILE_CACHE_NAME = 'azimut-tiles-v8.0';
+const CACHE_NAME = 'azimut-pro-v9.0';
+const TILE_CACHE_NAME = 'azimut-tiles-v9.0';
 
 const APP_ASSETS = [
     './',
