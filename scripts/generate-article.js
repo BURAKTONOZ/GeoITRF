@@ -289,4 +289,287 @@ const STATIC_TOPICS = [
     "Rüzgar erozyonu sahalarında rüzgar kıran (ağaç perdesi) şeritlerinin hakim rüzgar yönüne dik aplikasyonu",
     "Organik tarım sertifikasyonu için komşu konvansiyonel tarlalardan bırakılacak izolasyon mesafesi kontrolü",
     "Tohumluk üretim parsellerinde yabancı tozlaşmayı önlemek için tarlalar arası mesafe (izolasyon) ölçümü",
-    "Kırsal kalkınma (
+    "Kırsal kalkınma (TKDK / IPARD) hibe projelerinde yatırım yapılacak parselin koordinat doğrulaması",
+    "Hayvancılık tesisleri (ahır, ağıl, kümes) kurulumunda yerleşim yerlerine olan yasal mesafe ölçümü",
+    "Su ürünleri avlak sahaları ve göl içi yasak bölge sınırlarının koordinatlarla kontrolü",
+    "Ekoturizm ve glamping (çadır kamp) alanlarında ünitelerin doğaya zarar vermeden koordinatla yerleştirilmesi",
+    "Orman yangın gözetleme kuleleri ve su toplama çukurlarının (havuz) stratejik konum tespiti",
+
+    // --- 5. ELEKTRİK, ENERJİ, GES, RES VE TELEKOMÜNİKASYON (201-250) ---
+    "Güneş Enerjisi Santrali (GES) projelerinde panel sehpalarının (konstrüksiyon) sahada aplikasyonu",
+    "GES yatırımlarında marjinal tarım arazisi sınırlarının ve güney bakı yönünün sahada haritayla tespiti",
+    "GES şantiyelerinde inverter odaları, trafo merkezi ve kablo kanalı güzergahlarının araziye işaretlenmesi",
+    "Enerji Nakil Hattı (ENH) projelerinde direk merkez noktalarının (some ve durdurucu direkler) aplikasyonu",
+    "Yüksek gerilim (YG) ve orta gerilim (OG) hatlarında kamulaştırma (emniyet) şeridi genişliğinin sahada kontrolü",
+    "Elektrik dağıtım şebekelerinde aydınlatma direkleri ve saha dağıtım panolarının (box) koordinatlı alımı",
+    "Yeraltı enerji kablosu güzergahlarının kazı öncesi aplikasyonu ve kapatılmadan önce as-built kaydı",
+    "Rüzgar Enerjisi Santrali (RES) projelerinde türbin temel merkezlerinin ve vinç platform alanlarının aplikasyonu",
+    "RES şantiyelerinde geniş kanat taşıma yollarının kurp yarıçaplarının ve yol genişliklerinin saha kontrolü",
+    "Hidroelektrik Santral (HES) projelerinde regülatör yeri, iletim kanalı ve cebri boru ekseni aplikasyonu",
+    "Biyokütle ve biyogaz enerji tesislerinde hammadde depolama ve tesis sınırlarının vaziyet planından uygulanması",
+    "Fiber optik iletişim hatlarında güzergah etüdü, ek odası (menhol) noktalarının aplikasyonu ve CBS kaydı",
+    "Telekomünikasyon altyapısında abone bağlantı noktalarının ve saha dolaplarının koordinatlı envanteri",
+    "Elektrik direklerinde açı (some) sapmalarının pusula ve koordinat yardımıyla sahada kontrol edilmesi",
+    "Tarımsal sulama GES projelerinde güneş panelleri ile su kuyusu arasındaki kablo mesafesinin haritadan ölçümü",
+    "Katodik koruma tesislerinde anot yatağı ve ölçü kutusu noktalarının boru hattı boyunca aplikasyonu",
+    "Şehir içi trafo köşklerinin imar planındaki ayrılmış (trafo alanı) parsellerine tam oturtulması",
+    "Otoyol ve cadde aydınlatma projelerinde direkler arası eşit mesafe (30m - 40m) aplikasyonu",
+    "Enerji projelerinde orman geçiş izin sınırlarının ve kesilecek koridor genişliğinin sahada işaretlenmesi",
+    "Kaçak yapılaşmanın yüksek gerilim hatları altına (yaklaşma mesafesi içine) girip girmediğinin saha tespiti",
+    "GES sahalarında tel çit sınırları ile panel dizileri arasındaki yangın ve bakım yolu mesafesinin aplikasyonu",
+    "GES projelerinde topografik eğim nedeniyle oluşan gölgelenme mesafelerinin (pitch distance) sahada kontrolü",
+    "Dağıtım şirketleri (EDAŞ) direk dikim projelerinde istimlak sınırına ve parsel köşelerine uyum kontrolü",
+    "ENH direk ayaklarının (A, B, C, D ayakları) diyagonal ve kenar mesafelerinin sahada koordinatla kontrolü",
+    "Rüzgar türbini (RES) kanat süpürme alanı ve parsel sınırları dışına taşma (emniyet alanı) kontrolü",
+    "Jeotermal enerji santrali (JES) buhar isale hatlarının ve re-enjeksiyon kuyularının saha aplikasyonu",
+    "Elektrikli araç (EV) hızlı şarj istasyonu kurulumlarında otopark içi konumlandırma ve kablo güzergahı etüdü",
+    "Fabrika çatısı ve arazi tipi GES projelerinde trafo bağlantı noktasına olan kuş uçuşu ve gerçek hat mesafesi",
+    "Enerji nakil hatlarında tel çekimi öncesi direkler arası açıklık (menzil) mesafesinin GPS ile doğrulanması",
+    "Köy ve yayla şebekelerinde arıza tespiti için direk numaralarının koordinatlı harita üzerinden bulunması",
+    "Sokak aydınlatma armatürlerinin CBS (Coğrafi Bilgi Sistemi) envanteri için sahada tek tek koordinatlandırılması",
+    "Doğalgaz bölge regülatörleri (RMS-A ve RMS-B) istasyon alanlarının ve koruma çitlerinin aplikasyonu",
+    "Akaryakıt ve LPG istasyonu kurulumlarında tank sahası ve kanopi ayaklarının yola/komşuya çekme mesafesi",
+    "Radyolink ve mikrodalga haberleşme kuleleri arasında birbirini görme (Line of Sight) ve azimut açısı hesabı",
+    "Enerji depolama tesisleri (EDT / Batarya sahaları) konteyner yerleşim planlarının araziye aplikasyonu",
+    "Yüksek gerilim pilon (kafes) direklerinin temel kazılarında eksen kaçıklığının koordinatla önlenmesi",
+    "Demiryolu sinyalizasyon ve elektrifikasyon projelerinde kablo menhollerinin hat boyu aplikasyonu",
+    "Güneş tarlalarında (GES) drenaj kanalları ve çevre güvenlik kameraları (CCTV) direk yerlerinin tespiti",
+    "Yeraltı elektrik ve fiber hatlarında kazı hasarlarını önlemek için eski as-built koordinatlarını sahada bulma",
+    "Tarımsal sulama kooperatiflerinde elektrik panoları ve sayaç noktalarının harita üzerinde kayıt altına alınması",
+    "Havalimanı radar ve seyrüsefer (VOR/ILS) anten kulelerinin hassas koordinat ve yön aplikasyonu",
+    "Meteoroloji gözlem istasyonları (OMGİ) sensör sahasının koordinatlı kurulumu ve engel kontrolü",
+    "Paratoner (yıldırımdan korunma) direklerinin tesis içindeki koruma yarıçaplarının harita üzerinde analizi",
+    "Denizaltı kablo ve boru hattı projelerinde karaya çıkış (landfall) ve menhol noktalarının kıyı aplikasyonu",
+    "Sanayi tesislerinde fabrika içi altyapı (elektrik, su, doğalgaz, veri) galerilerinin koordinatlı haritalanması",
+    "Enerji yatırımlarında ön lisans ve lisans başvuruları için santral sahası köşe koordinatlarının doğrulanması",
+    "GES sahalarında yıkama suyu deposu ve bekçi kulübesi yerlerinin vaziyet planına göre aplikasyonu",
+    "Elektrik proje müellifleri için saha etüdünde (rölöve) mevcut direklerin hızlıca koordinatlandırılması",
+    "ENH güzergahlarında ağaç kesim (koridor açma) sınırlarının orman memurlarıyla birlikte sahada tespiti",
+    "Akıllı şehir uygulamalarında Wi-Fi noktaları, kamera direkleri ve sensörlerin koordinatlı saha montajı",
+
+    // --- 6. CAD, CBS (GIS), VERİ FORMATLARI VE DİJİTAL İŞ AKIŞI (251-300) ---
+    "NetCAD (.NCN) nokta dosyaları cep telefonunda nasıl açılır ve arazide aplikasyon için nasıl kullanılır?",
+    "AutoCAD (.DXF) çizim dosyalarındaki nokta ve poligonları mobil harita ekranına aktarma rehberi",
+    "Google Earth (.KML ve .KMZ) dosyalarını arazide canlı GPS konumuyla üst üste bindirerek gezme",
+    "GeoJSON formatı nedir? Web tabanlı CBS projelerini mobil saha terminallerinde görüntüleme",
+    "Excel (.CSV ve .TXT) formatındaki binlerce koordinat noktasını tek tıkla haritaya yükleme teknikleri",
+    "Arazide ölçülen noktaları ofisteki NetCAD ve AutoCAD yazılımlarına hatasız aktarma (Dışa Aktar)",
+    "Sahada yapılan ölçümlerden anında A4 boyutunda resmi PDF Koordinat ve Aplikasyon Raporu üretme",
+    "WhatsApp veya e-posta ile gelen konum/koordinat mesajlarını doğrudan harita aplikasyonuna dönüştürme",
+    "QR Kod ile şantiyede iki mühendis arasında internet olmadan proje ve koordinat dosyası paylaşımı",
+    "Bulut tabanlı (Cloud) proje senkronizasyonu: Arazide alınan noktanın aynı anda merkez ofiste görünmesi",
+    "Kurumsal harita ve inşaat firmalarında saha ekiplerinin görev ve nokta takibini tek merkezden yönetme",
+    "CAD programlarında farklı katmanlarda (Layer) bulunan verilerin sahada filtrelenerek kullanılması",
+    "Koordinat dosyalarında Türkçe karakter ve ondalık ayırıcı (nokta/virgül) hatalarının pratik çözümü",
+    "Harita üzerinde mesafe cetveli ve poligon alan ölçümü araçlarıyla sahada anlık metraj çıkarma",
+    "Uydu haritası altlıkları: Google Hybrid, Esri World Imagery ve OpenStreetMap katmanlarının saha farkları",
+    "Mobil tarayıcı (PWA) tabanlı jeodezik yazılımların uygulama marketi gerektirmeden her cihazda çalışma avantajı",
+    "Saha fotoğraflarının koordinatlı ve tarih damgalı olarak teknik raporlara entegre edilmesi",
+    "Büyük ölçekli altyapı projelerinde binlerce nokta arasından ada/isim aramasıyla hedef noktayı bulma",
+    "Geleneksel el GPS cihazları (Garmin, Magellan vb.) ile modern akıllı telefon tabanlı terminallerin karşılaştırması",
+    "AZİMUT Pro Jeodezik El Terminali ile saha mühendisliğinde dijital dönüşüm ve hız kazanımı",
+    "QGIS ve ArcGIS masaüstü CBS yazılımlarında üretilen katmanların mobil sahaya taşınması",
+    "Shapefile (.SHP) verilerini KML veya GeoJSON formatına dönüştürerek cep telefonunda görüntüleme",
+    "İmar planı paftalarını (Raster/TIF) vektör verilere dönüştürüp sahada parsel üzerinde kontrol etme",
+    "NetCAD'de hazırlanan aplikasyon özet cetvellerini kağıt çıktısına gerek kalmadan telefonda kullanma",
+    "AutoCAD Civil 3D yol ve altyapı projelerindeki kazık listelerini (.CSV) doğrudan saha terminaline atma",
+    "Saha ölçümlerinde nokta adlandırma (P1, P2, K1, S1) ve kodlama standartlarının ofis çizimine etkisi",
+    "Poligon ve sınır noktalarını birleştirerek sahada kapalı alan (poligon) oluşturma ve çevre uzunluğu hesabı",
+    "Farklı projeksiyonlardaki iki ayrı CAD dosyasını aynı harita ekranında doğru konumda birleştirme",
+    "Harita mühendislik bürolarında müşteri bilgilendirmesi için canlı konum ve PDF rapor paylaşım iş akışı",
+    "Belediye ve kamu kurumlarında saha denetim tutanaklarına koordinatlı harita ekran görüntüsü ekleme",
+    "İnşaat hakediş dosyalarında yapılan imalatın koordinat özet tablosu ve harita krokisiyle belgelenmesi",
+    "Arazide kaybolan veya silinen proje dosyalarını bulut yedekleme (Cloud Backup) üzerinden geri yükleme",
+    "Çoklu proje yönetimi: Aynı gün içinde 5 farklı şantiyenin koordinat klasörlerini birbirine karıştırmadan yönetme",
+    "Nokta listelerinde toplu silme, düzenleme ve koordinat filtreleme işlemlerinin sahada pratik kullanımı",
+    "Harita ekranında gece modu (karanlık tema) ve yüksek kontrastlı ikonların güneş altında okunabilirliği",
+    "Telefon bataryasını koruyarak tam gün saha ölçümü yapabilmek için GPS ve ekran optimizasyonu ipuçları",
+    "Harici Bluetooth GNSS (RTK) alıcılarını cep telefonuna bağlayarak mobil tarayıcıda milimetrik çalışmak",
+    "Saha mühendisleri için kağıtsız şantiye (Paperless Construction) vizyonu ve dijital aplikasyon araçları",
+    "Koordinat dönüşüm API'leri ve web tabanlı jeodezik hesap motorlarının matematiksel güvenilirliği",
+    "Türkiye'de harita, inşaat, orman ve enerji sektörlerinde mobil CBS kullanımının geleceği"
+];
+
+// ============================================================================
+// BÖLÜM 2: 200 ADET DİNAMİK SEKTÖREL MATRİS KONUSU (20 Meslek x 10 Operasyon)
+// ============================================================================
+const ROLES = [
+    "Harita ve Kadastro Mühendisleri",
+    "İnşaat Mühendisleri ve Şantiye Şefleri",
+    "Orman Mühendisleri ve Muhafaza Memurları",
+    "Elektrik Mühendisleri ve GES Yatırımcıları",
+    "Mimarlar ve Peyzaj Mimarları",
+    "Şehir ve Bölge Plancıları",
+    "Ziraat Mühendisleri ve Büyük Çiftçiler",
+    "Jeoloji ve Jeofizik Mühendisleri",
+    "Maden Mühendisleri ve Ocak Yöneticileri",
+    "Çevre Mühendisleri ve ÇED Uzmanları",
+    "Gayrimenkul Değerleme (Ekspertiz) Uzmanları",
+    "Profesyonel Arsa ve Arazi Emlakçıları",
+    "Belediye Fen İşleri ve İmar Müdürlüğü Ekipleri",
+    "Belediye Numarataj ve Adres Tespiti Personeli",
+    "Karayolları, DSİ ve Altyapı Kontrol Mühendisleri",
+    "LİHKAB ve Serbest Harita Bürosu Teknikerleri",
+    "CBS (Coğrafi Bilgi Sistemleri) Uzmanları",
+    "Telekomünikasyon ve Fiber Altyapı Ekipleri",
+    "Arsa, Tarla ve Bahçe Satın Alan Yatırımcılar",
+    "Arkeologlar ve Saha Araştırma Ekipleri"
+];
+
+const OPERATIONS = [
+    "için cep telefonuyla ITRF96 ve ED50 koordinat dönüşümü ve sahada nokta bulma",
+    "için TKGM kadastro parsel sınırlarını uydu haritası üzerinde canlı görüntüleme ve gezme",
+    "için sesli ve pusulalı Stakeout (Canlı Aplikasyon) radarıyla arazide hedef noktaya sıfırlama",
+    "için NetCAD (.NCN), KML ve Excel koordinat dosyalarını sahada telefonda açma ve yönetme",
+    "için arazide Hassas Epok Ortalaması (RMS) alarak GPS ölçüm doğruluğunu maksimuma çıkarma",
+    "için sahada yürüyerek veya harita üzerinden anlık alan (m² / dekar) ve mesafe metrajı hesaplama",
+    "için arazi çalışmalarını tek tıkla resmi A4 PDF Koordinat Raporuna dönüştürme",
+    "için dilim orta meridyeni (DOM) hatalarını önleyerek doğru projeksiyonda saha ölçümü yapma",
+    "için internetin zayıf olduğu kırsal sahalarda mobil el terminaliyle kesintisiz koordinat aplikasyonu",
+    "için ofis ile saha arasında bulut senkronizasyonu ve QR kodla hızlı proje/nokta paylaşımı"
+];
+
+const DYNAMIC_TOPICS = [];
+for (const role of ROLES) {
+    for (const op of OPERATIONS) {
+        DYNAMIC_TOPICS.push(`${role} ${op}`);
+    }
+}
+
+// TOPLAM 500 KONULUK ANA HAVUZ
+const TOPIC_POOL = [...STATIC_TOPICS, ...DYNAMIC_TOPICS];
+
+// Konu ve görsel temasına göre en uygun gerçek Unsplash fotoğrafını seçen yardımcı fonksiyon
+function getStockPhotoForTheme(theme, usedImagesSet) {
+    const pool = REAL_STOCK_PHOTOS[theme] || REAL_STOCK_PHOTOS.surveying;
+    // Önce daha önce kullanılmamış olanları filtrele
+    const unused = pool.filter(url => !usedImagesSet.has(url));
+    if (unused.length > 0) {
+        return unused[Math.floor(Math.random() * unused.length)];
+    }
+    // Hepsi kullanıldıysa havuzdan rastgele seç
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+async function runAutoBlogger() {
+    try {
+        console.log(`📚 Toplam Konu Havuzu Kapasitesi: ${TOPIC_POOL.length} benzersiz konu.`);
+
+        // 1. Daha önce yazılmış konuları ve kullanılmış görselleri Firestore'dan kontrol et
+        const snapshot = await db.collection('azimut_articles').select('sourceTopic', 'image').get();
+        const usedTopics = new Set();
+        const usedImages = new Set();
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.sourceTopic) usedTopics.add(data.sourceTopic);
+            if (data.image) usedImages.add(data.image);
+        });
+
+        let availableTopics = TOPIC_POOL.filter(t => !usedTopics.has(t));
+        if (availableTopics.length === 0) {
+            console.log("♻️ 500 konunun tamamı yazıldı! Havuz sıfırlanıyor...");
+            availableTopics = TOPIC_POOL;
+        }
+
+        const selectedTopic = availableTopics[Math.floor(Math.random() * availableTopics.length)];
+        console.log(`🎯 Seçilen Konu (${availableTopics.length} kalan içinden):`, selectedTopic);
+
+        // Makale içine gömülecek gerçek uygulama ekran görüntüsü (ek1.png - ek7.png)
+        const inlineAppScreen = `ek${Math.floor(Math.random() * 7) + 1}.png`;
+
+        // 2. Gemini API Komutu
+        const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve Saha Mühendisisin. Aynı zamanda AZİMUT Pro (https://buraktonoz.com/azimut/) jeodezik mobil el terminalinin baş teknik yazarısın.
+
+GÖREVİN: Sadece aşağıda verilen "SEÇİLEN KONU" üzerine Google aramalarında 1. sıraya çıkacak, son derece kapsamlı (en az 750-950 kelime), teknik açıdan doyurucu, akıcı ve tamamen özgün bir Türkçe SEO makalesi yazmak.
+
+SEÇİLEN KONU: "${selectedTopic}"
+
+YAZIM KURALLARI:
+1. Başlık (title): Seçilen konuyu tam yansıtan, Google'da tıklanma oranı yüksek, çarpıcı ve özgün bir başlık olsun.
+2. İçerik Yapısı (content): 
+   - Doğrudan konunun sahadaki gerçek problemini anlatan güçlü bir giriş paragrafı (<p>) ile başla.
+   - En az 4 adet <h2> alt başlığı ve gerekli yerlerde <h3> alt başlıkları kullan.
+   - Madde işaretli listeler (<ul><li>), numaralı adımlar (<ol><li>) ve önemli terimlerde kalın (<b>) etiketler kullan.
+   - Makalenin ortasında uygun bir bölümde, bu işlemin <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> kullanılarak cep telefonundan sahada adım adım nasıl pratik, hızlı ve ücretsiz çözüldüğünü anlat ve hemen altına şu HTML görsel kutusunu ekle:
+     <figure style="margin:24px 0;text-align:center;"><img src="${inlineAppScreen}" alt="${selectedTopic} - AZİMUT Pro Saha Ekranı" style="max-width:100%;border-radius:12px;border:1px solid rgba(56,189,248,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.4);"><figcaption style="font-size:13px;color:#94a3b8;margin-top:8px;">Şekil: AZİMUT Pro Jeodezik El Terminali Saha Uygulama Ekranı</figcaption></figure>
+3. Kategori (category): Sadece şu 4 değerden en uygun olan BİRİNİ seç: "Jeodezi & Projeksiyon", "Saha Aplikasyonu", "Kadastro & TKGM", "CAD & Yazılım".
+4. Görsel Teması (imageTheme): Makalenin kapak fotoğrafı için sadece şu 6 anahtardan en uygun olan BİRİNİ seç:
+   - "surveying" (Harita, jeodezi, koordinat, ölçüm konuları için)
+   - "construction" (Şantiye, inşaat, yol, altyapı, aplikasyon konuları için)
+   - "land" (Kadastro, TKGM, arsa, tarla, parsel sorgulama konuları için)
+   - "forestry" (Orman, ziraat, çevre, dağlık arazi konuları için)
+   - "energy" (GES, güneş enerji santrali, elektrik direği, RES, enerji hatları için)
+   - "cad_gis" (NetCAD, AutoCAD, KML, CBS, yazılım ve veri aktarımı konuları için)
+5. Yanıtı SADECE geçerli bir JSON objesi olarak ver.
+
+İSTENEN JSON FORMATI:
+{
+  "title": "Özgün ve Çarpıcı Makale Başlığı",
+  "category": "Saha Aplikasyonu",
+  "imageTheme": "surveying",
+  "summary": "Google arama sonuçlarında görünecek 150-160 karakterlik merak uyandırıcı SEO meta açıklaması.",
+  "keywords": "konuyla ilgili 8-10 adet virgülle ayrılmış SEO anahtar kelimesi, Azimut Pro",
+  "content": "<p>Giriş...</p><h2>1. Alt Başlık</h2><p>Detaylar...</p>"
+}`;
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                temperature: 0.85,
+                responseMimeType: "application/json"
+            }
+        });
+
+        let rawText = response.text.trim();
+        rawText = rawText.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
+        const articleData = JSON.parse(rawText);
+
+        // SEO uyumlu URL (Slug) + Benzersiz kısa kod
+        const baseSlug = articleData.title
+            .toLowerCase()
+            .replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u')
+            .replace(/[^a-z0-9\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+            .substring(0, 75);
+
+        const uniqueSuffix = Date.now().toString(36).slice(-4);
+        const slug = `${baseSlug}-${uniqueSuffix}`;
+
+        // Okuma süresi hesabı
+        const wordCount = articleData.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+        const readMins = Math.max(3, Math.ceil(wordCount / 180));
+
+        // Konunun temasına göre gerçek HD Unsplash stok fotoğrafı seç
+        const theme = articleData.imageTheme || "surveying";
+        const coverPhotoUrl = getStockPhotoForTheme(theme, usedImages);
+
+        const newArticle = {
+            id: slug,
+            slug: slug,
+            sourceTopic: selectedTopic,
+            title: articleData.title,
+            category: articleData.category || "Saha Aplikasyonu",
+            image: coverPhotoUrl, // Kapakta gerçek HD Unsplash mühendislik fotoğrafı!
+            date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
+            readTime: `${readMins} dk okuma`,
+            author: "Burak Tonoz",
+            authorEmail: "buraktonoz@gmail.com",
+            summary: articleData.summary,
+            keywords: articleData.keywords,
+            content: articleData.content, // İçeride ise ek1.png-ek7.png uygulama ekran görüntüsü gömülü!
+            timestamp: Date.now()
+        };
+
+        await db.collection('azimut_articles').doc(slug).set(newArticle);
+        console.log(`✅ Makale ve Gerçek HD Kapak Görseli Kaydedildi: [${articleData.category}] ${articleData.title}`);
+        console.log(`🖼️ Kapak Fotoğrafı (${theme}): ${coverPhotoUrl}`);
+
+    } catch (error) {
+        console.error("❌ Makale üretilirken hata oluştu:", error);
+        process.exit(1);
+    }
+}
+
+runAutoBlogger();
