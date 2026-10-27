@@ -1,9 +1,10 @@
-name: Günlük Otomatik SEO Makale Üretici
+name: Günde 3 Kez SEO Makale Üretici
 
 on:
   schedule:
-    - cron: '0 6 * * *' # Her gün saat 06:00 UTC'de (Türkiye saatiyle 09:00) otomatik çalışır
-  workflow_dispatch: # GitHub panelinden "Run workflow" diyerek istediğin an elle de tetikleyebilmeni sağlar
+    # UTC saatleriyle: 05:00 (TR 08:00), 09:00 (TR 12:00), 14:00 (TR 17:00)
+    - cron: '0 5,9,14 * * *'
+  workflow_dispatch:
 
 jobs:
   generate-and-publish:
