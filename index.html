@@ -964,11 +964,32 @@
             color: var(--success);
             border: 1px solid rgba(16, 185, 129, 0.42);
         }
+        .membership-badge.admin-member, .membership-status-badge.admin-member {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.24), rgba(0, 229, 255, 0.22));
+            color: #fde68a;
+            border: 1px solid rgba(245, 158, 11, 0.65);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+        }
         .membership-badge.passive-member, .membership-status-badge.passive-member {
             background: rgba(245, 158, 11, 0.18);
             color: var(--warning);
             border: 1px solid rgba(245, 158, 11, 0.45);
             animation: blinker 2.2s infinite;
+        }
+        .admin-ref-add-bar {
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 12px; padding: 9px;
+        }
+        .admin-ref-list-box {
+            display: flex; flex-direction: column; gap: 6px;
+            max-height: 240px; overflow-y: auto; padding-right: 2px;
+        }
+        .net-status-chip.admin-chip {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(0, 229, 255, 0.22));
+            color: #fde68a;
+            border: 1px solid rgba(245, 158, 11, 0.65);
         }
 
         /* Profildeki Referans Hakları ve Mail Kutuları */
@@ -2571,22 +2592,22 @@
                 <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Oturumu Kapat (Çıkış Yap)</button>
             </div>
 
-            <!-- v9: REFERANS HAKLARIM VE MESLEKTAŞ AKTİVASYON SÜTUNU (Dinamik Kotalı & Kaydedince Kilitlenen Yapı) -->
+            <!-- v10: REFERANS HAKLARIM (Admin için Sınırsız Liste, Aktif Üyeler için 3 Kişilik Kilitlenen Kontenjan, Pasifler için 0 Hak) -->
             <div class="referral-box-card" id="profile-referral-card">
                 <div class="referral-header-row">
                     <div>
-                        <h4 style="margin:0; font-size:0.88rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+                        <h4 id="profile-referral-title" style="margin:0; font-size:0.88rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">
                             <i class="fas fa-user-shield" style="color:var(--accent);"></i> Referans Haklarım
                         </h4>
-                        <p style="margin:2px 0 0 0; font-size:0.7rem; color:var(--text-muted); line-height:1.35;">
-                            Referans olduğunuz Gmail adresleri sisteme <b>Aktif Kullanıcı</b> olarak dahil olur. Kaydedilen mail adresi kilitlenir ve değiştirilemez.
+                        <p id="profile-referral-subtitle" style="margin:2px 0 0 0; font-size:0.7rem; color:var(--text-muted); line-height:1.35;">
+                            Aktif kullanıcılar 3 meslektaşına referans olabilir. Eklenen Gmail adresi kalıcı olarak kilitlenir ve bir daha değiştirilemez.
                         </p>
                     </div>
-                    <span class="referral-quota-pill" id="profile-referral-quota-pill">Kalan Hak: 0 / 3</span>
+                    <span class="referral-quota-pill" id="profile-referral-quota-pill">Referans Hakkı: 0</span>
                 </div>
 
                 <div class="referral-slots-list" id="profile-referral-slots-list">
-                    <!-- JS ile kullanıcının referralQuota değerine göre (varsayılan 3, Firebase'den artırılırsa dinamik) oluşturulur -->
+                    <!-- JS ile Admin / Aktif (3 Hak) / Pasif (0 Hak) durumuna göre oluşturulur -->
                 </div>
             </div>
 
@@ -2691,29 +2712,30 @@
         </div>
     </div>
 
-    <!-- v9: PASİF KULLANICI UYARI & AKTİVASYON MODALI -->
+    <!-- v10: PASİF KULLANICI UYARI & AKTİVASYON MODALI -->
     <div class="passive-wall-overlay" id="passive-wall-overlay" onclick="if(event.target === this) closePassiveWallModal()">
         <div class="passive-wall-card">
             <div class="passive-wall-icon"><i class="fas fa-user-lock"></i></div>
             <div style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:rgba(245,158,11,0.14); border:1px solid rgba(245,158,11,0.4); color:var(--warning); border-radius:20px; padding:4px 12px; font-size:0.68rem; font-weight:800; margin:0 auto;" id="passive-wall-feature-name">
-                <i class="fas fa-exclamation-triangle"></i> PASİF KULLANICI HESABI
+                <i class="fas fa-exclamation-triangle"></i> PASİF KULLANICI HESABI (0 REFERANS HAKKI)
             </div>
-            <h3 style="margin:0; font-size:1.04rem; font-weight:800; color:var(--text-main);" id="passive-wall-title">Bu Özellik Aktif Üyelik Gerektirir</h3>
+            <h3 style="margin:0; font-size:1.04rem; font-weight:800; color:var(--text-main);" id="passive-wall-title">Özellikleri ve Menüleri Kullanmak İçin Aktif Üyelik Gerekir</h3>
             <p style="margin:0; font-size:0.8rem; color:var(--text-muted); line-height:1.5;" id="passive-wall-desc">
-                Hesabınız şu anda <b>Pasif Kullanıcı</b> statüsündedir. <b>Parsel/Adres Sorgulama, TKGM Kadastro Parselleri, Nokta Kaydetme ve Mühendislik Araçlarını</b> kullanabilmek için lütfen <b>AZİMUT Ağı'ndan kendinize bir referans bulun</b> veya <b>aktivasyon ödemesi</b> yapın.
+                Gmail adresiniz sistemdeki aktif bir üyenin referans listesinde yer almadığı için hesabınız şu anda <b>Pasif Kullanıcı</b> konumundadır ve <b>referans hakkınız bulunmamaktadır</b>.<br><br>
+                Programın tüm özelliklerini ve menülerini kullanabilmek için <b>AZİMUT Ağı'ndan referans isteyin</b> veya <b>Ödeme Yap</b> butonuna tıklayarak ana yönetici (<b>buraktonoz@gmail.com</b>) ile iletişime geçin.
             </p>
             <div style="background:var(--input-bg); border:1px solid var(--border-light); border-radius:11px; padding:8px 10px; font-size:0.72rem; color:var(--text-muted); display:flex; align-items:center; justify-content:space-between; gap:8px;">
                 <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Gmail: <b id="passive-wall-email" style="color:var(--accent); font-family:'JetBrains Mono',monospace;">-</b></span>
                 <button type="button" class="btn-copy-mail" onclick="copyTextToClipboard(currentUserProfile.email || '', 'Gmail adresiniz kopyalandı')"><i class="fas fa-copy"></i> Kopyala</button>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px; margin-top:2px;">
-                <button type="button" class="pwa-install-btn" onclick="closePassiveWallModal(); switchTab('tab-network'); switchAzimutNetworkTab('HAS_QUOTA');">
-                    <i class="fas fa-gift"></i> Referans Hakkı Olanları Gör (AZİMUT Ağı)
+                <button type="button" class="pwa-install-btn" onclick="openNetworkForReference()">
+                    <i class="fas fa-users"></i> AZİMUT Ağı'ndan Referans İste
                 </button>
-                <a id="passive-wall-pay-mail" href="mailto:buraktonoz@gmail.com?subject=AZ%C4%B0MUT%20Pro%20Hesap%20Aktivasyonu%20%2F%20%C3%96deme%20Talebi" class="pwa-install-btn" style="background:rgba(245,158,11,0.18); color:var(--warning); border:1px solid rgba(245,158,11,0.45); text-decoration:none;">
-                    <i class="fas fa-credit-card"></i> Ödeme / Aktivasyon İçin İletişime Geç
-                </a>
-                <button type="button" class="dialog-btn" onclick="closePassiveWallModal()">Kapat</button>
+                <button type="button" id="passive-wall-pay-mail" onclick="openPaymentContactForActivation()" class="pwa-install-btn" style="background:rgba(245,158,11,0.2); color:var(--warning); border:1px solid rgba(245,158,11,0.5);">
+                    <i class="fas fa-credit-card"></i> Ödeme Yap (buraktonoz@gmail.com)
+                </button>
+                <button type="button" class="dialog-btn" onclick="closePassiveWallModal()">Programı Gör (Kapat)</button>
             </div>
         </div>
     </div>
@@ -2938,15 +2960,48 @@
         function closeCoffeeToast() { document.getElementById('coffee-toast').classList.remove('show'); }
 
         // --- FIREBASE VE YEREL SENKRONİZASYON ---
-        // --- v10: ZORUNLU GMAIL GİRİŞİ, REFERANS (3 HAK) AKTİF/PASİF ÜYELİK SİSTEMİ VE 3 SEKMELİ CANLI AZİMUT AĞI ---
+        // --- v10: ANA KULLANICI (buraktonoz@gmail.com SINIRSIZ HAK), YENİ ÜYELER İÇİN PASİF (0 HAK) BAŞLANGIÇ VE REFERANS DOĞRULAMA SİSTEMİ ---
         // MİMARİ & VERİ GÜVENLİĞİ (v10):
-        // 1) users/{uid}           -> SADECE giriş yapan kişinin kendisi okuyup yazabilir (Özel Koordinat Klasörleri / projectsData burada korunur).
-        // 2) azimut_network/{uid}  -> Üye olan herkesin (Aktif veya Pasif) birbirini anlık görebildiği genel kurumsal rehber (Koordinat içermez!).
-        // 3) azimut_referrals/{id} -> Aktif üyelerin verdikleri referansların anlık doğrulama ve aktivasyon tablosu.
-        const PROFILE_CACHE_KEY = 'azimut_pro_user_profile_v10';
-        const NETWORK_CACHE_KEY = 'azimut_pro_network_cache_v10';
-        const REFERRALS_CACHE_KEY = 'azimut_pro_referrals_cache_v10';
-        const DEFAULT_REFERRAL_QUOTA = 3;
+        // 1) Ana Yönetici (Admin): Sadece `buraktonoz@gmail.com` ana kullanıcıdır; doğuştan AKTİF'tir ve referans hakkı HİÇ BİTMEZ (Sınırsız ∞).
+        // 2) Diğer Tüm Kullanıcılar: Sisteme Gmail ile giriş yaptıklarında İLK OLARAK PASİF (isActive: false) ve 0 REFERANS HAKKI (referralQuota: 0) ile başlar.
+        //    Sistem anlık olarak bu Gmail adresinin herhangi bir aktif üyenin referans listesinde (azimut_referrals / referrals) olup olmadığını kontrol eder:
+        //    - Referans listesinde YOKSA -> PASİF kalır, referans hakkı 0 olur, özellikleri ve menüleri kullanamaz; AZİMUT Ağı'ndan referans istemeye veya buraktonoz@gmail.com'a ödeme maili atmaya yönlendirilir.
+        //    - Referans listesinde VARSA -> AKTİF olur, tüm menüler açılır ve kendisine 3 KİŞİLİK (eklediğinde kalıcı kilitlenen) referans hakkı tanımlanır.
+        const MAIN_ADMIN_EMAIL = 'buraktonoz@gmail.com';
+        const DEFAULT_REFERRAL_QUOTA = 3; // Sadece referansla AKTİF olmuş normal kullanıcılara verilir (Pasiflerin hakkı 0'dır!)
+        const ADMIN_UNLIMITED_QUOTA = 999999; // buraktonoz@gmail.com için sınırsız referans kotası
+        const PROFILE_CACHE_KEY = 'azimut_pro_profile_v10_zero';
+        const NETWORK_CACHE_KEY = 'azimut_pro_net_v10_zero';
+        const REFERRALS_CACHE_KEY = 'azimut_pro_refs_v10_zero';
+
+        // Eski sürümlerden (v8, v9, eski v10) kalmış tüm önbellekleri temizle ki sıfırlanan Firestore ile hiçbir çakışma olmasın
+        (function purgeLegacyCachesOnce() {
+            try {
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && (
+                        k.startsWith('azimut_pro_user_profile_') ||
+                        k.startsWith('azimut_pro_network_cache_') ||
+                        k.startsWith('azimut_pro_referrals_cache_')
+                    )) {
+                        keysToRemove.push(k);
+                    }
+                }
+                keysToRemove.forEach(k => localStorage.removeItem(k));
+            } catch (e) {}
+            if ('caches' in window) {
+                try {
+                    caches.keys().then(names => {
+                        names.forEach(name => {
+                            if (name.includes('v8') || name.includes('v9') || name === 'azimut-pro-v10.0') {
+                                caches.delete(name);
+                            }
+                        });
+                    });
+                } catch (e) {}
+            }
+        })();
 
         let currentUserProfile = {
             uid: '',
@@ -2955,10 +3010,12 @@
             photoURL: '',
             title: '',
             company: '',
-            explicitActive: false,
+            isAdmin: false,
             isActive: false,
-            referralQuota: DEFAULT_REFERRAL_QUOTA,
+            referralQuota: 0,
             referrals: [],
+            usedReferrals: 0,
+            remainingReferrals: 0,
             referredByEmail: '',
             referredByName: '',
             updatedAt: 0
@@ -2981,60 +3038,13 @@
             return normalizeEmail(email).replace(/[^a-z0-9@._-]/gi, '_');
         }
 
-        // Sadece kurucu Burak Tonoz ilk üyeliği yaptığı için doğuştan Aktif ve 3 referans hakkına sahiptir.
-        // Bundan sonra üye olan herkes referans olunmuş mu diye kontrol edilir; olunmamışsa Pasif kalır.
-        function isFounderOrAdminEmail(email, fullName = '') {
-            const normMail = normalizeEmail(email);
-            const normName = String(fullName || '').trim().toLowerCase()
-                .replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u')
-                .replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c');
-            if (normMail && (normMail.includes('buraktonoz') || normMail.includes('burak.tonoz') || normMail.includes('tonozburak'))) {
-                return true;
-            }
-            if (normName === 'burak tonoz') {
-                return true;
-            }
-            return false;
+        // SADECE buraktonoz@gmail.com ana kullanıcı (Admin) olarak kabul edilir ve sınırsız referans hakkına sahiptir.
+        function isMainAdminEmail(email) {
+            return normalizeEmail(email) === MAIN_ADMIN_EMAIL;
         }
 
-        // Bir kullanıcının gerçekten referans olunup olunmadığını veya kurucu (Burak Tonoz) olup olmadığını kesin olarak doğrular.
-        // Eğer birisine aktif bir üye referans olmadıysa (eski önbellekte ne yazarsa yazsın) PASİF kalmasını garanti eder.
-        function hasVerifiedActivation(email, fullName = '', docData = null, profData = null) {
-            const normMail = normalizeEmail(email);
-            if (isFounderOrAdminEmail(normMail, fullName)) return true;
-            if (normMail && globalReferredEmailsMap[normMail]) return true;
-            const d = docData || {};
-            const p = profData || {};
-            const refBy = normalizeEmail(d.referredByEmail || p.referredByEmail || '');
-            if (refBy && refBy.includes('@') && refBy !== normMail) return true;
-            if (d.adminApproved === true || p.adminApproved === true || d.aktif === true || p.aktif === true) return true;
-            return false;
-        }
-
-        function extractQuotaValue(docData, profData, fallbackQuota = DEFAULT_REFERRAL_QUOTA) {
-            const d = docData || {};
-            const p = profData || {};
-            // Yöneticinin Firebase konsolundan (ister ana dizinde ister profile/azimut_network altında) manuel olarak artırdığı tüm alan adlarını kontrol et
-            const candidates = [
-                d.referralQuota,
-                d.referansHakki,
-                d.referralRights,
-                d.hakSayisi,
-                p.referralQuota,
-                p.referansHakki,
-                p.referralRights,
-                p.hakSayisi
-            ];
-            const validNums = [];
-            for (const val of candidates) {
-                if (val !== undefined && val !== null && val !== '' && !isNaN(Number(val))) {
-                    validNums.push(Math.max(0, parseInt(Number(val), 10)));
-                }
-            }
-            if (validNums.length > 0) {
-                return Math.max(...validNums);
-            }
-            return fallbackQuota;
+        function isFounderOrAdminEmail(email) {
+            return isMainAdminEmail(email);
         }
 
         function sanitizeEmailArray(arr) {
@@ -3051,8 +3061,58 @@
             return out;
         }
 
+        // Kullanıcının mail adresine ve referans tablosuna göre KESİN statüsünü ve referans hakkını hesaplar:
+        // - buraktonoz@gmail.com -> AKTİF + SINIRSIZ HAK
+        // - Referans listesinde olan üye -> AKTİF + 3 HAK
+        // - Referans listesinde olmayan üye -> PASİF + 0 HAK
+        function computeUserStatusAndQuota(email, referralsArr = [], refMap = globalReferredEmailsMap) {
+            const normMail = normalizeEmail(email);
+            const cleanRefs = sanitizeEmailArray(referralsArr);
+
+            if (isMainAdminEmail(normMail)) {
+                return {
+                    isAdmin: true,
+                    isActive: true,
+                    referralQuota: ADMIN_UNLIMITED_QUOTA,
+                    referrals: cleanRefs,
+                    usedReferrals: cleanRefs.length,
+                    remainingReferrals: ADMIN_UNLIMITED_QUOTA,
+                    refInfo: {
+                        referredByEmail: MAIN_ADMIN_EMAIL,
+                        referredByName: 'Kurucu Ana Yönetici (Admin)'
+                    }
+                };
+            }
+
+            const refInfo = (normMail && refMap && refMap[normMail]) ? refMap[normMail] : null;
+            if (refInfo) {
+                const lockedRefs = cleanRefs.slice(0, DEFAULT_REFERRAL_QUOTA);
+                return {
+                    isAdmin: false,
+                    isActive: true,
+                    referralQuota: DEFAULT_REFERRAL_QUOTA,
+                    referrals: lockedRefs,
+                    usedReferrals: lockedRefs.length,
+                    remainingReferrals: Math.max(0, DEFAULT_REFERRAL_QUOTA - lockedRefs.length),
+                    refInfo: refInfo
+                };
+            }
+
+            // Referans olunmamış yeni/mevcut kullanıcı: KESİNLİKLE PASİF ve 0 REFERANS HAKKI!
+            return {
+                isAdmin: false,
+                isActive: false,
+                referralQuota: 0,
+                referrals: [],
+                usedReferrals: 0,
+                remainingReferrals: 0,
+                refInfo: null
+            };
+        }
+
         function isCurrentUserActive() {
             if (!auth.currentUser) return false;
+            if (isMainAdminEmail(currentUserProfile.email || auth.currentUser.email)) return true;
             return Boolean(currentUserProfile.isActive);
         }
 
@@ -3088,9 +3148,7 @@
 
         function loadCachedProfile(uid) {
             try {
-                const raw = localStorage.getItem(PROFILE_CACHE_KEY + '_' + uid)
-                    || localStorage.getItem('azimut_pro_user_profile_v9_' + uid)
-                    || localStorage.getItem('azimut_pro_user_profile_v8_' + uid);
+                const raw = localStorage.getItem(PROFILE_CACHE_KEY + '_' + uid);
                 if (raw) return JSON.parse(raw);
             } catch (e) {}
             return null;
@@ -3105,17 +3163,14 @@
 
         function loadCachedNetworkMap() {
             try {
-                const raw = localStorage.getItem(NETWORK_CACHE_KEY)
-                    || localStorage.getItem('azimut_pro_network_cache_v9')
-                    || localStorage.getItem('azimut_pro_network_cache_v8');
+                const raw = localStorage.getItem(NETWORK_CACHE_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (parsed && typeof parsed === 'object') azimutNetworkUsersMap = parsed;
                 }
             } catch (e) {}
             try {
-                const rawRef = localStorage.getItem(REFERRALS_CACHE_KEY)
-                    || localStorage.getItem('azimut_pro_referrals_cache_v9');
+                const rawRef = localStorage.getItem(REFERRALS_CACHE_KEY);
                 if (rawRef) {
                     const parsedRef = JSON.parse(rawRef);
                     if (parsedRef && typeof parsedRef === 'object') globalReferredEmailsMap = parsedRef;
@@ -3131,51 +3186,58 @@
         }
         loadCachedNetworkMap();
 
-        // Tüm ağdaki AKTİF kullanıcıların referans listelerini ve azimut_referrals tablosunu tarayarak
-        // kimin aktif kimin pasif olduğunu kesin ve hatasız olarak hesaplar.
+        // Tüm ağdaki referans listelerini ve azimut_referrals tablosunu tarayarak
+        // kimin aktif kimin pasif olduğunu kesin olarak hesaplar.
         function recomputeGlobalReferralActivation() {
             const refLookup = { ...globalReferredEmailsMap };
 
-            // 1. Aşama: Doğrudan kurucu (Burak Tonoz) veya veritabanında açıkça onaylanmış (explicitActive) ya da azimut_referrals'ta yer alanları belirle
+            // 1. Aşama: Ana yönetici (buraktonoz@gmail.com) tarafından eklenen tüm referansları tabloya işle (Sınırsız)
             Object.values(azimutNetworkUsersMap).forEach(u => {
                 if (!u) return;
                 const uMail = normalizeEmail(u.email);
-                const isSponsorEligible = Boolean(
-                    u.explicitActive === true ||
-                    isFounderOrAdminEmail(uMail, u.fullName) ||
-                    refLookup[uMail]
-                );
-                if (!isSponsorEligible) return;
-
-                const refs = sanitizeEmailArray(u.referrals);
-                refs.forEach(refMail => {
-                    if (!refLookup[refMail]) {
+                if (!isMainAdminEmail(uMail)) return;
+                sanitizeEmailArray(u.referrals).forEach(refMail => {
+                    if (refMail && refMail !== uMail && !refLookup[refMail]) {
                         refLookup[refMail] = {
                             referredByUid: u.uid || '',
-                            referredByEmail: u.email || '',
-                            referredByName: u.fullName || u.email || 'AZİMUT Üyesi'
+                            referredByEmail: uMail,
+                            referredByName: u.fullName || 'Burak Tonoz (Admin)'
                         };
                     }
                 });
             });
 
-            // 2. Aşama: Zincirleme referansları çöz (Aktif biri B'ye referans olduysa ve B de C'ye referans olduysa C de aktif olur)
-            for (let pass = 0; pass < 4; pass++) {
+            if (currentUserProfile && isMainAdminEmail(currentUserProfile.email)) {
+                const adminMail = normalizeEmail(currentUserProfile.email);
+                sanitizeEmailArray(currentUserProfile.referrals).forEach(refMail => {
+                    if (refMail && refMail !== adminMail && !refLookup[refMail]) {
+                        refLookup[refMail] = {
+                            referredByUid: currentUserProfile.uid || '',
+                            referredByEmail: adminMail,
+                            referredByName: currentUserProfile.fullName || 'Burak Tonoz (Admin)'
+                        };
+                    }
+                });
+            }
+
+            // 2. Aşama: Referansla aktif olmuş kullanıcıların kendi 3 referans hakkıyla ekledikleri kişileri zincirleme çöz
+            for (let pass = 0; pass < 5; pass++) {
                 Object.values(azimutNetworkUsersMap).forEach(u => {
                     if (!u) return;
                     const uMail = normalizeEmail(u.email);
-                    const isEligible = Boolean(
-                        u.explicitActive === true ||
-                        isFounderOrAdminEmail(uMail, u.fullName) ||
-                        refLookup[uMail]
-                    );
-                    if (!isEligible) return;
-                    sanitizeEmailArray(u.referrals).forEach(refMail => {
-                        if (!refLookup[refMail]) {
+                    const isEligibleActive = isMainAdminEmail(uMail) || Boolean(refLookup[uMail]);
+                    if (!isEligibleActive) return;
+
+                    const allowedRefs = isMainAdminEmail(uMail)
+                        ? sanitizeEmailArray(u.referrals)
+                        : sanitizeEmailArray(u.referrals).slice(0, DEFAULT_REFERRAL_QUOTA);
+
+                    allowedRefs.forEach(refMail => {
+                        if (refMail && refMail !== uMail && !refLookup[refMail]) {
                             refLookup[refMail] = {
                                 referredByUid: u.uid || '',
-                                referredByEmail: u.email || '',
-                                referredByName: u.fullName || u.email || 'AZİMUT Üyesi'
+                                referredByEmail: uMail,
+                                referredByName: u.fullName || uMail
                             };
                         }
                     });
@@ -3185,83 +3247,71 @@
             // Kendi profilimiz aktifse kendi referanslarımızı da dahil et
             if (currentUserProfile && currentUserProfile.email) {
                 const myMail = normalizeEmail(currentUserProfile.email);
-                const amIEligible = Boolean(
-                    currentUserProfile.explicitActive === true ||
-                    isFounderOrAdminEmail(myMail, currentUserProfile.fullName) ||
-                    refLookup[myMail]
-                );
-                if (amIEligible) {
-                    sanitizeEmailArray(currentUserProfile.referrals).forEach(refMail => {
-                        if (!refLookup[refMail]) {
+                if (isMainAdminEmail(myMail) || Boolean(refLookup[myMail])) {
+                    const myAllowedRefs = isMainAdminEmail(myMail)
+                        ? sanitizeEmailArray(currentUserProfile.referrals)
+                        : sanitizeEmailArray(currentUserProfile.referrals).slice(0, DEFAULT_REFERRAL_QUOTA);
+                    myAllowedRefs.forEach(refMail => {
+                        if (refMail && refMail !== myMail && !refLookup[refMail]) {
                             refLookup[refMail] = {
                                 referredByUid: currentUserProfile.uid || '',
-                                referredByEmail: currentUserProfile.email || '',
-                                referredByName: currentUserProfile.fullName || currentUserProfile.email || 'AZİMUT Üyesi'
+                                referredByEmail: myMail,
+                                referredByName: currentUserProfile.fullName || myMail
                             };
                         }
                     });
                 }
             }
 
-            // Her bir ağ kullanıcısının aktiflik ve kalan referans hakkı durumunu güncelle
-            // DİKKAT: Burada eski `u.isActive === true` kontrolü kaldırıldı! Sadece kurucu, referans olunan veya explicitActive olan aktif olur.
+            // 3. Aşama: Ağdaki her bir kullanıcının durumunu kesin kurallara göre güncelle
             Object.keys(azimutNetworkUsersMap).forEach(uid => {
                 const u = azimutNetworkUsersMap[uid];
                 if (!u) return;
-                const mailLower = normalizeEmail(u.email);
-                const refInfo = mailLower ? refLookup[mailLower] : null;
-                const isFounder = isFounderOrAdminEmail(mailLower, u.fullName);
-                const isActiveNow = Boolean(
-                    isFounder ||
-                    u.explicitActive === true ||
-                    Boolean(refInfo)
-                );
-                u.isActive = isActiveNow;
-                if (refInfo) {
-                    u.referredByEmail = u.referredByEmail || refInfo.referredByEmail || '';
-                    u.referredByName = u.referredByName || refInfo.referredByName || '';
-                } else if (isFounder) {
-                    u.referredByName = u.referredByName || 'Kurucu Yönetici (Burak Tonoz)';
+                const statusObj = computeUserStatusAndQuota(u.email, u.referrals, refLookup);
+                u.isAdmin = statusObj.isAdmin;
+                u.isActive = statusObj.isActive;
+                u.referralQuota = statusObj.referralQuota;
+                u.referrals = statusObj.referrals;
+                u.usedReferrals = statusObj.usedReferrals;
+                u.remainingReferrals = statusObj.remainingReferrals;
+                if (statusObj.refInfo) {
+                    u.referredByEmail = statusObj.refInfo.referredByEmail || u.referredByEmail || '';
+                    u.referredByName = statusObj.refInfo.referredByName || u.referredByName || '';
+                } else {
+                    u.referredByEmail = '';
+                    u.referredByName = '';
                 }
-                u.referrals = sanitizeEmailArray(u.referrals);
-                const quota = Math.max(Number(u.referralQuota ?? DEFAULT_REFERRAL_QUOTA), u.referrals.length);
-                u.referralQuota = quota;
-                u.usedReferrals = u.referrals.length;
-                u.remainingReferrals = isActiveNow ? Math.max(0, quota - u.referrals.length) : 0;
             });
 
-            // Giriş yapmış kullanıcının kendi aktiflik durumunu kontrol et
+            // 4. Aşama: Giriş yapmış kullanıcının kendi durumunu güncelle
             if (auth.currentUser && currentUserProfile.email) {
-                const myMail = normalizeEmail(currentUserProfile.email);
-                const myRef = refLookup[myMail];
-                const isFounder = isFounderOrAdminEmail(myMail, currentUserProfile.fullName);
                 const wasActive = Boolean(currentUserProfile.isActive);
-                const nowActive = Boolean(
-                    isFounder ||
-                    currentUserProfile.explicitActive === true ||
-                    Boolean(myRef)
-                );
-                currentUserProfile.isActive = nowActive;
-                if (myRef) {
-                    currentUserProfile.referredByEmail = currentUserProfile.referredByEmail || myRef.referredByEmail || '';
-                    currentUserProfile.referredByName = currentUserProfile.referredByName || myRef.referredByName || '';
-                } else if (isFounder) {
-                    currentUserProfile.explicitActive = true;
+                const myStatus = computeUserStatusAndQuota(currentUserProfile.email, currentUserProfile.referrals, refLookup);
+
+                currentUserProfile.isAdmin = myStatus.isAdmin;
+                currentUserProfile.isActive = myStatus.isActive;
+                currentUserProfile.referralQuota = myStatus.referralQuota;
+                currentUserProfile.referrals = myStatus.referrals;
+                currentUserProfile.usedReferrals = myStatus.usedReferrals;
+                currentUserProfile.remainingReferrals = myStatus.remainingReferrals;
+
+                if (myStatus.refInfo) {
+                    currentUserProfile.referredByEmail = myStatus.refInfo.referredByEmail || '';
+                    currentUserProfile.referredByName = myStatus.refInfo.referredByName || '';
+                } else {
+                    currentUserProfile.referredByEmail = '';
+                    currentUserProfile.referredByName = '';
                 }
 
-                // Eğer kullanıcı pasifken aktif birisi ona referans olduysa otomatik olarak Firebase'de de aktif olarak işaretle
-                if (!wasActive && nowActive) {
-                    currentUserProfile.explicitActive = true;
+                // Eğer kullanıcı pasifken aktif birisi ona referans olduysa otomatik olarak Firebase'de de aktif olarak güncelle
+                if (!wasActive && myStatus.isActive && !myStatus.isAdmin) {
                     const uid = auth.currentUser.uid;
-                    const myRefs = sanitizeEmailArray(currentUserProfile.referrals);
-                    const myQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), myRefs.length);
-                    const myRem = Math.max(0, myQuota - myRefs.length);
                     const updateObj = {
                         isActive: true,
-                        explicitActive: true,
-                        referralQuota: myQuota,
-                        usedReferrals: myRefs.length,
-                        remainingReferrals: myRem,
+                        isAdmin: false,
+                        referralQuota: DEFAULT_REFERRAL_QUOTA,
+                        usedReferrals: currentUserProfile.usedReferrals,
+                        remainingReferrals: currentUserProfile.remainingReferrals,
                         referredByEmail: currentUserProfile.referredByEmail || '',
                         referredByName: currentUserProfile.referredByName || '',
                         activatedAt: Date.now(),
@@ -3271,18 +3321,20 @@
                     db.collection('azimut_network').doc(uid).set(updateObj, { merge: true }).catch(() => {});
                     saveCachedProfile(currentUserProfile);
                     closePassiveWallModal();
-                    showToast("🎉 Hesabınız referans ile AKTİF KULLANICI statüsüne yükseltildi!", "fa-check-circle");
+                    showToast("🎉 Referansınız onaylandı! Hesabınız AKTİF oldu ve 3 referans hakkınız tanımlandı.", "fa-check-circle");
                 }
 
-                // Pasif kullanıcı ise açık kalmış TKGM kadastro katmanını kapat
-                if (!nowActive && typeof tkgmParselsActive !== 'undefined' && tkgmParselsActive) {
-                    tkgmParselsActive = false;
-                    if (typeof map !== 'undefined' && typeof tkgmParselsLayer !== 'undefined' && map.hasLayer(tkgmParselsLayer)) {
-                        map.removeLayer(tkgmParselsLayer);
+                // Pasif kullanıcı ise açık kalmış TKGM kadastro katmanını ve araçları kapat
+                if (!myStatus.isActive) {
+                    if (typeof tkgmParselsActive !== 'undefined' && tkgmParselsActive) {
+                        tkgmParselsActive = false;
+                        if (typeof map !== 'undefined' && typeof tkgmParselsLayer !== 'undefined' && map.hasLayer(tkgmParselsLayer)) {
+                            map.removeLayer(tkgmParselsLayer);
+                        }
+                        appSettings.tkgmParsels = false;
+                        saveLocalSettings();
+                        if (typeof updateLayersModalUI === 'function') updateLayersModalUI();
                     }
-                    appSettings.tkgmParsels = false;
-                    saveLocalSettings();
-                    if (typeof updateLayersModalUI === 'function') updateLayersModalUI();
                 }
             }
         }
@@ -3320,10 +3372,11 @@
             const displayTitle = p.title || 'Ünvan Belirtilmedi';
             const displayCompany = p.company || 'Kurum / Şirket Belirtilmedi';
             const displayEmail = p.email || '-';
+            const isAdmin = isMainAdminEmail(p.email);
             const isActive = Boolean(p.isActive);
             const refs = sanitizeEmailArray(p.referrals);
-            const totalQuota = Math.max(Number(p.referralQuota ?? DEFAULT_REFERRAL_QUOTA), refs.length);
-            const remainingQuota = isActive ? Math.max(0, totalQuota - refs.length) : 0;
+            const totalQuota = isAdmin ? ADMIN_UNLIMITED_QUOTA : (isActive ? DEFAULT_REFERRAL_QUOTA : 0);
+            const remainingQuota = isAdmin ? ADMIN_UNLIMITED_QUOTA : (isActive ? Math.max(0, DEFAULT_REFERRAL_QUOTA - refs.length) : 0);
 
             // 1. Sol Açılır Yan Panel (Side Drawer)
             setAvatarWithFallback(document.getElementById('drawer-user-photo'), p.photoURL, displayName);
@@ -3339,15 +3392,25 @@
             const dBadge = document.getElementById('drawer-membership-badge');
             const dRefSum = document.getElementById('drawer-referral-summary');
             if (dBadge) {
-                dBadge.className = 'membership-status-badge ' + (isActive ? 'active-member' : 'passive-member');
-                dBadge.innerHTML = isActive
-                    ? `<i class="fas fa-check-circle"></i> AKTİF KULLANICI`
-                    : `<i class="fas fa-user-clock"></i> PASİF KULLANICI (Referans Bekliyor)`;
+                if (isAdmin) {
+                    dBadge.className = 'membership-status-badge admin-member';
+                    dBadge.innerHTML = `<i class="fas fa-crown"></i> ANA YÖNETİCİ (ADMİN)`;
+                } else if (isActive) {
+                    dBadge.className = 'membership-status-badge active-member';
+                    dBadge.innerHTML = `<i class="fas fa-check-circle"></i> AKTİF KULLANICI`;
+                } else {
+                    dBadge.className = 'membership-status-badge passive-member';
+                    dBadge.innerHTML = `<i class="fas fa-user-lock"></i> PASİF KULLANICI (0 Hak)`;
+                }
             }
             if (dRefSum) {
-                dRefSum.innerHTML = isActive
-                    ? `<i class="fas fa-user-check"></i> Referans Hakkı: <b>${remainingQuota} / ${totalQuota}</b> Kaldı`
-                    : `<i class="fas fa-exclamation-circle" style="color:var(--warning);"></i> Tam erişim için <b>AZİMUT Ağı</b>'ndan referans bulun`;
+                if (isAdmin) {
+                    dRefSum.innerHTML = `Sınırsız (∞) • Eklenen: ${refs.length}`;
+                } else if (isActive) {
+                    dRefSum.innerHTML = `${remainingQuota} / ${DEFAULT_REFERRAL_QUOTA} Hak Kaldı`;
+                } else {
+                    dRefSum.innerHTML = `<span style="color:var(--warning);">0 Hak (Referans Bekleniyor)</span>`;
+                }
             }
 
             const dInName = document.getElementById('drawer-input-name');
@@ -3368,26 +3431,38 @@
 
             const pBadge = document.getElementById('profile-membership-badge');
             if (pBadge) {
-                pBadge.className = 'membership-status-badge ' + (isActive ? 'active-member' : 'passive-member');
-                pBadge.innerHTML = isActive
-                    ? `<i class="fas fa-check-circle"></i> AKTİF KULLANICI`
-                    : `<i class="fas fa-user-clock"></i> PASİF KULLANICI`;
+                if (isAdmin) {
+                    pBadge.className = 'membership-status-badge admin-member';
+                    pBadge.innerHTML = `<i class="fas fa-crown"></i> ANA KULLANICI / ADMİN`;
+                } else if (isActive) {
+                    pBadge.className = 'membership-status-badge active-member';
+                    pBadge.innerHTML = `<i class="fas fa-check-circle"></i> AKTİF KULLANICI`;
+                } else {
+                    pBadge.className = 'membership-status-badge passive-member';
+                    pBadge.innerHTML = `<i class="fas fa-user-lock"></i> PASİF KULLANICI`;
+                }
+            }
+
+            const storageModeEl = document.getElementById('stat-storage-mode');
+            if (storageModeEl) {
+                storageModeEl.innerText = isAdmin ? 'ADMİN' : (isActive ? 'AKTİF' : 'PASİF');
+                storageModeEl.style.color = isActive ? 'var(--success)' : 'var(--warning)';
             }
 
             const refByEl = document.getElementById('user-referred-by-info');
             if (refByEl) {
-                if (p.referredByName || p.referredByEmail) {
+                if (isAdmin) {
+                    refByEl.style.display = 'block';
+                    refByEl.style.color = '#fde68a';
+                    refByEl.innerHTML = `<i class="fas fa-crown"></i> Kurucu Ana Kullanıcı — Sınırsız Referans Yetkisi Aktif`;
+                } else if (isActive && (p.referredByName || p.referredByEmail)) {
                     refByEl.style.display = 'block';
                     refByEl.style.color = '#34d399';
                     refByEl.innerHTML = `<i class="fas fa-handshake"></i> Referans Olan: <b>${escapeHtmlSafe(p.referredByName || p.referredByEmail)}</b>`;
-                } else if (isActive) {
-                    refByEl.style.display = 'block';
-                    refByEl.style.color = '#34d399';
-                    refByEl.innerHTML = `<i class="fas fa-shield-alt"></i> Yetkili Aktif Üyelik Onaylı`;
                 } else {
                     refByEl.style.display = 'block';
                     refByEl.style.color = 'var(--warning)';
-                    refByEl.innerHTML = `<i class="fas fa-info-circle"></i> Henüz referansınız yok. Aktif olmak için referans bulun veya ödeme yapın.`;
+                    refByEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Referansınız bulunmuyor (Referans Hakkı: 0). Aktif olmak için AZİMUT Ağı'ndan referans isteyin veya ödeme yapın.`;
                 }
             }
 
@@ -3398,7 +3473,7 @@
             if (pInTitle && document.activeElement !== pInTitle) pInTitle.value = p.title || '';
             if (pInComp && document.activeElement !== pInComp) pInComp.value = p.company || '';
 
-            // 3. Profildeki Referans Hakları ve Mail Kutularını Oluştur
+            // 3. Profildeki Referans Ekranını Oluştur (Admin: Sınırsız Liste | Aktif Üye: 3 Kilitli Kutu | Pasif Üye: 0 Hak Uyarı Kartı)
             renderProfileReferralSlots();
 
             // 4. Canlı AZİMUT Ağı haritasında kendi kartımızı da anında güncelle
@@ -3411,8 +3486,8 @@
                     photoURL: p.photoURL || '',
                     title: p.title || 'Harita / Saha Personeli',
                     company: p.company || 'Kurum Belirtilmedi',
+                    isAdmin: isAdmin,
                     isActive: isActive,
-                    explicitActive: Boolean(p.explicitActive || isActive),
                     referralQuota: totalQuota,
                     referrals: refs,
                     usedReferrals: refs.length,
@@ -3429,35 +3504,119 @@
         function renderProfileReferralSlots() {
             const listContainer = document.getElementById('profile-referral-slots-list');
             const quotaPill = document.getElementById('profile-referral-quota-pill');
+            const titleEl = document.getElementById('profile-referral-title');
+            const subEl = document.getElementById('profile-referral-subtitle');
             if (!listContainer) return;
 
+            const isAdmin = isMainAdminEmail(currentUserProfile.email);
             const isActive = Boolean(currentUserProfile.isActive);
             const refs = sanitizeEmailArray(currentUserProfile.referrals);
-            const totalSlots = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), refs.length);
-            const usedCount = refs.length;
-            const remainingCount = isActive ? Math.max(0, totalSlots - usedCount) : 0;
 
-            if (quotaPill) {
-                if (isActive) {
-                    quotaPill.innerText = `Kalan Hak: ${remainingCount} / ${totalSlots}`;
-                    quotaPill.style.background = remainingCount > 0 ? 'rgba(245, 158, 11, 0.16)' : 'rgba(148, 163, 184, 0.16)';
-                    quotaPill.style.color = remainingCount > 0 ? 'var(--warning)' : 'var(--text-muted)';
+            // DURUM A: ANA KULLANICI / ADMİN (buraktonoz@gmail.com) -> SINIRSIZ LİSTE ŞEKLİNDE REFERANS EKLEME EKRANI
+            if (isAdmin) {
+                if (titleEl) {
+                    titleEl.innerHTML = `<i class="fas fa-crown" style="color:var(--warning);"></i> Yönetici (Admin) Sınırsız Referans Listesi`;
+                }
+                if (subEl) {
+                    subEl.innerHTML = `Ana kullanıcı (<b>buraktonoz@gmail.com</b>) olarak referans hakkınız hiç bitmez. Eklediğiniz her Gmail adresi sistemde anında <b>Aktif Kullanıcı</b> olur ve kendisine 3 kişilik referans hakkı tanımlanır.`;
+                }
+                if (quotaPill) {
+                    quotaPill.innerText = `Sınırsız Hak (∞) • Eklenen: ${refs.length}`;
+                    quotaPill.style.background = 'rgba(245, 158, 11, 0.2)';
+                    quotaPill.style.borderColor = 'rgba(245, 158, 11, 0.55)';
+                    quotaPill.style.color = '#fde68a';
+                }
+
+                let listItemsHtml = '';
+                if (refs.length === 0) {
+                    listItemsHtml = `
+                    <div style="text-align:center; padding:16px 10px; color:var(--text-muted); font-size:0.76rem; background:rgba(0,0,0,0.22); border-radius:10px; border:1px dashed var(--border-light);">
+                        Henüz referans listesine mail eklenmedi. Yukarıdaki alana Gmail adresi yazıp <b>Referans Ekle</b> butonuna basın.
+                    </div>`;
                 } else {
-                    quotaPill.innerText = `Pasif Üye (0 / ${totalSlots})`;
-                    quotaPill.style.background = 'rgba(239, 68, 68, 0.15)';
+                    listItemsHtml = `<div class="admin-ref-list-box">` + refs.map((mail, idx) => {
+                        const inNet = Object.values(azimutNetworkUsersMap).find(u => u && normalizeEmail(u.email) === mail);
+                        const memberTag = inNet
+                            ? `<span class="referral-locked-tag"><i class="fas fa-check-circle"></i> Sistemde Aktif (${escapeHtmlSafe(inNet.fullName || 'Üye')})</span>`
+                            : `<span class="referral-locked-tag" style="background:rgba(0,229,255,0.14); border-color:rgba(0,229,255,0.35); color:var(--accent);"><i class="fas fa-user-check"></i> Onaylı (Giriş Bekleniyor)</span>`;
+                        return `
+                        <div class="referral-slot-row locked">
+                            <span class="referral-slot-num">${idx + 1}</span>
+                            <input type="email" class="referral-slot-input" value="${escapeHtmlSafe(mail)}" disabled readonly>
+                            ${memberTag}
+                        </div>`;
+                    }).join('') + `</div>`;
+                }
+
+                listContainer.innerHTML = `
+                    <div class="admin-ref-add-bar">
+                        <input type="email" id="admin-new-ref-input" class="referral-slot-input" placeholder="Referans eklenecek Gmail adresini yazın..." onkeydown="if(event.key==='Enter') addAdminUnlimitedReferral()">
+                        <button type="button" class="btn-save-referral" onclick="addAdminUnlimitedReferral()">
+                            <i class="fas fa-plus-circle"></i> Referans Ekle
+                        </button>
+                    </div>
+                    <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.4px; margin-top:2px;">
+                        Eklediğiniz Referans Listesi (${refs.length} Kişi):
+                    </div>
+                    ${listItemsHtml}
+                `;
+                return;
+            }
+
+            // DURUM B: PASİF KULLANICI -> 0 REFERANS HAKKI (KUTULAR GÖSTERİLMEZ, REFERANS İSTE VEYA ÖDEME YAP YÖNLENDİRMESİ ÇIKAR)
+            if (!isActive) {
+                if (titleEl) {
+                    titleEl.innerHTML = `<i class="fas fa-user-lock" style="color:var(--warning);"></i> Referans Haklarım (Pasif Kullanıcı)`;
+                }
+                if (subEl) {
+                    subEl.innerHTML = `Yeni giriş yapan ve henüz referansı olmayan kullanıcıların referans hakkı yoktur (<b>0 Hak</b>).`;
+                }
+                if (quotaPill) {
+                    quotaPill.innerText = `Referans Hakkı: 0 (Pasif)`;
+                    quotaPill.style.background = 'rgba(239, 68, 68, 0.16)';
+                    quotaPill.style.borderColor = 'rgba(239, 68, 68, 0.45)';
                     quotaPill.style.color = '#fca5a5';
                 }
+
+                listContainer.innerHTML = `
+                    <div style="padding:12px; border-radius:12px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); color:#fde68a; font-size:0.75rem; line-height:1.48; display:flex; flex-direction:column; gap:10px;">
+                        <div>
+                            <i class="fas fa-exclamation-triangle"></i> <b>Hesabınız Pasif Durumdadır (Referans Hakkı: 0)</b><br>
+                            Gmail adresiniz (<b>${escapeHtmlSafe(currentUserProfile.email || '')}</b>) henüz sistemdeki aktif bir kullanıcının referans listesinde yer almıyor. Aktif bir üye size referans olduğunda hesabınız <b>Aktif</b> konuma geçecek ve size <b>3 kişilik referans hakkı</b> açılacaktır.
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button type="button" class="pwa-install-btn" style="flex:1; padding:9px 10px; font-size:0.74rem;" onclick="openNetworkForReference()">
+                                <i class="fas fa-users"></i> AZİMUT Ağı'ndan Referans İste
+                            </button>
+                            <button type="button" class="pwa-install-btn" style="flex:1; padding:9px 10px; font-size:0.74rem; background:rgba(245,158,11,0.2); color:var(--warning); border:1px solid rgba(245,158,11,0.5);" onclick="openPaymentContactForActivation()">
+                                <i class="fas fa-credit-card"></i> Ödeme Yap (buraktonoz@gmail.com)
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // DURUM C: REFERANSLA AKTİF OLMUŞ NORMAL KULLANICI -> SADECE 3 KİŞİLİK YER (EKLENDİĞİNDE KALICI OLARAK KİLİTLENİR)
+            const lockedRefs = refs.slice(0, DEFAULT_REFERRAL_QUOTA);
+            const remainingCount = Math.max(0, DEFAULT_REFERRAL_QUOTA - lockedRefs.length);
+
+            if (titleEl) {
+                titleEl.innerHTML = `<i class="fas fa-user-shield" style="color:var(--accent);"></i> Referans Haklarım (3 Kişilik Kontenjan)`;
+            }
+            if (subEl) {
+                subEl.innerHTML = `Aktif kullanıcı olarak <b>3 kişiye</b> referans olma hakkınız vardır. Eklediğiniz Gmail adresi kalıcı olarak kilitlenir ve bir daha değiştirilemez.`;
+            }
+            if (quotaPill) {
+                quotaPill.innerText = `Kalan Hak: ${remainingCount} / ${DEFAULT_REFERRAL_QUOTA}`;
+                quotaPill.style.background = remainingCount > 0 ? 'rgba(16, 185, 129, 0.16)' : 'rgba(148, 163, 184, 0.16)';
+                quotaPill.style.borderColor = remainingCount > 0 ? 'rgba(16, 185, 129, 0.42)' : 'rgba(148, 163, 184, 0.3)';
+                quotaPill.style.color = remainingCount > 0 ? 'var(--success)' : 'var(--text-muted)';
             }
 
             let html = '';
-            if (!isActive) {
-                html += `<div style="padding:8px 10px; border-radius:9px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.35); color:#fde68a; font-size:0.71rem; line-height:1.4;">
-                    <i class="fas fa-lock"></i> <b>Pasif Kullanıcı</b> durumundasınız. Hesabınız bir referans veya ödeme ile aktifleştiğinde aşağıdaki <b>${totalSlots} referans hakkınız</b> kullanıma açılacaktır.
-                </div>`;
-            }
-
-            for (let i = 0; i < totalSlots; i++) {
-                const savedEmail = refs[i] || '';
+            for (let i = 0; i < DEFAULT_REFERRAL_QUOTA; i++) {
+                const savedEmail = lockedRefs[i] || '';
                 const isLocked = Boolean(savedEmail);
 
                 if (isLocked) {
@@ -3465,15 +3624,15 @@
                     <div class="referral-slot-row locked">
                         <span class="referral-slot-num">${i + 1}</span>
                         <input type="email" class="referral-slot-input" value="${escapeHtmlSafe(savedEmail)}" disabled readonly>
-                        <span class="referral-locked-tag"><i class="fas fa-lock"></i> Onaylandı</span>
+                        <span class="referral-locked-tag"><i class="fas fa-lock"></i> Kilitli (Değiştirilemez)</span>
                     </div>`;
                 } else {
                     html += `
                     <div class="referral-slot-row">
                         <span class="referral-slot-num">${i + 1}</span>
-                        <input type="email" id="referral-slot-input-${i}" class="referral-slot-input" placeholder="${isActive ? (i + 1) + '. Referans Gmail adresi yazın...' : 'Aktif üyelik sonrası açılır'}" ${isActive ? '' : 'disabled'}>
-                        <button type="button" class="btn-save-referral" onclick="saveReferralSlot(${i})" ${isActive ? '' : 'disabled'}>
-                            <i class="fas fa-check"></i> Kaydet
+                        <input type="email" id="referral-slot-input-${i}" class="referral-slot-input" placeholder="${i + 1}. Referans Gmail adresi yazın..." onkeydown="if(event.key==='Enter') saveReferralSlot(${i})">
+                        <button type="button" class="btn-save-referral" onclick="saveReferralSlot(${i})">
+                            <i class="fas fa-user-plus"></i> Ekle
                         </button>
                     </div>`;
                 }
@@ -3482,6 +3641,45 @@
             listContainer.innerHTML = html;
         }
 
+        // Ana Kullanıcı (buraktonoz@gmail.com) için Sınırsız Referans Ekleme Fonksiyonu
+        async function addAdminUnlimitedReferral(prefilledEmail = null) {
+            if (!auth.currentUser || !isMainAdminEmail(currentUserProfile.email || auth.currentUser.email)) {
+                showToast("Bu özellik sadece Ana Yönetici (buraktonoz@gmail.com) içindir!", "fa-lock");
+                return;
+            }
+            const inputEl = document.getElementById('admin-new-ref-input');
+            const rawEmail = prefilledEmail !== null ? prefilledEmail : (inputEl ? inputEl.value : '');
+            const targetEmail = normalizeEmail(rawEmail);
+
+            if (!targetEmail || !targetEmail.includes('@') || !targetEmail.includes('.')) {
+                showToast("Lütfen geçerli bir Gmail / e-posta adresi girin!", "fa-exclamation-circle");
+                return;
+            }
+            if (targetEmail === MAIN_ADMIN_EMAIL) {
+                showToast("Kendi yönetici adresiniz zaten sınırsız aktiftir!", "fa-info-circle");
+                return;
+            }
+
+            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals);
+            if (currentRefs.includes(targetEmail)) {
+                showToast(`"${targetEmail}" zaten referans listenizde ekli ve aktif!`, "fa-check-circle");
+                if (inputEl) inputEl.value = '';
+                return;
+            }
+
+            const confirmed = await showCustomDialog({
+                title: "Yönetici Referans Onayı",
+                message: `"${targetEmail}" adresini referans listenize eklemek istiyor musunuz?\n\nBu kullanıcı anında AKTİF KULLANICI konumuna geçecek ve kendisine 3 kişilik referans hakkı tanımlanacaktır.`,
+                confirmText: "Evet, Referans Ekle ve Aktifleştir",
+                danger: false
+            });
+            if (!confirmed) return;
+
+            if (inputEl) inputEl.value = '';
+            await executeReferralPersistence(targetEmail, true);
+        }
+
+        // Normal Aktif Kullanıcılar için 3 Kişilik Kalıcı Kilitlenen Referans Kayıt Fonksiyonu
         async function saveReferralSlot(slotIndex, prefilledEmail = null) {
             if (!auth.currentUser) {
                 showToast("Lütfen önce Gmail hesabınızla giriş yapın", "fa-lock");
@@ -3489,6 +3687,11 @@
             }
             if (!isCurrentUserActive()) {
                 showPassiveWallModal("Referans Verme Sistemi");
+                return;
+            }
+            // Eğer giriş yapan kişi Ana Yönetici (buraktonoz@gmail.com) ise doğrudan sınırsız admin ekleme fonksiyonunu çalıştır
+            if (isMainAdminEmail(currentUserProfile.email || auth.currentUser.email)) {
+                await addAdminUnlimitedReferral(prefilledEmail);
                 return;
             }
 
@@ -3506,11 +3709,10 @@
                 return;
             }
 
-            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals);
-            const totalQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), currentRefs.length);
+            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals).slice(0, DEFAULT_REFERRAL_QUOTA);
 
-            if (currentRefs.length >= totalQuota) {
-                showToast("Tüm referans haklarınızı kullandınız!", "fa-info-circle");
+            if (currentRefs.length >= DEFAULT_REFERRAL_QUOTA) {
+                showToast("3 kişilik referans hakkınızın tamamını kullandınız!", "fa-lock");
                 return;
             }
 
@@ -3519,34 +3721,49 @@
                 return;
             }
 
+            if (globalReferredEmailsMap[targetEmail] || isMainAdminEmail(targetEmail)) {
+                showToast("Bu kullanıcı zaten sistemde aktif bir referansa sahiptir!", "fa-check-circle");
+                return;
+            }
+
             const confirmed = await showCustomDialog({
-                title: `${currentRefs.length + 1}. Referans Hakkı Onayı`,
-                message: `"${targetEmail}" adresine referans olmak üzeresiniz.\n\nKaydettiğinizde bu sütun kalıcı olarak kilitlenecek (değiştirilemez) ve kullanıcı sisteme Aktif Kullanıcı olarak giriş yapabilecektir. Onaylıyor musunuz?`,
-                confirmText: "Evet, Kaydet ve Kilitle",
+                title: `${currentRefs.length + 1}. Referans Hakkı (Kalıcı Kilit)`,
+                message: `"${targetEmail}" adresini ${currentRefs.length + 1}. referansınız olarak eklemek üzeresiniz.\n\nDİKKAT: Eklediğinizde bu alan KALICI OLARAK KİLİTLENECEK ve bir daha değiştirilemeyecektir. Onaylıyor musunuz?`,
+                confirmText: "Evet, Ekle ve Kalıcı Kilitle",
                 danger: false
             });
 
             if (!confirmed) return;
 
-            const updatedRefs = [...currentRefs, targetEmail];
+            await executeReferralPersistence(targetEmail, false);
+        }
+
+        async function executeReferralPersistence(targetEmail, isAdminAction = false) {
+            const uid = auth.currentUser.uid;
+            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals);
+            const updatedRefs = isAdminAction
+                ? [...currentRefs, targetEmail]
+                : [...currentRefs, targetEmail].slice(0, DEFAULT_REFERRAL_QUOTA);
+
             currentUserProfile.referrals = updatedRefs;
 
             // Global referans haritasına hemen ekle
             globalReferredEmailsMap[targetEmail] = {
-                referredByUid: auth.currentUser.uid,
-                referredByEmail: currentUserProfile.email,
-                referredByName: currentUserProfile.fullName
+                referredByUid: uid,
+                referredByEmail: normalizeEmail(currentUserProfile.email || auth.currentUser.email || ''),
+                referredByName: currentUserProfile.fullName || 'AZİMUT Üyesi'
             };
 
             saveCachedProfile(currentUserProfile);
             refreshUserProfileUI();
 
-            const uid = auth.currentUser.uid;
-            const remaining = Math.max(0, totalQuota - updatedRefs.length);
+            const totalQuota = isAdminAction ? ADMIN_UNLIMITED_QUOTA : DEFAULT_REFERRAL_QUOTA;
+            const remaining = isAdminAction ? ADMIN_UNLIMITED_QUOTA : Math.max(0, DEFAULT_REFERRAL_QUOTA - updatedRefs.length);
 
             try {
                 await db.collection('users').doc(uid).set({
                     referrals: updatedRefs,
+                    referralQuota: totalQuota,
                     usedReferrals: updatedRefs.length,
                     remainingReferrals: remaining,
                     updatedAt: Date.now(),
@@ -3571,41 +3788,43 @@
                 }, { merge: true });
             } catch (e) {}
 
-            // azimut_referrals koleksiyonuna da yaz ki referans olunan kişi giriş yaptığında veya şu an açıksa anında aktifleşsin
+            // azimut_referrals koleksiyonuna yaz ki referans olunan kişi giriş yaptığında veya şu an açıksa anında aktifleşsin
             const emailDocKey = getReferralDocKey(targetEmail);
             try {
                 await db.collection('azimut_referrals').doc(emailDocKey).set({
                     email: targetEmail,
                     referredByUid: uid,
-                    referredByEmail: normalizeEmail(currentUserProfile.email || ''),
+                    referredByEmail: normalizeEmail(currentUserProfile.email || auth.currentUser.email || ''),
                     referredByName: currentUserProfile.fullName || '',
-                    createdAt: Date.now()
+                    createdAt: Date.now(),
+                    updatedAt: Date.now()
                 }, { merge: true });
             } catch (e) {}
 
-            // Eğer referans olunan kullanıcı halihazırda sisteme giriş yapmışsa onun azimut_network kaydını da anında Aktif yap
-            // (Not: Kullanıcının özel users/{uid} koordinat klasörü korumalıdır, kullanıcı kendi ekranında anlık tetiklenip kendi users/{uid} kaydını da aktifler)
+            // Eğer referans olunan kullanıcı halihazırda sisteme giriş yapmışsa onun azimut_network kaydını da anında Aktif + 3 Hak yap
             const targetUserEntry = Object.values(azimutNetworkUsersMap).find(u => u && normalizeEmail(u.email) === targetEmail);
             if (targetUserEntry && targetUserEntry.uid) {
-                const targetRefs = sanitizeEmailArray(targetUserEntry.referrals);
-                const targetQuota = Math.max(Number(targetUserEntry.referralQuota ?? DEFAULT_REFERRAL_QUOTA), targetRefs.length);
+                const targetRefs = sanitizeEmailArray(targetUserEntry.referrals).slice(0, DEFAULT_REFERRAL_QUOTA);
                 const activationPayload = {
                     isActive: true,
-                    explicitActive: true,
-                    referralQuota: targetQuota,
+                    isAdmin: false,
+                    referralQuota: DEFAULT_REFERRAL_QUOTA,
                     usedReferrals: targetRefs.length,
-                    remainingReferrals: Math.max(0, targetQuota - targetRefs.length),
+                    remainingReferrals: Math.max(0, DEFAULT_REFERRAL_QUOTA - targetRefs.length),
                     referredByUid: uid,
-                    referredByEmail: normalizeEmail(currentUserProfile.email || ''),
+                    referredByEmail: normalizeEmail(currentUserProfile.email || auth.currentUser.email || ''),
                     referredByName: currentUserProfile.fullName || '',
                     activatedAt: Date.now(),
                     updatedAt: Date.now()
                 };
                 db.collection('azimut_network').doc(targetUserEntry.uid).set(activationPayload, { merge: true }).catch(() => {});
-                db.collection('users').doc(targetUserEntry.uid).set(activationPayload, { merge: true }).catch(() => {});
             }
 
-            showToast(`"${targetEmail}" referans olarak kaydedildi ve kilitlendi! (Kalan Hak: ${remaining})`, "fa-user-check");
+            if (isAdminAction) {
+                showToast(`"${targetEmail}" yönetici referans listesine eklendi ve aktifleştirildi!`, "fa-crown");
+            } else {
+                showToast(`"${targetEmail}" referans olarak eklendi ve kalıcı kilitlendi! (Kalan Hak: ${remaining})`, "fa-lock");
+            }
         }
 
         async function grantReferenceToUser(targetEmail, targetName) {
@@ -3613,10 +3832,13 @@
                 showPassiveWallModal("Referans Verme");
                 return;
             }
-            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals);
-            const totalQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), currentRefs.length);
-            if (currentRefs.length >= totalQuota) {
-                showToast("Kullanılabilir referans hakkınız kalmadı!", "fa-exclamation-circle");
+            if (isMainAdminEmail(currentUserProfile.email || (auth.currentUser && auth.currentUser.email))) {
+                await addAdminUnlimitedReferral(targetEmail);
+                return;
+            }
+            const currentRefs = sanitizeEmailArray(currentUserProfile.referrals).slice(0, DEFAULT_REFERRAL_QUOTA);
+            if (currentRefs.length >= DEFAULT_REFERRAL_QUOTA) {
+                showToast("3 kişilik referans hakkınızın tamamını kullandınız!", "fa-exclamation-circle");
                 return;
             }
             await saveReferralSlot(currentRefs.length, targetEmail);
@@ -3628,7 +3850,7 @@
             const featBadge = document.getElementById('passive-wall-feature-name');
             const mailEl = document.getElementById('passive-wall-email');
             if (featBadge) {
-                featBadge.innerHTML = `<i class="fas fa-ban"></i> Kısıtlı Özellik: ${escapeHtmlSafe(featureTitle || 'Tam Harita ve Mühendislik Araçları')}`;
+                featBadge.innerHTML = `<i class="fas fa-user-lock"></i> KİLTLİ ÖZELLİK: ${escapeHtmlSafe(featureTitle || 'Aktif Üyelik Gereklidir')}`;
             }
             if (mailEl) {
                 mailEl.innerText = currentUserProfile.email || (auth.currentUser ? auth.currentUser.email : '-');
@@ -3649,7 +3871,7 @@
             if (drawerOv) drawerOv.classList.remove('show');
             switchTab('tab-network');
             switchAzimutNetworkTab('HAS_QUOTA');
-            showToast("Referans hakkı olan aktif üyelerden referans talep edebilirsiniz", "fa-user-check");
+            showToast("AZİMUT Ağı'ndaki aktif üyelerden referans isteyebilirsiniz", "fa-users");
         }
 
         function openPaymentContactForActivation() {
@@ -3658,22 +3880,22 @@
             const userName = currentUserProfile.fullName || 'AZİMUT Kullanıcısı';
             const subject = encodeURIComponent(`AZİMUT Pro Üyelik Aktivasyon / Ödeme Talebi - ${userName}`);
             const body = encodeURIComponent(
-                `Merhaba AZİMUT Pro Yönetimi,\n\n` +
-                `Sisteme giriş yaptığım Gmail hesabımın (${userMail}) Aktif Kullanıcı statüsüne yükseltilmesi için ödeme / aktivasyon bilgilerini rica ediyorum.\n\n` +
+                `Merhaba Burak Bey (AZİMUT Pro Yönetimi),\n\n` +
+                `AZİMUT Pro uygulamasına Gmail hesabımla (${userMail}) üye oldum. Hesabımın Aktif Kullanıcı statüsüne geçirilmesi için ödeme / aktivasyon konusunda görüşmek istiyorum.\n\n` +
                 `Ad Soyad: ${userName}\n` +
                 `Ünvan: ${currentUserProfile.title || '-'}\n` +
                 `Kurum/Şirket: ${currentUserProfile.company || '-'}\n` +
                 `Kayıtlı Gmail: ${userMail}`
             );
             window.location.href = `mailto:buraktonoz@gmail.com?subject=${subject}&body=${body}`;
-            showToast("Aktivasyon ve ödeme talebi için mail uygulaması açılıyor...", "fa-credit-card");
+            showToast("buraktonoz@gmail.com adresine ödeme/aktivasyon maili açılıyor...", "fa-credit-card");
         }
 
         function handleMembershipBadgeClick() {
             if (isCurrentUserActive()) {
                 showToast("Hesabınız AKTİF KULLANICI statüsündedir. Tüm özellikleri kullanabilirsiniz.", "fa-check-circle");
             } else {
-                showPassiveWallModal("Üyelik Aktivasyonu Gerekli");
+                showPassiveWallModal("Pasif Kullanıcı — Referans veya Ödeme Gerekli");
             }
         }
 
@@ -3701,35 +3923,11 @@
 
             const normEmail = normalizeEmail(profileObj.email || auth.currentUser.email || currentUserProfile.email || '');
             const fullName = (profileObj.fullName || currentUserProfile.fullName || auth.currentUser.displayName || 'Personel').trim();
-            const refs = sanitizeEmailArray(profileObj.referrals !== undefined ? profileObj.referrals : currentUserProfile.referrals);
-            const quota = Math.max(
-                Number(profileObj.referralQuota ?? currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA),
-                DEFAULT_REFERRAL_QUOTA,
-                refs.length
-            );
+            const rawRefs = sanitizeEmailArray(profileObj.referrals !== undefined ? profileObj.referrals : currentUserProfile.referrals);
 
-            const refInfo = normEmail ? globalReferredEmailsMap[normEmail] : null;
-            const isFounder = isFounderOrAdminEmail(normEmail, fullName);
-            const refByEmail = normalizeEmail(
-                profileObj.referredByEmail ||
-                currentUserProfile.referredByEmail ||
-                (refInfo ? refInfo.referredByEmail : '') ||
-                ''
-            );
-            const refByName = (
-                profileObj.referredByName ||
-                currentUserProfile.referredByName ||
-                (refInfo ? refInfo.referredByName : '') ||
-                (isFounder ? 'Kurucu Yönetici (Burak Tonoz)' : '')
-            ).trim();
-
-            const activeFlag = hasVerifiedActivation(
-                normEmail,
-                fullName,
-                { ...currentUserProfile, ...profileObj, referredByEmail: refByEmail },
-                profileObj
-            );
-            const remaining = activeFlag ? Math.max(0, quota - refs.length) : 0;
+            const statusObj = computeUserStatusAndQuota(normEmail, rawRefs, globalReferredEmailsMap);
+            const refByEmail = statusObj.refInfo ? normalizeEmail(statusObj.refInfo.referredByEmail || '') : '';
+            const refByName = statusObj.refInfo ? (statusObj.refInfo.referredByName || '').trim() : '';
 
             const cleanProfile = {
                 uid: uid,
@@ -3738,13 +3936,12 @@
                 photoURL: profileObj.photoURL || auth.currentUser.photoURL || currentUserProfile.photoURL || '',
                 title: (profileObj.title || currentUserProfile.title || '').trim(),
                 company: (profileObj.company || currentUserProfile.company || '').trim(),
-                explicitActive: activeFlag,
-                isActive: activeFlag,
-                adminApproved: Boolean(profileObj.adminApproved === true || currentUserProfile.adminApproved === true),
-                referralQuota: quota,
-                referrals: refs,
-                usedReferrals: refs.length,
-                remainingReferrals: remaining,
+                isAdmin: statusObj.isAdmin,
+                isActive: statusObj.isActive,
+                referralQuota: statusObj.referralQuota,
+                referrals: statusObj.referrals,
+                usedReferrals: statusObj.usedReferrals,
+                remainingReferrals: statusObj.remainingReferrals,
                 referredByEmail: refByEmail,
                 referredByName: refByName,
                 updatedAt: Date.now()
@@ -3761,7 +3958,7 @@
                 photoURL: cleanProfile.photoURL,
                 title: cleanProfile.title || 'Harita / Saha Personeli',
                 company: cleanProfile.company || 'Kurum Belirtilmedi',
-                explicitActive: cleanProfile.explicitActive,
+                isAdmin: cleanProfile.isAdmin,
                 isActive: cleanProfile.isActive,
                 referralQuota: cleanProfile.referralQuota,
                 referrals: cleanProfile.referrals,
@@ -3783,9 +3980,6 @@
                 ...publicNetworkPayload,
                 profile: cleanProfile
             };
-            if (isInitialCreate) {
-                userDocPayload.referralQuota = cleanProfile.referralQuota;
-            }
 
             try {
                 await db.collection('users').doc(uid).set(userDocPayload, { merge: true });
@@ -3794,8 +3988,8 @@
             }
 
             // 3. Eğer kullanıcı Aktif ise ve referans verdiği mailler varsa azimut_referrals tablosuyla da senkronize et
-            if (cleanProfile.isActive && refs.length > 0) {
-                refs.forEach(refMail => {
+            if (cleanProfile.isActive && cleanProfile.referrals.length > 0) {
+                cleanProfile.referrals.forEach(refMail => {
                     const emailDocKey = getReferralDocKey(refMail);
                     db.collection('azimut_referrals').doc(emailDocKey).set({
                         email: refMail,
@@ -3905,7 +4099,12 @@
                         firstLocationCenteredAfterSplash = true;
                         map.setView([currentLat, currentLon], 18, { animate: false });
                     }
-                    checkFirstTimeTutorial();
+                    // Pasif kullanıcı ilk girişte programı görür ama otomatik olarak referans/ödeme yönlendirmesiyle bilgilendirilir
+                    if (!isCurrentUserActive()) {
+                        showPassiveWallModal('Pasif Üyelik — Aktivasyon veya Referans Gerekli');
+                    } else {
+                        checkFirstTimeTutorial();
+                    }
                 }, 550);
             }
         }
@@ -3923,16 +4122,19 @@
             const mergedEmail = email || normalizeEmail(existing.email || '');
             const mergedName = fullName || existing.fullName || 'AZİMUT Kullanıcısı';
             const refs = sanitizeEmailArray(data.referrals || prof.referrals || existing.referrals || []);
-            const quota = extractQuotaValue(data, prof, existing.referralQuota ?? DEFAULT_REFERRAL_QUOTA);
-            const refByEmail = normalizeEmail(data.referredByEmail || prof.referredByEmail || existing.referredByEmail || '');
-            const refByName = (data.referredByName || prof.referredByName || existing.referredByName || '').trim();
 
-            const verifiedActive = hasVerifiedActivation(
-                mergedEmail,
-                mergedName,
-                { ...existing, ...data, referredByEmail: refByEmail },
-                prof
-            );
+            // Eğer veritabanı dökümanında referredByEmail varsa ve globalReferredEmailsMap'te henüz yoksa ekle
+            const docRefByEmail = normalizeEmail(data.referredByEmail || prof.referredByEmail || existing.referredByEmail || '');
+            const docRefByName = (data.referredByName || prof.referredByName || existing.referredByName || '').trim();
+            if (mergedEmail && docRefByEmail && !globalReferredEmailsMap[mergedEmail]) {
+                globalReferredEmailsMap[mergedEmail] = {
+                    referredByUid: data.referredByUid || '',
+                    referredByEmail: docRefByEmail,
+                    referredByName: docRefByName
+                };
+            }
+
+            const statusCalc = computeUserStatusAndQuota(mergedEmail, refs, globalReferredEmailsMap);
 
             azimutNetworkUsersMap[uid] = {
                 uid: uid,
@@ -3941,15 +4143,14 @@
                 photoURL: prof.photoURL || data.photoURL || existing.photoURL || '',
                 title: (prof.title || data.title || existing.title || 'Harita / Saha Personeli').trim(),
                 company: (prof.company || data.company || existing.company || 'Kurum Belirtilmedi').trim(),
-                explicitActive: verifiedActive,
-                isActive: verifiedActive,
-                adminApproved: Boolean(data.adminApproved === true || prof.adminApproved === true || existing.adminApproved === true),
-                referralQuota: Math.max(quota, DEFAULT_REFERRAL_QUOTA, refs.length),
-                referrals: refs,
-                usedReferrals: refs.length,
-                remainingReferrals: verifiedActive ? Math.max(0, Math.max(quota, DEFAULT_REFERRAL_QUOTA, refs.length) - refs.length) : 0,
-                referredByEmail: refByEmail,
-                referredByName: refByName,
+                isAdmin: statusCalc.isAdmin,
+                isActive: statusCalc.isActive,
+                referralQuota: statusCalc.referralQuota,
+                referrals: statusCalc.referrals,
+                usedReferrals: statusCalc.usedReferrals,
+                remainingReferrals: statusCalc.remainingReferrals,
+                referredByEmail: statusCalc.referredByEmail || docRefByEmail,
+                referredByName: statusCalc.referredByName || docRefByName,
                 updatedAt: prof.updatedAt || data.updatedAt || existing.updatedAt || Date.now()
             };
         }
@@ -3959,29 +4160,22 @@
             if (networkUnsubDir) { try { networkUnsubDir(); } catch (e) {} networkUnsubDir = null; }
             if (networkUnsubRefs) { try { networkUnsubRefs(); } catch (e) {} networkUnsubRefs = null; }
 
-            // 1. azimut_referrals koleksiyonunu anlık dinle (Aktif üyelerin verdiği referanslar)
+            // 1. azimut_referrals koleksiyonunu anlık dinle (Sıfır durum uyumlu: koleksiyon silindiğinde harita da sıfırlanır)
             try {
                 networkUnsubRefs = db.collection('azimut_referrals').onSnapshot((snapshot) => {
-                    if (typeof snapshot.docChanges === 'function') {
-                        snapshot.docChanges().forEach((change) => {
-                            if (change.type === 'removed') {
-                                const oldData = change.doc.data() || {};
-                                const oldMail = normalizeEmail(oldData.email);
-                                if (oldMail) delete globalReferredEmailsMap[oldMail];
-                            }
-                        });
-                    }
+                    const freshRefsMap = {};
                     snapshot.forEach((doc) => {
                         const d = doc.data() || {};
                         const mail = normalizeEmail(d.email);
                         if (mail) {
-                            globalReferredEmailsMap[mail] = {
+                            freshRefsMap[mail] = {
                                 referredByUid: d.referredByUid || '',
                                 referredByEmail: normalizeEmail(d.referredByEmail || ''),
                                 referredByName: d.referredByName || ''
                             };
                         }
                     });
+                    globalReferredEmailsMap = freshRefsMap;
                     recomputeGlobalReferralActivation();
                     saveCachedNetworkMap();
                     refreshUserProfileUI();
@@ -3990,18 +4184,19 @@
                 });
             } catch (e) {}
 
-            // 2. azimut_network koleksiyonunu anlık dinle (Üye olan herkes birbirini burada anlık görür)
+            // 2. azimut_network koleksiyonunu anlık dinle (Sıfır durum uyumlu: silinen kayıtlar haritadan temizlenir)
             try {
                 networkUnsubDir = db.collection('azimut_network').onSnapshot((snapshot) => {
-                    if (typeof snapshot.docChanges === 'function') {
-                        snapshot.docChanges().forEach((change) => {
-                            if (change.type === 'removed' && (!auth.currentUser || change.doc.id !== auth.currentUser.uid)) {
-                                delete azimutNetworkUsersMap[change.doc.id];
-                            }
-                        });
-                    }
+                    const seenIds = new Set();
                     snapshot.forEach((doc) => {
+                        seenIds.add(doc.id);
                         ingestNetworkDoc(doc.id, doc.data());
+                    });
+                    // Firestore'dan silinen eski dökümanları temizle
+                    Object.keys(azimutNetworkUsersMap).forEach((uidKey) => {
+                        if (!seenIds.has(uidKey) && (!auth.currentUser || uidKey !== auth.currentUser.uid)) {
+                            delete azimutNetworkUsersMap[uidKey];
+                        }
                     });
                     recomputeGlobalReferralActivation();
                     saveCachedNetworkMap();
@@ -4026,7 +4221,8 @@
 
         function buildNetworkUserCardHtml(u) {
             const isMe = auth.currentUser && u.uid === auth.currentUser.uid;
-            const isActive = Boolean(u.isActive);
+            const isUserAdmin = isMainAdminEmail(u.email);
+            const isActive = Boolean(u.isActive || isUserAdmin);
             const safeName = escapeHtmlSafe(u.fullName || 'İsimsiz Personel');
             const safeTitle = escapeHtmlSafe(u.title || 'Ünvan Belirtilmedi');
             const safeComp = escapeHtmlSafe(u.company || 'Kurum / Şirket Belirtilmedi');
@@ -4035,16 +4231,20 @@
             const avatarSrc = u.photoURL ? escapeHtmlSafe(u.photoURL) : fallbackAvatar;
 
             const refs = sanitizeEmailArray(u.referrals);
-            const totalQuota = Math.max(Number(u.referralQuota ?? DEFAULT_REFERRAL_QUOTA), refs.length);
-            const remaining = isActive ? Math.max(0, totalQuota - refs.length) : 0;
+            const remaining = isUserAdmin
+                ? ADMIN_UNLIMITED_QUOTA
+                : (isActive ? Math.max(0, DEFAULT_REFERRAL_QUOTA - refs.length) : 0);
 
+            const amIAdmin = isMainAdminEmail(currentUserProfile.email || auth.currentUser?.email);
             const myRefs = sanitizeEmailArray(currentUserProfile.referrals);
-            const myTotalQuota = Math.max(Number(currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA), myRefs.length);
-            const myRemaining = isCurrentUserActive() ? Math.max(0, myTotalQuota - myRefs.length) : 0;
+            const myRemaining = amIAdmin
+                ? ADMIN_UNLIMITED_QUOTA
+                : (isCurrentUserActive() ? Math.max(0, DEFAULT_REFERRAL_QUOTA - myRefs.length) : 0);
             const canGrantRefToThisUser = Boolean(!isMe && !isActive && safeEmail && isCurrentUserActive() && myRemaining > 0);
 
             // Eğer aktif ve referans hakkı olan biriyse ve ben pasifsem, mail konusunu "Referans Talebi" olarak hazırla
             const isRequestingRef = Boolean(!isCurrentUserActive() && isActive && remaining > 0);
+            const remainingTextForMail = isUserAdmin ? 'sınırsız' : `${remaining}`;
             const subject = encodeURIComponent(
                 isRequestingRef
                     ? `AZİMUT Pro Referans Talebi - ${currentUserProfile.fullName || ''}`
@@ -4052,22 +4252,32 @@
             );
             const body = encodeURIComponent(
                 isRequestingRef
-                    ? `Merhaba ${u.fullName || ''},\n\nAZİMUT Pro sistemine Gmail hesabımla (${currentUserProfile.email || ''}) giriş yaptım. AZİMUT Ağı'nda ${remaining} referans hakkınız bulunduğunu gördüm.\n\nUygun görürseniz Gmail adresimi (${currentUserProfile.email || ''}) profilinizdeki referans bölümüne ekleyerek aktif kullanıcı olmama referans olabilir misiniz?\n\nTeşekkürler, saygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`
+                    ? `Merhaba ${u.fullName || ''},\n\nAZİMUT Pro sistemine Gmail hesabımla (${currentUserProfile.email || ''}) giriş yaptım. Sistemde pasif konumdayım ve AZİMUT Ağı'nda ${remainingTextForMail} referans hakkınız bulunduğunu gördüm.\n\nUygun görürseniz Gmail adresimi (${currentUserProfile.email || ''}) profilinizdeki referans bölümüne ekleyerek aktif kullanıcı olmama referans olabilir misiniz?\n\nTeşekkürler, saygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`
                     : `Merhaba ${u.fullName || ''},\n\nAZİMUT Pro Kurumsal Ağı üzerinden sizinle iletişime geçiyorum.\n\nSaygılarımla,\n${currentUserProfile.fullName || ''}\n${currentUserProfile.title || ''} - ${currentUserProfile.company || ''}`
             );
             const mailtoHref = safeEmail ? `mailto:${safeEmail}?subject=${subject}&body=${body}` : '#';
 
-            const statusChipHtml = isActive
-                ? `<span class="net-status-chip active-chip"><i class="fas fa-check-circle"></i> AKTİF</span>`
-                : `<span class="net-status-chip passive-chip"><i class="fas fa-user-clock"></i> PASİF</span>`;
+            const statusChipHtml = isUserAdmin
+                ? `<span class="net-status-chip admin-chip"><i class="fas fa-crown"></i> ANA KULLANICI (ADMİN) • AKTİF</span>`
+                : (isActive
+                    ? `<span class="net-status-chip active-chip"><i class="fas fa-check-circle"></i> AKTİF</span>`
+                    : `<span class="net-status-chip passive-chip"><i class="fas fa-user-clock"></i> PASİF</span>`);
 
-            const quotaChipHtml = isActive
-                ? `<span class="net-quota-chip ${remaining === 0 ? 'zero' : ''}"><i class="fas fa-gift"></i> Referans Hakkı: ${remaining} / ${totalQuota}</span>`
-                : `<span class="net-quota-chip zero"><i class="fas fa-hourglass-half"></i> Referans Bekliyor</span>`;
+            const quotaChipHtml = isUserAdmin
+                ? `<span class="net-quota-chip"><i class="fas fa-infinity"></i> Referans Hakkı: Sınırsız (∞) • Eklenen: ${refs.length}</span>`
+                : (isActive
+                    ? `<span class="net-quota-chip ${remaining === 0 ? 'zero' : ''}"><i class="fas fa-gift"></i> Referans Hakkı: ${remaining} / ${DEFAULT_REFERRAL_QUOTA}</span>`
+                    : `<span class="net-quota-chip zero"><i class="fas fa-ban"></i> Referans Hakkı: 0 (Pasif)</span>`);
 
-            const referredByLine = u.referredByName || u.referredByEmail
-                ? `<div style="font-size:0.65rem; color:#34d399; font-weight:700; margin-top:2px;"><i class="fas fa-handshake"></i> Referans: ${escapeHtmlSafe(u.referredByName || u.referredByEmail)}</div>`
-                : '';
+            const referredByLine = isUserAdmin
+                ? `<div style="font-size:0.65rem; color:#fbbf24; font-weight:800; margin-top:2px;"><i class="fas fa-crown"></i> Kurucu Yönetici — Sınırsız Referans Yetkisi</div>`
+                : ((u.referredByName || u.referredByEmail)
+                    ? `<div style="font-size:0.65rem; color:#34d399; font-weight:700; margin-top:2px;"><i class="fas fa-handshake"></i> Referans: ${escapeHtmlSafe(u.referredByName || u.referredByEmail)}</div>`
+                    : `<div style="font-size:0.65rem; color:#f87171; font-weight:700; margin-top:2px;"><i class="fas fa-hourglass-half"></i> Henüz Kimse Referans Olmadı (Pasif)</div>`);
+
+            const grantBtnLabel = amIAdmin
+                ? `<i class="fas fa-crown"></i> Referans Ol (Sınırsız Admin)`
+                : `<i class="fas fa-user-check"></i> Referans Ol (${myRemaining} Hak Kaldı)`;
 
             return `
             <div class="network-user-card ${isMe ? 'is-me' : ''} ${!isActive ? 'is-passive-user' : ''}">
@@ -4089,7 +4299,7 @@
                 <div class="network-user-actions">
                     ${canGrantRefToThisUser ? `
                     <button type="button" class="btn-grant-ref" onclick="grantReferenceToUser('${safeEmail}', '${safeName}')">
-                        <i class="fas fa-user-check"></i> Referans Ol (${myRemaining} Hak)
+                        ${grantBtnLabel}
                     </button>
                     ` : ''}
                     ${safeEmail ? `
@@ -4114,6 +4324,11 @@
 
             const allUsers = Object.values(azimutNetworkUsersMap).filter(u => u && (u.email || u.fullName));
             allUsers.sort((a, b) => {
+                // Admin her zaman en üstte, ardından kendisi, ardından güncellenme tarihi
+                const aAdmin = isMainAdminEmail(a.email);
+                const bAdmin = isMainAdminEmail(b.email);
+                if (aAdmin && !bAdmin) return -1;
+                if (!aAdmin && bAdmin) return 1;
                 if (auth.currentUser) {
                     if (a.uid === auth.currentUser.uid) return -1;
                     if (b.uid === auth.currentUser.uid) return 1;
@@ -4122,7 +4337,7 @@
             });
 
             const activeUsersAll = allUsers.filter(u => u.isActive);
-            const hasQuotaUsersAll = activeUsersAll.filter(u => (u.remainingReferrals || 0) > 0);
+            const hasQuotaUsersAll = activeUsersAll.filter(u => isMainAdminEmail(u.email) || (u.remainingReferrals || 0) > 0);
             const passiveUsersAll = allUsers.filter(u => !u.isActive);
 
             // Sekme sayaçlarını güncelle
@@ -4219,8 +4434,10 @@
                 const initialEmail = normalizeEmail(user.email || cachedProf.email || '');
                 const initialName = (cachedProf.fullName || user.displayName || (initialEmail ? initialEmail.split('@')[0] : 'Personel')).trim();
                 const initialRefs = sanitizeEmailArray(cachedProf.referrals || []);
-                const initialQuota = Math.max(Number(cachedProf.referralQuota ?? DEFAULT_REFERRAL_QUOTA), DEFAULT_REFERRAL_QUOTA, initialRefs.length);
-                const initialActive = hasVerifiedActivation(initialEmail, initialName, cachedProf, cachedProf);
+
+                // Yeni giriş yapan kişi buraktonoz@gmail.com değilse ve globalReferredEmailsMap'te yoksa:
+                // Kesinlikle PASİF (isActive: false) ve 0 Referans Haklı (referralQuota: 0) başlar!
+                const initialCalc = computeUserStatusAndQuota(initialEmail, initialRefs, globalReferredEmailsMap);
 
                 currentUserProfile = {
                     uid: user.uid,
@@ -4229,19 +4446,20 @@
                     photoURL: user.photoURL || cachedProf.photoURL || '',
                     title: cachedProf.title || '',
                     company: cachedProf.company || '',
-                    explicitActive: initialActive,
-                    isActive: initialActive,
-                    adminApproved: Boolean(cachedProf.adminApproved === true),
-                    referralQuota: initialQuota,
-                    referrals: initialRefs,
-                    referredByEmail: normalizeEmail(cachedProf.referredByEmail || ''),
-                    referredByName: cachedProf.referredByName || '',
+                    isAdmin: initialCalc.isAdmin,
+                    isActive: initialCalc.isActive,
+                    referralQuota: initialCalc.referralQuota,
+                    referrals: initialCalc.referrals,
+                    usedReferrals: initialCalc.usedReferrals,
+                    remainingReferrals: initialCalc.remainingReferrals,
+                    referredByEmail: initialCalc.referredByEmail,
+                    referredByName: initialCalc.referredByName,
                     updatedAt: cachedProf.updatedAt || Date.now()
                 };
                 refreshUserProfileUI();
                 startAzimutNetworkRealtime();
 
-                // 1. Kullanıcının kendi özel dökümanını (users/{uid}) canlı dinle (kota artışı veya özel profil senkronizasyonu için)
+                // 1. Kullanıcının kendi özel dökümanını (users/{uid}) canlı dinle
                 try {
                     currentUserDocUnsub = db.collection('users').doc(user.uid).onSnapshot((doc) => {
                         if (!doc.exists) return;
@@ -4250,17 +4468,9 @@
                         const mergedEmail = normalizeEmail(user.email || cloudProf.email || docData.email || currentUserProfile.email || '');
                         const mergedName = (cloudProf.fullName || docData.fullName || currentUserProfile.fullName || user.displayName || 'Personel').trim();
                         const mergedRefs = sanitizeEmailArray(docData.referrals || cloudProf.referrals || currentUserProfile.referrals || []);
-                        const newQuota = extractQuotaValue(docData, cloudProf, currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA);
-                        const refByEmail = normalizeEmail(docData.referredByEmail || cloudProf.referredByEmail || currentUserProfile.referredByEmail || '');
-                        const refByName = (docData.referredByName || cloudProf.referredByName || currentUserProfile.referredByName || '').trim();
-                        const verifiedActive = hasVerifiedActivation(
-                            mergedEmail,
-                            mergedName,
-                            { ...currentUserProfile, ...docData, referredByEmail: refByEmail },
-                            cloudProf
-                        );
 
-                        const prevQuota = currentUserProfile.referralQuota;
+                        const statusCalc = computeUserStatusAndQuota(mergedEmail, mergedRefs, globalReferredEmailsMap);
+
                         currentUserProfile = {
                             ...currentUserProfile,
                             uid: user.uid,
@@ -4269,49 +4479,38 @@
                             photoURL: user.photoURL || cloudProf.photoURL || docData.photoURL || currentUserProfile.photoURL || '',
                             title: cloudProf.title || docData.title || currentUserProfile.title || '',
                             company: cloudProf.company || docData.company || currentUserProfile.company || '',
-                            explicitActive: verifiedActive,
-                            isActive: verifiedActive,
-                            adminApproved: Boolean(docData.adminApproved === true || cloudProf.adminApproved === true || currentUserProfile.adminApproved === true),
-                            referralQuota: Math.max(newQuota, DEFAULT_REFERRAL_QUOTA, mergedRefs.length),
-                            referrals: mergedRefs,
-                            referredByEmail: refByEmail,
-                            referredByName: refByName,
+                            isAdmin: statusCalc.isAdmin,
+                            isActive: statusCalc.isActive,
+                            referralQuota: statusCalc.referralQuota,
+                            referrals: statusCalc.referrals,
+                            usedReferrals: statusCalc.usedReferrals,
+                            remainingReferrals: statusCalc.remainingReferrals,
+                            referredByEmail: statusCalc.referredByEmail,
+                            referredByName: statusCalc.referredByName,
                             updatedAt: Date.now()
                         };
                         saveCachedProfile(currentUserProfile);
                         refreshUserProfileUI();
-
-                        if (prevQuota && currentUserProfile.referralQuota > prevQuota) {
-                            showToast(`Referans hakkınız yönetici tarafından ${currentUserProfile.referralQuota} adede yükseltildi!`, "fa-gift");
-                        }
                     }, () => {});
                 } catch (e) {}
 
                 // 2. Kullanıcının kendi azimut_network/{uid} dökümanını da canlı dinle
-                // (Başka bir aktif kullanıcı "Referans Ol" butonuna bastığında pasif kullanıcı anında burada yakalayıp aktifleşir!)
+                // (Başka bir aktif kullanıcı "Referans Ol" butonuna bastığında pasif kullanıcı anında burada yakalayıp aktifleşir ve 3 referans hakkı kazanır!)
                 try {
                     currentUserNetDocUnsub = db.collection('azimut_network').doc(user.uid).onSnapshot((netDoc) => {
                         if (!netDoc.exists) return;
                         const netData = netDoc.data() || {};
-                        ingestNetworkDoc(user.uid, netData);
                         const netRefByEmail = normalizeEmail(netData.referredByEmail || '');
                         const netRefByName = (netData.referredByName || '').trim();
-                        if (netRefByEmail) {
-                            currentUserProfile.referredByEmail = netRefByEmail;
-                            currentUserProfile.referredByName = netRefByName || currentUserProfile.referredByName || '';
-                            globalReferredEmailsMap[normalizeEmail(currentUserProfile.email)] = {
+                        const myEmail = normalizeEmail(user.email || currentUserProfile.email || '');
+                        if (myEmail && netRefByEmail) {
+                            globalReferredEmailsMap[myEmail] = {
                                 referredByUid: netData.referredByUid || '',
                                 referredByEmail: netRefByEmail,
                                 referredByName: netRefByName
                             };
                         }
-                        if (netData.adminApproved === true || netData.aktif === true) {
-                            currentUserProfile.adminApproved = true;
-                        }
-                        const netQuota = extractQuotaValue(netData, netData, currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA);
-                        if (netQuota > (currentUserProfile.referralQuota || DEFAULT_REFERRAL_QUOTA)) {
-                            currentUserProfile.referralQuota = netQuota;
-                        }
+                        ingestNetworkDoc(user.uid, netData);
                         recomputeGlobalReferralActivation();
                         saveCachedProfile(currentUserProfile);
                         refreshUserProfileUI();
@@ -4350,33 +4549,19 @@
                     const mergedRefs = sanitizeEmailArray(
                         docData.referrals || cloudProf.referrals || netData.referrals || currentUserProfile.referrals || []
                     );
-                    const quota = extractQuotaValue(
-                        { ...netData, ...docData },
-                        cloudProf,
-                        currentUserProfile.referralQuota ?? DEFAULT_REFERRAL_QUOTA
-                    );
-                    const refInfo = mergedEmail ? globalReferredEmailsMap[mergedEmail] : null;
-                    const refByEmail = normalizeEmail(
-                        docData.referredByEmail ||
-                        cloudProf.referredByEmail ||
-                        netData.referredByEmail ||
-                        (refInfo ? refInfo.referredByEmail : '') ||
-                        ''
-                    );
-                    const refByName = (
-                        docData.referredByName ||
-                        cloudProf.referredByName ||
-                        netData.referredByName ||
-                        (refInfo ? refInfo.referredByName : '') ||
-                        (isFounderOrAdminEmail(mergedEmail, mergedName) ? 'Kurucu Yönetici (Burak Tonoz)' : '')
-                    ).trim();
 
-                    const verifiedActive = hasVerifiedActivation(
-                        mergedEmail,
-                        mergedName,
-                        { ...netData, ...docData, referredByEmail: refByEmail },
-                        cloudProf
-                    );
+                    // Eğer netData veya docData içinde doğrulanmış bir referredByEmail varsa haritaya işle
+                    const existingRefBy = normalizeEmail(netData.referredByEmail || docData.referredByEmail || cloudProf.referredByEmail || '');
+                    const existingRefName = (netData.referredByName || docData.referredByName || cloudProf.referredByName || '').trim();
+                    if (mergedEmail && existingRefBy && !globalReferredEmailsMap[mergedEmail]) {
+                        globalReferredEmailsMap[mergedEmail] = {
+                            referredByUid: netData.referredByUid || '',
+                            referredByEmail: existingRefBy,
+                            referredByName: existingRefName
+                        };
+                    }
+
+                    const statusCalc = computeUserStatusAndQuota(mergedEmail, mergedRefs, globalReferredEmailsMap);
 
                     currentUserProfile = {
                         uid: user.uid,
@@ -4385,13 +4570,14 @@
                         photoURL: user.photoURL || cloudProf.photoURL || docData.photoURL || netData.photoURL || '',
                         title: (cloudProf.title || docData.title || netData.title || currentUserProfile.title || '').trim(),
                         company: (cloudProf.company || docData.company || netData.company || currentUserProfile.company || '').trim(),
-                        explicitActive: verifiedActive,
-                        isActive: verifiedActive,
-                        adminApproved: Boolean(docData.adminApproved === true || cloudProf.adminApproved === true || netData.adminApproved === true),
-                        referralQuota: Math.max(quota, DEFAULT_REFERRAL_QUOTA, mergedRefs.length),
-                        referrals: mergedRefs,
-                        referredByEmail: refByEmail,
-                        referredByName: refByName,
+                        isAdmin: statusCalc.isAdmin,
+                        isActive: statusCalc.isActive,
+                        referralQuota: statusCalc.referralQuota,
+                        referrals: statusCalc.referrals,
+                        usedReferrals: statusCalc.usedReferrals,
+                        remainingReferrals: statusCalc.remainingReferrals,
+                        referredByEmail: statusCalc.referredByEmail,
+                        referredByName: statusCalc.referredByName,
                         updatedAt: Date.now()
                     };
                     saveCachedProfile(currentUserProfile);
@@ -4416,8 +4602,8 @@
                         updateDropdownUI(); updateListUI(); renderActiveProjectMarkers(); updateStats();
                     }
 
-                    // ÖNEMLİ (v10): Kullanıcı Gmail ile giriş yaptığı anda (henüz ünvan/kurum adımında olsa bile)
-                    // azimut_network tablosuna anında kaydedilir ki AZİMUT Ağı'nda herkes tarafından anlık olarak (Pasif veya Aktif) görülebilsin!
+                    // Kullanıcı Gmail ile giriş yaptığı anda azimut_network tablosuna anında kaydedilir
+                    // (Referansı yoksa Pasif & 0 Hak; referansı varsa Aktif & 3 Hak; buraktonoz@gmail.com ise Admin & Sınırsız Hak)
                     persistProfileToDatabase(currentUserProfile, !(userDoc && userDoc.exists));
 
                     // Eğer personelin Ünvan veya Kurum/Şirket bilgisi henüz girilmemişse ilk giriş tamamlama adımını göster
@@ -4507,7 +4693,12 @@
         // --- HARİTA, 4 KATMANLI ALTLIK SİSTEMİ VE TKGM PARSEL WMS ENTEGRASYONU ---
 
         function toggleDrawer() {
-            document.getElementById('side-drawer').classList.toggle('show');
+            const drawerEl = document.getElementById('side-drawer');
+            const isOpening = drawerEl && !drawerEl.classList.contains('show');
+            if (isOpening && !requireActiveMembership('Yan Menü ve Jeodezik Ayarlar')) {
+                return;
+            }
+            drawerEl.classList.toggle('show');
             document.getElementById('drawer-overlay').classList.toggle('show');
         }
 
@@ -4699,6 +4890,7 @@
 
         // --- TEMA, ETİKET, EKRAN AÇIK TUTMA (WAKE LOCK) VE NİŞANGAH ---
         function toggleDaylightMode() {
+            if (!requireActiveMembership('Arazi (Güneş Işığı) Modu')) return;
             appSettings.daylight = !appSettings.daylight;
             document.body.classList.toggle('daylight-mode', appSettings.daylight);
             document.getElementById('toggle-daylight').classList.toggle('active', appSettings.daylight);
@@ -4962,6 +5154,7 @@
         startLiveGpsTracking();
 
         function goToMyLocation() {
+            if (!requireActiveMembership('Canlı GPS Konum Odaklama')) return;
             lockViewportScroll();
             startLiveGpsTracking();
             enableCompassPermission(false);
@@ -4975,6 +5168,7 @@
         }
 
         function copyCoords(type) {
+            if (!requireActiveMembership('Anlık Koordinat Kopyalama')) return;
             let latText = document.getElementById('live-lat').innerText;
             let lonText = document.getElementById('live-lon').innerText;
             let yText = document.getElementById('live-y').innerText;
@@ -6961,8 +7155,15 @@
                 return;
             }
 
-            // Pasif kullanıcı nokta eklemek istediğinde Pasif Kullanıcı uyarısını göster
-            if (tabId === 'tab-add' && !requireActiveMembership('Nokta Ekleme ve Kayıt')) {
+            // Pasif kullanıcı programı açıp görebilir; yalnızca Harita, AZİMUT Ağı ve Profil sekmelerine girebilir.
+            // Sorgu, Katmanlar, + Nokta Ekle ve Kayıtlar menülerine bastığında Referans İste / Ödeme Yap ekranına yönlendirilir!
+            const lockedTabsForPassive = {
+                'tab-query': 'TKGM Parsel ve Adres Sorgulama Menüsü',
+                'tab-layer': 'Harita Katmanları ve TKGM Kadastro Menüsü',
+                'tab-add': 'Nokta Ekleme ve Koordinat Kayıt Menüsü',
+                'tab-records': 'Kayıtlı Noktalar, Klasörler ve CAD Aktarım Menüsü'
+            };
+            if (lockedTabsForPassive[tabId] && !requireActiveMembership(lockedTabsForPassive[tabId])) {
                 return;
             }
 
