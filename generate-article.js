@@ -1,8 +1,6 @@
 const { GoogleGenAI } = require('@google/genai');
 const admin = require('firebase-admin');
 
-// Firebase Admin Bağlantısını Kurma (GitHub Secrets üzerinden)
-// Satır sonlarındaki \n kaçış karakterlerini gerçek yeni satıra çevirir
 const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
 
 admin.initializeApp({
@@ -18,18 +16,30 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function runAutoBlogger() {
     try {
-        console.log("🤖 Gemini API ile yapay zeka makale üretimi başlıyor...");
+        console.log("🤖 Gemini API ile hedef kitleye özel makale üretimi başlıyor...");
 
-        // Gemini'ye verilecek mühendislik komutu (Prompt)
-        const prompt = `Sen 20 yıllık kıdemli bir Harita ve Kadastro Mühendisisin. AZİMUT Pro (buraktonoz.com/azimut) jeodezik el terminalini kullanan saha mühendisleri için Google'da 1 numaraya oynayacak, SEO uyumlu, H2 ve H3 başlıkları içeren profesyonel bir teknik makale yaz.
-        Konu şu 4 seçenekten birisi olsun (Rastgele seç): 1) ITRF96 ve ED50 Koordinat Dönüşümü, 2) Arazide Nokta Aplikasyonu (Stakeout), 3) TKGM Kadastro Parsel Sorgulama, 4) NetCAD NCN ve AutoCAD DXF Veri Aktarımı.
-        Cevabı SADECE saf JSON formatında ver. JSON formatı şu şekilde olmalı:
+        // Yapay zekaya her seferinde farklı bir sektör seçmesi için havuz veriyoruz
+        const prompt = `Sen 20 yıllık kıdemli bir mühendissin ve AZİMUT Pro (buraktonoz.com/azimut) jeodezik uygulamasının teknik yazarısın. 
+        Aşağıdaki hedef kitlelerden ve konulardan RASTGELE BİRİNİ seç ve Google'da 1 numaraya çıkacak, SEO uyumlu, H2/H3 başlıkları içeren, güncel ve son derece faydalı bir makale yaz:
+        
+        Hedef Kitleler ve Konu Fikirleri:
+        1. Harita/Geomatik Mühendisleri (Konu: ITRF96, ED50 dönüşümleri, DOM hassasiyeti, NetCAD NCN aktarımı)
+        2. Orman Mühendisleri (Konu: Orman kadastrosu, ORÜS noktaları bulma, dağlık alanda aplikasyon)
+        3. Elektrik Mühendisleri & GES (Konu: Güneş Enerjisi Santrali (GES) panel aplikasyonu, ENH direk yeri tespiti)
+        4. Topoğraflar ve Saha Teknikerleri (Konu: KML dosyalarını sahada açma, telefondan stakeout radarı kullanımı)
+        5. Arsa/Tarla Sahipleri & Vatandaşlar (Konu: "Aldığım arsanın sınırlarını tapu kadastro verisiyle telefondan nasıl bulurum?", TKGM parsel sorgulama)
+
+        Kural 1: Seçtiğin kitleye uygun teknik veya anlaşılır bir dil kullan.
+        Kural 2: İçerikte mutlaka AZİMUT Pro'nun bu sorunu telefondan ücretsiz ve kolayca nasıl çözdüğünü anlat.
+        Kural 3: Her makale bir öncekinden tamamen farklı, özgün ve ilgi çekici bir başlığa sahip olsun.
+        
+        Cevabı SADECE saf JSON formatında ver:
         {
-          "title": "Makale Başlığı",
+          "title": "İlgi Çekici Makale Başlığı",
           "category": "Jeodezi & Projeksiyon VEYA Saha Aplikasyonu VEYA Kadastro & TKGM VEYA CAD & Yazılım",
-          "summary": "150 karakterlik SEO özeti",
+          "summary": "150 karakterlik çarpıcı SEO özeti",
           "keywords": "anahtar, kelimeler, virgülle, ayrılmış",
-          "content": "<p>Makale girişi...</p><h2>1. Başlık</h2><p>İçerik...</p>"
+          "content": "<p>Giriş paragrafı...</p><h2>1. Başlık</h2><p>İçerik...</p>"
         }`;
 
         const response = await ai.models.generateContent({
@@ -37,22 +47,17 @@ async function runAutoBlogger() {
             contents: prompt,
         });
 
-        // JSON temizliği ve ayrıştırma
         let rawText = response.text.trim();
         rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
         const articleData = JSON.parse(rawText);
 
-        // SEO uyumlu URL (Slug) oluşturma
         const slug = articleData.title
             .toLowerCase()
             .replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u')
             .replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
 
-        // Okuma süresi hesaplama
         const wordCount = articleData.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
         const readMins = Math.max(2, Math.ceil(wordCount / 180));
-
-        // Kapak görselini 7 resimden rastgele seçme (ek1.png - ek7.png)
         const randomImg = `ek${Math.floor(Math.random() * 7) + 1}.png`;
 
         const newArticle = {
@@ -71,12 +76,11 @@ async function runAutoBlogger() {
             timestamp: Date.now()
         };
 
-        // Veritabanına kaydetme
         await db.collection('azimut_articles').doc(slug).set(newArticle);
         console.log(`✅ Makale başarıyla Firebase'e kaydedildi: ${articleData.title}`);
 
     } catch (error) {
-        console.error("❌ Makale üretilirken kritik bir hata oluştu:", error);
+        console.error("❌ Makale üretilirken hata oluştu:", error);
         process.exit(1);
     }
 }
