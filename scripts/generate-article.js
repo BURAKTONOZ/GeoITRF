@@ -14,36 +14,54 @@ admin.initializeApp({
 const db = admin.firestore();
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// YAPAY ZEKAYA BIRAKMADAN KOD İLE RASTGELE KONU SEÇİM HAVUZU (Sürekli genişletebilirsin)
+const TOPIC_POOL = [
+    "Elektrik mühendisleri için Güneş Enerjisi Santrali (GES) panellerinin arazide aplikasyonu.",
+    "Harita mühendisleri için ITRF96 ve ED50 dönüşümlerinde DOM (Dilim Orta Meridyeni) hatasız nasıl seçilir?",
+    "Arsa sahipleri için yeni alınan tarlanın sınırlarını TKGM verisiyle cep telefonundan bulma rehberi.",
+    "Orman mühendisleri için dağlık arazide orman kadastrosu ve ORÜS noktalarının telefondan tespiti.",
+    "Şantiye şefleri ve teknikerler için ofisteki NetCAD NCN dosyalarını sahada telefonda açıp ölçüm yapma.",
+    "CBS uzmanları için KML ve GeoJSON verilerini arazide canlı olarak uydu haritası üzerine yansıtma.",
+    "Gayrimenkul değerleme uzmanları ve emlakçılar için satılacak parselin yerini 100% doğrulukla bulma.",
+    "Yol ve altyapı projelerinde şev kazıklarının ve güzergah kırık noktalarının telefondan aplikasyonu.",
+    "Eski ED50 kadastro paftalarındaki koordinatları güncel ITRF96 sistemine cep telefonundan dönüştürme.",
+    "Hassas Epok Ortalaması (RMS) nedir? Mobil cihazlarda GPS doğruluğu nasıl artırılır?"
+];
+
 async function runAutoBlogger() {
     try {
-        console.log("🤖 Gemini API ile hedefe özel ve GÖRSELLİ makale üretimi başlıyor...");
+        // Kod her çalıştığında havuzdan matematiksel olarak rastgele BİR konu seçer
+        const selectedTopic = TOPIC_POOL[Math.floor(Math.random() * TOPIC_POOL.length)];
+        console.log("🎯 Bugünün Seçilen Net Konusu:", selectedTopic);
 
+        // Yapay zekaya kesin ve net komut
         const prompt = `Sen 20 yıllık kıdemli bir mühendissin ve AZİMUT Pro (buraktonoz.com/azimut) jeodezik uygulamasının teknik yazarısın. 
-        Aşağıdaki hedef kitlelerden ve konulardan RASTGELE BİRİNİ seç ve Google'da 1 numaraya çıkacak, SEO uyumlu, H2/H3 başlıkları içeren, güncel ve son derece faydalı bir makale yaz:
         
-        Hedef Kitleler ve Konu Fikirleri:
-        1. Harita/Geomatik Mühendisleri (Konu: ITRF96, ED50 dönüşümleri, DOM hassasiyeti, NetCAD NCN aktarımı)
-        2. Orman Mühendisleri (Konu: Orman kadastrosu, ORÜS noktaları bulma, dağlık alanda aplikasyon)
-        3. Elektrik Mühendisleri & GES (Konu: Güneş Enerjisi Santrali (GES) panel aplikasyonu, ENH direk yeri tespiti)
-        4. Topoğraflar ve Saha Teknikerleri (Konu: KML dosyalarını sahada açma, telefondan stakeout radarı kullanımı)
-        5. Arsa/Tarla Sahipleri & Vatandaşlar (Konu: "Aldığım arsanın sınırlarını tapu kadastro verisiyle telefondan nasıl bulurum?", TKGM parsel sorgulama)
+        GÖREVİN: Sadece aşağıda verilen KONU üzerine Google'da 1 numaraya çıkacak, SEO uyumlu, H2 ve H3 başlıkları içeren, güncel ve son derece teknik/faydalı bir makale yazmak.
+        
+        BUGÜNKÜ KONUN: "${selectedTopic}"
 
-        Kural 1: Seçtiğin kitleye uygun teknik veya anlaşılır bir dil kullan ve AZİMUT Pro'nun çözümünü anlat.
-        Kural 2: Kapak görseli oluşturulması için "imagePrompt" alanına, makalenin konusunu anlatan İNGİLİZCE, detaylı ve gerçekçi bir fotoğraf tasviri yaz (Örn: "Professional land surveyor engineer using a GPS rover in a sunny field, realistic photography, 4k resolution").
+        Kurallar:
+        1. Makale başka hiçbir konuya sapmasın, sadece verilen konuyu derinlemesine anlatsın.
+        2. İçerikte mutlaka AZİMUT Pro'nun bu sorunu arazide, telefondan, ücretsiz ve kolayca nasıl çözdüğünü adım adım anlat.
+        3. Daha önce yazdığın makalelerdeki aynı cümleleri KULLANMA. Orijinal ve yaratıcı ol.
         
-        Cevabı SADECE saf JSON formatında ver:
+        Cevabı SADECE saf JSON formatında ver. JSON formatı:
         {
-          "title": "İlgi Çekici Makale Başlığı",
+          "title": "İlgi Çekici ve Özgün Makale Başlığı",
           "category": "Jeodezi & Projeksiyon VEYA Saha Aplikasyonu VEYA Kadastro & TKGM VEYA CAD & Yazılım",
           "summary": "150 karakterlik çarpıcı SEO özeti",
           "keywords": "anahtar, kelimeler, virgülle, ayrılmış",
-          "imagePrompt": "İngilizce gerçekçi fotoğraf tasviri (prompt)",
           "content": "<p>Giriş paragrafı...</p><h2>1. Başlık</h2><p>İçerik...</p>"
         }`;
 
+        // "temperature: 0.9" ayarı yapay zekanın yaratıcılığını ve çeşitliliğini zorlar!
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
+            config: {
+                temperature: 0.9 
+            }
         });
 
         let rawText = response.text.trim();
@@ -58,18 +76,15 @@ async function runAutoBlogger() {
         const wordCount = articleData.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
         const readMins = Math.max(2, Math.ceil(wordCount / 180));
         
-        // YAPAY ZEKANIN TASVİRİYLE DİNAMİK RESİM LİNKİ OLUŞTURMA
-        const fallbackPrompt = "professional topographic land surveyor engineer with modern gps equipment, realistic, 4k";
-        const promptForImage = articleData.imagePrompt ? articleData.imagePrompt : fallbackPrompt;
-        const encodedImagePrompt = encodeURIComponent(promptForImage);
-        const dynamicImageUrl = `https://image.pollinations.ai/prompt/${encodedImagePrompt}?width=800&height=450&nologo=true`;
+        // Hata veren yapay zeka resimleri yerine senin jilet gibi 7 ekran görüntünden birini rastgele kapak yapar
+        const randomRealImage = `ek${Math.floor(Math.random() * 7) + 1}.png`;
 
         const newArticle = {
             id: slug,
             slug: slug,
             title: articleData.title,
             category: articleData.category || "Saha Aplikasyonu",
-            image: dynamicImageUrl, // Artık ek1.png yerine bu özel görsel linki kaydedilecek!
+            image: randomRealImage, 
             date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
             readTime: `${readMins} dk okuma`,
             author: "Azimut AI Asistanı",
@@ -81,7 +96,7 @@ async function runAutoBlogger() {
         };
 
         await db.collection('azimut_articles').doc(slug).set(newArticle);
-        console.log(`✅ Makale ve özel kapak görseli başarıyla Firebase'e kaydedildi: ${articleData.title}`);
+        console.log(`✅ Yepyeni Makale Başarıyla Kaydedildi: ${articleData.title}`);
 
     } catch (error) {
         console.error("❌ Makale üretilirken hata oluştu:", error);
