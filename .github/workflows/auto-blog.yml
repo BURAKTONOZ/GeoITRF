@@ -2,21 +2,38 @@ name: Günde 3 Kez SEO Makale Üretici
 
 on:
   schedule:
-    # TEST İÇİN HEMEN ŞİMDİ: TR 09:20 (UTC 06:20) ve TR 09:25 (UTC 06:25)
-    - cron: '20 6 * * *'
-    - cron: '25 6 * * *'
-    # NORMAL GÜNLÜK SAATLER: TR 08:00, 12:00 ve 17:00
-    - cron: '0 5 * * *'
-    - cron: '0 9 * * *'
-    - cron: '0 14 * * *'
+    # ===== GEÇİCİ TEST: schedule çalışıyor mu görmek için. Görünce bu satırı SİL =====
+    - cron: '*/5 * * * *'
+    # Asıl tetikler: TR 08:07, 12:11, 17:13 (UTC 05:07, 09:11, 14:13)
+    - cron: '7 5 * * *'
+    - cron: '11 9 * * *'
+    - cron: '13 14 * * *'
+    # Yedek tetikler: asıl tetik düşerse devreye girer (script 150 dk kuralıyla çift yazımı engeller)
+    - cron: '47 5 * * *'
+    - cron: '51 9 * * *'
+    - cron: '53 14 * * *'
   workflow_dispatch:
+
+concurrency:
+  group: auto-blog
+  cancel-in-progress: false
 
 jobs:
   generate-and-publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: write
     steps:
       - name: Repoyu Kopyala
         uses: actions/checkout@v4
+
+      - name: Zamanlanmış Workflow Kapanmasın (60 gün kuralı)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method PUT "repos/${{ github.repository }}/actions/workflows/auto-blog.yml/enable"
 
       - name: Node.js Kurulumu
         uses: actions/setup-node@v4
@@ -24,7 +41,7 @@ jobs:
           node-version: '20'
 
       - name: Gerekli Kütüphaneleri Yükle
-        run: npm install @google/genai firebase-admin
+        run: npm install @google/genai firebase-admin --no-audit --no-fund
 
       - name: Gemini ile Makaleyi Üret ve Firebase'e Kaydet
         env:
