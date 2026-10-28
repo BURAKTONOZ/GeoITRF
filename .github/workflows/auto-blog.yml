@@ -2,6 +2,10 @@ name: Günde 3 Kez SEO Makale Üretici
 
 on:
   schedule:
+    # TEST İÇİN HEMEN ŞİMDİ: TR 09:20 (UTC 06:20) ve TR 09:25 (UTC 06:25)
+    - cron: '20 6 * * *'
+    - cron: '25 6 * * *'
+    # NORMAL GÜNLÜK SAATLER: TR 08:00, 12:00 ve 17:00
     - cron: '0 5 * * *'
     - cron: '0 9 * * *'
     - cron: '0 14 * * *'
