@@ -2,8 +2,6 @@ name: Günde 3 Kez SEO Makale Üretici
 
 on:
   schedule:
-    # ===== GEÇİCİ TEST: schedule çalışıyor mu görmek için. Görünce bu satırı SİL =====
-    - cron: '*/5 * * * *'
     # Asıl tetikler: TR 08:07, 12:11, 17:13 (UTC 05:07, 09:11, 14:13)
     - cron: '7 5 * * *'
     - cron: '11 9 * * *'
