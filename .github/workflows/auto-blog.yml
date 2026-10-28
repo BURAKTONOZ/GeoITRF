@@ -2,8 +2,9 @@ name: Günde 3 Kez SEO Makale Üretici
 
 on:
   schedule:
-    # UTC saatleriyle: 05:00 (TR 08:00), 09:00 (TR 12:00), 14:00 (TR 17:00)
-    - cron: '0 5,9,14 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 9 * * *'
+    - cron: '0 14 * * *'
   workflow_dispatch:
 
 jobs:
