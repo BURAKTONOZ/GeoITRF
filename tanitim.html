@@ -1,4 +1,4 @@
-<!-- CREATED BY TONOZ | AZİMUT PRO - RESMİ TANITIM VE JEODEZİ PORTALI -->
+<!-- CREATED BY TONOZ | AZİMUT PRO - RESMİ TANITIM VE JEODEZİ BİLGİ PORTALI -->
 <!DOCTYPE html>
 <html lang="tr" class="scroll-smooth">
 <head>
@@ -16,9 +16,9 @@
     <!-- FAVICON VE UYGULAMA İKONLARI -->
     <link rel="icon" type="image/png" href="icon.png" id="favicon-link">
     <link rel="apple-touch-icon" href="logo.jpeg" id="apple-icon-link">
-    <meta name="theme-color" content="#050811">
+    <meta name="theme-color" content="#060a12">
 
-    <!-- OPEN GRAPH / FACEBOOK / WHATSAPP / LINKEDIN PAYLAŞIM KARTLARI -->
+    <!-- OPEN GRAPH / WHATSAPP / LINKEDIN PAYLAŞIM KARTLARI -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="AZİMUT Pro Jeodezik Terminal">
     <meta property="og:title" content="AZİMUT Pro | Profesyonel Jeodezik Ölçüm, Aplikasyon ve Haritacılık Portalı" id="og-title">
@@ -33,7 +33,7 @@
     <meta name="twitter:description" content="Sahada cep telefonuyla hassas ITRF96/ED50 koordinatları alın, canlı yönlendirmeyle nokta aplikasyonu yapın ve NCN/DXF/KML olarak indirin.">
     <meta name="twitter:image" content="https://buraktonoz.com/azimut/logo.jpeg">
 
-    <!-- GOOGLE YAPISAL VERİ ŞEMALARI (JSON-LD: YAZILIM + SSS) -->
+    <!-- GOOGLE YAPISAL VERİ ŞEMALARI (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -49,7 +49,11 @@
           "screenshot": [
             "https://buraktonoz.com/azimut/ek1.png",
             "https://buraktonoz.com/azimut/ek2.png",
-            "https://buraktonoz.com/azimut/ek3.png"
+            "https://buraktonoz.com/azimut/ek3.png",
+            "https://buraktonoz.com/azimut/ek4.png",
+            "https://buraktonoz.com/azimut/ek5.png",
+            "https://buraktonoz.com/azimut/ek6.png",
+            "https://buraktonoz.com/azimut/ek7.png"
           ],
           "author": {
             "@type": "Person",
@@ -97,10 +101,10 @@
     }
     </script>
 
-    <!-- FONTLAR VE İKON KÜTÜPHANESİ -->
+    <!-- FONTLAR VE İKONLAR -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- FIREBASE KÜTÜPHANELERİ -->
@@ -110,56 +114,63 @@
 
     <style>
         :root {
-            --bg-main: #050811;
-            --bg-secondary: #0a1020;
-            --surface: rgba(13, 21, 38, 0.78);
-            --surface-solid: #0d1526;
-            --card-bg: rgba(255, 255, 255, 0.035);
-            --card-hover: rgba(0, 229, 255, 0.07);
+            --bg-dark: #060a12;
+            --bg-panel: #0c1322;
+            --bg-card: rgba(15, 23, 42, 0.75);
+            --bg-card-hover: rgba(20, 32, 58, 0.95);
             --accent: #00e5ff;
-            --accent-glow: rgba(0, 229, 255, 0.35);
-            --accent-blue: #3b82f6;
-            --text-main: #f8fafc;
+            --accent-soft: rgba(0, 229, 255, 0.12);
+            --accent-border: rgba(0, 229, 255, 0.32);
+            --primary: #3b82f6;
+            --text-light: #f8fafc;
+            --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.1);
+            --border-subtle: rgba(255, 255, 255, 0.08);
             --success: #10b981;
-            --warning: #f59e0b;
             --danger: #ef4444;
+            --warning: #f59e0b;
+            --radius-lg: 20px;
+            --radius-md: 14px;
         }
 
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 84px;
         }
 
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.65;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 229, 255, 0.08) 0%, transparent 35%),
-                radial-gradient(circle at 85% 25%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
-                linear-gradient(to bottom, #050811 0%, #090f1d 100%);
+                radial-gradient(circle at 10% 10%, rgba(0, 229, 255, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(59, 130, 246, 0.07) 0%, transparent 40%);
         }
 
-        /* ARKA PLAN KOORDİNAT GRİD DOKUSU */
-        .geo-grid-bg {
+        /* ARKA PLAN İNCE MÜHENDİSLİK GRİDİ */
+        .bg-grid {
             position: fixed;
             inset: 0;
-            background-size: 48px 48px;
+            background-size: 44px 44px;
             background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+                linear-gradient(to right, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
             pointer-events: none;
             z-index: 0;
         }
 
         .container {
             width: 100%;
-            max-width: 1240px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             position: relative;
@@ -169,98 +180,97 @@
         /* BİLDİRİM TOAST */
         .site-toast {
             position: fixed;
-            top: 90px;
-            right: 20px;
-            z-index: 4000;
-            background: var(--surface-solid);
+            bottom: 24px;
+            right: 24px;
+            z-index: 5000;
+            background: #0f172a;
             border: 1px solid var(--accent);
-            color: var(--text-main);
-            padding: 12px 18px;
+            color: var(--text-light);
+            padding: 13px 18px;
             border-radius: 14px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 600;
             display: none;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.75);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.85);
+            max-width: 90vw;
         }
-        .site-toast.show { display: flex; }
+        .site-toast.show { display: flex; animation: fadeUp 0.25s ease; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* ÜST GEZİNME ÇUBUĞU (NAVBAR) */
+        /* ÜST NAVBAR */
         .navbar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
+            position: sticky;
+            top: 0;
             z-index: 1000;
-            background: rgba(5, 8, 17, 0.85);
-            backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--border);
-            transition: all 0.3s ease;
+            background: rgba(6, 10, 18, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
         }
         .nav-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 76px;
+            height: 72px;
+            gap: 16px;
         }
-        .brand-logo {
+        .brand {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
-            color: var(--text-main);
+            color: var(--text-light);
         }
-        .brand-logo img {
-            width: 44px;
-            height: 44px;
+        .brand img {
+            width: 42px;
+            height: 42px;
             border-radius: 11px;
             object-fit: cover;
-            border: 1px solid rgba(0, 229, 255, 0.4);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
-        }
-        .brand-text {
-            display: flex;
-            flex-direction: column;
+            border: 1px solid var(--accent-border);
         }
         .brand-title {
-            font-size: 1.25rem;
+            font-size: 1.18rem;
             font-weight: 800;
-            letter-spacing: 1.5px;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
         }
-        .brand-badge {
-            font-size: 0.65rem;
-            background: rgba(0, 229, 255, 0.15);
-            color: var(--accent);
-            border: 1px solid rgba(0, 229, 255, 0.35);
-            padding: 2px 6px;
-            border-radius: 6px;
+        .badge-pro {
             font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.5px;
+            font-size: 0.65rem;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border: 1px solid var(--accent-border);
+            padding: 2px 7px;
+            border-radius: 6px;
         }
         .brand-sub {
             font-size: 0.68rem;
             color: var(--text-muted);
-            letter-spacing: 0.5px;
+            display: block;
+            margin-top: -2px;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 26px;
+            gap: 28px;
             list-style: none;
         }
         .nav-links a {
-            color: var(--text-muted);
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: 0.2s;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: color 0.2s;
         }
-        .nav-links a:hover {
-            color: var(--accent);
-        }
+        .nav-links a:hover { color: var(--accent); }
 
         .nav-actions {
             display: flex;
@@ -268,503 +278,591 @@
             gap: 10px;
         }
 
-        /* PARLAYAN "PROGRAMA GİT" ANA BUTONU */
-        .btn-launch {
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--accent) 0%, #00b4d8 50%, var(--accent-blue) 100%);
-            color: #030712;
+            gap: 9px;
+            background: linear-gradient(135deg, var(--accent) 0%, #00b4d8 60%, var(--primary) 100%);
+            color: #040814;
             font-weight: 800;
-            font-size: 0.92rem;
-            padding: 12px 22px;
+            font-size: 0.9rem;
+            padding: 11px 20px;
             border-radius: 12px;
             text-decoration: none;
-            letter-spacing: 0.4px;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
-            transition: all 0.25s ease;
             border: none;
             cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
         }
-        .btn-launch:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 229, 255, 0.65);
+            box-shadow: 0 8px 28px rgba(0, 229, 255, 0.5);
         }
 
-        .btn-outline {
+        .btn-secondary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             background: rgba(255, 255, 255, 0.04);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 12px 20px;
+            color: var(--text-light);
+            border: 1px solid var(--border-subtle);
+            padding: 11px 18px;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             text-decoration: none;
-            transition: 0.2s;
             cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
-        .btn-outline:hover {
+        .btn-secondary:hover {
             border-color: var(--accent);
             color: var(--accent);
-            background: rgba(0, 229, 255, 0.08);
+            background: var(--accent-soft);
         }
 
-        .mobile-menu-btn {
+        .mobile-toggle {
             display: none;
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--text-main);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
             width: 42px;
             height: 42px;
-            border-radius: 10px;
-            font-size: 1.15rem;
+            border-radius: 11px;
+            font-size: 1.1rem;
             cursor: pointer;
         }
 
-        /* HERO (ANA VİTRİN) BÖLÜMÜ */
-        .hero-section {
-            padding: 135px 0 80px;
-            position: relative;
-            overflow: hidden;
+        /* HERO (ANA KARŞILAMA VE ETKİLEŞİMLİ TELEFON VİTRİNİ) */
+        .hero {
+            padding: 56px 0 72px;
         }
-        .hero-grid {
+        .hero-layout {
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
             gap: 48px;
             align-items: center;
         }
-        .hero-kicker {
+        .kicker {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.3);
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-border);
             color: var(--accent);
             padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.78rem;
+            border-radius: 99px;
+            font-size: 0.76rem;
             font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            margin-bottom: 18px;
         }
-        .hero-kicker img {
-            width: 18px;
-            height: 18px;
-            animation: spinSlow 12s linear infinite;
+        .hero h1 {
+            font-size: clamp(2rem, 4.2vw, 3.35rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
         }
-        @keyframes spinSlow { 100% { transform: rotate(360deg); } }
-
-        .hero-title {
-            font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-            font-weight: 900;
-            line-height: 1.12;
-            letter-spacing: -0.5px;
-            margin-bottom: 20px;
-        }
-        .hero-title .gradient-text {
-            background: linear-gradient(90deg, #00e5ff, #38bdf8, #818cf8);
+        .text-gradient {
+            background: linear-gradient(90deg, #00e5ff, #38bdf8, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .hero-desc {
-            font-size: 1.08rem;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            max-width: 620px;
+        .hero-lead {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            max-width: 600px;
         }
-        .hero-cta-group {
+        .hero-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 36px;
+            gap: 12px;
+            margin-bottom: 34px;
         }
-        .hero-cta-group .btn-launch {
-            font-size: 1.05rem;
-            padding: 16px 30px;
+        .hero-buttons .btn-primary {
+            padding: 14px 26px;
+            font-size: 0.98rem;
         }
 
-        .hero-metrics {
+        .quick-specs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
+            padding-top: 22px;
+            border-top: 1px solid var(--border-subtle);
         }
-        .metric-item h4 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.25rem;
-            color: var(--accent);
-            font-weight: 700;
+        .spec-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-subtle);
+            padding: 12px;
+            border-radius: 12px;
         }
-        .metric-item p {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* SAĞ VİDEO VE LOGOLU TELEFON MAKETİ */
-        .hero-visual {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .glow-orb {
-            position: absolute;
-            width: 340px;
-            height: 340px;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.3) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 70%);
-            filter: blur(40px);
-            z-index: 0;
-        }
-        .media-showcase-card {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 440px;
-            background: var(--surface-solid);
-            border: 1px solid rgba(0, 229, 255, 0.35);
-            border-radius: 26px;
-            padding: 14px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 229, 255, 0.15);
-        }
-        .showcase-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 10px 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-        }
-        .showcase-dots {
-            display: flex;
-            gap: 6px;
-        }
-        .showcase-dots span {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--border);
-        }
-        .showcase-dots span:nth-child(1) { background: #ef4444; }
-        .showcase-dots span:nth-child(2) { background: #f59e0b; }
-        .showcase-dots span:nth-child(3) { background: #10b981; }
-
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            border-radius: 18px;
-            overflow: hidden;
-            background: #000;
-            aspect-ratio: 1 / 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .video-wrapper video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .video-sound-btn {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(5, 8, 17, 0.85);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            cursor: pointer;
-            z-index: 5;
-            backdrop-filter: blur(8px);
-        }
-
-        /* FLOATING ROZETLER */
-        .floating-chip {
-            position: absolute;
-            z-index: 4;
-            background: rgba(11, 17, 32, 0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 229, 255, 0.4);
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 0.76rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.6);
-            animation: floatY 4s ease-in-out infinite;
-        }
-        .floating-chip.chip-left { top: 12%; left: -24px; }
-        .floating-chip.chip-right { bottom: 10%; right: -20px; animation-delay: 2s; }
-        @keyframes floatY {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        /* BÖLÜM BAŞLIKLARI */
-        section {
-            padding: 85px 0;
-            position: relative;
-        }
-        .section-header {
-            text-align: center;
-            max-width: 720px;
-            margin: 0 auto 54px;
-        }
-        .section-tag {
-            display: inline-block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            background: rgba(0, 229, 255, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 229, 255, 0.25);
-        }
-        .section-title {
-            font-size: clamp(1.75rem, 3.2vw, 2.5rem);
-            font-weight: 800;
-            margin-bottom: 14px;
-        }
-        .section-subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        /* MÜHENDİSLİK ÖZELLİKLERİ GRİD */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 22px;
-        }
-        .feature-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 28px 24px;
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 229, 255, 0.45);
-            background: var(--card-hover);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
-        }
-        .feature-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            background: rgba(0, 229, 255, 0.12);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            color: var(--accent);
-            font-size: 1.35rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 18px;
-        }
-        .feature-card h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .feature-card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* EKRAN GÖRÜNTÜLERİ GALERİSİ */
-        .screenshots-section {
-            background: rgba(10, 16, 32, 0.65);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-        .gallery-controls {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 26px;
-            flex-wrap: wrap;
-        }
-        .gallery-track {
-            display: flex;
-            gap: 22px;
-            overflow-x: auto;
-            padding: 12px 6px 28px;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--surface-solid);
-        }
-        .gallery-track::-webkit-scrollbar { height: 8px; }
-        .gallery-track::-webkit-scrollbar-track { background: var(--surface-solid); border-radius: 10px; }
-        .gallery-track::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-        .phone-frame {
-            flex: 0 0 265px;
-            scroll-snap-align: center;
-            background: #080d1a;
-            border: 3px solid #1e293b;
-            border-radius: 32px;
-            padding: 10px;
-            box-shadow: 0 18px 40px rgba(0,0,0,0.65);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .phone-frame:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--accent);
-            box-shadow: 0 20px 45px rgba(0, 229, 255, 0.25);
-        }
-        .phone-notch {
-            width: 70px;
-            height: 6px;
-            background: #1e293b;
-            border-radius: 10px;
-            margin: 2px auto 8px;
-        }
-        .phone-frame img {
-            width: 100%;
-            height: 510px;
-            object-fit: cover;
-            border-radius: 22px;
+        .spec-box strong {
             display: block;
-            background: #0b1324;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--accent);
         }
-        .phone-caption {
-            text-align: center;
+        .spec-box span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* SAĞ TARAF: İNTERAKTİF TELEFON ÇERÇEVESİ (ek1...ek7 + Video Sekmeli) */
+        .hero-phone-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .phone-mode-tabs {
+            display: inline-flex;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            gap: 4px;
+        }
+        .phone-mode-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
             font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-top: 10px;
-            padding-bottom: 2px;
-        }
-
-        /* LIGHTBOX */
-        .lightbox-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(3, 6, 14, 0.92);
-            backdrop-filter: blur(12px);
-            z-index: 3000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .lightbox-modal.show { display: flex; }
-        .lightbox-modal img {
-            max-width: 92vw;
-            max-height: 88vh;
-            border-radius: 20px;
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 50px rgba(0, 229, 255, 0.3);
-        }
-        .lightbox-close {
-            position: absolute;
-            top: 24px;
-            right: 28px;
-            font-size: 2rem;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        /* MAKALE & BLOG MERKEZİ */
-        .blog-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 32px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 14px 18px;
-            border-radius: 16px;
-        }
-        .blog-categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .cat-pill {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
+            font-weight: 700;
             padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            border-radius: 9px;
             cursor: pointer;
             transition: 0.2s;
         }
-        .cat-pill.active, .cat-pill:hover {
-            background: rgba(0, 229, 255, 0.16);
+        .phone-mode-btn.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .phone-mockup {
+            width: 300px;
+            background: #070b14;
+            border: 4px solid #1e293b;
+            border-radius: 42px;
+            padding: 11px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.85), 0 0 40px rgba(0, 229, 255, 0.14);
+            position: relative;
+        }
+        .phone-speaker {
+            width: 64px;
+            height: 5px;
+            background: #1e293b;
+            border-radius: 10px;
+            margin: 2px auto 9px;
+        }
+        .phone-screen {
+            position: relative;
+            width: 100%;
+            height: 540px;
+            border-radius: 30px;
+            overflow: hidden;
+            background: #0b1324;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+            transition: opacity 0.25s ease;
+        }
+        .phone-screen video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .phone-nav-overlay {
+            position: absolute;
+            inset: auto 10px 12px 10px;
+            background: rgba(6, 10, 18, 0.88);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .phone-nav-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .phone-screen-label {
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-align: center;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .phone-dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 14px;
+            justify-content: center;
+        }
+        .phone-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .phone-dot.active {
+            width: 24px;
+            background: var(--accent);
+        }
+
+        /* BÖLÜM GENEL STİLLERİ */
+        .section {
+            padding: 72px 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .section-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 44px;
+        }
+        .section-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--accent);
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-border);
+            padding: 4px 12px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.25rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.96rem;
+        }
+
+        /* ÖZELLİKLER (SADE 6'LI KART) */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .feature-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .feature-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-border);
+        }
+        .feature-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+        .feature-item h3 {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .feature-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        /* EKRAN GÖRÜNTÜLERİ YATAY TELEFON GALERİSİ (ek1.png - ek7.png) */
+        .phone-gallery-wrap {
+            position: relative;
+        }
+        .phone-carousel {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 8px 4px 24px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--bg-panel);
+        }
+        .phone-carousel::-webkit-scrollbar { height: 6px; }
+        .phone-carousel::-webkit-scrollbar-track { background: var(--bg-panel); border-radius: 10px; }
+        .phone-carousel::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        .mini-phone-card {
+            flex: 0 0 230px;
+            scroll-snap-align: start;
+            background: #080d18;
+            border: 2px solid #1e293b;
+            border-radius: 28px;
+            padding: 9px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .mini-phone-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+        }
+        .mini-phone-notch {
+            width: 50px;
+            height: 4px;
+            background: #1e293b;
+            border-radius: 8px;
+            margin: 2px auto 7px;
+        }
+        .mini-phone-card img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 20px;
+            display: block;
+            background: #0b1324;
+        }
+        .mini-phone-title {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 10px;
+            padding: 0 4px 2px;
+        }
+
+        /* ============================================================================
+           MAKALE & BİLGİ BANKASI (YÜZLERCE MAKALEYİ KALDIRAN SEKMELİ + SAYFALAMALI YAPI)
+           ============================================================================ */
+        .blog-control-bar {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .blog-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        /* Mobilde yatay kaydırılabilir kategori sekmeleri */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            max-width: 100%;
+        }
+        .category-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--accent-soft);
             color: var(--accent);
             border-color: var(--accent);
         }
-        .blog-search-box {
+        .tab-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.35);
+            padding: 1px 6px;
+            border-radius: 6px;
+        }
+
+        .search-Sort-wrap {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(0,0,0,0.45);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 14px;
+            flex: 1;
+            justify-content: flex-end;
             min-width: 260px;
         }
-        .blog-search-box input {
+        .search-input-box {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 8px 14px;
+            width: 100%;
+            max-width: 340px;
+        }
+        .search-input-box input {
             background: transparent;
             border: none;
-            color: var(--text-main);
+            color: var(--text-light);
             outline: none;
             width: 100%;
-            font-size: 0.86rem;
+            font-size: 0.85rem;
         }
 
+        /* ÖNE ÇIKAN SON MAKALE (FEATURED HERO CARD) */
+        .featured-article-box {
+            margin-bottom: 26px;
+        }
+        .featured-card {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(12, 19, 34, 0.95));
+            border: 1px solid var(--accent-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .featured-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+        }
+        .featured-img-wrap {
+            position: relative;
+            min-height: 280px;
+            background: #090f1d;
+        }
+        .featured-img-wrap img {
+            width: 100%;
+            height: 100%;
+            max-height: 340px;
+            object-fit: cover;
+            display: block;
+        }
+        .featured-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(6, 10, 18, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 5px 11px;
+            border-radius: 8px;
+        }
+        .featured-info {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .featured-info h3 {
+            font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+            font-weight: 800;
+            line-height: 1.3;
+            margin: 10px 0 12px;
+            color: var(--text-light);
+        }
+        .featured-info p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* STANDART MAKALE KARTLARI (3 SÜTUN, KOMPAKT VE TEMİZ) */
         .articles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 26px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
         .article-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
+            cursor: pointer;
         }
         .article-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--accent);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+            transform: translateY(-4px);
+            border-color: var(--accent-border);
+            background: var(--bg-card-hover);
+        }
+        .article-thumb-wrap {
+            position: relative;
+            height: 185px;
+            background: #09101f;
+            overflow: hidden;
         }
         .article-thumb {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
-            background: #0d1629;
-            border-bottom: 1px solid var(--border);
+            transition: transform 0.35s ease;
+        }
+        .article-card:hover .article-thumb {
+            transform: scale(1.04);
         }
         .article-body {
-            padding: 22px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -773,143 +871,320 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.74rem;
+            gap: 8px;
+            font-size: 0.72rem;
             color: var(--text-muted);
-            margin-bottom: 10px;
             font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 9px;
         }
-        .article-tag {
-            background: rgba(0, 229, 255, 0.14);
+        .article-cat {
+            background: var(--accent-soft);
             color: var(--accent);
-            padding: 3px 9px;
+            padding: 3px 8px;
             border-radius: 6px;
             font-weight: 700;
         }
         .article-title {
-            font-size: 1.18rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            line-height: 1.35;
-            color: var(--text-main);
+            font-size: 1.04rem;
+            font-weight: 700;
+            line-height: 1.38;
+            color: var(--text-light);
+            margin-bottom: 9px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .article-summary {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .article-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
+            padding-top: 12px;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.8rem;
         }
-        .read-more-btn {
+        .read-btn {
             color: var(--accent);
             font-weight: 700;
-            font-size: 0.86rem;
-            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .admin-card-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .admin-icon-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--text-main);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
         }
 
-        /* MAKALE OKUMA MODALI */
+        /* SAYFALAMA (PAGINATION) BARI */
+        .pagination-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 34px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-panel);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .page-btn:hover:not(:disabled), .page-btn.active {
+            background: var(--accent);
+            color: #040814;
+            border-color: var(--accent);
+        }
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ============================================================================
+           DERGİ KALİTESİNDE MAKALE OKUMA MODALI (READER MODAL)
+           ============================================================================ */
         .reader-modal {
             position: fixed;
             inset: 0;
-            background: rgba(5, 8, 17, 0.94);
+            background: rgba(4, 7, 15, 0.94);
             backdrop-filter: blur(16px);
-            z-index: 2500;
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 3000;
             display: none;
             overflow-y: auto;
-            padding: 40px 16px;
+            padding: 0;
         }
         .reader-modal.show { display: block; }
-        .reader-box {
-            max-width: 840px;
-            margin: 0 auto;
-            background: var(--surface-solid);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 36px;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+
+        .reading-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            width: 0%;
+            z-index: 3200;
+            transition: width 0.1s ease;
         }
-        .reader-content h2, .reader-content h3 {
+
+        .reader-sticky-top {
+            position: sticky;
+            top: 0;
+            z-index: 3100;
+            background: rgba(8, 13, 25, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 12px 20px;
+        }
+        .reader-top-inner {
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reader-container {
+            max-width: 820px;
+            margin: 28px auto 60px;
+            background: #0b1220;
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 40px 44px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+        }
+
+        .reader-title {
+            font-size: clamp(1.55rem, 3.2vw, 2.25rem);
+            font-weight: 800;
+            line-height: 1.25;
+            margin: 14px 0 16px;
+            color: #ffffff;
+        }
+        .reader-meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding-bottom: 22px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .reader-cover-img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* Makale İçi Tipografi (Çok Rahat Okunur) */
+        .reader-content {
+            font-size: 1.06rem;
+            line-height: 1.85;
+            color: #e2e8f0;
+        }
+        .reader-content h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
             color: var(--accent);
-            margin: 24px 0 12px;
+            margin: 32px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+        }
+        .reader-content h3 {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: #93c5fd;
+            margin: 24px 0 10px;
         }
         .reader-content p {
-            margin-bottom: 16px;
-            color: #e2e8f0;
-            font-size: 1.02rem;
-            line-height: 1.8;
+            margin-bottom: 18px;
         }
         .reader-content ul, .reader-content ol {
-            margin: 12px 0 20px 24px;
+            margin: 14px 0 22px 24px;
             color: #cbd5e1;
         }
-        .reader-content li { margin-bottom: 8px; }
+        .reader-content li {
+            margin-bottom: 10px;
+        }
+        .reader-content a {
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .reader-content figure {
+            margin: 28px 0;
+            text-align: center;
+        }
+        .reader-content figure img {
+            max-width: 100%;
+            max-height: 520px;
+            object-fit: contain;
+            border-radius: 14px;
+            border: 1px solid var(--accent-border);
+        }
 
-        /* YAZAR / ADMİN MAKALE YÖNETİM PANELİ MODALI */
+        .related-posts-box {
+            margin-top: 38px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 14px;
+        }
+        .related-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .related-item:hover {
+            border-color: var(--accent);
+        }
+
+        /* SIKÇA SORULAN SORULAR */
+        .faq-wrap {
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .faq-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .faq-q {
+            width: 100%;
+            padding: 18px 22px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.98rem;
+            font-weight: 700;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .faq-a {
+            padding: 0 22px 18px;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            display: none;
+        }
+        .faq-card.open { border-color: var(--accent-border); }
+        .faq-card.open .faq-a { display: block; }
+
+        /* YAZAR / ADMİN CMS MODALI */
         .cms-modal {
             position: fixed;
             inset: 0;
-            background: rgba(5, 8, 17, 0.92);
-            backdrop-filter: blur(14px);
-            z-index: 2800;
+            background: rgba(4, 7, 15, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 3500;
             display: none;
             overflow-y: auto;
-            padding: 30px 16px;
+            padding: 24px 16px;
         }
         .cms-modal.show { display: block; }
         .cms-box {
-            max-width: 820px;
+            max-width: 780px;
             margin: 0 auto;
-            background: var(--surface-solid);
+            background: #0c1322;
             border: 1px solid var(--accent);
-            border-radius: 22px;
-            padding: 28px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            border-radius: 20px;
+            padding: 26px;
         }
-        .form-group { margin-bottom: 16px; }
+        .form-group { margin-bottom: 14px; }
         .form-group label {
             display: block;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--text-muted);
             margin-bottom: 6px;
         }
         .form-input, .form-textarea, .form-select {
             width: 100%;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 14px;
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.92rem;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 11px 14px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.9rem;
             outline: none;
         }
         .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
@@ -920,424 +1195,385 @@
             margin-bottom: 8px;
         }
         .editor-toolbar button {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
             padding: 6px 10px;
             border-radius: 8px;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             cursor: pointer;
-        }
-        .editor-toolbar button:hover {
-            border-color: var(--accent);
-            color: var(--accent);
         }
 
-        /* SIKÇA SORULAN SORULAR */
-        .faq-list {
-            max-width: 860px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        .faq-item {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        .faq-question {
-            width: 100%;
-            padding: 20px 24px;
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-size: 1.02rem;
-            font-weight: 700;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        .faq-answer {
-            padding: 0 24px 20px;
-            color: var(--text-muted);
-            font-size: 0.94rem;
+        /* LIGHTBOX */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 6, 14, 0.94);
+            z-index: 4500;
             display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
         }
-        .faq-item.open .faq-answer { display: block; }
-        .faq-item.open { border-color: rgba(0, 229, 255, 0.4); }
+        .lightbox.show { display: flex; }
+        .lightbox img {
+            max-width: 94vw;
+            max-height: 88vh;
+            border-radius: 18px;
+            border: 2px solid var(--accent);
+        }
 
         /* FOOTER */
         footer {
-            background: #03060c;
-            border-top: 1px solid var(--border);
-            padding: 65px 0 35px;
-            font-size: 0.88rem;
+            background: #04070e;
+            border-top: 1px solid var(--border-subtle);
+            padding: 56px 0 32px;
             color: var(--text-muted);
+            font-size: 0.86rem;
         }
         .footer-grid {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1fr;
-            gap: 36px;
-            margin-bottom: 45px;
+            grid-template-columns: 1.4fr 1fr 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
         }
         .footer-col h4 {
-            color: var(--text-main);
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 16px;
+            color: var(--text-light);
+            font-size: 0.92rem;
+            margin-bottom: 14px;
         }
         .footer-col ul {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 9px;
         }
         .footer-col a {
             color: var(--text-muted);
             text-decoration: none;
-            transition: 0.2s;
         }
         .footer-col a:hover { color: var(--accent); }
         .footer-bottom {
-            padding-top: 28px;
-            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
-            align-items: center;
-            gap: 14px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        /* MOBİL UYUMLULUK */
-        @media (max-width: 960px) {
-            .hero-grid { grid-template-columns: 1fr; text-align: center; }
-            .hero-desc { margin: 0 auto 28px; }
-            .hero-cta-group { justify-content: center; }
-            .hero-metrics { grid-template-columns: repeat(2, 1fr); }
+        /* ============================================================================
+           MOBİL VE TABLET UYUMLULUK (RESPONSIVE BREAKPOINTS)
+           ============================================================================ */
+        @media (max-width: 992px) {
+            .hero-layout {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 38px;
+            }
+            .hero-lead { margin: 0 auto 24px; }
+            .hero-buttons { justify-content: center; }
+            .quick-specs { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .articles-grid { grid-template-columns: repeat(2, 1fr); }
+            .featured-card { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+
             .nav-links {
                 display: none;
                 position: absolute;
-                top: 76px; left: 0; right: 0;
-                background: var(--surface-solid);
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: #0a101f;
                 flex-direction: column;
                 padding: 20px;
-                border-bottom: 1px solid var(--border);
+                gap: 16px;
+                border-bottom: 1px solid var(--border-subtle);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             }
-            .nav-links.mobile-open { display: flex; }
-            .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .floating-chip { display: none; }
+            .nav-links.open { display: flex; }
+            .mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
         }
-        @media (max-width: 560px) {
+
+        @media (max-width: 640px) {
+            .hero { padding: 32px 0 52px; }
+            .section { padding: 52px 0; }
+            .features-grid { grid-template-columns: 1fr; }
+            .articles-grid { grid-template-columns: 1fr; }
+            .related-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; }
-            .reader-box, .cms-box { padding: 22px 16px; }
+            .brand-sub { display: none; }
+            .btn-primary { padding: 10px 14px; font-size: 0.82rem; }
+            .reader-container {
+                margin: 0;
+                border-radius: 0;
+                border: none;
+                padding: 24px 18px 48px;
+            }
+            .reader-content { font-size: 1rem; line-height: 1.78; }
+            .search-Sort-wrap { width: 100%; }
+            .search-input-box { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="geo-grid-bg"></div>
+    <div class="bg-grid"></div>
 
     <!-- BİLDİRİM TOAST -->
     <div class="site-toast" id="site-toast">
-        <i class="fas fa-shield-halved" style="color:var(--accent);"></i>
+        <i class="fas fa-circle-check" style="color:var(--accent);"></i>
         <span id="site-toast-text">Bildirim</span>
     </div>
 
     <!-- ÜST MENÜ (NAVBAR) -->
     <header class="navbar">
         <div class="container nav-inner">
-            <a href="#" class="brand-logo">
+            <a href="#" class="brand">
                 <img src="logo.jpeg" data-asset="logo.jpeg" alt="AZİMUT Pro Logo">
-                <div class="brand-text">
-                    <div class="brand-title">AZİMUT <span class="brand-badge">PRO v2.2</span></div>
-                    <div class="brand-sub">JEODEZİK ÖLÇÜM & APLİKASYON</div>
+                <div>
+                    <div class="brand-title">AZİMUT <span class="badge-pro">PRO</span></div>
+                    <span class="brand-sub">JEODEZİK EL TERMİNALİ</span>
                 </div>
             </a>
 
             <ul class="nav-links" id="nav-links">
-                <li><a href="#ozellikler">Özellikler</a></li>
-                <li><a href="#ekran-goruntuleri">Uygulama Galerisi</a></li>
-                <li><a href="#makaleler">Haritacılık Makaleleri</a></li>
-                <li><a href="#sss">S.S.S.</a></li>
+                <li><a href="#ozellikler" onclick="closeMobileNav()">Özellikler</a></li>
+                <li><a href="#ekran-goruntuleri" onclick="closeMobileNav()">Telefon Ekranları</a></li>
+                <li><a href="#makaleler" onclick="closeMobileNav()">Mühendislik Rehberleri</a></li>
+                <li><a href="#sss" onclick="closeMobileNav()">S.S.S.</a></li>
             </ul>
 
             <div class="nav-actions">
-                <!-- SADECE buraktonoz@gmail.com İLE GOOGLE OTURUMU AÇILDIĞINDA GÖRÜNÜR -->
-                <button class="btn-outline" id="admin-write-btn" style="display:none; padding:10px 14px; font-size:0.8rem; border-color:var(--success); color:var(--success);" onclick="openArticleEditor()">
-                    <i class="fas fa-pen-nib"></i> Makale Yaz
+                <!-- SADECE buraktonoz@gmail.com GİRİŞ YAPTIĞINDA GÖRÜNÜR -->
+                <button class="btn-secondary" id="admin-write-btn" style="display:none; padding:9px 12px; font-size:0.78rem; border-color:var(--success); color:var(--success);" onclick="openArticleEditor()">
+                    <i class="fas fa-pen-nib"></i> Yazı Ekle
                 </button>
-                <button class="btn-outline" id="admin-logout-btn" style="display:none; padding:10px 12px; font-size:0.8rem; border-color:var(--danger); color:var(--danger);" onclick="logoutAdmin()" title="Yönetici Çıkışı Yap">
-                    <i class="fas fa-sign-out-alt"></i>
+                <button class="btn-secondary" id="admin-logout-btn" style="display:none; padding:9px 11px; font-size:0.78rem; border-color:var(--danger); color:var(--danger);" onclick="logoutAdmin()" title="Çıkış">
+                    <i class="fas fa-power-off"></i>
                 </button>
 
-                <a href="https://buraktonoz.com/azimut/" class="btn-launch" title="AZİMUT Pro Uygulamasını Başlat">
+                <a href="https://buraktonoz.com/azimut/" class="btn-primary">
                     <i class="fas fa-satellite-dish"></i> PROGRAMA GİT
                 </a>
-                <button class="mobile-menu-btn" onclick="document.getElementById('nav-links').classList.toggle('mobile-open')" aria-label="Menü">
+                <button class="mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menü">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- HERO (ANA TANITIM VE INTRO VİDEO ALANI) -->
-    <section class="hero-section">
-        <div class="container hero-grid">
+    <!-- HERO BÖLÜMÜ (SOL: NET AMAÇ | SAĞ: CANLI TELEFON EKRAN VİTRİNİ ek1..ek7) -->
+    <section class="hero">
+        <div class="container hero-layout">
             <div>
-                <div class="hero-kicker">
-                    <img src="icon.png" data-asset="icon.png" alt="Dünya İkonu">
-                    <span>TÜRKİYE'NİN YENİ NESİL HARİTACILIK TERMİNALİ</span>
+                <div class="kicker">
+                    <i class="fas fa-compass"></i>
+                    <span>HARİTA • İNŞAAT • ORMAN • KADASTRO</span>
                 </div>
-                <h1 class="hero-title">
-                    Cep Telefonunuzu <span class="gradient-text">Jeodezik El Terminaline</span> Dönüştürün.
+                <h1>
+                    Cep Telefonunuzu <span class="text-gradient">Jeodezik El Terminaline</span> Dönüştürün.
                 </h1>
-                <p class="hero-desc">
-                    <strong>AZİMUT Pro</strong>; sahada çalışan harita, inşaat, orman ve kadastro mühendisleri için geliştirildi. Anlık <strong>ITRF96, ED50 ve UTM</strong> dönüşümü yapın, sesli ve titreşimli radar ile <strong>nokta aplikasyonu (Stakeout)</strong> gerçekleştirin, <strong>TKGM Kadastro Parsellerini</strong> haritada görüntüleyin ve ölçümlerinizi <strong>NCN, DXF, KML</strong> olarak anında indirin.
+                <p class="hero-lead">
+                    <strong>AZİMUT Pro</strong> ile sahada ek cihaza ihtiyaç duymadan anlık <strong>ITRF96, ED50 ve UTM</strong> koordinat dönüşümü yapın, pusulalı ve sesli radarla <strong>nokta aplikasyonu (Stakeout)</strong> gerçekleştirin, <strong>TKGM parsel sınırlarını</strong> uydu haritasında açın ve ölçümlerinizi <strong>NCN, DXF, KML</strong> olarak anında indirin.
                 </p>
 
-                <div class="hero-cta-group">
-                    <a href="https://buraktonoz.com/azimut/" class="btn-launch">
-                        <i class="fas fa-rocket"></i> PROGRAMA GİT (ÜCRETSİZ BAŞLAT)
+                <div class="hero-buttons">
+                    <a href="https://buraktonoz.com/azimut/" class="btn-primary">
+                        <i class="fas fa-rocket"></i> UYGULAMAYI BAŞLAT (ÜCRETSİZ)
                     </a>
-                    <a href="#ekran-goruntuleri" class="btn-outline">
-                        <i class="fas fa-mobile-screen-button"></i> Ekran Görüntülerini İncele
-                    </a>
-                    <a href="#makaleler" class="btn-outline">
-                        <i class="fas fa-book-open"></i> Jeodezi Makaleleri
+                    <a href="#makaleler" class="btn-secondary">
+                        <i class="fas fa-book-open"></i> Mühendislik Makaleleri
                     </a>
                 </div>
 
-                <div class="hero-metrics">
-                    <div class="metric-item">
-                        <h4>ITRF96 / ED50</h4>
-                        <p>3° ve 6° Tam Projeksiyon</p>
+                <div class="quick-specs">
+                    <div class="spec-box">
+                        <strong>ITRF96 & ED50</strong>
+                        <span>3° ve 6° Projeksiyon</span>
                     </div>
-                    <div class="metric-item">
-                        <h4>TKGM WMS</h4>
-                        <p>Canlı Kadastro Parselleri</p>
+                    <div class="spec-box">
+                        <strong>STAKEOUT</strong>
+                        <span>Sesli & Pusulalı Aplikasyon</span>
                     </div>
-                    <div class="metric-item">
-                        <h4>NCN • DXF • KML</h4>
-                        <p>6 Farklı CAD Aktarımı</p>
+                    <div class="spec-box">
+                        <strong>TKGM WMS</strong>
+                        <span>Canlı Kadastro Parseli</span>
                     </div>
-                    <div class="metric-item">
-                        <h4>%100 Offline</h4>
-                        <p>Arazide Çevrimdışı Çalışma</p>
+                    <div class="spec-box">
+                        <strong>NCN • DXF • KML</strong>
+                        <span>6 Formatta CAD Çıktısı</span>
                     </div>
                 </div>
             </div>
 
-            <!-- SAĞ TARAF: INTRO.MP4 ANİMASYONLU VİTRİN -->
-            <div class="hero-visual">
-                <div class="glow-orb"></div>
-
-                <div class="floating-chip chip-left">
-                    <i class="fas fa-bullseye" style="color:var(--success); font-size:1.2rem;"></i>
-                    <div>
-                        <div style="color:var(--text-main);">Canlı Aplikasyon</div>
-                        <div style="font-size:0.68rem; color:var(--text-muted);">Sesli & Pusulalı Radar</div>
-                    </div>
+            <!-- SAĞ TARAF: TELEFON ÇERÇEVESİ İÇİNDE ek1.png - ek7.png VE VİDEO -->
+            <div class="hero-phone-stage">
+                <div class="phone-mode-tabs">
+                    <button class="phone-mode-btn active" id="mode-screens-btn" onclick="switchPhoneMode('screens')">
+                        <i class="fas fa-mobile-screen"></i> Ekranlar (1-7)
+                    </button>
+                    <button class="phone-mode-btn" id="mode-video-btn" onclick="switchPhoneMode('video')">
+                        <i class="fas fa-play-circle"></i> Tanıtım Videosu
+                    </button>
                 </div>
 
-                <div class="floating-chip chip-right">
-                    <i class="fas fa-border-all" style="color:var(--warning); font-size:1.2rem;"></i>
-                    <div>
-                        <div style="color:var(--text-main);">TKGM Parsel Katmanı</div>
-                        <div style="font-size:0.68rem; color:var(--text-muted);">WMS Uydu Entegrasyonu</div>
-                    </div>
-                </div>
-
-                <div class="media-showcase-card">
-                    <div class="showcase-top-bar">
-                        <div class="showcase-dots"><span></span><span></span><span></span></div>
-                        <span>AZİMUT PRO TERMINAL • INTRO</span>
-                        <i class="fas fa-signal" style="color:var(--accent);"></i>
-                    </div>
-                    <div class="video-wrapper">
-                        <video id="intro-video" autoplay loop muted playsinline poster="logo.jpeg">
+                <div class="phone-mockup">
+                    <div class="phone-speaker"></div>
+                    <div class="phone-screen">
+                        <img id="hero-phone-img" src="ek1.png" alt="AZİMUT Pro Mobil Ekran" onclick="openLightbox(this.src)">
+                        <video id="hero-phone-video" loop muted playsinline poster="logo.jpeg">
                             <source src="intro.mp4" type="video/mp4">
                         </video>
-                        <button class="video-sound-btn" onclick="toggleIntroSound()" id="sound-toggle-btn">
-                            <i class="fas fa-volume-mute"></i> Sesi Aç
-                        </button>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:4px 6px 0;">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <img src="icon.png" data-asset="icon.png" alt="İkon" style="width:26px; height:26px;">
-                            <span style="font-size:0.78rem; font-weight:700;">buraktonoz.com/azimut</span>
+
+                        <div class="phone-nav-overlay" id="phone-screen-controls">
+                            <button class="phone-nav-btn" onclick="changeHeroSlide(-1)" aria-label="Önceki Ekran">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="phone-screen-label" id="hero-phone-caption">1/7 • Canlı ITRF96 Ölçüm</div>
+                            <button class="phone-nav-btn" onclick="changeHeroSlide(1)" aria-label="Sonraki Ekran">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
-                        <a href="https://buraktonoz.com/azimut/" style="color:var(--accent); font-size:0.8rem; font-weight:700; text-decoration:none;">
-                            Terminali Aç <i class="fas fa-arrow-right"></i>
-                        </a>
                     </div>
                 </div>
+
+                <div class="phone-dots" id="hero-phone-dots"></div>
             </div>
         </div>
     </section>
 
-    <!-- ÖZELLİKLER BÖLÜMÜ -->
-    <section id="ozellikler">
+    <!-- SADE VE NET ÖZELLİKLER BÖLÜMÜ -->
+    <section id="ozellikler" class="section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">TEKNİK DONANIM & YETENEKLER</span>
-                <h2 class="section-title">Neden Binlerce Mühendis AZİMUT Pro Kullanıyor?</h2>
-                <p class="section-subtitle">Pahalı GPS alıcılarının yanında her an cebinizde taşıyabileceğiniz, Türkiye jeodezik standartlarına (%100 TUREF / ITRF96 ve ED50) göre kalibre edilmiş saha terminali.</p>
+            <div class="section-head">
+                <span class="section-badge">TEMEL YETENEKLER</span>
+                <h2 class="section-title">Arazide İhtiyacınız Olan Tüm Jeodezik Araçlar</h2>
+                <p class="section-desc">Karmaşık menüler olmadan, sahada tek elle ve güneş altında rahatça kullanabilmeniz için tasarlandı.</p>
             </div>
 
             <div class="features-grid">
-                <article class="feature-card">
+                <div class="feature-item">
                     <div class="feature-icon"><i class="fas fa-compass"></i></div>
                     <h3>ITRF96, ED50 ve UTM Dönüşümü</h3>
-                    <p>Bulunduğunuz boylama göre Dilim Orta Meridyenini (DOM 27° - 45°) otomatik algılar veya manuel dilim seçimiyle anlık Sağa (Y) ve Yukarı (X) koordinat üretir.</p>
-                </article>
-
-                <article class="feature-card">
+                    <p>Bulunduğunuz boylama göre Dilim Orta Meridyenini (DOM 27° - 45°) otomatik algılar veya manuel dilim kilitlemeyle Sağa (Y) ve Yukarı (X) değerlerini hesaplar.</p>
+                </div>
+                <div class="feature-item">
                     <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
-                    <h3>Canlı Nokta Aplikasyonu (Stakeout)</h3>
-                    <p>Arazide aradığınız parsel köşesine veya poligon noktasına kaç metre ve kaç santimetre kaldığını pusula radarı, sesli bip frekansı ve titreşimle adım adım tarif eder.</p>
-                </article>
-
-                <article class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-border-all"></i></div>
+                    <h3>Canlı Nokta Aplikasyonu</h3>
+                    <p>Aradığınız parsel köşesine veya proje noktasına kaç santimetre kaldığını pusula yönlendirmesi, sesli uyarı ve titreşimle adım adım gösterir.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
                     <h3>TKGM Kadastro Parsel Katmanı</h3>
-                    <p>Google Hybrid, Esri Uydu, Topoğrafik ve OSM harita altlıkları üzerinde doğrudan TKGM kadastro parsel sınırlarını şeffaf katman olarak açıp kapatabilirsiniz.</p>
-                </article>
-
-                <article class="feature-card">
+                    <p>Uydu görüntüsü üzerine resmi TKGM parsel sınırlarını şeffaf katman olarak bindirir; arazide hangi parselin içinde olduğunuzu anında görürsünüz.</p>
+                </div>
+                <div class="feature-item">
                     <div class="feature-icon"><i class="fas fa-satellite"></i></div>
                     <h3>Hassas Epok Ortalaması (RMS)</h3>
-                    <p>Tekil GPS okuması yerine 5, 10 veya 20 epok boyunca ağırlıklı koordinat ortalaması alarak mobil konum doğruluğunu maksimum hassasiyete taşır ve RMS hatasını hesaplar.</p>
-                </article>
-
-                <article class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-drafting-compass"></i></div>
-                    <h3>NetCAD (.NCN) ve AutoCAD (.DXF)</h3>
-                    <p>Proje klasörlerinizdeki noktaları nokta adı, ITRF koordinatları, Z kotu ve kategori kodlarıyla birlikte doğrudan NetCAD, AutoCAD, Google Earth KML ve Excel CSV formatında dışa aktarır.</p>
-                </article>
-
-                <article class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-draw-polygon"></i></div>
-                    <h3>Alan, Mesafe ve Nişangah Ölçümü</h3>
-                    <p>Harita merkez nişangahı veya çokgen çizim aracıyla arazideki parsellerin m², dekar (dönüm) ve hektar cinsinden kapalı alanını ve çevre uzunluğunu saniyeler içinde hesaplar.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- EKRAN GÖRÜNTÜLERİ GALERİSİ (ek1.png ... ek7.png ve dinamik artış destekli) -->
-    <section id="ekran-goruntuleri" class="screenshots-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">ARAYÜZ VE SAHA DENEYİMİ</span>
-                <h2 class="section-title">Uygulama İçi Ekran Görüntüleri</h2>
-                <p class="section-subtitle">Güneş ışığı (arazi) modu, siber gece teması, canlı aplikasyon radarı, TKGM parsel görünümü ve proje yönetim ekranlarını yakından inceleyin. Büyütmek için görsellere dokunun.</p>
-            </div>
-
-            <div class="gallery-controls">
-                <button class="btn-outline" onclick="scrollGallery(-300)"><i class="fas fa-chevron-left"></i> Sola Kaydır</button>
-                <a href="https://buraktonoz.com/azimut/" class="btn-launch"><i class="fas fa-play"></i> Canlı Uygulamayı Dene</a>
-                <button class="btn-outline" onclick="scrollGallery(300)">Sağa Kaydır <i class="fas fa-chevron-right"></i></button>
-            </div>
-
-            <div class="gallery-track" id="screenshots-track"></div>
-        </div>
-    </section>
-
-    <!-- HARİTACILIK VE JEODEZİ MAKALELERİ (SEO BLOG MERKEZİ) -->
-    <section id="makaleler">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">HARİTACILIK BİLGİ BANKASI & BLOG</span>
-                <h2 class="section-title">Jeodezi, Kadastro ve Saha Mühendisliği Makaleleri</h2>
-                <p class="section-subtitle">Harita mühendisliği, ITRF96-ED50 dönüşüm parametreleri, arazide nokta aplikasyonu teknikleri ve CBS/CAD iş akışları üzerine güncel teknik rehberler.</p>
-            </div>
-
-            <div class="blog-toolbar">
-                <div class="blog-categories" id="blog-categories">
-                    <button class="cat-pill active" onclick="filterArticles('Tümü', this)">Tümü</button>
-                    <button class="cat-pill" onclick="filterArticles('Jeodezi & Projeksiyon', this)">Jeodezi & Projeksiyon</button>
-                    <button class="cat-pill" onclick="filterArticles('Saha Aplikasyonu', this)">Saha Aplikasyonu</button>
-                    <button class="cat-pill" onclick="filterArticles('Kadastro & TKGM', this)">Kadastro & TKGM</button>
-                    <button class="cat-pill" onclick="filterArticles('CAD & Yazılım', this)">CAD & Yazılım</button>
+                    <p>Anlık GPS sapmalarını sönümlemek için 5, 10 veya 20 epok boyunca ağırlıklı ortalama alır ve Karesel Ortalama Hata (RMS) değerini raporlar.</p>
                 </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-file-export"></i></div>
+                    <h3>NetCAD, AutoCAD ve KML Çıktısı</h3>
+                    <p>Kaydettiğiniz noktaları tek dokunuşla .NCN, .DXF, .KML, .CSV, .GEOJSON formatlarında dışa aktarır veya ofisten gelen dosyaları haritada açar.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-ruler-combined"></i></div>
+                    <h3>Alan (m² / Dekar) ve PDF Rapor</h3>
+                    <p>Harita üzerinden poligon alan ve mesafe metrajı çıkarır; yapılan arazi çalışmasını tek tıkla A4 boyutunda resmi PDF Koordinat Raporuna dönüştürür.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                    <div class="blog-search-box">
-                        <i class="fas fa-search" style="color:var(--text-muted);"></i>
-                        <input type="text" id="article-search" placeholder="Makalelerde ara (ITRF, NCN, Parsel...)" oninput="renderArticles()">
+    <!-- UYGULAMA EKRAN GÖRÜNTÜLERİ (ek1.png - ek7.png TELEFON ÇERÇEVELİ GALERİ) -->
+    <section id="ekran-goruntuleri" class="section" style="background: rgba(12, 19, 34, 0.5);">
+        <div class="container">
+            <div class="section-head">
+                <span class="section-badge">UYGULAMA ARAYÜZÜ</span>
+                <h2 class="section-title">Telefondan Gerçek Saha Ekranları</h2>
+                <p class="section-desc">AZİMUT Pro'nun mobil arayüzünü yakından inceleyin. Tam ekran görmek istediğiniz telefon ekranına dokunabilirsiniz.</p>
+            </div>
+
+            <div class="phone-gallery-wrap">
+                <div class="phone-carousel" id="phone-carousel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HARİTACILIK BİLGİ BANKASI VE MAKALELER (SEKMELİ + SAYFALAMALI + ARAMALI) -->
+    <section id="makaleler" class="section">
+        <div class="container">
+            <div class="section-head">
+                <span class="section-badge">JEODEZİ & SAHA KÜTÜPHANESİ</span>
+                <h2 class="section-title">Haritacılık, Kadastro ve Uygulama Rehberleri</h2>
+                <p class="section-desc">Kategorilere ayrılmış teknik makalelerimizden ilgilendiğiniz alanı seçin veya arama kutusunu kullanın.</p>
+            </div>
+
+            <!-- KATEGORİ SEKMELERİ VE ARAMA ÇUBUĞU -->
+            <div class="blog-control-bar">
+                <div class="blog-top-row">
+                    <div class="category-tabs" id="category-tabs">
+                        <!-- JS ile dinamik sayaçlı oluşturulur -->
+                    </div>
+                    <div class="search-Sort-wrap">
+                        <div class="search-input-box">
+                            <i class="fas fa-search" style="color:var(--text-muted);"></i>
+                            <input type="text" id="article-search" placeholder="Konu ara (Örn: ITRF96, GES, TKGM, NCN...)" oninput="onSearchInput()">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- MAKALELERİN LİSTELENDİĞİ GRİD -->
+            <!-- ÖNE ÇIKAN SON YAZI (SADECE 1. SAYFADA VE ARAMA YOKKEN GÖRÜNÜR) -->
+            <div id="featured-article-container" class="featured-article-box"></div>
+
+            <!-- MAKALELER 3'LÜ GRİD (SAYFA BAŞINA 6 ADET) -->
             <div class="articles-grid" id="articles-grid"></div>
+
+            <!-- SAYFA NUMARALARI (PAGINATION) -->
+            <div class="pagination-bar" id="pagination-bar"></div>
         </div>
     </section>
 
-    <!-- SIKÇA SORULAN SORULAR (SEO FAQ) -->
-    <section id="sss" style="background: rgba(10, 16, 32, 0.45); border-top: 1px solid var(--border);">
+    <!-- SIKÇA SORULAN SORULAR -->
+    <section id="sss" class="section" style="background: rgba(12, 19, 34, 0.4);">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">MERAK EDİLENLER</span>
+            <div class="section-head">
+                <span class="section-badge">MERAK EDİLENLER</span>
                 <h2 class="section-title">Sıkça Sorulan Sorular</h2>
-                <p class="section-subtitle">AZİMUT Pro'nun teknik altyapısı, koordinat doğruluğu ve kullanımı hakkında en çok sorulan sorular.</p>
             </div>
 
-            <div class="faq-list">
-                <div class="faq-item open">
-                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <div class="faq-wrap">
+                <div class="faq-card open">
+                    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                         <span>1. AZİMUT Pro hangi koordinat sistemlerini ve dilimleri destekliyor?</span>
                         <i class="fas fa-chevron-down" style="color:var(--accent);"></i>
                     </button>
-                    <div class="faq-answer">
-                        AZİMUT Pro; Türkiye'de mühendislik ve kadastro projelerinde standart olarak kullanılan <strong>ITRF96 (3° TM)</strong>, <strong>ED50 (3° TM ve 6° UTM)</strong>, <strong>WGS84 Coğrafi (Enlem/Boylam)</strong> ve <strong>WGS84 UTM (6°)</strong> sistemlerini eksiksiz destekler. Dilim Orta Meridyeni (DOM 27, 30, 33, 36, 39, 42, 45) GPS konumunuza göre otomatik seçilir veya ayarlardan sabitlenebilir.
+                    <div class="faq-a">
+                        Türkiye'de standart olarak kullanılan <strong>ITRF96 (3° TM)</strong>, <strong>ED50 (3° TM ve 6° UTM)</strong>, <strong>WGS84 Coğrafi</strong> ve <strong>UTM (6°)</strong> sistemlerini tüm Dilim Orta Meridyenleri (DOM 27, 30, 33, 36, 39, 42, 45) ile destekler.
                     </div>
                 </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                        <span>2. TKGM Kadastro Parsellerini harita üzerinde nasıl açabilirim?</span>
+                <div class="faq-card">
+                    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        <span>2. Ölçtüğüm noktaları NetCAD veya AutoCAD'e nasıl aktarabilirim?</span>
                         <i class="fas fa-chevron-down" style="color:var(--accent);"></i>
                     </button>
-                    <div class="faq-answer">
-                        Uygulamanın alt menüsünde yer alan <strong>Katmanlar (Layers)</strong> simgesine dokunduğunuzda açılan panelden harita altlığınızı (Google Hybrid, Esri Uydu, Topoğrafik, OSM) seçebilir ve hemen altındaki <strong>"TKGM Kadastro Parselleri"</strong> anahtarını aktif ederek tüm parsel sınırlarını harita üzerinde canlı görebilirsiniz.
+                    <div class="faq-a">
+                        Uygulama içindeki <strong>Projeler</strong> menüsünden noktalarınızı tek dokunuşla <strong>NetCAD (.ncn)</strong>, <strong>AutoCAD (.dxf)</strong>, <strong>Google Earth (.kml)</strong>, <strong>Excel (.csv)</strong> ve <strong>GeoJSON</strong> olarak indirebilirsiniz.
                     </div>
                 </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                        <span>3. Ölçtüğüm noktaları NetCAD veya AutoCAD'e nasıl atarım?</span>
+                <div class="faq-card">
+                    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        <span>3. Telefonuma uygulama olarak kurulabilir mi, internetsiz çalışır mı?</span>
                         <i class="fas fa-chevron-down" style="color:var(--accent);"></i>
                     </button>
-                    <div class="faq-answer">
-                        Alt menüdeki <strong>Projeler & Kayıtlar</strong> sekmesine girerek aktif klasörünüzdeki noktaları tek tıkla <strong>NetCAD (.ncn)</strong>, <strong>AutoCAD (.dxf)</strong>, <strong>Google Earth (.kml)</strong>, <strong>Excel (.csv)</strong>, <strong>Metin (.txt)</strong> veya <strong>GeoJSON</strong> formatlarında telefonunuza indirebilir ya da doğrudan WhatsApp/Mail ile paylaşabilirsiniz.
+                    <div class="faq-a">
+                        Evet. PWA teknolojisi sayesinde tarayıcı menüsünden <strong>"Ana Ekrana Ekle"</strong> diyerek telefonunuza kurabilir ve arazide internet çekmediğinde dahi koordinat dönüşümü ile aplikasyon özelliklerini çevrimdışı kullanabilirsiniz.
                     </div>
                 </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                        <span>4. Telefonuma uygulama olarak nasıl kurabilirim (PWA)?</span>
-                        <i class="fas fa-chevron-down" style="color:var(--accent);"></i>
-                    </button>
-                    <div class="faq-answer">
-                        AZİMUT Pro yeni nesil PWA teknolojisiyle çalışır. Uygulama sayfasındayken sol üst menüdeki <strong>"Uygulamayı Ana Ekrana Ekle"</strong> butonuna basarak Android ve iPhone (iOS) cihazlarınıza uygulama mağazasına gerek kalmadan doğrudan kurabilir, tam ekran ve çevrimdışı (offline) kullanabilirsiniz.
-                    </div>
-                </div>
-            </div>
-
-            <!-- ALT ÇAĞRI KARTI (CTA BANNER) -->
-            <div style="margin-top:65px; background:linear-gradient(135deg, rgba(0,229,255,0.12), rgba(59,130,246,0.12)); border:1px solid rgba(0,229,255,0.35); border-radius:24px; padding:42px 28px; text-align:center;">
-                <img src="logo.jpeg" data-asset="logo.jpeg" alt="Azimut Logo" style="width:72px; height:72px; border-radius:18px; margin-bottom:16px; border:2px solid var(--accent);">
-                <h3 style="font-size:1.7rem; font-weight:800; margin-bottom:10px;">Arazide Hemen Ölçüme Başlayın</h3>
-                <p style="color:var(--text-muted); max-width:580px; margin:0 auto 24px;">Kurulum gerektirmeden tarayıcınızdan anında açın veya telefonunuzun ana ekranına ekleyerek çevrimdışı saha terminalinizi aktif edin.</p>
-                <a href="https://buraktonoz.com/azimut/" class="btn-launch" style="font-size:1.05rem; padding:16px 34px;">
-                    <i class="fas fa-location-crosshairs"></i> AZİMUT PRO'YU ŞİMDİ AÇ
-                </a>
             </div>
         </div>
     </section>
@@ -1347,36 +1583,34 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <div class="brand-logo" style="margin-bottom:14px;">
+                    <div class="brand" style="margin-bottom:12px;">
                         <img src="logo.jpeg" data-asset="logo.jpeg" alt="Logo">
-                        <div class="brand-text">
-                            <div class="brand-title">AZİMUT <span class="brand-badge">PRO</span></div>
-                            <div class="brand-sub">CREATED BY TONOZ</div>
+                        <div>
+                            <div class="brand-title">AZİMUT <span class="badge-pro">PRO</span></div>
+                            <span style="font-size:0.7rem; color:var(--text-muted);">CREATED BY TONOZ</span>
                         </div>
                     </div>
-                    <p style="margin-bottom:14px;">Harita, inşaat, orman ve kadastro mühendisleri için geliştirilmiş profesyonel ITRF96/ED50 koordinat dönüşüm, canlı aplikasyon ve CAD veri aktarım platformu.</p>
-                    <p style="font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--accent);">İletişim: buraktonoz@gmail.com</p>
+                    <p style="margin-bottom:12px;">Harita, inşaat, orman ve kadastro mühendisleri için web tabanlı ITRF96/ED50 koordinat dönüşüm ve saha aplikasyon terminali.</p>
+                    <p style="font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--accent);">buraktonoz@gmail.com</p>
                 </div>
 
                 <div class="footer-col">
-                    <h4>Hızlı Erişim</h4>
+                    <h4>Hızlı Menü</h4>
                     <ul>
-                        <li><a href="https://buraktonoz.com/azimut/">🚀 Azimut Pro Terminali</a></li>
-                        <li><a href="#ozellikler">Teknik Özellikler</a></li>
-                        <li><a href="#ekran-goruntuleri">Uygulama Galerisi</a></li>
-                        <li><a href="#makaleler">Jeodezi Makaleleri</a></li>
-                        <li><a href="#sss">Sıkça Sorulan Sorular</a></li>
+                        <li><a href="https://buraktonoz.com/azimut/">🚀 Uygulamayı Başlat</a></li>
+                        <li><a href="#ozellikler">Özellikler</a></li>
+                        <li><a href="#ekran-goruntuleri">Ekran Görüntüleri</a></li>
+                        <li><a href="#makaleler">Mühendislik Blogu</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
-                    <h4>Desteklenen Sistemler</h4>
+                    <h4>Popüler Konular</h4>
                     <ul>
-                        <li><a href="#makaleler">ITRF96 (3° TM Dilimleri)</a></li>
-                        <li><a href="#makaleler">ED50 (3° TM & 6° UTM)</a></li>
-                        <li><a href="#makaleler">WGS84 Coğrafi & UTM</a></li>
-                        <li><a href="#makaleler">TKGM WMS Parsel Servisi</a></li>
-                        <li><a href="#makaleler">NetCAD (.ncn) & AutoCAD (.dxf)</a></li>
+                        <li><a href="#makaleler" onclick="selectCategory('Jeodezi & Projeksiyon')">ITRF96 & ED50 Dönüşümü</a></li>
+                        <li><a href="#makaleler" onclick="selectCategory('Saha Aplikasyonu')">Canlı Nokta Aplikasyonu</a></li>
+                        <li><a href="#makaleler" onclick="selectCategory('Kadastro & TKGM')">TKGM Parsel Sorgulama</a></li>
+                        <li><a href="#makaleler" onclick="selectCategory('CAD & Yazılım')">NetCAD (.NCN) Aktarımı</a></li>
                     </ul>
                 </div>
 
@@ -1384,76 +1618,93 @@
                     <h4>Geliştirici & Yönetim</h4>
                     <ul>
                         <li><a href="https://buraktonoz.com" target="_blank" rel="noopener">Burak Tonoz Portfolyo</a></li>
-                        <li><a href="javascript:void(0)" onclick="handleAuthorAuth()" id="footer-admin-link"><i class="fab fa-google"></i> Yönetici Girişi (OAuth)</a></li>
-                        <li id="footer-backup-item" style="display:none;"><a href="javascript:void(0)" onclick="exportArticlesJSON()"><i class="fas fa-code"></i> Makale Yedeği (.json)</a></li>
+                        <li><a href="javascript:void(0)" onclick="handleAuthorAuth()" id="footer-admin-link"><i class="fab fa-google"></i> Yazar Girişi</a></li>
+                        <li id="footer-backup-item" style="display:none;"><a href="javascript:void(0)" onclick="exportArticlesJSON()"><i class="fas fa-download"></i> Makale Yedeği İndir</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <span>© 2026 <strong>AZİMUT Pro</strong> | Created by <strong>Burak Tonoz</strong>. Tüm hakları saklıdır.</span>
-                <span style="font-family:'JetBrains Mono', monospace; font-size:0.75rem;">ITRF96 • ED50 • STAKEOUT • TKGM WMS</span>
+                <span>© 2026 <strong>AZİMUT Pro</strong> | Created by <strong>Burak Tonoz</strong>.</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.75rem;">ITRF96 • ED50 • STAKEOUT • TKGM</span>
             </div>
         </div>
     </footer>
 
-    <!-- TAM EKRAN EKRAN GÖRÜNTÜSÜ LIGHTBOX MODALI -->
-    <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox()">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="Uygulama Ekran Görüntüsü">
+    <!-- TAM EKRAN GÖRSEL LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
+        <img id="lightbox-img" src="" alt="Ekran Görüntüsü">
     </div>
 
-    <!-- MAKALE OKUMA MODALI -->
-    <div class="reader-modal" id="reader-modal">
-        <div class="reader-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border);">
-                <span class="article-tag" id="reader-cat">Kategori</span>
-                <div style="display:flex; gap:10px; align-items:center;">
-                    <button class="btn-outline" style="padding:7px 12px; font-size:0.78rem;" onclick="shareCurrentArticle()">
-                        <i class="fas fa-share-nodes"></i> Makale Linkini Kopyala
-                    </button>
-                    <button class="btn-outline" style="padding:7px 12px; font-size:0.78rem; color:var(--danger); border-color:var(--danger);" onclick="closeArticleReader()">
-                        <i class="fas fa-times"></i> Kapat
-                    </button>
-                </div>
-            </div>
-            <h1 id="reader-title" style="font-size:clamp(1.5rem, 3vw, 2.2rem); font-weight:800; line-height:1.25; margin-bottom:12px;"></h1>
-            <div style="font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--text-muted); margin-bottom:24px;">
-                <i class="fas fa-user-astronaut" style="color:var(--accent);"></i> Yazar: <b id="reader-author" style="color:var(--text-main);">Burak Tonoz</b> &nbsp;•&nbsp;
-                <i class="fas fa-calendar-alt" style="color:var(--accent);"></i> <span id="reader-date"></span> &nbsp;•&nbsp;
-                <i class="fas fa-clock" style="color:var(--accent);"></i> <span id="reader-readtime">4 dk okuma</span>
-            </div>
-            <img id="reader-cover" src="" alt="Makale Görseli" style="width:100%; max-height:380px; object-fit:cover; border-radius:16px; margin-bottom:26px; border:1px solid var(--border);">
-            <div class="reader-content" id="reader-body"></div>
+    <!-- DERGİ FORMATINDA MAKALE OKUMA EKRANI -->
+    <div class="reader-modal" id="reader-modal" onscroll="updateReadingProgress(this)">
+        <div class="reading-progress-bar" id="reading-progress"></div>
 
-            <div style="margin-top:36px; padding-top:24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
-                <div>
-                    <div style="font-weight:700;">Bu makaledeki araçları sahada hemen deneyin!</div>
-                    <div style="font-size:0.82rem; color:var(--text-muted);">AZİMUT Pro terminali tüm cihazlarda ücretsiz kullanıma hazırdır.</div>
+        <div class="reader-sticky-top">
+            <div class="reader-top-inner">
+                <button class="btn-secondary" style="padding:8px 14px; font-size:0.82rem;" onclick="closeArticleReader()">
+                    <i class="fas fa-arrow-left"></i> Makalelere Dön
+                </button>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-secondary" style="padding:8px 12px; font-size:0.8rem;" onclick="shareCurrentArticle()">
+                        <i class="fas fa-share-nodes"></i> Paylaş
+                    </button>
+                    <a href="https://buraktonoz.com/azimut/" class="btn-primary" style="padding:8px 14px; font-size:0.8rem;">
+                        <i class="fas fa-satellite-dish"></i> Uygulamayı Aç
+                    </a>
                 </div>
-                <a href="https://buraktonoz.com/azimut/" class="btn-launch">
-                    <i class="fas fa-satellite-dish"></i> AZİMUT PRO'YA GİT
-                </a>
             </div>
         </div>
+
+        <article class="reader-container">
+            <span class="article-cat" id="reader-cat">Kategori</span>
+            <h1 class="reader-title" id="reader-title">Makale Başlığı</h1>
+
+            <div class="reader-meta-bar">
+                <span><i class="fas fa-user-check" style="color:var(--accent);"></i> <b id="reader-author" style="color:#fff;">Burak Tonoz</b></span>
+                <span><i class="fas fa-calendar" style="color:var(--accent);"></i> <span id="reader-date"></span></span>
+                <span><i class="fas fa-clock" style="color:var(--accent);"></i> <span id="reader-readtime"></span></span>
+            </div>
+
+            <img id="reader-cover" class="reader-cover-img" src="" alt="Kapak Görseli">
+
+            <div class="reader-content" id="reader-body"></div>
+
+            <!-- MAKALE ALTI UYGULAMA ÇAĞRI KUTUSU -->
+            <div style="margin-top:36px; background:linear-gradient(135deg, rgba(0,229,255,0.1), rgba(59,130,246,0.1)); border:1px solid var(--accent-border); border-radius:16px; padding:22px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <div style="font-weight:800; font-size:1.05rem;">Bu rehberdeki işlemleri sahada hemen uygulayın!</div>
+                    <div style="font-size:0.85rem; color:var(--text-muted);">AZİMUT Pro kurulum gerektirmeden telefonunuzda ücretsiz çalışır.</div>
+                </div>
+                <a href="https://buraktonoz.com/azimut/" class="btn-primary">
+                    <i class="fas fa-rocket"></i> AZİMUT PRO'YU BAŞLAT
+                </a>
+            </div>
+
+            <!-- BENZER MAKALELER -->
+            <div class="related-posts-box">
+                <h4 style="font-size:1rem; color:var(--text-light);">İlgili Diğer Mühendislik Rehberleri</h4>
+                <div class="related-grid" id="related-articles-grid"></div>
+            </div>
+        </article>
     </div>
 
-    <!-- YAZAR (ADMİN) MAKALE YAZMA / DÜZENLEME MODALI -->
+    <!-- YAZAR MAKALE YÖNETİM PANELİ (SADECE buraktonoz@gmail.com) -->
     <div class="cms-modal" id="cms-modal">
         <div class="cms-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:12px;">
-                <h3 style="font-size:1.2rem; color:var(--accent);"><i class="fas fa-pen-to-square"></i> Makale Yayınlama & SEO Editörü (Yetkili: buraktonoz@gmail.com)</h3>
-                <button class="btn-outline" style="padding:6px 12px;" onclick="closeArticleEditor()"><i class="fas fa-times"></i></button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--border-subtle);">
+                <h3 style="font-size:1.1rem; color:var(--accent);"><i class="fas fa-pen-to-square"></i> Makale Yayınlama & Düzenleme Paneli</h3>
+                <button class="btn-secondary" style="padding:6px 12px;" onclick="closeArticleEditor()"><i class="fas fa-times"></i></button>
             </div>
 
             <input type="hidden" id="edit-article-id">
 
             <div class="form-group">
-                <label>Makale Başlığı (Google H1 ve Arama Başlığı Olacaktır)</label>
+                <label>Makale Başlığı</label>
                 <input type="text" id="cms-title" class="form-input" placeholder="Örn: ITRF96 ve ED50 Koordinat Dönüşümü Nasıl Yapılır?">
             </div>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
                 <div class="form-group">
                     <label>Kategori</label>
                     <select id="cms-category" class="form-select">
@@ -1464,57 +1715,56 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Kapak Görseli (Örn: ek1.png, logo.jpeg veya Resim Linki)</label>
-                    <input type="text" id="cms-image" class="form-input" placeholder="ek1.png veya https://..." value="ek1.png">
+                    <label>Kapak Görseli (ek1.png veya Resim URL)</label>
+                    <input type="text" id="cms-image" class="form-input" value="ek1.png">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Kısa SEO Özeti (Google Arama Sonuçlarında Görünecek Açıklama - 150-160 Karakter)</label>
-                <input type="text" id="cms-summary" class="form-input" placeholder="Arazide cep telefonuyla ITRF96 koordinat alma ve NetCAD NCN formatına aktarma rehberi...">
+                <label>Kısa SEO Özeti (150-160 Karakter)</label>
+                <input type="text" id="cms-summary" class="form-input" placeholder="Google arama sonuçlarında görünecek özet açıklama...">
             </div>
 
             <div class="form-group">
-                <label>Makale İçeriği (HTML veya Düz Metin Yazabilirsiniz)</label>
+                <label>Makale İçeriği (HTML veya Paragraf)</label>
                 <div class="editor-toolbar">
-                    <button type="button" onclick="insertTag('<h2>', '</h2>')"><b>H2 Alt Başlık</b></button>
+                    <button type="button" onclick="insertTag('<h2>', '</h2>')"><b>H2 Başlık</b></button>
                     <button type="button" onclick="insertTag('<h3>', '</h3>')"><b>H3 Başlık</b></button>
-                    <button type="button" onclick="insertTag('<b>', '</b>')"><i class="fas fa-bold"></i> Kalın</button>
-                    <button type="button" onclick="insertTag('<p>', '</p>')"><i class="fas fa-paragraph"></i> Paragraf</button>
-                    <button type="button" onclick="insertTag('<ul>\n  <li>', '</li>\n</ul>')"><i class="fas fa-list-ul"></i> Madde Listesi</button>
-                    <button type="button" onclick="insertTag('<a href=&quot;https://buraktonoz.com/azimut/&quot;>', '</a>')"><i class="fas fa-link"></i> Azimut Linki Ekle</button>
+                    <button type="button" onclick="insertTag('<b>', '</b>')">Kalın</button>
+                    <button type="button" onclick="insertTag('<p>', '</p>')">Paragraf</button>
+                    <button type="button" onclick="insertTag('<ul>\n  <li>', '</li>\n</ul>')">Liste</button>
                 </div>
-                <textarea id="cms-content" rows="10" class="form-textarea" placeholder="Makale metninizi buraya yazın... Boş bırakılan satırlar otomatik olarak paragrafa dönüştürülür."></textarea>
+                <textarea id="cms-content" rows="9" class="form-textarea"></textarea>
             </div>
 
             <div class="form-group">
-                <label>SEO Anahtar Kelimeleri (Virgülle ayırın)</label>
-                <input type="text" id="cms-keywords" class="form-input" placeholder="ITRF96, ED50 dönüşüm, nokta aplikasyonu, TKGM parsel sorgu">
+                <label>Anahtar Kelimeler (Virgülle ayırın)</label>
+                <input type="text" id="cms-keywords" class="form-input">
             </div>
 
-            <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:20px;">
-                <button class="btn-outline" onclick="closeArticleEditor()">İptal</button>
-                <button class="btn-launch" onclick="saveArticle()"><i class="fas fa-cloud-upload-alt"></i> Makaleyi Buluta Yayınla</button>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+                <button class="btn-secondary" onclick="closeArticleEditor()">İptal</button>
+                <button class="btn-primary" onclick="saveArticle()"><i class="fas fa-cloud-upload-alt"></i> Yayınla</button>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================================================
-        // 1. BİLDİRİM VE XSS GÜVENLİK YARDIMCILARI
+        // 1. TEMEL YARDIMCILAR VE MEDYA YOLU ÇÖZÜCÜ
         // ============================================================================
-        let siteToastTimer = null;
+        let toastTimeout = null;
         function showSiteToast(msg, isError = false) {
             const toast = document.getElementById('site-toast');
             const text = document.getElementById('site-toast-text');
             const icon = toast.querySelector('i');
             toast.style.borderColor = isError ? 'var(--danger)' : 'var(--accent)';
             icon.style.color = isError ? 'var(--danger)' : 'var(--accent)';
-            icon.className = isError ? 'fas fa-triangle-exclamation' : 'fas fa-shield-check';
+            icon.className = isError ? 'fas fa-triangle-exclamation' : 'fas fa-circle-check';
             text.innerText = msg;
             toast.classList.add('show');
-            if (siteToastTimer) clearTimeout(siteToastTimer);
-            siteToastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
         }
 
         function escapeHtml(str) {
@@ -1527,112 +1777,145 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // ============================================================================
-        // 2. AKILLI MEDYA YOLU ÇÖZÜCÜ VE EKRAN GÖRÜNTÜLERİ GALERİSİ (ek1.png...ek7.png+)
-        // ============================================================================
-        const SCREENSHOT_CAPTIONS = [
-            "1. Canlı ITRF96 / WGS84 Ölçüm & HUD Ekranı",
-            "2. TKGM Kadastro Parsel WMS Katmanı",
-            "3. Sesli & Pusulalı Nokta Aplikasyon (Stakeout) Radarı",
-            "4. Harita Altlıkları ve Katman Yöneticisi",
-            "5. Çoklu Proje Klasörleri ve NCN / DXF / KML Aktarımı",
-            "6. Nişangah, Alan & Mesafe (m² / Dekar) Hesaplama",
-            "7. Jeodezik Koordinat Dönüştürücü & Ayarlar"
-        ];
-
-        function resolveAssetPath(imgElement, fileName) {
-            imgElement.onerror = function() {
-                if (!this.dataset.retried) {
-                    this.dataset.retried = "true";
-                    this.src = "../" + fileName;
-                }
-            };
-        }
-
-        document.querySelectorAll('[data-asset]').forEach(el => {
-            resolveAssetPath(el, el.getAttribute('data-asset'));
-        });
-
-        const introVid = document.getElementById('intro-video');
-        if (introVid) {
-            const sourceEl = introVid.querySelector('source');
-            sourceEl.addEventListener('error', function() {
-                if (!introVid.dataset.retried) {
-                    introVid.dataset.retried = "true";
-                    sourceEl.src = "../intro.mp4";
-                    introVid.poster = "../logo.jpeg";
-                    introVid.load();
-                    introVid.play().catch(()=>{});
-                }
-            });
-        }
-
-        function toggleIntroSound() {
-            const v = document.getElementById('intro-video');
-            const btn = document.getElementById('sound-toggle-btn');
-            v.muted = !v.muted;
-            btn.innerHTML = v.muted 
-                ? '<i class="fas fa-volume-mute"></i> Sesi Aç' 
-                : '<i class="fas fa-volume-up"></i> Sesi Kapat';
-        }
-
-        function initScreenshotsGallery() {
-            const track = document.getElementById('screenshots-track');
-            track.innerHTML = '';
-            const maxCheck = 15;
-
-            for (let i = 1; i <= maxCheck; i++) {
-                const fileName = `ek${i}.png`;
-                const frame = document.createElement('div');
-                frame.className = 'phone-frame';
-                frame.style.display = 'none';
-
-                const notch = document.createElement('div');
-                notch.className = 'phone-notch';
-
-                const img = document.createElement('img');
-                img.alt = `AZİMUT Pro Ekran Görüntüsü ${i}`;
-                img.loading = 'lazy';
-                img.src = fileName;
-
-                img.onload = function() {
-                    frame.style.display = 'block';
-                };
-                img.onerror = function() {
-                    if (!this.dataset.triedParent) {
-                        this.dataset.triedParent = 'true';
-                        this.src = `../${fileName}`;
-                    } else {
-                        frame.remove();
-                    }
-                };
-
-                const cap = document.createElement('div');
-                cap.className = 'phone-caption';
-                cap.innerText = SCREENSHOT_CAPTIONS[i - 1] || `AZİMUT Pro Saha Görünümü #${i}`;
-
-                frame.onclick = () => openLightbox(img.src);
-                frame.appendChild(notch);
-                frame.appendChild(img);
-                frame.appendChild(cap);
-                track.appendChild(frame);
-            }
-        }
-
-        function scrollGallery(amount) {
-            document.getElementById('screenshots-track').scrollBy({ left: amount, behavior: 'smooth' });
+        function closeMobileNav() {
+            document.getElementById('nav-links').classList.remove('open');
         }
 
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
-            document.getElementById('lightbox-modal').classList.add('show');
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').classList.remove('show');
+            document.getElementById('lightbox').classList.add('show');
         }
 
         // ============================================================================
-        // 3. FIREBASE BAĞLANTISI VE SIKI YÖNETİCİ KİMLİK DOĞRULAMASI (SADECE BURAK TONOZ)
+        // 2. TELEFON EKRAN GÖRÜNTÜLERİ (ek1.png - ek7.png) VİTRİN VE GALERİ SİSTEMİ
+        // ============================================================================
+        const PHONE_SCREENS = [
+            { file: "ek1.png", title: "1/7 • Canlı ITRF96 / WGS84 Ölçüm Ekranı" },
+            { file: "ek2.png", title: "2/7 • TKGM Kadastro Parsel Katmanı" },
+            { file: "ek3.png", title: "3/7 • Sesli & Pusulalı Aplikasyon Radarı" },
+            { file: "ek4.png", title: "4/7 • Uydu Harita Altlıkları & Katmanlar" },
+            { file: "ek5.png", title: "5/7 • Proje Klasörleri & NCN/DXF/KML Çıktı" },
+            { file: "ek6.png", title: "6/7 • Alan (m² / Dekar) ve Mesafe Ölçümü" },
+            { file: "ek7.png", title: "7/7 • Jeodezik Dönüştürücü & Ayarlar" }
+        ];
+
+        let currentHeroSlide = 0;
+        let heroSlideTimer = null;
+
+        function setSmartImgSrc(imgEl, fileName) {
+            imgEl.dataset.retried = "";
+            imgEl.onerror = function() {
+                if (!this.dataset.retried) {
+                    this.dataset.retried = "1";
+                    this.src = "../" + fileName;
+                } else {
+                    this.src = "logo.jpeg";
+                }
+            };
+            imgEl.src = fileName;
+        }
+
+        function initHeroPhone() {
+            const dotsWrap = document.getElementById('hero-phone-dots');
+            dotsWrap.innerHTML = PHONE_SCREENS.map((_, idx) => 
+                `<button class="phone-dot ${idx === 0 ? 'active' : ''}" onclick="goToHeroSlide(${idx})" aria-label="Ekran ${idx+1}"></button>`
+            ).join('');
+
+            updateHeroPhoneView();
+            startHeroAutoSlide();
+        }
+
+        function updateHeroPhoneView() {
+            const item = PHONE_SCREENS[currentHeroSlide];
+            const imgEl = document.getElementById('hero-phone-img');
+            const capEl = document.getElementById('hero-phone-caption');
+            setSmartImgSrc(imgEl, item.file);
+            capEl.innerText = item.title;
+
+            document.querySelectorAll('#hero-phone-dots .phone-dot').forEach((d, idx) => {
+                d.classList.toggle('active', idx === currentHeroSlide);
+            });
+        }
+
+        function changeHeroSlide(dir) {
+            currentHeroSlide = (currentHeroSlide + dir + PHONE_SCREENS.length) % PHONE_SCREENS.length;
+            updateHeroPhoneView();
+            startHeroAutoSlide();
+        }
+
+        function goToHeroSlide(idx) {
+            currentHeroSlide = idx;
+            updateHeroPhoneView();
+            startHeroAutoSlide();
+        }
+
+        function startHeroAutoSlide() {
+            if (heroSlideTimer) clearInterval(heroSlideTimer);
+            heroSlideTimer = setInterval(() => {
+                currentHeroSlide = (currentHeroSlide + 1) % PHONE_SCREENS.length;
+                updateHeroPhoneView();
+            }, 4500);
+        }
+
+        function switchPhoneMode(mode) {
+            const imgEl = document.getElementById('hero-phone-img');
+            const vidEl = document.getElementById('hero-phone-video');
+            const ctrlEl = document.getElementById('phone-screen-controls');
+            const dotsEl = document.getElementById('hero-phone-dots');
+            const btnScreens = document.getElementById('mode-screens-btn');
+            const btnVideo = document.getElementById('mode-video-btn');
+
+            if (mode === 'video') {
+                if (heroSlideTimer) clearInterval(heroSlideTimer);
+                imgEl.style.display = 'none';
+                ctrlEl.style.display = 'none';
+                dotsEl.style.display = 'none';
+                vidEl.style.display = 'block';
+                vidEl.play().catch(() => {});
+                btnScreens.classList.remove('active');
+                btnVideo.classList.add('active');
+            } else {
+                vidEl.pause();
+                vidEl.style.display = 'none';
+                imgEl.style.display = 'block';
+                ctrlEl.style.display = 'flex';
+                dotsEl.style.display = 'flex';
+                btnVideo.classList.remove('active');
+                btnScreens.classList.add('active');
+                startHeroAutoSlide();
+            }
+        }
+
+        function initPhoneGallery() {
+            const carousel = document.getElementById('phone-carousel');
+            carousel.innerHTML = '';
+
+            PHONE_SCREENS.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'mini-phone-card';
+
+                const notch = document.createElement('div');
+                notch.className = 'mini-phone-notch';
+
+                const img = document.createElement('img');
+                img.alt = item.title;
+                img.loading = 'lazy';
+                setSmartImgSrc(img, item.file);
+
+                const title = document.createElement('div');
+                title.className = 'mini-phone-title';
+                title.innerText = item.title;
+
+                card.onclick = () => openLightbox(img.src);
+                card.appendChild(notch);
+                card.appendChild(img);
+                card.appendChild(title);
+                carousel.appendChild(card);
+            });
+        }
+
+        // ============================================================================
+        // 3. FIREBASE VE KATEGORİLİ / SAYFALAMALI BLOG SİSTEMİ
         // ============================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBI0jB3Ouiz2pB5jz4eXLc30PnCkInqlYk",
@@ -1650,21 +1933,21 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const provider = new firebase.auth.GoogleAuthProvider();
-
-        // SADECE BU E-POSTA ADRESİ MAKALE YAZABİLİR, DÜZENLEYEBİLİR VEYA SİLEBİLİR
         const AUTHORIZED_ADMIN_EMAIL = "buraktonoz@gmail.com";
 
         function isStrictAdmin() {
             const user = auth.currentUser;
-            return Boolean(
-                user &&
-                user.email &&
-                user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL &&
-                user.emailVerified === true
-            );
+            return Boolean(user && user.email && user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL && user.emailVerified);
         }
 
-        // Google Botlarının İlk Taramada Hemen İndekslemesi İçin Gömülü SEO Makaleleri
+        const CATEGORIES = [
+            "Tümü",
+            "Jeodezi & Projeksiyon",
+            "Saha Aplikasyonu",
+            "Kadastro & TKGM",
+            "CAD & Yazılım"
+        ];
+
         const DEFAULT_SEO_ARTICLES = [
             {
                 id: "itrf96-ed50-wgs84-koordinat-donusumu-rehberi",
@@ -1675,20 +1958,16 @@
                 date: "27 Ekim 2026",
                 readTime: "5 dk okuma",
                 author: "Burak Tonoz",
-                summary: "Türkiye'de harita ve kadastro projelerinde kullanılan TUREF / ITRF96 (3° TM), ED50 ve WGS84 koordinat sistemleri arasındaki farklar, Dilim Orta Meridyeni (DOM) seçimi ve AZİMUT Pro ile anlık dönüşüm.",
-                keywords: "ITRF96 koordinat dönüştürücü, ED50 ITRF çevirici, DOM 33, Gauss Kruger 3 derece, telefondan ITRF koordinat alma",
+                summary: "Türkiye'de harita ve kadastro projelerinde kullanılan TUREF / ITRF96 (3° TM), ED50 ve WGS84 koordinat sistemleri arasındaki farklar, Dilim Orta Meridyeni (DOM) seçimi ve anlık dönüşüm.",
+                keywords: "ITRF96 koordinat dönüştürücü, ED50 ITRF çevirici, DOM 33, Gauss Kruger 3 derece",
                 content: `
                     <p>Harita, inşaat, orman ve kadastro mühendislerinin sahada en sık karşılaştığı problemlerden biri; küresel konumlama uydularından (GNSS/GPS) gelen <b>WGS84 Coğrafi (Enlem ve Boylam)</b> verilerinin, Türkiye'deki resmi projelerde kullanılan <b>ITRF96 (3° Transverse Mercator)</b> veya eski paftalardaki <b>ED50</b> sistemine hatasız dönüştürülmesidir.</p>
                     <h2>1. Neden WGS84 ile ITRF96 Arasında Projeksiyon Dönüşümü Gerekir?</h2>
-                    <p>Akıllı telefonlarımızdaki GPS çipleri konumumuzu derece-dakika-saniye veya ondalık derece cinsinden (Örn: 39.92077° Kuzey, 32.85411° Doğu) verir. Ancak imar planları, kadastro paftaları, şantiye aplikasyon krokileri ve NetCAD/AutoCAD projeleri metre tabanlı <b>Sağa (Y)</b> ve <b>Yukarı (X)</b> koordinatlarla çalışır.</p>
+                    <p>Akıllı telefonlarımızdaki GPS çipleri konumumuzu derece-dakika-saniye veya ondalık derece cinsinden verir. Ancak imar planları, kadastro paftaları, şantiye aplikasyon krokileri ve NetCAD/AutoCAD projeleri metre tabanlı <b>Sağa (Y)</b> ve <b>Yukarı (X)</b> koordinatlarla çalışır.</p>
                     <h2>2. Dilim Orta Meridyeni (DOM) Nedir ve Nasıl Seçilir?</h2>
-                    <p>Türkiye, 3 derecelik Gauss-Krüger projeksiyon sisteminde <b>27°, 30°, 33°, 36°, 39°, 42° ve 45°</b> olmak üzere 7 farklı dilim orta meridyenine ayrılmıştır. Örneğin Ankara ve İç Anadolu bölgesinde çalışırken <b>DOM 33°</b> kullanılırken, İstanbul ve Batı Anadolu'da <b>DOM 30°</b> veya <b>27°</b> kullanılır.</p>
-                    <ul>
-                        <li><b>Otomatik DOM Algılama:</b> AZİMUT Pro, bulunduğunuz boylamı anlık analiz ederek en yakın 3° veya 6° dilimi otomatik seçer.</li>
-                        <li><b>Manuel DOM Kilitleme:</b> Dilim sınırındaki şantiyelerde projeyle birebir uyum için sol menüden DOM değerini sabitleyebilirsiniz.</li>
-                    </ul>
+                    <p>Türkiye, 3 derecelik Gauss-Krüger projeksiyon sisteminde <b>27°, 30°, 33°, 36°, 39°, 42° ve 45°</b> olmak üzere 7 farklı dilim orta meridyenine ayrılmıştır. Örneğin Ankara ve İç Anadolu bölgesinde çalışırken <b>DOM 33°</b> kullanılırken, İstanbul ve Batı Anadolu'da <b>DOM 30°</b> kullanılır.</p>
                     <h2>3. Hassas Epok Ortalaması ile Mobil GPS Doğruluğunu Artırma</h2>
-                    <p>Tek bir anlık GPS okuması atmosferik gecikmeler veya bina yansımaları (multipath) sebebiyle sapma gösterebilir. <b>AZİMUT Pro</b> içerisindeki <i>Hassas Ortalama (Epok)</i> modu, 10 veya 20 saniye boyunca alınan okumaları ağırlıklı ortalamaya tabi tutarak RMS hatasını minimize eder ve saha çalışmalarınızda maksimum güvenilirlik sağlar.</p>
+                    <p>Tek bir anlık GPS okuması atmosferik gecikmeler veya bina yansımaları sebebiyle sapma gösterebilir. <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> içerisindeki Hassas Ortalama (Epok) modu, 10 veya 20 saniye boyunca alınan okumaları ağırlıklı ortalamaya tabi tutarak RMS hatasını minimize eder.</p>
                 `
             },
             {
@@ -1701,19 +1980,13 @@
                 readTime: "4 dk okuma",
                 author: "Burak Tonoz",
                 summary: "Uydu görüntüsü üzerinde resmi TKGM parsel sınırlarını canlı görüntüleme ve arazide kayıp parsel köşelerini pusula radarı ve sesli yönlendirmeyle bulma rehberi.",
-                keywords: "TKGM parsel sorgulama, haritada parsel sınırları, nokta aplikasyonu, stakeout programı, parsel köşesi bulma",
+                keywords: "TKGM parsel sorgulama, haritada parsel sınırları, nokta aplikasyonu, stakeout programı",
                 content: `
-                    <p>Arazide bir parselin sınırlarını kontrol ederken veya kamulaştırma, orman kadastrosu ve şantiye sınır tespitlerinde sadece koordinat görmek yetmez; uydu görüntüsü üzerinde <b>kadastro parsel sınırlarını</b> canlı olarak görmek mühendise büyük bir hız kazandırır.</p>
+                    <p>Arazide bir parselin sınırlarını kontrol ederken veya kamulaştırma, orman kadastrosu ve şantiye sınır tespitlerinde sadece koordinat görmek yetmez; uydu görüntüsü üzerinde <b>kadastro parsel sınırlarını</b> canlı olarak görmek büyük hız kazandırır.</p>
                     <h2>1. Uydu Haritası Üzerinde TKGM Parsellerini Açma</h2>
-                    <p><b>AZİMUT Pro</b> alt menüsünde yer alan <b>Katmanlar</b> butonuna dokunduğunuzda; Google Hybrid, Esri World Imagery, Topoğrafik Harita (Eşyükselti eğrili) ve OpenStreetMap seçeneklerinin hemen altında <b>TKGM Kadastro Parselleri</b> anahtarını göreceksiniz.</p>
-                    <p>Bu özelliği aktif ettiğiniz anda, haritayı kaydırdığınız her yerde güncel parsel sınırları şeffaf bir katman olarak uydu görüntüsünün üzerine biner. Üstelik Service Worker önbellekleme teknolojisi sayesinde, ofiste incelediğiniz bölgenin parsel çizgileri arazide internetiniz zayıflasa bile cihaz hafızasından yüklenmeye devam eder.</p>
+                    <p><b>AZİMUT Pro</b> alt menüsünde yer alan Katmanlar butonuna dokunduğunuzda; Google Hybrid, Esri World Imagery ve OpenStreetMap seçeneklerinin hemen altında <b>TKGM Kadastro Parselleri</b> anahtarını aktif edebilirsiniz.</p>
                     <h2>2. Canlı Nokta Aplikasyonu (Stakeout) Nasıl Çalışır?</h2>
-                    <p>Elinizdeki bir koordinatı (veya NCN/KML dosyasından içe aktardığınız parsel köşesini) arazide bulmak için noktanın yanındaki <b>Hedef (Aplikasyon)</b> simgesine basmanız yeterlidir:</p>
-                    <ul>
-                        <li><b>Pusula Radarı:</b> Telefonunuzun manyetik pusula sensörüyle entegre çalışan ok, yürümeniz gereken yönü (Örn: <i>Düz İleri Git, Hafif Sağa İlerle</i>) canlı gösterir.</li>
-                        <li><b>Doğu (+Y) / Kuzey (+X) Farkları:</b> Hedefe ulaşmak için doğuya veya kuzeye kaç santimetre kaldığını anlık hesaplar.</li>
-                        <li><b>Sesli Bip ve Titreşim:</b> Noktaya yaklaştıkça hızlanan sesli uyarı sayesinde ekrana bakmadan bile hedef kazık noktasına ulaşabilirsiniz.</li>
-                    </ul>
+                    <p>Elinizdeki bir koordinatı arazide bulmak için noktanın yanındaki Hedef (Aplikasyon) simgesine basmanız yeterlidir. Pusula radarı, Doğu/Kuzey santimetre farkları ve sesli bip frekansı sizi doğrudan hedefe götürür.</p>
                 `
             },
             {
@@ -1726,33 +1999,27 @@
                 readTime: "4 dk okuma",
                 author: "Burak Tonoz",
                 summary: "Arazide cep telefonuyla alınan poligon, röper, direk ve sınır noktalarını ofisteki NetCAD veya AutoCAD yazılımlarına saniyeler içinde aktarma yöntemleri.",
-                keywords: "NetCAD NCN dosya formatı, AutoCAD DXF koordinat aktarma, KML koordinat dönüştürme, CSV Excel koordinat",
+                keywords: "NetCAD NCN dosya formatı, AutoCAD DXF koordinat aktarma, KML koordinat dönüştürme",
                 content: `
-                    <p>Saha çalışmasının en kritik aşaması, arazide toplanan röper, poligon, elektrik direği, altyapı vanası veya bina köşesi noktalarının ofisteki CAD yazılımlarına sıfır hatayla aktarılmasıdır. Elle koordinat yazmak hem zaman kaybettirir hem de hatalı giriş riskini artırır.</p>
+                    <p>Saha çalışmasının en kritik aşaması, arazide toplanan noktaların ofisteki CAD yazılımlarına sıfır hatayla aktarılmasıdır.</p>
                     <h2>1. Tek Tıkla 6 Farklı Mühendislik Formatında Çıktı</h2>
-                    <p><b>AZİMUT Pro</b> içerisindeki <i>Projeler & Noktalar</i> yöneticisi, her şantiyeniz için ayrı klasörler oluşturmanıza ve bu klasörleri şu 6 standart formatta dışa aktarmanıza olanak tanır:</p>
-                    <ul>
-                        <li><b>NetCAD (.ncn):</b> Nokta Adı, Sağa (Y), Yukarı (X), Kot (Z) ve Nokta Kodu dizilimiyle NetCAD'de doğrudan açılır.</li>
-                        <li><b>AutoCAD (.dxf):</b> Noktaları ve nokta isimlerini ayrı katmanlarda (Layer) çizim objesi olarak AutoCAD ve Civil 3D'ye taşır.</li>
-                        <li><b>Google Earth (.kml):</b> Tüm saha notlarınız ve koordinat tablolarınızla birlikte 3 boyutlu küre üzerinde incelenmesini sağlar.</li>
-                        <li><b>Excel (.csv) & Metin (.txt) & GeoJSON:</b> CBS (QGIS, ArcGIS) ve hakediş tabloları için hazır veri seti üretir.</li>
-                    </ul>
-                    <h2>2. Mevcut Projeleri Telefona İçe Aktarma (Import)</h2>
-                    <p>Sadece veri indirmekle kalmayıp; ofiste hazırladığınız <b>.ncn, .kml, .csv, .txt veya .geojson</b> dosyalarını da AZİMUT Pro'ya tek dokunuşla yükleyebilir, yüzlerce noktayı harita üzerinde görerek anında aplikasyona başlayabilirsiniz.</p>
+                    <p><b>AZİMUT Pro</b> içerisindeki Projeler yöneticisi ile tüm noktalarınızı NetCAD (.ncn), AutoCAD (.dxf), Google Earth (.kml), Excel (.csv) ve GeoJSON formatlarında doğrudan indirebilirsiniz.</p>
                 `
             }
         ];
 
-        const LOCAL_ARTICLES_KEY = 'azimut_pro_blog_articles_v1';
+        const LOCAL_STORAGE_KEY = 'azimut_pro_blog_articles_v2';
         let articlesList = [];
         let activeCategory = 'Tümü';
+        let currentPage = 1;
+        const ARTICLES_PER_PAGE = 6;
         let currentOpenArticle = null;
 
         function loadArticles() {
             try {
-                const saved = localStorage.getItem(LOCAL_ARTICLES_KEY);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
+                const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         articlesList = parsed;
                     }
@@ -1762,23 +2029,23 @@
             if (articlesList.length === 0) {
                 articlesList = [...DEFAULT_SEO_ARTICLES];
             }
+            renderCategoryTabs();
             renderArticles();
             checkUrlForArticleSlug();
 
             db.collection('azimut_articles').orderBy('timestamp', 'desc').get()
                 .then(snapshot => {
                     if (!snapshot.empty) {
-                        const cloudArticles = [];
-                        snapshot.forEach(doc => {
-                            cloudArticles.push({ id: doc.id, ...doc.data() });
-                        });
+                        const cloud = [];
+                        snapshot.forEach(doc => cloud.push({ id: doc.id, ...doc.data() }));
                         const map = new Map();
-                        cloudArticles.forEach(a => map.set(a.id, a));
+                        cloud.forEach(a => map.set(a.id, a));
                         DEFAULT_SEO_ARTICLES.forEach(a => {
                             if (!map.has(a.id)) map.set(a.id, a);
                         });
                         articlesList = Array.from(map.values());
-                        localStorage.setItem(LOCAL_ARTICLES_KEY, JSON.stringify(articlesList));
+                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(articlesList));
+                        renderCategoryTabs();
                         renderArticles();
                         checkUrlForArticleSlug();
                     }
@@ -1786,67 +2053,156 @@
                 .catch(() => {});
         }
 
-        function filterArticles(cat, btnEl) {
+        function renderCategoryTabs() {
+            const wrap = document.getElementById('category-tabs');
+            wrap.innerHTML = CATEGORIES.map(cat => {
+                const count = cat === 'Tümü' 
+                    ? articlesList.length 
+                    : articlesList.filter(a => a.category === cat).length;
+                const isActive = activeCategory === cat ? 'active' : '';
+                return `
+                    <button class="tab-btn ${isActive}" onclick="selectCategory('${escapeHtml(cat)}')">
+                        <span>${escapeHtml(cat)}</span>
+                        <span class="tab-count">${count}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectCategory(cat) {
             activeCategory = cat;
-            document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-            if (btnEl) btnEl.classList.add('active');
+            currentPage = 1;
+            renderCategoryTabs();
             renderArticles();
         }
 
-        function renderArticles() {
-            const grid = document.getElementById('articles-grid');
-            const query = (document.getElementById('article-search')?.value || '').toLowerCase().trim();
-            const adminAuthorized = isStrictAdmin();
+        function onSearchInput() {
+            currentPage = 1;
+            renderArticles();
+        }
 
-            let filtered = articlesList.filter(a => {
+        function getFilteredArticles() {
+            const query = (document.getElementById('article-search')?.value || '').toLowerCase().trim();
+            return articlesList.filter(a => {
                 const matchCat = (activeCategory === 'Tümü') || (a.category === activeCategory);
-                const matchQuery = !query || 
-                    (a.title && a.title.toLowerCase().includes(query)) || 
-                    (a.summary && a.summary.toLowerCase().includes(query)) || 
+                const matchQuery = !query ||
+                    (a.title && a.title.toLowerCase().includes(query)) ||
+                    (a.summary && a.summary.toLowerCase().includes(query)) ||
                     (a.keywords && a.keywords.toLowerCase().includes(query));
                 return matchCat && matchQuery;
             });
+        }
+
+        function renderArticles() {
+            const featuredBox = document.getElementById('featured-article-container');
+            const grid = document.getElementById('articles-grid');
+            const pagination = document.getElementById('pagination-bar');
+            const query = (document.getElementById('article-search')?.value || '').trim();
+            const adminAuthorized = isStrictAdmin();
+
+            const filtered = getFilteredArticles();
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px 20px; color:var(--text-muted);">Aradığınız kriterlere uygun makale bulunamadı.</div>`;
+                featuredBox.innerHTML = '';
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:48px 20px; color:var(--text-muted); background:var(--bg-card); border-radius:16px; border:1px solid var(--border-subtle);">Aradığınız kriterlere uygun makale bulunamadı.</div>`;
+                pagination.innerHTML = '';
                 return;
             }
 
-            grid.innerHTML = filtered.map(art => {
+            // Eğer 1. sayfadaysak ve arama yapılmıyorsa en son makaleyi "Vitrin (Featured)" olarak üstte göster
+            let listForGrid = filtered;
+            if (currentPage === 1 && !query && filtered.length > 1) {
+                const feat = filtered[0];
+                listForGrid = filtered.slice(1);
+                featuredBox.innerHTML = `
+                    <article class="featured-card" onclick="openArticleReader('${escapeHtml(feat.id)}')">
+                        <div class="featured-img-wrap">
+                            <span class="featured-badge"><i class="fas fa-bolt"></i> SON YAYINLANAN REHBER</span>
+                            <img src="${escapeHtml(feat.image || 'ek1.png')}" alt="${escapeHtml(feat.title)}" onerror="if(!this.dataset.r){this.dataset.r=1;this.src='../'+this.getAttribute('src');}else{this.src='logo.jpeg';}">
+                        </div>
+                        <div class="featured-info">
+                            <div class="article-meta">
+                                <span class="article-cat">${escapeHtml(feat.category)}</span>
+                                <span>${escapeHtml(feat.date)} • ${escapeHtml(feat.readTime || '4 dk okuma')}</span>
+                            </div>
+                            <h3>${escapeHtml(feat.title)}</h3>
+                            <p>${escapeHtml(feat.summary)}</p>
+                            <div>
+                                <span class="read-btn" style="font-size:0.9rem;">Rehberi Oku <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            } else {
+                featuredBox.innerHTML = '';
+            }
+
+            const totalPages = Math.max(1, Math.ceil(listForGrid.length / ARTICLES_PER_PAGE));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const startIdx = (currentPage - 1) * ARTICLES_PER_PAGE;
+            const pageItems = listForGrid.slice(startIdx, startIdx + ARTICLES_PER_PAGE);
+
+            grid.innerHTML = pageItems.map(art => {
                 const safeId = escapeHtml(art.id);
                 const safeTitle = escapeHtml(art.title);
                 const safeSummary = escapeHtml(art.summary);
                 const safeCat = escapeHtml(art.category);
                 const safeDate = escapeHtml(art.date);
-                const safeImg = escapeHtml(art.image || 'logo.jpeg');
+                const safeImg = escapeHtml(art.image || 'ek1.png');
                 const safeReadTime = escapeHtml(art.readTime || '4 dk okuma');
 
                 return `
-                <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
-                    <img src="${safeImg}" alt="${safeTitle}" class="article-thumb" itemprop="image" onerror="if(!this.dataset.r){this.dataset.r=1;this.src='../'+(this.getAttribute('src'));}else{this.src='logo.jpeg';}">
+                <article class="article-card" onclick="openArticleReader('${safeId}')">
+                    <div class="article-thumb-wrap">
+                        <img src="${safeImg}" alt="${safeTitle}" class="article-thumb" loading="lazy" onerror="if(!this.dataset.r){this.dataset.r=1;this.src='../'+this.getAttribute('src');}else{this.src='logo.jpeg';}">
+                    </div>
                     <div class="article-body">
                         <div class="article-meta">
-                            <span class="article-tag">${safeCat}</span>
-                            <span itemprop="datePublished">${safeDate}</span>
+                            <span class="article-cat">${safeCat}</span>
+                            <span>${safeDate}</span>
                         </div>
-                        <h3 class="article-title" itemprop="headline">${safeTitle}</h3>
-                        <p class="article-summary" itemprop="description">${safeSummary}</p>
+                        <h3 class="article-title">${safeTitle}</h3>
+                        <p class="article-summary">${safeSummary}</p>
                         <div class="article-footer">
-                            <button class="read-more-btn" onclick="openArticleReader('${safeId}')">
-                                Devamını Oku <i class="fas fa-arrow-right"></i>
-                            </button>
+                            <span class="read-btn">Devamını Oku <i class="fas fa-arrow-right"></i></span>
                             ${adminAuthorized ? `
-                                <div class="admin-card-actions">
-                                    <button class="admin-icon-btn" title="Düzenle" onclick="editArticle('${safeId}')"><i class="fas fa-edit" style="color:var(--accent);"></i></button>
-                                    <button class="admin-icon-btn" title="Sil" onclick="deleteArticle('${safeId}')"><i class="fas fa-trash" style="color:var(--danger);"></i></button>
+                                <div style="display:flex; gap:6px;" onclick="event.stopPropagation()">
+                                    <button class="btn-secondary" style="padding:5px 9px; font-size:0.75rem;" onclick="editArticle('${safeId}')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-secondary" style="padding:5px 9px; font-size:0.75rem; color:var(--danger);" onclick="deleteArticle('${safeId}')"><i class="fas fa-trash"></i></button>
                                 </div>
-                            ` : `<span style="font-size:0.74rem; color:var(--text-muted);">${safeReadTime}</span>`}
+                            ` : `<span style="color:var(--text-muted); font-size:0.74rem;">${safeReadTime}</span>`}
                         </div>
                     </div>
                 </article>`;
             }).join('');
+
+            // Sayfalama butonları
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+            } else {
+                let buttonsHtml = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToArticlePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+                for (let p = 1; p <= totalPages; p++) {
+                    if (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2) {
+                        buttonsHtml += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goToArticlePage(${p})">${p}</button>`;
+                    } else if (Math.abs(p - currentPage) === 3) {
+                        buttonsHtml += `<span style="color:var(--text-muted); padding:0 4px;">...</span>`;
+                    }
+                }
+                buttonsHtml += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToArticlePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+                pagination.innerHTML = buttonsHtml;
+            }
         }
 
+        function goToArticlePage(page) {
+            currentPage = page;
+            renderArticles();
+            document.getElementById('makaleler').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ============================================================================
+        // 4. MAKALE OKUMA MODALI VE İLERLEME ÇUBUĞU
+        // ============================================================================
         function openArticleReader(id) {
             const art = articlesList.find(a => a.id === id || a.slug === id);
             if (!art) return;
@@ -1859,23 +2215,36 @@
             document.getElementById('reader-readtime').innerText = art.readTime || '4 dk okuma';
 
             const coverImg = document.getElementById('reader-cover');
-            coverImg.src = art.image || 'logo.jpeg';
-            coverImg.onerror = function() {
-                if (!this.dataset.retried) {
-                    this.dataset.retried = '1';
-                    this.src = '../' + (art.image || 'logo.jpeg');
-                }
-            };
+            setSmartImgSrc(coverImg, art.image || 'ek1.png');
 
             document.getElementById('reader-body').innerHTML = art.content;
-            document.getElementById('reader-modal').classList.add('show');
+
+            // Benzer 2 makale önerisi
+            const related = articlesList
+                .filter(a => a.id !== art.id && (a.category === art.category || true))
+                .slice(0, 2);
+            document.getElementById('related-articles-grid').innerHTML = related.map(r => `
+                <div class="related-item" onclick="openArticleReader('${escapeHtml(r.id)}')">
+                    <span class="article-cat" style="font-size:0.68rem;">${escapeHtml(r.category)}</span>
+                    <div style="font-weight:700; font-size:0.9rem; margin-top:6px; color:var(--text-light);">${escapeHtml(r.title)}</div>
+                </div>
+            `).join('');
+
+            const modal = document.getElementById('reader-modal');
+            modal.classList.add('show');
+            modal.scrollTop = 0;
             document.body.style.overflow = 'hidden';
 
-            document.title = `${art.title} | AZİMUT Pro Blog`;
-            const metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.setAttribute('content', art.summary);
+            document.title = `${art.title} | AZİMUT Pro`;
             const newUrl = `${window.location.pathname}?makale=${encodeURIComponent(art.slug || art.id)}`;
             window.history.pushState({ articleId: art.id }, art.title, newUrl);
+        }
+
+        function updateReadingProgress(modalEl) {
+            const scrollTop = modalEl.scrollTop;
+            const docHeight = modalEl.scrollHeight - modalEl.clientHeight;
+            const percent = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+            document.getElementById('reading-progress').style.width = percent + '%';
         }
 
         function closeArticleReader() {
@@ -1898,13 +2267,11 @@
         function checkUrlForArticleSlug() {
             const params = new URLSearchParams(window.location.search);
             const slug = params.get('makale');
-            if (slug) {
-                openArticleReader(slug);
-            }
+            if (slug) openArticleReader(slug);
         }
 
         // ============================================================================
-        // 4. SADECE buraktonoz@gmail.com İÇİN KİLİTLİ YAZAR YÖNETİM PANELİ
+        // 5. YÖNETİCİ KİMLİK DOĞRULAMA (SADECE buraktonoz@gmail.com)
         // ============================================================================
         auth.onAuthStateChanged(user => {
             const writeBtn = document.getElementById('admin-write-btn');
@@ -1912,28 +2279,17 @@
             const footerLink = document.getElementById('footer-admin-link');
             const backupItem = document.getElementById('footer-backup-item');
 
-            if (user) {
-                if (user.email && user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL && user.emailVerified) {
-                    writeBtn.style.display = 'inline-flex';
-                    logoutBtn.style.display = 'inline-flex';
-                    backupItem.style.display = 'block';
-                    footerLink.innerHTML = `<i class="fas fa-pen-nib" style="color:var(--success);"></i> Makale Editörünü Aç (${escapeHtml(user.email)})`;
-                    showSiteToast("Yönetici oturumu doğrulandı: " + user.email);
-                } else {
-                    // Yetkisiz bir Google hesabıyla giriş yapıldıysa anında oturumu kapat!
-                    const unauthorizedMail = user.email || "Bilinmeyen Hesap";
-                    auth.signOut();
-                    writeBtn.style.display = 'none';
-                    logoutBtn.style.display = 'none';
-                    backupItem.style.display = 'none';
-                    footerLink.innerHTML = `<i class="fab fa-google"></i> Yönetici Girişi (OAuth)`;
-                    showSiteToast(`Yetkisiz hesap (${unauthorizedMail})! Sadece buraktonoz@gmail.com makale yayınlayabilir.`, true);
-                }
+            if (user && user.email && user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL && user.emailVerified) {
+                writeBtn.style.display = 'inline-flex';
+                logoutBtn.style.display = 'inline-flex';
+                backupItem.style.display = 'block';
+                footerLink.innerHTML = `<i class="fas fa-pen-nib" style="color:var(--success);"></i> Makale Editörü Açık`;
             } else {
+                if (user) auth.signOut();
                 writeBtn.style.display = 'none';
                 logoutBtn.style.display = 'none';
                 backupItem.style.display = 'none';
-                footerLink.innerHTML = `<i class="fab fa-google"></i> Yönetici Girişi (OAuth)`;
+                footerLink.innerHTML = `<i class="fab fa-google"></i> Yazar Girişi`;
             }
             renderArticles();
         });
@@ -1945,24 +2301,20 @@
             }
             provider.setCustomParameters({ prompt: 'select_account' });
             auth.signInWithPopup(provider)
-                .then(result => {
-                    if (result.user && result.user.email && result.user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL && result.user.emailVerified) {
+                .then(res => {
+                    if (res.user && res.user.email && res.user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL) {
                         openArticleEditor();
                     } else {
                         auth.signOut();
-                        showSiteToast("Erişim Reddedildi: Sadece buraktonoz@gmail.com yetkilidir.", true);
+                        showSiteToast("Sadece buraktonoz@gmail.com yetkilidir.", true);
                     }
                 })
-                .catch(err => {
-                    showSiteToast("Google oturumu açılamadı: " + err.message, true);
-                });
+                .catch(err => showSiteToast("Giriş hatası: " + err.message, true));
         }
 
         function logoutAdmin() {
             closeArticleEditor();
-            auth.signOut().then(() => {
-                showSiteToast("Yönetici oturumu kapatıldı.");
-            });
+            auth.signOut().then(() => showSiteToast("Yönetici çıkışı yapıldı."));
         }
 
         function slugify(text) {
@@ -1975,7 +2327,6 @@
         }
 
         function insertTag(openTag, closeTag) {
-            if (!isStrictAdmin()) return;
             const area = document.getElementById('cms-content');
             const start = area.selectionStart;
             const end = area.selectionEnd;
@@ -1984,27 +2335,16 @@
             area.focus();
         }
 
-        function openArticleEditor(articleToEdit = null) {
-            if (!isStrictAdmin()) {
-                showSiteToast("Yetkisiz erişim! Lütfen buraktonoz@gmail.com ile giriş yapın.", true);
-                return;
-            }
+        function openArticleEditor(art = null) {
+            if (!isStrictAdmin()) return;
             document.getElementById('cms-modal').classList.add('show');
-            if (articleToEdit) {
-                document.getElementById('edit-article-id').value = articleToEdit.id;
-                document.getElementById('cms-title').value = articleToEdit.title;
-                document.getElementById('cms-category').value = articleToEdit.category;
-                document.getElementById('cms-image').value = articleToEdit.image;
-                document.getElementById('cms-summary').value = articleToEdit.summary;
-                document.getElementById('cms-content').value = articleToEdit.content;
-                document.getElementById('cms-keywords').value = articleToEdit.keywords || '';
-            } else {
-                document.getElementById('edit-article-id').value = '';
-                document.getElementById('cms-title').value = '';
-                document.getElementById('cms-summary').value = '';
-                document.getElementById('cms-content').value = '';
-                document.getElementById('cms-keywords').value = '';
-            }
+            document.getElementById('edit-article-id').value = art ? art.id : '';
+            document.getElementById('cms-title').value = art ? art.title : '';
+            document.getElementById('cms-category').value = art ? art.category : 'Jeodezi & Projeksiyon';
+            document.getElementById('cms-image').value = art ? art.image : 'ek1.png';
+            document.getElementById('cms-summary').value = art ? art.summary : '';
+            document.getElementById('cms-content').value = art ? art.content : '';
+            document.getElementById('cms-keywords').value = art ? (art.keywords || '') : '';
         }
 
         function closeArticleEditor() {
@@ -2012,34 +2352,21 @@
         }
 
         function editArticle(id) {
-            if (!isStrictAdmin()) {
-                showSiteToast("Yetkisiz işlem!", true);
-                return;
-            }
             const art = articlesList.find(a => a.id === id);
             if (art) openArticleEditor(art);
         }
 
         function deleteArticle(id) {
-            if (!isStrictAdmin()) {
-                showSiteToast("Yetkisiz işlem!", true);
-                return;
-            }
-            if (!confirm("Bu makaleyi kalıcı olarak silmek istediğinize emin misiniz?")) return;
+            if (!isStrictAdmin() || !confirm("Bu makaleyi kalıcı olarak silmek istediğinize emin misiniz?")) return;
             articlesList = articlesList.filter(a => a.id !== id);
-            localStorage.setItem(LOCAL_ARTICLES_KEY, JSON.stringify(articlesList));
-            db.collection('azimut_articles').doc(id).delete()
-                .then(() => showSiteToast("Makale buluttan silindi."))
-                .catch(err => showSiteToast("Bulut silme uyarısı: " + err.message, true));
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(articlesList));
+            db.collection('azimut_articles').doc(id).delete().then(() => showSiteToast("Makale silindi."));
+            renderCategoryTabs();
             renderArticles();
         }
 
         function saveArticle() {
-            if (!isStrictAdmin()) {
-                showSiteToast("Yetkisiz işlem! Makale kaydetmek için buraktonoz@gmail.com oturumu gereklidir.", true);
-                return;
-            }
-
+            if (!isStrictAdmin()) return;
             const title = document.getElementById('cms-title').value.trim();
             const category = document.getElementById('cms-category').value;
             const image = document.getElementById('cms-image').value.trim() || 'ek1.png';
@@ -2049,10 +2376,9 @@
             const existingId = document.getElementById('edit-article-id').value;
 
             if (!title || !summary || !rawContent) {
-                showSiteToast("Lütfen Başlık, SEO Özeti ve Makale İçeriği alanlarını doldurun.", true);
+                showSiteToast("Lütfen Başlık, Özet ve İçerik alanlarını doldurun.", true);
                 return;
             }
-
             if (!rawContent.includes('<p>') && !rawContent.includes('<h2>')) {
                 rawContent = rawContent.split(/\n\s*\n/).map(p => `<p>${p.trim()}</p>`).join('\n');
             }
@@ -2065,37 +2391,30 @@
             const newArticle = {
                 id: slug,
                 slug: slug,
-                title: title,
-                category: category,
-                image: image,
+                title,
+                category,
+                image,
                 date: nowStr,
                 readTime: `${readMins} dk okuma`,
                 author: "Burak Tonoz",
                 authorEmail: AUTHORIZED_ADMIN_EMAIL,
-                summary: summary,
-                keywords: keywords,
+                summary,
+                keywords,
                 content: rawContent,
                 timestamp: Date.now()
             };
 
             const idx = articlesList.findIndex(a => a.id === slug);
-            if (idx > -1) {
-                articlesList[idx] = newArticle;
-            } else {
-                articlesList.unshift(newArticle);
-            }
+            if (idx > -1) articlesList[idx] = newArticle;
+            else articlesList.unshift(newArticle);
 
-            localStorage.setItem(LOCAL_ARTICLES_KEY, JSON.stringify(articlesList));
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(articlesList));
             db.collection('azimut_articles').doc(slug).set(newArticle)
                 .then(() => {
                     closeArticleEditor();
+                    renderCategoryTabs();
                     renderArticles();
-                    showSiteToast("Makale başarıyla yayınlandı ve buluta kaydedildi!");
-                })
-                .catch(err => {
-                    closeArticleEditor();
-                    renderArticles();
-                    showSiteToast("Yerel olarak kaydedildi (Firestore kural iznini kontrol edin).", false);
+                    showSiteToast("Makale başarıyla yayınlandı!");
                 });
         }
 
@@ -2108,9 +2427,9 @@
             a.click();
         }
 
-        // İlk Yükleme
         window.addEventListener('DOMContentLoaded', () => {
-            initScreenshotsGallery();
+            initHeroPhone();
+            initPhoneGallery();
             loadArticles();
         });
     </script>
