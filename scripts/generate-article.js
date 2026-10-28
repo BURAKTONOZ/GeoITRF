@@ -1,17 +1,25 @@
 const { GoogleGenAI } = require('@google/genai');
-const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
-const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+if (!process.env.FIREBASE_PRIVATE_KEY) {
+  console.error("❌ HATA: FIREBASE_PRIVATE_KEY bulunamadı!");
+  process.exit(1);
+}
 
-admin.initializeApp({
-  credential: admin.credential.cert({
+const privateKey = process.env.FIREBASE_PRIVATE_KEY
+  .replace(/^"|"$/g, '')
+  .replace(/\\n/g, '\n');
+
+initializeApp({
+  credential: cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     privateKey: privateKey,
   })
 });
 
-const db = admin.firestore();
+const db = getFirestore();
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // ============================================================================
