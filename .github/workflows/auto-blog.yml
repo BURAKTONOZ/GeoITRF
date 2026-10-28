@@ -1,15 +1,12 @@
-name: Günde 3 Kez SEO Makale Üretici
+name: Günde 4 Kez SEO Makale Üretici
 
 on:
   schedule:
-    # Asıl tetikler: TR 08:07, 12:11, 17:13 (UTC 05:07, 09:11, 14:13)
-    - cron: '7 5 * * *'
-    - cron: '11 9 * * *'
-    - cron: '13 14 * * *'
-    # Yedek tetikler: asıl tetik düşerse devreye girer (script 150 dk kuralıyla çift yazımı engeller)
-    - cron: '47 5 * * *'
-    - cron: '51 9 * * *'
-    - cron: '53 14 * * *'
+    # TR 07:30, 12:30, 17:30, 22:30  (UTC 04:30, 09:30, 14:30, 19:30)
+    - cron: '30 4 * * *'
+    - cron: '30 9 * * *'
+    - cron: '30 14 * * *'
+    - cron: '30 19 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -19,7 +16,7 @@ concurrency:
 jobs:
   generate-and-publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       contents: read
       actions: write
