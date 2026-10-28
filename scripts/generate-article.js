@@ -1,23 +1,28 @@
 const { GoogleGenAI } = require('@google/genai');
-const { initializeApp, cert } = require('firebase-admin/app');
+const { initializeApp, cert, getApps } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 
-if (!process.env.FIREBASE_PRIVATE_KEY) {
-  console.error("❌ HATA: FIREBASE_PRIVATE_KEY bulunamadı!");
+// 1. Ortam Değişkenleri ve Private Key Formatlama Kontrolü
+if (!process.env.FIREBASE_PRIVATE_KEY || !process.env.GEMINI_API_KEY) {
+  console.error("❌ HATA: GitHub Secrets (FIREBASE_PRIVATE_KEY veya GEMINI_API_KEY) eksik!");
   process.exit(1);
 }
 
-const privateKey = process.env.FIREBASE_PRIVATE_KEY
+const formattedPrivateKey = process.env.FIREBASE_PRIVATE_KEY
   .replace(/^"|"$/g, '')
+  .replace(/^'|'$/g, '')
   .replace(/\\n/g, '\n');
 
-initializeApp({
-  credential: cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: privateKey,
-  })
-});
+// 2. Modüler Firebase Admin Başlatma (Node 20/22/24 Tam Uyumlu)
+if (getApps().length === 0) {
+  initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: formattedPrivateKey,
+    })
+  });
+}
 
 const db = getFirestore();
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
