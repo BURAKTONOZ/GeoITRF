@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="[http://www.sitemaps.org/schemas/sitemap/0.9](http://www.sitemaps.org/schemas/sitemap/0.9)"
+        xmlns:image="[http://www.google.com/schemas/sitemap-image/1.1](http://www.google.com/schemas/sitemap-image/1.1)">
+  <url>
+    <loc>[https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)</loc>
+    <lastmod>2026-10-30T09:26:37.371Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>[https://buraktonoz.com/azimut/logo.jpeg](https://buraktonoz.com/azimut/logo.jpeg)</image:loc>
+      <image:title>AZİMUT Pro TKGM Parsel Sorgulama ve Jeodezik Aplikasyon Terminali</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html](https://buraktonoz.com/azimut/tanitim.html)</loc>
+    <lastmod>2026-10-30T09:26:37.371Z</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>[https://buraktonoz.com/azimut/ek2.png](https://buraktonoz.com/azimut/ek2.png)</image:loc>
+      <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-30T09:26:36.382Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:title>Jeodezik Hesaplamalarda Kritik Fark: Harita Yatay Alanı ile Eğimli Arazi Yüzey Alanı Arasındaki Gizemli İlişki – AZİMUT Pro ile Net Çözümler</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-29T23:28:40.545Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Arazide Milimetrik Hassasiyet Artık Cebinizde: Mimarlar ve Peyzaj Mimarları İçin Sesli ve Pusulalı Canlı Aplikasyon (Stakeout) Radarı ile Hedefe Sıfırlama Kılavuzu</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-29T19:49:21.397Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Mimarlar ve Peyzaj Mimarları İçin Arazide GPS Doğruluğunda Devrim: Epok Ortalaması (RMS) ve AZİMUT Pro ile Milimetrik Hassasiyet</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-29T17:56:04.995Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Gece ve Sisli Şantiyelerde Güvenli Nokta Aplikasyonu: Mobil Ekran Radarıyla Riskleri Sıfırlayın</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-29T16:17:53.260Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Saha Mühendislerinin Kabusu Bitiyor: Telefon Bataryasını Koruyarak Tam Gün GPS Ölçümü İçin Pro İpuçları</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-29T06:08:56.130Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.ctfassets.net/v7wr16nrr0mz/47f4LvZKJiteFmHQM2jUaC/c28884b6e8f5783e58a99606e683336d/what-is-land-surveying-software-thumb-1172x660.jpg?fm=webp</image:loc>
+      <image:title>Arazide Hedef Noktaya Sıfırlama: Arsa, Tarla ve Bahçe Yatırımcıları İçin Sesli ve Pusulalı Canlı Aplikasyon (Stakeout) Radarı</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-28T23:23:22.235Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Jeotermal Enerjinin Kalbi: Kuyu Lokasyonu ve Koruma Alanları Aplikasyonunda Kritik Adımlar ve Saha Çözümleri</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-28T13:59:45.425Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Emlakçıların Kabusu Bitiyor: Müşteriye Yanlış Arsa Göstermeyi Sıfırlayan Mobil Harita Teknikleri</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-28T06:13:27.193Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://deu6qa9w4xg02.cloudfront.net/media/blog-kapaklari/harita-koordinatlari-nedir_tzKnoLv.webp</image:loc>
+      <image:title>Akarsu Havza Yönetimi ve Sel Kapanı: Vadilerde Koordinatla Yer Tespiti İçin Kapsamlı Bir Rehber</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-27T19:30:57.837Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Orman İçi Yol Güzergah Etüdü: Yangınla Mücadelede ve Üretimde Hassas Eğim/Koordinat Alımının Anahtarları</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-27T17:28:42.746Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Saha Ölçümlerinde Devrim: Geleneksel El GPS&apos;leri mi, Akıllı Telefon Tabanlı Terminaller mi?</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-27T17:09:53.201Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:title>ED50&apos;den ITRF96&apos;ya Cep Telefonundan Dönüşüm: Kadastro Paftalarınızı AZİMUT Pro ile Anında Güncelleyin</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-27T17:07:04.850Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:title>Elektrik Mühendisleri İçin GES Paneli Aplikasyonunda Devrim: AZİMUT Pro ile Arazide Hassas Kurulum Rehberi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-27T17:05:27.847Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://www.katilimevim.com.tr/katilimyeni/cdn/uploads/000003364_188.webp</image:loc>
+      <image:title>Aldığınız Arsanın Sınırlarını Telefonunuzdan Anında Bulun: TKGM Verileri ve AZİMUT Pro ile Kesin Çözüm!</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <lastmod>2026-10-27T12:57:33.425Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:title>Saha Aplikasyonu (Stakeout) Nedir ve Nasıl Yapılır? Cep Telefonuyla Adım Adım Nokta Aplikasyonu Rehberi</image:title>
+    </image:image>
+  </url>
+</urlset>
