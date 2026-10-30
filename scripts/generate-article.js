@@ -109,7 +109,7 @@ async function buildSitemapAndRobots() {
       id: doc.id,
       slug: d.slug || doc.id,
       title: d.title || 'AZİMUT Pro Mühendislik Rehberi',
-      image: d.image || '[https://buraktonoz.com/azimut/logo.jpeg](https://buraktonoz.com/azimut/logo.jpeg)',
+      image: d.image || 'https://buraktonoz.com/azimut/logo.jpeg',
       timestamp: Number(d.timestamp) || Date.now()
     });
   });
@@ -118,29 +118,29 @@ async function buildSitemapAndRobots() {
 
   const nowIso = new Date().toISOString();
   let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-  sitemap += `<urlset xmlns="[http://www.sitemaps.org/schemas/sitemap/0.9](http://www.sitemaps.org/schemas/sitemap/0.9)"\n`;
-  sitemap += `        xmlns:image="[http://www.google.com/schemas/sitemap-image/1.1](http://www.google.com/schemas/sitemap-image/1.1)">\n`;
+  sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+  sitemap += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
 
   // 1. Ana Uygulama Terminali
   sitemap += `  <url>\n`;
-  sitemap += `    <loc>[https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)</loc>\n`;
+  sitemap += `    <loc>https://buraktonoz.com/azimut/</loc>\n`;
   sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
   sitemap += `    <changefreq>daily</changefreq>\n`;
   sitemap += `    <priority>1.0</priority>\n`;
   sitemap += `    <image:image>\n`;
-  sitemap += `      <image:loc>[https://buraktonoz.com/azimut/logo.jpeg](https://buraktonoz.com/azimut/logo.jpeg)</image:loc>\n`;
+  sitemap += `      <image:loc>https://buraktonoz.com/azimut/logo.jpeg</image:loc>\n`;
   sitemap += `      <image:title>AZİMUT Pro TKGM Parsel Sorgulama ve Jeodezik Aplikasyon Terminali</image:title>\n`;
   sitemap += `    </image:image>\n`;
   sitemap += `  </url>\n`;
 
   // 2. Tanıtım ve Mühendislik Blog Portalı
   sitemap += `  <url>\n`;
-  sitemap += `    <loc>[https://buraktonoz.com/azimut/tanitim.html](https://buraktonoz.com/azimut/tanitim.html)</loc>\n`;
+  sitemap += `    <loc>https://buraktonoz.com/azimut/tanitim.html</loc>\n`;
   sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
   sitemap += `    <changefreq>hourly</changefreq>\n`;
   sitemap += `    <priority>1.0</priority>\n`;
   sitemap += `    <image:image>\n`;
-  sitemap += `      <image:loc>[https://buraktonoz.com/azimut/ek2.png](https://buraktonoz.com/azimut/ek2.png)</image:loc>\n`;
+  sitemap += `      <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>\n`;
   sitemap += `      <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>\n`;
   sitemap += `    </image:image>\n`;
   sitemap += `  </url>\n`;
@@ -148,11 +148,11 @@ async function buildSitemapAndRobots() {
   // 3. Tüm Dinamik Makale URL'leri
   for (const art of allArticles) {
     const safeSlug = encodeURIComponent(art.slug);
-    const artUrl = `[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}`;
+    const artUrl = `https://buraktonoz.com/azimut/tanitim.html?makale=${safeSlug}`;
     const isoDate = new Date(art.timestamp).toISOString();
     const fullImgUrl = art.image.startsWith('http')
       ? art.image
-      : `[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^\.\//, '')}`;
+      : `https://buraktonoz.com/azimut/${art.image.replace(/^\.\//, '')}`;
 
     sitemap += `  <url>\n`;
     sitemap += `    <loc>${escapeXml(artUrl)}</loc>\n`;
@@ -173,7 +173,7 @@ async function buildSitemapAndRobots() {
     "User-agent: *",
     "Allow: /",
     "",
-    "Sitemap: [https://buraktonoz.com/azimut/sitemap.xml](https://buraktonoz.com/azimut/sitemap.xml)"
+    "Sitemap: https://buraktonoz.com/azimut/sitemap.xml"
   ].join('\n');
   fs.writeFileSync('robots.txt', robotsTxt, 'utf8');
 
@@ -185,60 +185,60 @@ async function buildSitemapAndRobots() {
 // ============================================================================
 const REAL_STOCK_PHOTOS = {
   surveying: [
-    "[https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80)"
+    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80"
   ],
   construction: [
-    "[https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80)"
+    "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80"
   ],
   land: [
-    "[https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80)"
+    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80"
   ],
   forestry: [
-    "[https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80)"
+    "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80"
   ],
   energy: [
-    "[https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80)"
+    "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80"
   ],
   cad_gis: [
-    "[https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80)",
-    "[https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80)"
+    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80"
   ]
 };
 
@@ -625,6 +625,25 @@ function getStockPhotoForTheme(theme, usedImagesSet) {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+// Gemini 503 (yoğunluk) gibi geçici hatalara karşı tekrar deneme + yedek model
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+async function generateWithRetry(params) {
+  const MAX_ATTEMPTS = 6;
+  let lastErr;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const model = attempt <= 3 ? params.model : 'gemini-2.5-flash-lite';
+    try {
+      console.log(`🤖 Deneme ${attempt}/${MAX_ATTEMPTS} (${model})...`);
+      return await ai.models.generateContent({ ...params, model });
+    } catch (err) {
+      lastErr = err;
+      console.warn(`⚠️ Deneme ${attempt} başarısız: ${String(err && err.message ? err.message : err).slice(0, 160)}`);
+      if (attempt < MAX_ATTEMPTS) await sleep(attempt * 10000);
+    }
+  }
+  throw lastErr;
+}
+
 async function runAutoBlogger() {
   try {
     console.log(`📚 Toplam SEO Konu Havuzu Kapasitesi: ${TOPIC_POOL.length} benzersiz konu.`);
@@ -652,7 +671,7 @@ async function runAutoBlogger() {
 
     const inlineAppScreen = `ek${Math.floor(Math.random() * 7) + 1}.png`;
 
-    const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve CBS Mühendisisin. Aynı zamanda AZİMUT Pro ([https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)) jeodezik mobil el terminalinin baş teknik yazarısın.
+    const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve CBS Mühendisisin. Aynı zamanda AZİMUT Pro (https://buraktonoz.com/azimut/) jeodezik mobil el terminalinin baş teknik yazarısın.
 
 GÖREVİN: Sadece aşağıda verilen "SEÇİLEN KONU" üzerine Google aramalarında 1. sıraya ve "Featured Snippet" (0. Sıra Özet Kutusu) alanına çıkacak, son derece kapsamlı (en az 850-1100 kelime), teknik açıdan doyurucu, akıcı ve tamamen özgün bir Türkçe SEO makalesi yazmak.
 
@@ -666,16 +685,16 @@ YAZIM VE TEKNİK SEO KURALLARI:
    - En az 4 adet <h2> alt başlığı ve gerekli yerlerde <h3> alt başlıkları kullan.
    - Madde işaretli listeler (<ul><li>), numaralı adımlar (<ol><li>) ve önemli terimlerde kalın (<b>) etiketler kullan.
    - Makalenin uygun bir bölümünde AZİMUT Pro'nun şu benzersiz üstünlüklerinden (konuyla bağlantılı olarak) mutlaka bahset:
-     * TKGM'nin kendi sitesinde bile sadece tek tek parsel sorgulanabilirken, <a href="[https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)">AZİMUT Pro</a> ile harita ekranındaki <b>tüm TKGM kadastro parsellerinin aynı anda toplu ve canlı</b> görülebildiği,
+     * TKGM'nin kendi sitesinde bile sadece tek tek parsel sorgulanabilirken, <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> ile harita ekranındaki <b>tüm TKGM kadastro parsellerinin aynı anda toplu ve canlı</b> görülebildiği,
      * İstediğiniz yerin Ada/Parsel bilgisini girerek harita üzerinde çizdirilebildiği, köşe koordinatlarının tek tuşla mevcut projeye aktarılıp sesli/pusulalı <b>nokta aplikasyonu (Stakeout)</b> yapılabildiği,
-     * <b>MAKS (Mekânsal Adres Kayıt Sistemi)</b> verileri üzerinden mahalle idari sınırları, cadde ve sokakların sorgulanıp haritada çizdirilebildiği ve <a href="[https://buraktonoz.com/azimut/tanitim.html](https://buraktonoz.com/azimut/tanitim.html)">AZİMUT Pro Tanıtım ve Rehber Portalı</a> üzerinden tüm detaylara ulaşılabildiği.
+     * <b>MAKS (Mekânsal Adres Kayıt Sistemi)</b> verileri üzerinden mahalle idari sınırları, cadde ve sokakların sorgulanıp haritada çizdirilebildiği ve <a href="https://buraktonoz.com/azimut/tanitim.html">AZİMUT Pro Tanıtım ve Rehber Portalı</a> üzerinden tüm detaylara ulaşılabildiği.
    - Makalenin ortasında şu HTML görsel kutusunu ekle:
      <figure style="margin:24px 0;text-align:center;"><img src="${inlineAppScreen}" alt="${selectedTopic} - AZİMUT Pro TKGM ve Aplikasyon Ekranı" loading="lazy" style="max-width:100%;border-radius:12px;border:1px solid rgba(56,189,248,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.4);"><figcaption style="font-size:13px;color:#94a3b8;margin-top:8px;">Şekil: AZİMUT Pro Jeodezik El Terminali - Canlı TKGM Parsel, MAKS ve Saha Aplikasyon Ekranı</figcaption></figure>
    - Makalenin en sonuna <h2>Konuyla İlgili Sıkça Sorulan Sorular</h2> başlığı aç ve konuyla ilgili Google'da en çok aratılan 3 soruyu (<h3>Soru?</h3><p>Cevap...</p> formatında) yanıtla.
 3. Kategori (category): Sadece şu 4 değerden en uygun olan BİRİNİ seç: "Kadastro & TKGM", "Saha Aplikasyonu", "Jeodezi & Projeksiyon", "CAD & Yazılım".
 4. Görsel Teması (imageTheme): Makalenin kapak fotoğrafı için sadece şu 6 anahtardan en uygun olan BİRİNİ seç: "surveying", "construction", "land", "forestry", "energy", "cad_gis".`;
 
-    const response = await ai.models.generateContent({
+    const response = await generateWithRetry({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
