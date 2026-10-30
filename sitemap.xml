@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://buraktonoz.com/azimut/</loc>
-    <lastmod>2026-10-30T16:05:27.706Z</lastmod>
+    <lastmod>2026-10-30T19:37:20.126Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,12 +13,22 @@
   </url>
   <url>
     <loc>https://buraktonoz.com/azimut/tanitim.html</loc>
-    <lastmod>2026-10-30T16:05:27.706Z</lastmod>
+    <lastmod>2026-10-30T19:37:20.126Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=maks-verileriyle-canli-mahalle-ve-cadde-haritasi-goruntuleme-azimut-pro-ile-j2rn</loc>
+    <lastmod>2026-10-30T19:37:19.056Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>MAKS Verileriyle Canlı Mahalle ve Cadde Haritası Görüntüleme: AZİMUT Pro ile TKGM Parsel ve Saha Aplikasyonunda Yeni Dönem</image:title>
     </image:image>
   </url>
   <url>
