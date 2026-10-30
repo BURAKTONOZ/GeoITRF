@@ -1,6 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 const { initializeApp, cert, getApps } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
+const fs = require('fs');
 
 // 1. Ortam Değişkenleri ve Private Key Formatlama Kontrolü
 if (!process.env.FIREBASE_PRIVATE_KEY || !process.env.GEMINI_API_KEY) {
@@ -13,7 +14,7 @@ const formattedPrivateKey = process.env.FIREBASE_PRIVATE_KEY
   .replace(/^'|'$/g, '')
   .replace(/\\n/g, '\n');
 
-// 2. Modüler Firebase Admin Başlatma (Node 20/22/24 Tam Uyumlu)
+// 2. Modüler Firebase Admin Başlatma
 if (getApps().length === 0) {
   initializeApp({
     credential: cert({
@@ -26,6 +27,17 @@ if (getApps().length === 0) {
 
 const db = getFirestore();
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// XML Özel Karakter Temizleyici (Sitemap.xml kırılmalarını %100 önler)
+function escapeXml(unsafe) {
+  if (!unsafe) return '';
+  return String(unsafe)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
 
 // ============================================================================
 // GERÇEK HD STOK FOTOĞRAF HAVUZU (UNSPLASH CDN - %100 ÇALIŞIR, LİMİTSİZDİR)
@@ -90,9 +102,42 @@ const REAL_STOCK_PHOTOS = {
 };
 
 // ============================================================================
-// BÖLÜM 1: 300 ADET ÖZEL NİŞ HARİTA, MÜHENDİSLİK, CBS VE ARAZİ KONU HAVUZU
+// BÖLÜM 1: YÜKSEK ARAMA HACİMLİ TKGM, MAKS VE JEODEZİ KONU HAVUZU (330 ADET)
 // ============================================================================
 const STATIC_TOPICS = [
+  // YENİ EKLENEN YÜKSEK TRAFİKLİ TKGM & MAKS LONG-TAIL SEO KONULARI (30 ADET)
+  "TKGM parsel sorgulama ekranında tek tek parsel bakmak yerine tüm kadastro parsellerini tek haritada canlı görme yöntemi",
+  "Ada ve parsel numarası girerek parselin köşe koordinatlarını (ITRF96 / ED50) çıkarma ve cep telefonuyla arazide sınır taşı bulma",
+  "TKGM parsel sorgu verilerini NetCAD (.NCN) ve AutoCAD (.DXF) formatına dönüştürüp projeye aktarma rehberi",
+  "MAKS (Mekânsal Adres Kayıt Sistemi) üzerinden mahalle idari sınırlarını ve cadde/sokak haritasını canlı görüntüleme",
+  "Tarla ve arsa sınırlarını telefon GPS'i ile bulma: Kayıp parsel kazıklarını pusulalı aplikasyonla (Stakeout) tespit etme",
+  "TKGM kadastro paftası ile uydu görüntüsünü üst üste bindirerek komşu parsel tecavüzü (sınır ihlali) kontrolü yapma",
+  "İl, İlçe, Mahalle, Ada, Parsel bilgileriyle arazide internet çekmeden parsel köşelerine sesli aplikasyon yapma",
+  "MAKS numarataj verileri ile TKGM kadastro parsellerini aynı harita ekranında çakıştırarak bina ve adres tespiti",
+  "Parsel sorgulama sonrasında arsanın köşe noktalarını mevcut şantiye projesine ekleyip anında saha aplikasyonu yapma",
+  "TKGM parsel sınırlarını KML, GeoJSON ve Excel (CSV) koordinat listesi olarak telefona indirme teknikleri",
+  "Mahalle sınırı nereden geçiyor? MAKS verileriyle kırsal ve kentsel mahalle sınır poligonlarını haritada çizdirme",
+  "Emlakçılar ve arsa yatırımcıları için tüm köy/mahalle parsellerini tek ekranda görerek kelepir arazi analizi yapma",
+  "Tapu parsel sorgulama ve haritada arsa yeri bulma: Cep telefonunu LİHKAB öncesi ön kontrol terminaline dönüştürme",
+  "Belediye numarataj ve imar ekipleri için MAKS cadde, sokak ve dış kapı verilerini sahada mobil haritada açma",
+  "TKGM parsel köşe koordinatlarını ITRF96 (3 derece TM) sisteminde okuma ve A4 PDF Koordinat Raporu üretme",
+  "Orman sınırı ve 2B parsel sorgulama: Kadastro parsellerinin orman ve mera sınırlarıyla komşuluğunu haritada görme",
+  "Hisseli tarlalarda TKGM parsel sınırını haritaya çizdirip paydaşlar arası fiili kullanım alanını (dönüm/m²) bölme",
+  "Kamulaştırma ve enerji nakil hattı projelerinde güzergahın hangi TKGM parsellerinden geçtiğini tek ekranda görme",
+  "TKGM WMS katmanı nedir? Mobil tarayıcıda tüm Türkiye kadastro parsellerini kesintisiz ve hızlı açma",
+  "Parsel cephe uzunluğu ve net metrekare (m²) hesabı: Harita üzerinde çizdirilen parselin kenar uzunluklarını ölçme",
+  "MAKS (Mekânsal Adres Kayıt Sistemi) nedir? Harita mühendisliği ve belediyecilikte saha kullanımı",
+  "Yolu olmayan tarlalarda komşu TKGM parsellerini tek ekranda inceleyerek en kısa geçit hakkı güzergahını bulma",
+  "Güneş Enerjisi Santrali (GES) arazi seçiminde TKGM parsellerini toplu görüntüleme ve güney bakı/eğim analizi",
+  "Şantiye sahasında hafriyat ve tel çit çekimi öncesi TKGM parsel köşelerini projeye aktarıp kazık çakma",
+  "Mahkeme keşfi ve fen bilirkişisi incelemesi öncesi avukat ve malikler için TKGM parsel ve MAKS sınır etüdü",
+  "TKGM parsel sorgulama alternatifleri: Neden tekil parsel sorgusu yerine toplu kadastro katmanı kullanılmalı?",
+  "Köy yerleşik alanı ve civarı sınırlarının MAKS ve TKGM parsel katmanları üzerinde sahada kontrol edilmesi",
+  "İmar planı (18. Madde) uygulaması gören bölgelerde eski kadastral parsel ile yeni imar parselini sahada bulma",
+  "Cep telefonuyla parsel köşe noktası aplikasyonu yaparken RMS (Hassas Epok Ortalaması) ile hata payını düşürme",
+  "AZİMUT Pro ile TKGM parsel sorgulama, MAKS sınır çizimi ve NetCAD/AutoCAD veri aktarımında tam saha rehberi",
+
+  // MEVCUT 300 ADET NİŞ HARİTA, JEODEZİ VE SAHA MÜHENDİSLİĞİ KONUSU
   "Harita mühendisliğinde ITRF96 ve ED50 koordinat dönüşümlerinde DOM (Dilim Orta Meridyeni) seçimi",
   "3 derecelik Gauss-Krüger (TM) ile 6 derecelik UTM projeksiyon sistemleri arasındaki farklar ve saha uygulamaları",
   "TUREF (Türkiye Ulusal Referans Çerçevesi) nedir ve mobil GPS ölçümlerinde nasıl kullanılır?",
@@ -413,15 +458,15 @@ const ROLES = [
 
 const OPERATIONS = [
   "için cep telefonuyla ITRF96 ve ED50 koordinat dönüşümü ve sahada nokta bulma",
-  "için TKGM kadastro parsel sınırlarını uydu haritası üzerinde canlı görüntüleme ve gezme",
-  "için sesli ve pusulalı Stakeout (Canlı Aplikasyon) radarıyla arazide hedef noktaya sıfırlama",
-  "için NetCAD (.NCN), KML ve Excel koordinat dosyalarını sahada telefonda açma ve yönetme",
+  "için TKGM kadastro parsellerinin tamamını tek ekranda canlı görüntüleme ve köşe aplikasyonu",
+  "için MAKS (Mekânsal Adres Kayıt Sistemi) ile mahalle sınırı, cadde ve sokak verilerini haritada çizdirme",
+  "için sesli ve pusulalı Stakeout (Canlı Aplikasyon) radarıyla arazide parsel taşına sıfırlama",
+  "için NetCAD (.NCN), AutoCAD (.DXF), KML ve Excel koordinat dosyalarını sahada telefonda açma",
   "için arazide Hassas Epok Ortalaması (RMS) alarak GPS ölçüm doğruluğunu maksimuma çıkarma",
-  "için sahada yürüyerek veya harita üzerinden anlık alan (m² / dekar) ve mesafe metrajı hesaplama",
-  "için arazi çalışmalarını tek tıkla resmi A4 PDF Koordinat Raporuna dönüştürme",
+  "için sahada yürüyerek veya parsel seçerek anlık alan (m² / dekar) ve mesafe metrajı hesaplama",
+  "için arazi ve parsel çalışmalarını tek tıkla resmi A4 PDF Koordinat Raporuna dönüştürme",
   "için dilim orta meridyeni (DOM) hatalarını önleyerek doğru projeksiyonda saha ölçümü yapma",
-  "için internetin zayıf olduğu kırsal sahalarda mobil el terminaliyle kesintisiz koordinat aplikasyonu",
-  "için ofis ile saha arasında bulut senkronizasyonu ve QR kodla hızlı proje/nokta paylaşımı"
+  "için internetin zayıf olduğu kırsal sahalarda mobil el terminaliyle kesintisiz koordinat aplikasyonu"
 ];
 
 const DYNAMIC_TOPICS = [];
@@ -444,12 +489,12 @@ function getStockPhotoForTheme(theme, usedImagesSet) {
 
 async function runAutoBlogger() {
   try {
-    console.log(`📚 Toplam Konu Havuzu Kapasitesi: ${TOPIC_POOL.length} benzersiz konu.`);
+    console.log(`📚 Toplam SEO Konu Havuzu Kapasitesi: ${TOPIC_POOL.length} benzersiz konu.`);
 
-    const snapshot = await db.collection('azimut_articles').select('sourceTopic', 'image').get();
+    const allArticlesSnap = await db.collection('azimut_articles').get();
     const usedTopics = new Set();
     const usedImages = new Set();
-    snapshot.forEach(doc => {
+    allArticlesSnap.forEach(doc => {
       const data = doc.data();
       if (data.sourceTopic) usedTopics.add(data.sourceTopic);
       if (data.image) usedImages.add(data.image);
@@ -457,7 +502,7 @@ async function runAutoBlogger() {
 
     let availableTopics = TOPIC_POOL.filter(t => !usedTopics.has(t));
     if (availableTopics.length === 0) {
-      console.log("♻️ 500 konunun tamamı yazıldı! Havuz sıfırlanıyor...");
+      console.log("♻️ Tüm konular tamamlandı! Havuz sıfırlanıyor...");
       availableTopics = TOPIC_POOL;
     }
 
@@ -466,45 +511,45 @@ async function runAutoBlogger() {
 
     const inlineAppScreen = `ek${Math.floor(Math.random() * 7) + 1}.png`;
 
-    const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve Saha Mühendisisin. Aynı zamanda AZİMUT Pro (https://buraktonoz.com/azimut/) jeodezik mobil el terminalinin baş teknik yazarısın.
+    const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve CBS Mühendisisin. Aynı zamanda AZİMUT Pro (https://buraktonoz.com/azimut/) jeodezik mobil el terminalinin baş teknik yazarısın.
 
-GÖREVİN: Sadece aşağıda verilen "SEÇİLEN KONU" üzerine Google aramalarında 1. sıraya çıkacak, son derece kapsamlı (en az 750-950 kelime), teknik açıdan doyurucu, akıcı ve tamamen özgün bir Türkçe SEO makalesi yazmak.
+GÖREVİN: Sadece aşağıda verilen "SEÇİLEN KONU" üzerine Google aramalarında 1. sıraya ve "Featured Snippet" (0. Sıra Özet Kutusu) alanına çıkacak, son derece kapsamlı (en az 850-1100 kelime), teknik açıdan doyurucu, akıcı ve tamamen özgün bir Türkçe SEO makalesi yazmak.
 
 SEÇİLEN KONU: "${selectedTopic}"
 
-YAZIM KURALLARI:
-1. Başlık (title): Seçilen konuyu tam yansıtan, Google'da tıklanma oranı yüksek, çarpıcı ve özgün bir başlık olsun.
+YAZIM VE TEKNİK SEO KURALLARI:
+1. Başlık (title): Seçilen konuyu tam yansıtan, içinde aranma hacmi yüksek anahtar kelimeler geçen (Örn: TKGM Parsel Sorgulama, ITRF96, Aplikasyon, MAKS vb.), tıklanma oranı (CTR) yüksek ve özgün bir başlık olsun.
 2. İçerik Yapısı (content): 
-   - Doğrudan konunun sahadaki gerçek problemini anlatan güçlü bir giriş paragrafı (<p>) ile başla.
+   - Giriş paragrafından (<p>) hemen sonra Google Featured Snippet için şu HTML özet kutusunu konuya uyarlayarak ekle:
+     <div style="background:rgba(0,229,255,0.08);border-left:4px solid #00e5ff;padding:16px;border-radius:8px;margin:20px 0;"><b>📌 Hızlı Mühendislik Özeti:</b> [Buraya konunun 2-3 cümlelik en net teknik çözüm özetini yaz]</div>
    - En az 4 adet <h2> alt başlığı ve gerekli yerlerde <h3> alt başlıkları kullan.
    - Madde işaretli listeler (<ul><li>), numaralı adımlar (<ol><li>) ve önemli terimlerde kalın (<b>) etiketler kullan.
-   - Makalenin ortasında uygun bir bölümde, bu işlemin <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> kullanılarak cep telefonundan sahada adım adım nasıl pratik, hızlı ve ücretsiz çözüldüğünü anlat ve hemen altına şu HTML görsel kutusunu ekle:
-     <figure style="margin:24px 0;text-align:center;"><img src="${inlineAppScreen}" alt="${selectedTopic} - AZİMUT Pro Saha Ekranı" style="max-width:100%;border-radius:12px;border:1px solid rgba(56,189,248,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.4);"><figcaption style="font-size:13px;color:#94a3b8;margin-top:8px;">Şekil: AZİMUT Pro Jeodezik El Terminali Saha Uygulama Ekranı</figcaption></figure>
-3. Kategori (category): Sadece şu 4 değerden en uygun olan BİRİNİ seç: "Jeodezi & Projeksiyon", "Saha Aplikasyonu", "Kadastro & TKGM", "CAD & Yazılım".
-4. Görsel Teması (imageTheme): Makalenin kapak fotoğrafı için sadece şu 6 anahtardan en uygun olan BİRİNİ seç:
-   - "surveying" (Harita, jeodezi, koordinat, ölçüm konuları için)
-   - "construction" (Şantiye, inşaat, yol, altyapı, aplikasyon konuları için)
-   - "land" (Kadastro, TKGM, arsa, tarla, parsel sorgulama konuları için)
-   - "forestry" (Orman, ziraat, çevre, dağlık arazi konuları için)
-   - "energy" (GES, güneş enerji santrali, elektrik direği, RES, enerji hatları için)
-   - "cad_gis" (NetCAD, AutoCAD, KML, CBS, yazılım ve veri aktarımı konuları için)
+   - Makalenin uygun bir bölümünde AZİMUT Pro'nun şu benzersiz üstünlüklerinden (konuyla bağlantılı olarak) mutlaka bahset:
+     * TKGM'nin kendi sitesinde bile sadece tek tek parsel sorgulanabilirken, <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> ile harita ekranındaki <b>tüm TKGM kadastro parsellerinin aynı anda toplu ve canlı</b> görülebildiği,
+     * İstediğiniz yerin Ada/Parsel bilgisini girerek harita üzerinde çizdirilebildiği, köşe koordinatlarının tek tuşla mevcut projeye aktarılıp sesli/pusulalı <b>nokta aplikasyonu (Stakeout)</b> yapılabildiği,
+     * <b>MAKS (Mekânsal Adres Kayıt Sistemi)</b> verileri üzerinden mahalle idari sınırları, cadde ve sokakların sorgulanıp haritada çizdirilebildiği ve <a href="https://buraktonoz.com/azimut/tanitim.html">AZİMUT Pro Tanıtım ve Rehber Portalı</a> üzerinden tüm detaylara ulaşılabildiği.
+   - Makalenin ortasında şu HTML görsel kutusunu ekle:
+     <figure style="margin:24px 0;text-align:center;"><img src="${inlineAppScreen}" alt="${selectedTopic} - AZİMUT Pro TKGM ve Aplikasyon Ekranı" loading="lazy" style="max-width:100%;border-radius:12px;border:1px solid rgba(56,189,248,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.4);"><figcaption style="font-size:13px;color:#94a3b8;margin-top:8px;">Şekil: AZİMUT Pro Jeodezik El Terminali - Canlı TKGM Parsel, MAKS ve Saha Aplikasyon Ekranı</figcaption></figure>
+   - Makalenin en sonuna <h2>Konuyla İlgili Sıkça Sorulan Sorular</h2> başlığı aç ve konuyla ilgili Google'da en çok aratılan 3 soruyu (<h3>Soru?</h3><p>Cevap...</p> formatında) yanıtla.
+3. Kategori (category): Sadece şu 4 değerden en uygun olan BİRİNİ seç: "Kadastro & TKGM", "Saha Aplikasyonu", "Jeodezi & Projeksiyon", "CAD & Yazılım".
+4. Görsel Teması (imageTheme): Makalenin kapak fotoğrafı için sadece şu 6 anahtardan en uygun olan BİRİNİ seç: "surveying", "construction", "land", "forestry", "energy", "cad_gis".
 5. Yanıtı SADECE geçerli bir JSON objesi olarak ver.
 
 İSTENEN JSON FORMATI:
 {
-  "title": "Özgün ve Çarpıcı Makale Başlığı",
-  "category": "Saha Aplikasyonu",
-  "imageTheme": "surveying",
-  "summary": "Google arama sonuçlarında görünecek 150-160 karakterlik merak uyandırıcı SEO meta açıklaması.",
-  "keywords": "konuyla ilgili 8-10 adet virgülle ayrılmış SEO anahtar kelimesi, Azimut Pro",
-  "content": "<p>Giriş...</p><h2>1. Alt Başlık</h2><p>Detaylar...</p>"
+  "title": "Özgün ve Çarpıcı SEO Makale Başlığı",
+  "category": "Kadastro & TKGM",
+  "imageTheme": "land",
+  "summary": "Google arama sonuçlarında görünecek 150-160 karakterlik merak uyandırıcı ve anahtar kelime odaklı SEO meta açıklaması.",
+  "keywords": "konuyla ilgili 10-12 adet virgülle ayrılmış SEO anahtar kelimesi, TKGM parsel sorgulama, MAKS sınır, Azimut Pro",
+  "content": "<p>Giriş...</p><div style=\\"...\\">...</div><h2>1. Alt Başlık</h2><p>Detaylar...</p>"
 }`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
-        temperature: 0.85,
+        temperature: 0.8,
         responseMimeType: "application/json"
       }
     });
@@ -535,7 +580,7 @@ YAZIM KURALLARI:
       slug: slug,
       sourceTopic: selectedTopic,
       title: articleData.title,
-      category: articleData.category || "Saha Aplikasyonu",
+      category: articleData.category || "Kadastro & TKGM",
       image: coverPhotoUrl,
       date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }),
       readTime: `${readMins} dk okuma`,
@@ -548,11 +593,93 @@ YAZIM KURALLARI:
     };
 
     await db.collection('azimut_articles').doc(slug).set(newArticle);
-    console.log(`✅ Makale ve Gerçek HD Kapak Görseli Kaydedildi: [${articleData.category}] ${articleData.title}`);
-    console.log(`🖼️ Kapak Fotoğrafı (${theme}): ${coverPhotoUrl}`);
+    console.log(`✅ SEO Makalesi Kaydedildi: [${newArticle.category}] ${newArticle.title}`);
+
+    // ============================================================================
+    // 3. GELİŞMİŞ GOOGLE IMAGE SİTEMAP.XML VE ROBOTS.TXT ÜRETİMİ
+    // ============================================================================
+    const updatedSnap = await db.collection('azimut_articles').get();
+    const allArticles = [];
+    updatedSnap.forEach(doc => {
+      const d = doc.data();
+      allArticles.push({
+        id: doc.id,
+        slug: d.slug || doc.id,
+        title: d.title || 'AZİMUT Pro Mühendislik Rehberi',
+        image: d.image || 'https://buraktonoz.com/azimut/logo.jpeg',
+        timestamp: Number(d.timestamp) || Date.now()
+      });
+    });
+
+    // En yeni makaleden en eskiye sırala
+    allArticles.sort((a, b) => b.timestamp - a.timestamp);
+
+    const nowIso = new Date().toISOString();
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+    sitemap += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
+
+    // 1. Ana Uygulama Terminali
+    sitemap += `  <url>\n`;
+    sitemap += `    <loc>https://buraktonoz.com/azimut/</loc>\n`;
+    sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
+    sitemap += `    <changefreq>daily</changefreq>\n`;
+    sitemap += `    <priority>1.0</priority>\n`;
+    sitemap += `    <image:image>\n`;
+    sitemap += `      <image:loc>https://buraktonoz.com/azimut/logo.jpeg</image:loc>\n`;
+    sitemap += `      <image:title>AZİMUT Pro TKGM Parsel Sorgulama ve Jeodezik Aplikasyon Terminali</image:title>\n`;
+    sitemap += `    </image:image>\n`;
+    sitemap += `  </url>\n`;
+
+    // 2. Tanıtım ve Mühendislik Blog Portalı
+    sitemap += `  <url>\n`;
+    sitemap += `    <loc>https://buraktonoz.com/azimut/tanitim.html</loc>\n`;
+    sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
+    sitemap += `    <changefreq>hourly</changefreq>\n`;
+    sitemap += `    <priority>1.0</priority>\n`;
+    sitemap += `    <image:image>\n`;
+    sitemap += `      <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>\n`;
+    sitemap += `      <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>\n`;
+    sitemap += `    </image:image>\n`;
+    sitemap += `  </url>\n`;
+
+    // 3. Tüm Dinamik Makale URL'leri (Google Görsel SEO Etiketleriyle)
+    for (const art of allArticles) {
+      const safeSlug = encodeURIComponent(art.slug);
+      const artUrl = `https://buraktonoz.com/azimut/tanitim.html?makale=${safeSlug}`;
+      const isoDate = new Date(art.timestamp).toISOString();
+      const fullImgUrl = art.image.startsWith('http')
+        ? art.image
+        : `https://buraktonoz.com/azimut/${art.image.replace(/^\.\//, '')}`;
+
+      sitemap += `  <url>\n`;
+      sitemap += `    <loc>${escapeXml(artUrl)}</loc>\n`;
+      sitemap += `    <lastmod>${isoDate}</lastmod>\n`;
+      sitemap += `    <changefreq>weekly</changefreq>\n`;
+      sitemap += `    <priority>0.85</priority>\n`;
+      sitemap += `    <image:image>\n`;
+      sitemap += `      <image:loc>${escapeXml(fullImgUrl)}</image:loc>\n`;
+      sitemap += `      <image:title>${escapeXml(art.title)}</image:title>\n`;
+      sitemap += `    </image:image>\n`;
+      sitemap += `  </url>\n`;
+    }
+
+    sitemap += `</urlset>\n`;
+    fs.writeFileSync('sitemap.xml', sitemap, 'utf8');
+
+    // 4. Arama Motoru Botları İçin robots.txt Oluşturma
+    const robotsTxt = [
+      "User-agent: *",
+      "Allow: /",
+      "",
+      "Sitemap: https://buraktonoz.com/azimut/sitemap.xml"
+    ].join('\n');
+    fs.writeFileSync('robots.txt', robotsTxt, 'utf8');
+
+    console.log(`🗺️ Gelişmiş Google Image Sitemap (sitemap.xml) ve robots.txt oluşturuldu! Toplam URL: ${allArticles.length + 2}`);
 
   } catch (error) {
-    console.error("❌ Makale üretilirken hata oluştu:", error);
+    console.error("❌ Hata oluştu:", error);
     process.exit(1);
   }
 }
