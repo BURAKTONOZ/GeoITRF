@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://buraktonoz.com/azimut/</loc>
-    <lastmod>2026-10-30T09:40:45.338Z</lastmod>
+    <lastmod>2026-10-30T10:57:40.342Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,12 +13,22 @@
   </url>
   <url>
     <loc>https://buraktonoz.com/azimut/tanitim.html</loc>
-    <lastmod>2026-10-30T09:40:45.338Z</lastmod>
+    <lastmod>2026-10-30T10:57:40.342Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=gayrimenkul-yatiriminda-imar-plani-ve-kadastro-parsellerini-uydu-goruntusuy-ysbe</loc>
+    <lastmod>2026-10-30T10:57:39.303Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Gayrimenkul Yatırımında İmar Planı ve Kadastro Parsellerini Uydu Görüntüsüyle Çakıştırma: TKGM, ITRF96, Aplikasyon ve MAKS ile Doğru Analiz</image:title>
     </image:image>
   </url>
   <url>
@@ -37,7 +47,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>https://buraktonoz.com/azimut/[https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&amp;fit=crop&amp;w=1000&amp;q=80](https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&amp;fit=crop&amp;w=1000&amp;q=80)</image:loc>
+      <image:loc>https://www.sinavaraci.com/wp-content/uploads/2026/10/izohips-topografik-profil-r03.png</image:loc>
       <image:title>Jeodezik Hesaplamalarda Kritik Fark: Harita Yatay Alanı ile Eğimli Arazi Yüzey Alanı Arasındaki Gizemli İlişki – AZİMUT Pro ile Net Çözümler</image:title>
     </image:image>
   </url>
