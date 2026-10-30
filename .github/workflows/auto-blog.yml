@@ -1,4 +1,4 @@
-name: Günde 4 Kez SEO Makale Üretici
+name: Günde 4 Kez SEO Makale ve Sitemap Üretici
 
 on:
   schedule:
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: auto-blog
+  group: auto-blog-seo
   cancel-in-progress: false
 
 jobs:
@@ -18,11 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      contents: read
+      contents: write
       actions: write
     steps:
       - name: Repoyu Kopyala
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Zamanlanmış Workflow Kapanmasın (60 gün kuralı)
         continue-on-error: true
@@ -38,10 +40,26 @@ jobs:
       - name: Gerekli Kütüphaneleri Yükle
         run: npm install @google/genai firebase-admin@12.7.0 --no-audit --no-fund
 
-      - name: Gemini ile Makaleyi Üret ve Firebase'e Kaydet
+      - name: Gemini ile SEO Makalesi, Sitemap.xml ve Robots.txt Üret
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
           FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
         run: node scripts/generate-article.js
+
+      - name: Sitemap.xml ve Robots.txt Dosyalarını Repoya Kaydet ve Yükle
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main || true
+          git add sitemap.xml robots.txt
+          git commit -m "SEO: Dinamik Sitemap.xml ve Robots.txt güncellendi [skip ci]" || echo "Sitemap zaten güncel"
+          git push origin HEAD:main || git push
+
+      - name: Arama Motorlarına (Google & Bing) Sitemap Bildirimi Gönder
+        continue-on-error: true
+        run: |
+          curl -sS "https://www.google.com/ping?sitemap=https://buraktonoz.com/azimut/sitemap.xml" > /dev/null || true
+          curl -sS "https://www.bing.com/ping?sitemap=https://buraktonoz.com/azimut/sitemap.xml" > /dev/null || true
+          echo "✅ Arama motoru bildirimleri tamamlandı."
