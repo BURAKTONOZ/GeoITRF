@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: [https://buraktonoz.com/azimut/sitemap.xml](https://buraktonoz.com/azimut/sitemap.xml)
+Sitemap: https://buraktonoz.com/azimut/sitemap.xml

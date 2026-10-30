@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="[http://www.sitemaps.org/schemas/sitemap/0.9](http://www.sitemaps.org/schemas/sitemap/0.9)"
-        xmlns:image="[http://www.google.com/schemas/sitemap-image/1.1](http://www.google.com/schemas/sitemap-image/1.1)">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>[https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)</loc>
-    <lastmod>2026-10-30T09:26:37.371Z</lastmod>
+    <loc>https://buraktonoz.com/azimut/</loc>
+    <lastmod>2026-10-30T09:40:45.338Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>[https://buraktonoz.com/azimut/logo.jpeg](https://buraktonoz.com/azimut/logo.jpeg)</image:loc>
+      <image:loc>https://buraktonoz.com/azimut/logo.jpeg</image:loc>
       <image:title>AZİMUT Pro TKGM Parsel Sorgulama ve Jeodezik Aplikasyon Terminali</image:title>
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html](https://buraktonoz.com/azimut/tanitim.html)</loc>
-    <lastmod>2026-10-30T09:26:37.371Z</lastmod>
+    <loc>https://buraktonoz.com/azimut/tanitim.html</loc>
+    <lastmod>2026-10-30T09:40:45.338Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>[https://buraktonoz.com/azimut/ek2.png](https://buraktonoz.com/azimut/ek2.png)</image:loc>
+      <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=tunel-portal-ve-yaklasim-kazisi-aplikasyonu-itrf96-tkgm-ve-azimut-pro-ile-h-7vj4</loc>
+    <lastmod>2026-10-30T09:40:44.543Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Tünel Portal ve Yaklaşım Kazısı Aplikasyonu: ITRF96, TKGM ve AZİMUT Pro ile Hassas Saha Uygulamaları</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=jeodezik-hesaplamalarda-kritik-fark-harita-yatay-alani-ile-egimli-arazi-yuz-pp3q</loc>
     <lastmod>2026-10-30T09:26:36.382Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:loc>https://buraktonoz.com/azimut/[https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&amp;fit=crop&amp;w=1000&amp;q=80](https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&amp;fit=crop&amp;w=1000&amp;q=80)</image:loc>
       <image:title>Jeodezik Hesaplamalarda Kritik Fark: Harita Yatay Alanı ile Eğimli Arazi Yüzey Alanı Arasındaki Gizemli İlişki – AZİMUT Pro ile Net Çözümler</image:title>
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=arazide-milimetrik-hassasiyet-artik-cebinizde-mimarlar-ve-peyzaj-mimarlari--cqys</loc>
     <lastmod>2026-10-29T23:28:40.545Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -42,7 +52,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=mimarlar-ve-peyzaj-mimarlari-icin-arazide-gps-dogrulugunda-devrim-epok-orta-ipfx</loc>
     <lastmod>2026-10-29T19:49:21.397Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -52,7 +62,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=gece-ve-sisli-santiyelerde-guvenli-nokta-aplikasyonu-mobil-ekran-radariyla--h1bp</loc>
     <lastmod>2026-10-29T17:56:04.995Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -62,7 +72,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=saha-muhendislerinin-kabusu-bitiyor-telefon-bataryasini-koruyarak-tam-gun-g-yr80</loc>
     <lastmod>2026-10-29T16:17:53.260Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -72,7 +82,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=arazide-hedef-noktaya-sifirlama-arsa-tarla-ve-bahce-yatirimcilari-icin-sesl-p3l2</loc>
     <lastmod>2026-10-29T06:08:56.130Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -82,7 +92,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=jeotermal-enerjinin-kalbi-kuyu-lokasyonu-ve-koruma-alanlari-aplikasyonunda--q2ue</loc>
     <lastmod>2026-10-28T23:23:22.235Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -92,7 +102,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=emlakcilarin-kabusu-bitiyor-musteriye-yanlis-arsa-gostermeyi-sifirlayan-mob-l9mq</loc>
     <lastmod>2026-10-28T13:59:45.425Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -102,7 +112,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=akarsu-havza-yonetimi-ve-sel-kapani-vadilerde-koordinatla-yer-tespiti-icin--tjnr</loc>
     <lastmod>2026-10-28T06:13:27.193Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -112,7 +122,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=orman-ici-yol-guzergah-etudu-yanginla-mucadelede-ve-uretimde-hassas-egimkoo-zcm9</loc>
     <lastmod>2026-10-27T19:30:57.837Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -122,7 +132,7 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=saha-olcumlerinde-devrim-geleneksel-el-gpsleri-mi-akilli-telefon-tabanli-te-m4tt</loc>
     <lastmod>2026-10-27T17:28:42.746Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -132,27 +142,27 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=ed50den-itrf96ya-cep-telefonundan-donusum-kadastro-paftalarinizi-azimut-pro-ile-aninda-guncelleyin</loc>
     <lastmod>2026-10-27T17:09:53.201Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>ED50&apos;den ITRF96&apos;ya Cep Telefonundan Dönüşüm: Kadastro Paftalarınızı AZİMUT Pro ile Anında Güncelleyin</image:title>
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=elektrik-muhendisleri-icin-ges-paneli-aplikasyonunda-devrim-azimut-pro-ile-arazide-hassas-kurulum-rehberi</loc>
     <lastmod>2026-10-27T17:07:04.850Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:loc>https://buraktonoz.com/azimut/ek6.png</image:loc>
       <image:title>Elektrik Mühendisleri İçin GES Paneli Aplikasyonunda Devrim: AZİMUT Pro ile Arazide Hassas Kurulum Rehberi</image:title>
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=aldiginiz-arsanin-sinirlarini-telefonunuzdan-aninda-bulun-tkgm-verileri-ve-azimut-pro-ile-kesin-cozum</loc>
     <lastmod>2026-10-27T17:05:27.847Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -162,12 +172,12 @@
     </image:image>
   </url>
   <url>
-    <loc>[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}</loc>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=saha-aplikasyonu-stakeout-nedir-ve-nasil-yapilir-cep-telefonuyla-adim-adim-nokta-aplikasyonu-rehberi</loc>
     <lastmod>2026-10-27T12:57:33.425Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^.//, &apos;&apos;)}</image:loc>
+      <image:loc>https://buraktonoz.com/azimut/ek7.png</image:loc>
       <image:title>Saha Aplikasyonu (Stakeout) Nedir ve Nasıl Yapılır? Cep Telefonuyla Adım Adım Nokta Aplikasyonu Rehberi</image:title>
     </image:image>
   </url>
