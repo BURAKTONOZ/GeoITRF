@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://buraktonoz.com/azimut/</loc>
-    <lastmod>2026-10-30T10:57:40.342Z</lastmod>
+    <lastmod>2026-10-30T11:32:36.621Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,12 +13,22 @@
   </url>
   <url>
     <loc>https://buraktonoz.com/azimut/tanitim.html</loc>
-    <lastmod>2026-10-30T10:57:40.342Z</lastmod>
+    <lastmod>2026-10-30T11:32:36.621Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=cevre-muhendisliginde-su-toprak-ve-hava-kalitesi-izleme-itrf96-koordinatli--7pq7</loc>
+    <lastmod>2026-10-30T11:32:35.469Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Çevre Mühendisliğinde Su, Toprak ve Hava Kalitesi İzleme: ITRF96 Koordinatlı İstasyon Envanteri ve AZİMUT Pro ile Saha Aplikasyonu</image:title>
     </image:image>
   </url>
   <url>
