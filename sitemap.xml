@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://buraktonoz.com/azimut/</loc>
-    <lastmod>2026-10-30T19:37:20.126Z</lastmod>
+    <lastmod>2026-10-30T23:04:36.377Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,12 +13,22 @@
   </url>
   <url>
     <loc>https://buraktonoz.com/azimut/tanitim.html</loc>
-    <lastmod>2026-10-30T19:37:20.126Z</lastmod>
+    <lastmod>2026-10-30T23:04:36.377Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=profesyonel-emlakcilar-icin-saha-metraji-tkgm-parsel-sorgulama-aplikasyon-v-xmiz</loc>
+    <lastmod>2026-10-30T23:04:35.179Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Profesyonel Emlakçılar İçin Saha Metrajı: TKGM Parsel Sorgulama, Aplikasyon ve Anlık Alan Hesaplama Rehberi | AZİMUT Pro ile Kesin Sonuçlar</image:title>
     </image:image>
   </url>
   <url>
