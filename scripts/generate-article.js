@@ -1,4 +1,4 @@
-const { GoogleGenAI } = require('@google/genai');
+const { GoogleGenAI, Type } = require('@google/genai');
 const { initializeApp, cert, getApps } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 const fs = require('fs');
@@ -40,64 +40,205 @@ function escapeXml(unsafe) {
 }
 
 // ============================================================================
+// ZIRHLI JSON PARSER (Bad control character in string literal hatasını %100 çözer)
+// ============================================================================
+function safeParseGeminiJson(rawText) {
+  let text = String(rawText || '').trim();
+  text = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```$/i, '').trim();
+
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1) {
+    text = text.substring(firstBrace, lastBrace + 1);
+  }
+
+  // 1. Deneme: Doğrudan parse et
+  try {
+    return JSON.parse(text);
+  } catch (err1) {
+    // 2. Deneme: String (tırnak) içindeki kaçırılmamış Enter (\n), Tab (\t) ve kontrol karakterlerini temizle
+    let sanitized = '';
+    let inString = false;
+    let isEscaped = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const code = text.charCodeAt(i);
+
+      if (inString) {
+        if (isEscaped) {
+          isEscaped = false;
+          sanitized += ch;
+        } else if (ch === '\\') {
+          isEscaped = true;
+          sanitized += ch;
+        } else if (ch === '"') {
+          inString = false;
+          sanitized += ch;
+        } else if (code < 32) {
+          // JSON string içinde yasak olan ham kontrol karakterlerini güvenli hale getir
+          if (ch === '\n' || ch === '\r') {
+            sanitized += ' ';
+          } else if (ch === '\t') {
+            sanitized += ' ';
+          }
+        } else {
+          sanitized += ch;
+        }
+      } else {
+        if (ch === '"') {
+          inString = true;
+        }
+        sanitized += ch;
+      }
+    }
+
+    return JSON.parse(sanitized);
+  }
+}
+
+// ============================================================================
+// SİTEMAP.XML VE ROBOTS.TXT ÜRETİCİ FONKSİYON
+// ============================================================================
+async function buildSitemapAndRobots() {
+  const updatedSnap = await db.collection('azimut_articles').get();
+  const allArticles = [];
+  updatedSnap.forEach(doc => {
+    const d = doc.data();
+    allArticles.push({
+      id: doc.id,
+      slug: d.slug || doc.id,
+      title: d.title || 'AZİMUT Pro Mühendislik Rehberi',
+      image: d.image || '[https://buraktonoz.com/azimut/logo.jpeg](https://buraktonoz.com/azimut/logo.jpeg)',
+      timestamp: Number(d.timestamp) || Date.now()
+    });
+  });
+
+  allArticles.sort((a, b) => b.timestamp - a.timestamp);
+
+  const nowIso = new Date().toISOString();
+  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+  sitemap += `<urlset xmlns="[http://www.sitemaps.org/schemas/sitemap/0.9](http://www.sitemaps.org/schemas/sitemap/0.9)"\n`;
+  sitemap += `        xmlns:image="[http://www.google.com/schemas/sitemap-image/1.1](http://www.google.com/schemas/sitemap-image/1.1)">\n`;
+
+  // 1. Ana Uygulama Terminali
+  sitemap += `  <url>\n`;
+  sitemap += `    <loc>[https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)</loc>\n`;
+  sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
+  sitemap += `    <changefreq>daily</changefreq>\n`;
+  sitemap += `    <priority>1.0</priority>\n`;
+  sitemap += `    <image:image>\n`;
+  sitemap += `      <image:loc>[https://buraktonoz.com/azimut/logo.jpeg](https://buraktonoz.com/azimut/logo.jpeg)</image:loc>\n`;
+  sitemap += `      <image:title>AZİMUT Pro TKGM Parsel Sorgulama ve Jeodezik Aplikasyon Terminali</image:title>\n`;
+  sitemap += `    </image:image>\n`;
+  sitemap += `  </url>\n`;
+
+  // 2. Tanıtım ve Mühendislik Blog Portalı
+  sitemap += `  <url>\n`;
+  sitemap += `    <loc>[https://buraktonoz.com/azimut/tanitim.html](https://buraktonoz.com/azimut/tanitim.html)</loc>\n`;
+  sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
+  sitemap += `    <changefreq>hourly</changefreq>\n`;
+  sitemap += `    <priority>1.0</priority>\n`;
+  sitemap += `    <image:image>\n`;
+  sitemap += `      <image:loc>[https://buraktonoz.com/azimut/ek2.png](https://buraktonoz.com/azimut/ek2.png)</image:loc>\n`;
+  sitemap += `      <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>\n`;
+  sitemap += `    </image:image>\n`;
+  sitemap += `  </url>\n`;
+
+  // 3. Tüm Dinamik Makale URL'leri
+  for (const art of allArticles) {
+    const safeSlug = encodeURIComponent(art.slug);
+    const artUrl = `[https://buraktonoz.com/azimut/tanitim.html?makale=$](https://buraktonoz.com/azimut/tanitim.html?makale=$){safeSlug}`;
+    const isoDate = new Date(art.timestamp).toISOString();
+    const fullImgUrl = art.image.startsWith('http')
+      ? art.image
+      : `[https://buraktonoz.com/azimut/$](https://buraktonoz.com/azimut/$){art.image.replace(/^\.\//, '')}`;
+
+    sitemap += `  <url>\n`;
+    sitemap += `    <loc>${escapeXml(artUrl)}</loc>\n`;
+    sitemap += `    <lastmod>${isoDate}</lastmod>\n`;
+    sitemap += `    <changefreq>weekly</changefreq>\n`;
+    sitemap += `    <priority>0.85</priority>\n`;
+    sitemap += `    <image:image>\n`;
+    sitemap += `      <image:loc>${escapeXml(fullImgUrl)}</image:loc>\n`;
+    sitemap += `      <image:title>${escapeXml(art.title)}</image:title>\n`;
+    sitemap += `    </image:image>\n`;
+    sitemap += `  </url>\n`;
+  }
+
+  sitemap += `</urlset>\n`;
+  fs.writeFileSync('sitemap.xml', sitemap, 'utf8');
+
+  const robotsTxt = [
+    "User-agent: *",
+    "Allow: /",
+    "",
+    "Sitemap: [https://buraktonoz.com/azimut/sitemap.xml](https://buraktonoz.com/azimut/sitemap.xml)"
+  ].join('\n');
+  fs.writeFileSync('robots.txt', robotsTxt, 'utf8');
+
+  console.log(`🗺️ Sitemap.xml ve robots.txt başarıyla güncellendi! (Toplam URL: ${allArticles.length + 2})`);
+}
+
+// ============================================================================
 // GERÇEK HD STOK FOTOĞRAF HAVUZU (UNSPLASH CDN - %100 ÇALIŞIR, LİMİTSİZDİR)
 // ============================================================================
 const REAL_STOCK_PHOTOS = {
   surveying: [
-    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80"
+    "[https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1000&q=80)"
   ],
   construction: [
-    "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80"
+    "[https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=1000&q=80)"
   ],
   land: [
-    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80"
+    "[https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80)"
   ],
   forestry: [
-    "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80"
+    "[https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80)"
   ],
   energy: [
-    "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80"
+    "[https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=1000&q=80)"
   ],
   cad_gis: [
-    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80"
+    "[https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80)",
+    "[https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80](https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80)"
   ]
 };
 
@@ -105,7 +246,6 @@ const REAL_STOCK_PHOTOS = {
 // BÖLÜM 1: YÜKSEK ARAMA HACİMLİ TKGM, MAKS VE JEODEZİ KONU HAVUZU (330 ADET)
 // ============================================================================
 const STATIC_TOPICS = [
-  // YENİ EKLENEN YÜKSEK TRAFİKLİ TKGM & MAKS LONG-TAIL SEO KONULARI (30 ADET)
   "TKGM parsel sorgulama ekranında tek tek parsel bakmak yerine tüm kadastro parsellerini tek haritada canlı görme yöntemi",
   "Ada ve parsel numarası girerek parselin köşe koordinatlarını (ITRF96 / ED50) çıkarma ve cep telefonuyla arazide sınır taşı bulma",
   "TKGM parsel sorgu verilerini NetCAD (.NCN) ve AutoCAD (.DXF) formatına dönüştürüp projeye aktarma rehberi",
@@ -136,8 +276,6 @@ const STATIC_TOPICS = [
   "İmar planı (18. Madde) uygulaması gören bölgelerde eski kadastral parsel ile yeni imar parselini sahada bulma",
   "Cep telefonuyla parsel köşe noktası aplikasyonu yaparken RMS (Hassas Epok Ortalaması) ile hata payını düşürme",
   "AZİMUT Pro ile TKGM parsel sorgulama, MAKS sınır çizimi ve NetCAD/AutoCAD veri aktarımında tam saha rehberi",
-
-  // MEVCUT 300 ADET NİŞ HARİTA, JEODEZİ VE SAHA MÜHENDİSLİĞİ KONUSU
   "Harita mühendisliğinde ITRF96 ve ED50 koordinat dönüşümlerinde DOM (Dilim Orta Meridyeni) seçimi",
   "3 derecelik Gauss-Krüger (TM) ile 6 derecelik UTM projeksiyon sistemleri arasındaki farklar ve saha uygulamaları",
   "TUREF (Türkiye Ulusal Referans Çerçevesi) nedir ve mobil GPS ölçümlerinde nasıl kullanılır?",
@@ -491,6 +629,9 @@ async function runAutoBlogger() {
   try {
     console.log(`📚 Toplam SEO Konu Havuzu Kapasitesi: ${TOPIC_POOL.length} benzersiz konu.`);
 
+    // ÖNCE MEVCUT MAKALELERLE SİTEMAP'İ HEMEN OLUŞTUR (Garantiye al)
+    await buildSitemapAndRobots();
+
     const allArticlesSnap = await db.collection('azimut_articles').get();
     const usedTopics = new Set();
     const usedImages = new Set();
@@ -511,7 +652,7 @@ async function runAutoBlogger() {
 
     const inlineAppScreen = `ek${Math.floor(Math.random() * 7) + 1}.png`;
 
-    const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve CBS Mühendisisin. Aynı zamanda AZİMUT Pro (https://buraktonoz.com/azimut/) jeodezik mobil el terminalinin baş teknik yazarısın.
+    const prompt = `Sen 20 yıllık kıdemli bir Harita, Kadastro ve CBS Mühendisisin. Aynı zamanda AZİMUT Pro ([https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)) jeodezik mobil el terminalinin baş teknik yazarısın.
 
 GÖREVİN: Sadece aşağıda verilen "SEÇİLEN KONU" üzerine Google aramalarında 1. sıraya ve "Featured Snippet" (0. Sıra Özet Kutusu) alanına çıkacak, son derece kapsamlı (en az 850-1100 kelime), teknik açıdan doyurucu, akıcı ve tamamen özgün bir Türkçe SEO makalesi yazmak.
 
@@ -520,43 +661,42 @@ SEÇİLEN KONU: "${selectedTopic}"
 YAZIM VE TEKNİK SEO KURALLARI:
 1. Başlık (title): Seçilen konuyu tam yansıtan, içinde aranma hacmi yüksek anahtar kelimeler geçen (Örn: TKGM Parsel Sorgulama, ITRF96, Aplikasyon, MAKS vb.), tıklanma oranı (CTR) yüksek ve özgün bir başlık olsun.
 2. İçerik Yapısı (content): 
-   - Giriş paragrafından (<p>) hemen sonra Google Featured Snippet için şu HTML özet kutusunu konuya uyarlayarak ekle:
+   - Giriş paragrafından (<p>) hemen sonra Google Featured Snippet için şu HTML özet kutusunu konuya uyarlayarak ekle (tek satır HTML olarak):
      <div style="background:rgba(0,229,255,0.08);border-left:4px solid #00e5ff;padding:16px;border-radius:8px;margin:20px 0;"><b>📌 Hızlı Mühendislik Özeti:</b> [Buraya konunun 2-3 cümlelik en net teknik çözüm özetini yaz]</div>
    - En az 4 adet <h2> alt başlığı ve gerekli yerlerde <h3> alt başlıkları kullan.
    - Madde işaretli listeler (<ul><li>), numaralı adımlar (<ol><li>) ve önemli terimlerde kalın (<b>) etiketler kullan.
    - Makalenin uygun bir bölümünde AZİMUT Pro'nun şu benzersiz üstünlüklerinden (konuyla bağlantılı olarak) mutlaka bahset:
-     * TKGM'nin kendi sitesinde bile sadece tek tek parsel sorgulanabilirken, <a href="https://buraktonoz.com/azimut/">AZİMUT Pro</a> ile harita ekranındaki <b>tüm TKGM kadastro parsellerinin aynı anda toplu ve canlı</b> görülebildiği,
+     * TKGM'nin kendi sitesinde bile sadece tek tek parsel sorgulanabilirken, <a href="[https://buraktonoz.com/azimut/](https://buraktonoz.com/azimut/)">AZİMUT Pro</a> ile harita ekranındaki <b>tüm TKGM kadastro parsellerinin aynı anda toplu ve canlı</b> görülebildiği,
      * İstediğiniz yerin Ada/Parsel bilgisini girerek harita üzerinde çizdirilebildiği, köşe koordinatlarının tek tuşla mevcut projeye aktarılıp sesli/pusulalı <b>nokta aplikasyonu (Stakeout)</b> yapılabildiği,
-     * <b>MAKS (Mekânsal Adres Kayıt Sistemi)</b> verileri üzerinden mahalle idari sınırları, cadde ve sokakların sorgulanıp haritada çizdirilebildiği ve <a href="https://buraktonoz.com/azimut/tanitim.html">AZİMUT Pro Tanıtım ve Rehber Portalı</a> üzerinden tüm detaylara ulaşılabildiği.
+     * <b>MAKS (Mekânsal Adres Kayıt Sistemi)</b> verileri üzerinden mahalle idari sınırları, cadde ve sokakların sorgulanıp haritada çizdirilebildiği ve <a href="[https://buraktonoz.com/azimut/tanitim.html](https://buraktonoz.com/azimut/tanitim.html)">AZİMUT Pro Tanıtım ve Rehber Portalı</a> üzerinden tüm detaylara ulaşılabildiği.
    - Makalenin ortasında şu HTML görsel kutusunu ekle:
      <figure style="margin:24px 0;text-align:center;"><img src="${inlineAppScreen}" alt="${selectedTopic} - AZİMUT Pro TKGM ve Aplikasyon Ekranı" loading="lazy" style="max-width:100%;border-radius:12px;border:1px solid rgba(56,189,248,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.4);"><figcaption style="font-size:13px;color:#94a3b8;margin-top:8px;">Şekil: AZİMUT Pro Jeodezik El Terminali - Canlı TKGM Parsel, MAKS ve Saha Aplikasyon Ekranı</figcaption></figure>
    - Makalenin en sonuna <h2>Konuyla İlgili Sıkça Sorulan Sorular</h2> başlığı aç ve konuyla ilgili Google'da en çok aratılan 3 soruyu (<h3>Soru?</h3><p>Cevap...</p> formatında) yanıtla.
 3. Kategori (category): Sadece şu 4 değerden en uygun olan BİRİNİ seç: "Kadastro & TKGM", "Saha Aplikasyonu", "Jeodezi & Projeksiyon", "CAD & Yazılım".
-4. Görsel Teması (imageTheme): Makalenin kapak fotoğrafı için sadece şu 6 anahtardan en uygun olan BİRİNİ seç: "surveying", "construction", "land", "forestry", "energy", "cad_gis".
-5. Yanıtı SADECE geçerli bir JSON objesi olarak ver.
-
-İSTENEN JSON FORMATI:
-{
-  "title": "Özgün ve Çarpıcı SEO Makale Başlığı",
-  "category": "Kadastro & TKGM",
-  "imageTheme": "land",
-  "summary": "Google arama sonuçlarında görünecek 150-160 karakterlik merak uyandırıcı ve anahtar kelime odaklı SEO meta açıklaması.",
-  "keywords": "konuyla ilgili 10-12 adet virgülle ayrılmış SEO anahtar kelimesi, TKGM parsel sorgulama, MAKS sınır, Azimut Pro",
-  "content": "<p>Giriş...</p><div style=\\"...\\">...</div><h2>1. Alt Başlık</h2><p>Detaylar...</p>"
-}`;
+4. Görsel Teması (imageTheme): Makalenin kapak fotoğrafı için sadece şu 6 anahtardan en uygun olan BİRİNİ seç: "surveying", "construction", "land", "forestry", "energy", "cad_gis".`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
-        temperature: 0.8,
-        responseMimeType: "application/json"
+        temperature: 0.75,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            title: { type: Type.STRING },
+            category: { type: Type.STRING },
+            imageTheme: { type: Type.STRING },
+            summary: { type: Type.STRING },
+            keywords: { type: Type.STRING },
+            content: { type: Type.STRING }
+          },
+          required: ["title", "category", "imageTheme", "summary", "keywords", "content"]
+        }
       }
     });
 
-    let rawText = response.text.trim();
-    rawText = rawText.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
-    const articleData = JSON.parse(rawText);
+    const articleData = safeParseGeminiJson(response.text);
 
     const baseSlug = articleData.title
       .toLowerCase()
@@ -595,88 +735,8 @@ YAZIM VE TEKNİK SEO KURALLARI:
     await db.collection('azimut_articles').doc(slug).set(newArticle);
     console.log(`✅ SEO Makalesi Kaydedildi: [${newArticle.category}] ${newArticle.title}`);
 
-    // ============================================================================
-    // 3. GELİŞMİŞ GOOGLE IMAGE SİTEMAP.XML VE ROBOTS.TXT ÜRETİMİ
-    // ============================================================================
-    const updatedSnap = await db.collection('azimut_articles').get();
-    const allArticles = [];
-    updatedSnap.forEach(doc => {
-      const d = doc.data();
-      allArticles.push({
-        id: doc.id,
-        slug: d.slug || doc.id,
-        title: d.title || 'AZİMUT Pro Mühendislik Rehberi',
-        image: d.image || 'https://buraktonoz.com/azimut/logo.jpeg',
-        timestamp: Number(d.timestamp) || Date.now()
-      });
-    });
-
-    // En yeni makaleden en eskiye sırala
-    allArticles.sort((a, b) => b.timestamp - a.timestamp);
-
-    const nowIso = new Date().toISOString();
-    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-    sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
-    sitemap += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
-
-    // 1. Ana Uygulama Terminali
-    sitemap += `  <url>\n`;
-    sitemap += `    <loc>https://buraktonoz.com/azimut/</loc>\n`;
-    sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
-    sitemap += `    <changefreq>daily</changefreq>\n`;
-    sitemap += `    <priority>1.0</priority>\n`;
-    sitemap += `    <image:image>\n`;
-    sitemap += `      <image:loc>https://buraktonoz.com/azimut/logo.jpeg</image:loc>\n`;
-    sitemap += `      <image:title>AZİMUT Pro TKGM Parsel Sorgulama ve Jeodezik Aplikasyon Terminali</image:title>\n`;
-    sitemap += `    </image:image>\n`;
-    sitemap += `  </url>\n`;
-
-    // 2. Tanıtım ve Mühendislik Blog Portalı
-    sitemap += `  <url>\n`;
-    sitemap += `    <loc>https://buraktonoz.com/azimut/tanitim.html</loc>\n`;
-    sitemap += `    <lastmod>${nowIso}</lastmod>\n`;
-    sitemap += `    <changefreq>hourly</changefreq>\n`;
-    sitemap += `    <priority>1.0</priority>\n`;
-    sitemap += `    <image:image>\n`;
-    sitemap += `      <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>\n`;
-    sitemap += `      <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>\n`;
-    sitemap += `    </image:image>\n`;
-    sitemap += `  </url>\n`;
-
-    // 3. Tüm Dinamik Makale URL'leri (Google Görsel SEO Etiketleriyle)
-    for (const art of allArticles) {
-      const safeSlug = encodeURIComponent(art.slug);
-      const artUrl = `https://buraktonoz.com/azimut/tanitim.html?makale=${safeSlug}`;
-      const isoDate = new Date(art.timestamp).toISOString();
-      const fullImgUrl = art.image.startsWith('http')
-        ? art.image
-        : `https://buraktonoz.com/azimut/${art.image.replace(/^\.\//, '')}`;
-
-      sitemap += `  <url>\n`;
-      sitemap += `    <loc>${escapeXml(artUrl)}</loc>\n`;
-      sitemap += `    <lastmod>${isoDate}</lastmod>\n`;
-      sitemap += `    <changefreq>weekly</changefreq>\n`;
-      sitemap += `    <priority>0.85</priority>\n`;
-      sitemap += `    <image:image>\n`;
-      sitemap += `      <image:loc>${escapeXml(fullImgUrl)}</image:loc>\n`;
-      sitemap += `      <image:title>${escapeXml(art.title)}</image:title>\n`;
-      sitemap += `    </image:image>\n`;
-      sitemap += `  </url>\n`;
-    }
-
-    sitemap += `</urlset>\n`;
-    fs.writeFileSync('sitemap.xml', sitemap, 'utf8');
-
-    // 4. Arama Motoru Botları İçin robots.txt Oluşturma
-    const robotsTxt = [
-      "User-agent: *",
-      "Allow: /",
-      "",
-      "Sitemap: https://buraktonoz.com/azimut/sitemap.xml"
-    ].join('\n');
-    fs.writeFileSync('robots.txt', robotsTxt, 'utf8');
-
-    console.log(`🗺️ Gelişmiş Google Image Sitemap (sitemap.xml) ve robots.txt oluşturuldu! Toplam URL: ${allArticles.length + 2}`);
+    // Yeni makale eklendikten sonra Sitemap.xml'i tekrar güncelle
+    await buildSitemapAndRobots();
 
   } catch (error) {
     console.error("❌ Hata oluştu:", error);
