@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://buraktonoz.com/azimut/</loc>
-    <lastmod>2026-10-31T10:30:43.048Z</lastmod>
+    <lastmod>2026-10-31T15:25:30.950Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,12 +13,22 @@
   </url>
   <url>
     <loc>https://buraktonoz.com/azimut/tanitim.html</loc>
-    <lastmod>2026-10-31T10:30:43.048Z</lastmod>
+    <lastmod>2026-10-31T15:25:30.950Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://buraktonoz.com/azimut/ek2.png</image:loc>
       <image:title>TKGM Tüm Parselleri Görme ve MAKS Sınır Çizimi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://buraktonoz.com/azimut/tanitim.html?makale=cikmaz-parsellerde-gecit-hakki-guzergahi-belirleme-tkgm-itrf96-aplikasyon-v-z2oz</loc>
+    <lastmod>2026-10-31T15:25:29.346Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&amp;fit=crop&amp;w=1000&amp;q=80</image:loc>
+      <image:title>Çıkmaz Parsellerde Geçit Hakkı Güzergahı Belirleme: TKGM, ITRF96, Aplikasyon ve AZİMUT Pro ile Saha Çözümleri</image:title>
     </image:image>
   </url>
   <url>
